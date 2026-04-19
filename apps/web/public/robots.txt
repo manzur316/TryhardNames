@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tryhardnames.com/sitemap.xml

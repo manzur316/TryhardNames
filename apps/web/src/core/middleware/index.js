@@ -1,0 +1,1 @@
+export { LEGACY_ROUTE_MAP, useLegacyRouteRedirect } from './legacyRouteHandler.js';
