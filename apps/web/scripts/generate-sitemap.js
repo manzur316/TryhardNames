@@ -22,11 +22,20 @@ const run = () => {
       fs.mkdirSync(publicDir, { recursive: true });
     }
 
-    // Write sitemap.xml
-    const outputPath = path.join(publicDir, 'sitemap.xml');
-    fs.writeFileSync(outputPath, sitemapXml);
+    // Write sitemap.xml (public for local + tooling)
+    const outputPublicPath = path.join(publicDir, 'sitemap.xml');
+    fs.writeFileSync(outputPublicPath, sitemapXml);
 
-    console.log(`✅ Successfully generated sitemap.xml with ${urlsCount} URLs at ${outputPath}`);
+    // Also write sitemap.xml to dist for Vercel output expectations
+    const distDir = path.join(__dirname, '../dist');
+    if (!fs.existsSync(distDir)) {
+      fs.mkdirSync(distDir, { recursive: true });
+    }
+    const outputDistPath = path.join(distDir, 'sitemap.xml');
+    fs.writeFileSync(outputDistPath, sitemapXml);
+
+    console.log(`✅ Successfully generated sitemap.xml with ${urlsCount} URLs at ${outputPublicPath}`);
+    console.log(`✅ Also wrote sitemap.xml to ${outputDistPath}`);
   } catch (error) {
     console.error('❌ Error generating sitemap:', error);
     process.exit(1);
