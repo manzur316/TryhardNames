@@ -30,6 +30,9 @@ export const GamerNamesEdgyPage = () => {
     <GamerNamesLayout 
       title="Edgy Gamer Names" 
       description="Dark, intimidating, and fierce names to strike fear into opponents."
+      seoTitle="Edgy Gamer Names – Dark & Intimidating Gamertags | TryhardNames"
+      seoDescription="Edgy gamertag ideas with dark-fantasy energy—still safe for platform rules. Best fits for FPS, BR and ranked grind accounts."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

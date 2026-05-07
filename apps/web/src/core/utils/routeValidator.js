@@ -16,6 +16,7 @@ export const VALID_ROUTES = [
   '/gamer-names/edgy',
   '/stylish-text-generator',
   '/nickname-symbols',
+  '/gamer-bio-generator',
   '/sitemap',
   '/sitemap.xml'
 ];
@@ -30,6 +31,7 @@ export const VALID_PATTERNS = [
   /^\/gamer-names(\/(cool|funny|pro|edgy))?\/?$/,
   /^\/stylish-text-generator\/?$/,
   /^\/nickname-symbols\/?$/,
+  /^\/gamer-bio-generator\/?$/,
   /^\/sitemap(\.xml)?\/?$/
 ];
 
@@ -52,9 +54,8 @@ export const getClosestValidRoute = (pathname) => {
     '/valorant-names': '/gamer-names',
     '/fortnite-names': '/gamer-names',
     '/fortnite-tryhard-names': '/gamer-names',
-    '/gamer-bio-generator': '/',
-    '/cool-gamer-bio': '/',
-    '/funny-gamer-bio': '/',
+    '/cool-gamer-bio': '/gamer-bio-generator',
+    '/funny-gamer-bio': '/gamer-bio-generator',
     '/roblox-names-generator': '/roblox-names',
     '/roblox-cool-names': '/roblox-names/cool',
     '/roblox-funny-names': '/roblox-names/funny',

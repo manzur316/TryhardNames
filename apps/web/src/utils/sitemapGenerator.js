@@ -4,6 +4,23 @@ import { getAllValidSlugs } from './pageLoader.js';
 const toolPages = ['/stylish-text-generator', '/nickname-symbols'];
 const hubPages = ['/roblox-names', '/gamer-names'];
 
+/** Indexable static routes not covered by hub/tool/dynamic lists */
+const staticPages = [
+  '/about',
+  '/contact',
+  '/privacy-policy',
+  '/terms-of-service',
+  '/gamer-bio-generator',
+  '/roblox-names/cool',
+  '/roblox-names/funny',
+  '/roblox-names/aesthetic',
+  '/roblox-names/tryhard',
+  '/gamer-names/cool',
+  '/gamer-names/funny',
+  '/gamer-names/pro',
+  '/gamer-names/edgy',
+];
+
 /**
  * Returns the current date in ISO format (YYYY-MM-DD)
  * @returns {string}
@@ -65,6 +82,7 @@ export const getSitemapUrls = () => {
     ...homepage,
     ...hubPages,
     ...toolPages,
+    ...staticPages,
     ...dynamicPaths
   ])];
 

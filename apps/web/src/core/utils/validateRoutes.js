@@ -5,7 +5,6 @@ export const validateRoutes = () => {
     '/valorant-names',
     '/fortnite-names',
     '/fortnite-tryhard-names',
-    '/gamer-bio-generator',
     '/cool-gamer-bio',
     '/funny-gamer-bio',
     '/roblox-names-generator',
@@ -34,6 +33,7 @@ export const validateRoutes = () => {
     '/gamer-names/funny',
     '/gamer-names/pro',
     '/gamer-names/edgy',
+    '/gamer-bio-generator',
     '*'
   ];
 

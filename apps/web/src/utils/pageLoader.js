@@ -1,36 +1,35 @@
 
-import valorant from '../pages/clusters/valorant.js';
-import fortnite from '../pages/clusters/fortnite.js';
-import cod from '../pages/clusters/cod.js';
-import general from '../pages/clusters/general.js';
-import longtail from '../pages/clusters/longtail.js';
+import {
+  getAllProgrammaticSlugs,
+  getProgrammaticPageBySlug,
+  getProgrammaticPagesByCategory,
+  isProgrammaticSlug,
+} from '../seo/programmatic/pages.js';
+
+/**
+ * Programmatic SEO single source of truth.
+ *
+ * - No per-URL hardcoded pages.
+ * - Slugs are validated from datasets + allowed combos.
+ * - Page data is generated on demand from templates.
+ */
 
 export const clusters = {
-  valorant,
-  fortnite,
-  cod,
-  general,
-  longtail
+  valorant: getProgrammaticPagesByCategory('valorant'),
+  fortnite: getProgrammaticPagesByCategory('fortnite'),
+  cod: getProgrammaticPagesByCategory('cod'),
+  roblox: getProgrammaticPagesByCategory('roblox'),
+  general: getProgrammaticPagesByCategory('general'),
 };
 
-export const allPages = [
-  ...valorant,
-  ...fortnite,
-  ...cod,
-  ...general,
-  ...longtail
-];
-
-export const pageMap = new Map(allPages.map(page => [page.slug, page]));
-
-// Extract all valid slugs from cluster pages (format: 'category/keyword')
-export const validSlugs = allPages.map(page => page.slug);
+// Extract all valid slugs from programmatic generator (format: 'category/keyword')
+export const validSlugs = getAllProgrammaticSlugs();
 
 // Validate if a slug is valid (accepts with or without leading slash, supports multi-segment slugs)
 export const isValidSlug = (slug) => {
   if (!slug) return false;
   const normalized = slug.startsWith('/') ? slug.slice(1) : slug;
-  return validSlugs.includes(normalized);
+  return isProgrammaticSlug(normalized);
 };
 
 // Get all valid slugs
@@ -41,11 +40,11 @@ export const getAllValidSlugs = () => {
 export const getPageBySlug = (slug) => {
   // Handle both '/category/keyword' and 'category/keyword' formats
   const normalized = slug.startsWith('/') ? slug.slice(1) : slug;
-  return pageMap.get(normalized) || null;
+  return getProgrammaticPageBySlug(normalized) || null;
 };
 
 export const getAllSlugs = () => {
-  return Array.from(pageMap.keys());
+  return validSlugs;
 };
 
 export const getPagesByCluster = (clusterName) => {

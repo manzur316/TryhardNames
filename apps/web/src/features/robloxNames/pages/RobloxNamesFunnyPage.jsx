@@ -30,6 +30,9 @@ export const RobloxNamesFunnyPage = () => {
     <RobloxNamesLayout 
       title="Funny Roblox Names" 
       description="Hilarious and goofy names guaranteed to make other players laugh."
+      seoTitle="Funny Roblox Names – Meme & Comedy Username Ideas | TryhardNames"
+      seoDescription="Funny Roblox username ideas for players who want humor without breaking username rules. Clever wordplay, clean jokes, and memorable tags."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

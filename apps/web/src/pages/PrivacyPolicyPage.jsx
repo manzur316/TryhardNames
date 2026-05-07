@@ -1,17 +1,16 @@
 import React from 'react';
-import { useSEO } from '@/hooks/useSEO.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 
 const PrivacyPolicyPage = () => {
-  useSEO({
-    title: 'Privacy Policy - TryhardNames',
-    description: 'Privacy Policy for TryhardNames. Learn how we collect, use, and protect your data.',
-    url: 'https://tryhardnames.com/privacy-policy',
-    type: 'website'
-  });
-
   const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
+    <>
+    <SeoHead
+      title="Privacy Policy – TryhardNames"
+      description="How TryhardNames collects, uses, and protects data when you use our gaming name and text tools."
+      path="/privacy-policy"
+    />
     <div className="bg-gradient-dark text-dark-300 font-sans py-20 px-4 flex-grow flex flex-col">
       <div className="container mx-auto max-w-4xl bg-dark-800 border border-dark-700 rounded-3xl p-8 md:p-12">
         <h1 className="text-4xl md:text-5xl font-black text-dark-50 mb-4">Privacy Policy</h1>
@@ -78,6 +77,7 @@ const PrivacyPolicyPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

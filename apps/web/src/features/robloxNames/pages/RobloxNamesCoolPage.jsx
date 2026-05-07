@@ -30,6 +30,9 @@ export const RobloxNamesCoolPage = () => {
     <RobloxNamesLayout 
       title="Cool Roblox Names" 
       description="Edgy, awesome, and unforgettable names for your Roblox character."
+      seoTitle="Cool Roblox Names – Stylish & Edgy Username Ideas | TryhardNames"
+      seoDescription="Generate cool Roblox display-name ideas: sleek, edgy styles that read clean on profiles and friend lists. Tips for availability and username rules included."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

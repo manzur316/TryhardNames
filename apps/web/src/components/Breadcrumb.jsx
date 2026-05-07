@@ -2,26 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { Helmet } from 'react-helmet';
+import { breadcrumbListSchema } from '@/seo/schema.js';
 
 const Breadcrumb = ({ items }) => {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://tryhardnames.com/"
-      },
-      ...items.map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 2,
-        "name": item.name,
-        "item": `https://tryhardnames.com${item.path}`
-      }))
-    ]
-  };
+  const schema = breadcrumbListSchema(items);
 
   return (
     <>

@@ -23,6 +23,7 @@ const validStaticRoutes = [
   '/contact',
   '/privacy-policy',
   '/terms-of-service',
+  '/gamer-bio-generator',
   '/leaderboards',
   '/favorites'
 ];

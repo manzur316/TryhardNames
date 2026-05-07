@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSEO } from '@/hooks/useSEO.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 import apiServerClient from '@/lib/apiServerClient.js';
 import { Button } from '@/components/ui/button.jsx';
 import { Input } from '@/components/ui/input.jsx';
@@ -7,13 +7,6 @@ import { Textarea } from '@/components/ui/textarea.jsx';
 import { Mail, MessageSquare, Send, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 const ContactPage = () => {
-  useSEO({
-    title: 'Contact TryhardNames - Get in Touch',
-    description: 'Contact the TryhardNames team for support, suggestions, or business inquiries.',
-    url: 'https://tryhardnames.com/contact',
-    type: 'website'
-  });
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -65,6 +58,12 @@ const ContactPage = () => {
   };
 
   return (
+    <>
+    <SeoHead
+      title="Contact TryhardNames – Support & Feedback"
+      description="Reach the TryhardNames team for tool feedback, partnerships, or general questions about our free gaming generators."
+      path="/contact"
+    />
     <div className="bg-gradient-dark text-dark-300 font-sans selection:bg-accent-cyan/30 py-20 px-4 flex-grow flex flex-col">
       <div className="container mx-auto max-w-5xl">
         
@@ -207,6 +206,7 @@ const ContactPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

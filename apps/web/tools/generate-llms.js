@@ -81,8 +81,19 @@ function extractRoutes(appJsxPath) {
 	}
 }
 
-function findReactFiles(dir) {
-	return fs.readdirSync(dir).map(item => path.join(dir, item));
+/** Collect .jsx / .tsx files only; recurse subdirs; never treat directories as files (fixes EISDIR on clusters/). */
+function findReactPageFiles(dir) {
+	const entries = fs.readdirSync(dir, { withFileTypes: true });
+	const files = [];
+	for (const dirent of entries) {
+		const fullPath = path.join(dir, dirent.name);
+		if (dirent.isDirectory()) {
+			files.push(...findReactPageFiles(fullPath));
+		} else if (dirent.isFile() && /\.(jsx|tsx)$/.test(dirent.name)) {
+			files.push(fullPath);
+		}
+	}
+	return files;
 }
 
 function extractHelmetData(content, filePath, routes) {
@@ -136,6 +147,9 @@ function ensureDirectoryExists(dirPath) {
 
 function processPageFile(filePath, routes) {
 	try {
+		if (!fs.statSync(filePath).isFile()) {
+			return null;
+		}
 		const content = fs.readFileSync(filePath, 'utf8');
 		return extractHelmetData(content, filePath, routes);
 	} catch (error) {
@@ -155,7 +169,7 @@ function main() {
 		pages = pages.filter(Boolean);
 	} else {
 		const routes = extractRoutes(appJsxPath);
-		const reactFiles = findReactFiles(pagesDir);
+		const reactFiles = findReactPageFiles(pagesDir);
 
 		pages = reactFiles
 			.map(filePath => processPageFile(filePath, routes))

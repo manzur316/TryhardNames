@@ -1,10 +1,10 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Swords, Sparkles, Zap, Trophy, Gem, TrendingUp, ChevronDown, Copy } from 'lucide-react';
 import freeGamerNamesData from '@/data/freeGamerNamesData.js';
 import NamesGrid from '@/components/NamesGrid.jsx';
 import InteractionButtons from '@/components/InteractionButtons.jsx';
 import { Button } from '@/components/ui/button.jsx';
-import { useSEO } from '@/hooks/useSEO.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 
 const iconMap = {
   Swords,
@@ -16,13 +16,6 @@ const iconMap = {
 };
 
 const FreeGamerNamesPackPage = () => {
-  useSEO({
-    title: 'Free Gamer Names Pack - TryhardNames',
-    description: 'Download our free pack of 1000+ unique gamer names. Perfect for gamers looking for the perfect username.',
-    url: 'https://tryhardnames.com',
-    type: 'website'
-  });
-  
   const allNames = useMemo(() => {
     return freeGamerNamesData.flatMap(section => section.names);
   }, []);
@@ -39,20 +32,15 @@ const FreeGamerNamesPackPage = () => {
     alert('Name copied to clipboard! (Demo)');
   };
 
-  useEffect(() => {
-    console.log('🚀 [FreeGamerNamesPackPage] Component mounted');
-    
-    const meta = document.createElement('meta');
-    meta.name = 'robots';
-    meta.content = 'noindex, nofollow';
-    document.head.appendChild(meta);
-
-    return () => {
-      document.head.removeChild(meta);
-    };
-  }, []);
-
   return (
+    <>
+    <SeoHead
+      title="Free Gamer Names Pack – Curated Username List | TryhardNames"
+      description="Browse a large curated list of gamer name ideas—tap to copy. Internal catalog page (noindex) for TryhardNames visitors."
+      path="/free-gamer-names-pack"
+      noIndex
+      skipCanonical
+    />
     <div className="bg-gradient-dark text-dark-300 font-sans selection:bg-accent-cyan/30 flex-grow flex flex-col">
       
       {/* Hero Section */}
@@ -143,6 +131,7 @@ const FreeGamerNamesPackPage = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import SeoHead from '@/seo/SeoHead.jsx';
 import CopyButton from '@/components/CopyButton.jsx';
 
 const SeoTemplate = ({ pageData }) => {
-  const canonicalUrl = `https://tryhardnames.com/${pageData.slug}`;
+  const path = `/${pageData.slug}`;
 
   // Split H1 to make the last word a gradient
   const h1Words = pageData.h1.split(' ');
@@ -14,23 +14,13 @@ const SeoTemplate = ({ pageData }) => {
 
   return (
     <>
-      <Helmet>
-        <title>{pageData.title}</title>
-        <meta name="description" content={pageData.description} />
-        <link rel="canonical" href={canonicalUrl} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:title" content={pageData.title} />
-        <meta property="og:description" content={pageData.description} />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={canonicalUrl} />
-        <meta name="twitter:title" content={pageData.title} />
-        <meta name="twitter:description" content={pageData.description} />
-      </Helmet>
+      <SeoHead
+        title={pageData.title}
+        description={pageData.description}
+        path={path}
+        ogType="article"
+        jsonLd={pageData.jsonLd || []}
+      />
 
       <div className="bg-gradient-dark text-dark-300 min-h-screen py-20 px-4 flex-grow flex flex-col">
         <div className="container mx-auto max-w-5xl">
@@ -85,18 +75,67 @@ const SeoTemplate = ({ pageData }) => {
           )}
 
           {/* Related Pages */}
-          {pageData.related && pageData.related.length > 0 && (
+          {(pageData.linkBlocks && pageData.linkBlocks.length > 0) || (pageData.related && pageData.related.length > 0) ? (
             <div className="border-t border-dark-700 pt-16">
-              <h3 className="text-2xl font-bold text-dark-50 mb-8 text-center">Explore More</h3>
-              <div className="flex flex-wrap justify-center gap-4">
-                {pageData.related.map((rel, i) => (
-                  <Link 
-                    key={i} 
-                    to={`/${rel.slug}`} 
-                    className="bg-dark-800 border border-dark-700 px-6 py-4 rounded-full text-dark-50 font-medium hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300 hover:scale-105 shadow-sm"
+              <h2 className="text-3xl font-bold text-dark-50 mb-10 text-center">Explore More</h2>
+
+              {pageData.linkBlocks && pageData.linkBlocks.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                  {pageData.linkBlocks.map((block, i) => (
+                    <section
+                      key={i}
+                      className="bg-dark-800 border border-dark-700 rounded-2xl p-6 md:p-7 hover:border-accent-cyan/40 transition-colors shadow-refined"
+                      aria-label={block.title}
+                    >
+                      <h3 className="text-xl font-bold text-dark-50 mb-4">{block.title}</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {block.links.map((l) => (
+                          <Link
+                            key={l.slug}
+                            to={`/${l.slug}`}
+                            className="bg-dark-900 border border-dark-700 px-4 py-3 rounded-full text-dark-50 text-sm font-semibold hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300 shadow-sm"
+                          >
+                            {l.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+                </div>
+              )}
+
+              {/* Backwards-compatible fallback */}
+              {(!pageData.linkBlocks || pageData.linkBlocks.length === 0) && pageData.related && pageData.related.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+                  {pageData.related.map((rel, i) => (
+                    <Link
+                      key={i}
+                      to={`/${rel.slug}`}
+                      className="bg-dark-800 border border-dark-700 px-6 py-4 rounded-full text-dark-50 font-medium hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300 hover:scale-105 shadow-sm"
+                    >
+                      {rel.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {/* FAQs (Indexable content + JSON-LD in head) */}
+          {pageData.faqs && pageData.faqs.length > 0 && (
+            <div className="border-t border-dark-700 pt-16">
+              <h2 className="text-3xl font-bold text-dark-50 mb-8 text-center">Frequently Asked Questions</h2>
+              <div className="space-y-4 max-w-4xl mx-auto">
+                {pageData.faqs.map((faq, i) => (
+                  <details
+                    key={i}
+                    className="bg-dark-800 border border-dark-700 rounded-xl p-6 hover:border-accent-cyan/40 transition-colors"
                   >
-                    {rel.title}
-                  </Link>
+                    <summary className="cursor-pointer select-none font-bold text-dark-50 text-lg">
+                      {faq.question}
+                    </summary>
+                    <div className="mt-3 text-dark-300 leading-relaxed">{faq.answer}</div>
+                  </details>
                 ))}
               </div>
             </div>

@@ -1,17 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSEO } from '@/hooks/useSEO.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 import { Zap, Gamepad2, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 
 const AboutPage = () => {
-  useSEO({
-    title: 'About TryhardNames - Gamer Name Generator',
-    description: 'Learn about TryhardNames, the ultimate gamer name and bio generator for gamers worldwide.',
-    url: 'https://tryhardnames.com/about',
-    type: 'website'
-  });
-
   const features = [
     {
       icon: Zap,
@@ -36,6 +29,12 @@ const AboutPage = () => {
   ];
 
   return (
+    <>
+    <SeoHead
+      title="About TryhardNames – Gaming Name & Unicode Tools"
+      description="TryhardNames builds free generators for gamer tags, Roblox/gamer hubs, stylish Unicode text and nickname symbols—made for players who care about identity."
+      path="/about"
+    />
     <div className="bg-gradient-dark text-dark-300 font-sans selection:bg-accent-cyan/30 flex-grow flex flex-col">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
@@ -99,6 +98,7 @@ const AboutPage = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

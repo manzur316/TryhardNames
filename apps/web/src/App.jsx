@@ -16,7 +16,12 @@ import { Navigation, Breadcrumbs, LegacyRouteHandler, RouteGuard } from '@/core/
 import { 
   StylishTextGeneratorPage,
   NicknameSymbolsPage,
-  HomePage
+  HomePage,
+  AboutPage,
+  ContactPage,
+  PrivacyPolicyPage,
+  TermsOfServicePage,
+  GamerBioGeneratorPage,
 } from '@/features/index.js';
 import NotFoundPage from '@/pages/NotFoundPage.jsx';
 import DynamicPage from '@/pages/DynamicPage.jsx';
@@ -64,6 +69,12 @@ function App() {
                             <Route path="/" element={<HomePage />} />
                             <Route path="/stylish-text-generator" element={<StylishTextGeneratorPage />} />
                             <Route path="/nickname-symbols" element={<NicknameSymbolsPage />} />
+
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/contact" element={<ContactPage />} />
+                            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                            <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+                            <Route path="/gamer-bio-generator" element={<GamerBioGeneratorPage />} />
                             
                             {/* Lazy Loaded Roblox Routes */}
                             <Route path="/roblox-names" element={<Suspense fallback={<PageLoader />}><RobloxNamesMainPage /></Suspense>} />

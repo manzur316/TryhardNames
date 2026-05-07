@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Helmet } from 'react-helmet';
+import SeoHead from '@/seo/SeoHead.jsx';
 import { Check, AlertCircle, Sparkles, History, Trash2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import Breadcrumb from '@/components/Breadcrumb.jsx';
@@ -59,10 +59,11 @@ const NicknameGeneratorPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Nickname Symbols Generator – Cool Gaming Names</title>
-        <meta name="description" content="Add cool symbols, special characters, and aesthetic text to your gaming nicknames. Perfect for PUBG, Free Fire, Roblox, and more." />
-      </Helmet>
+      <SeoHead
+        title="Nickname Symbols Generator – Cool Characters for Gaming Names | TryhardNames"
+        description="Decorate nicknames with aesthetic symbols and Unicode extras—built for short gaming handles. Copy-ready characters for mobile shooters, Roblox and Discord."
+        path="/nickname-symbols"
+      />
 
       <div className={`${bgMain} ${textMain} flex-grow flex flex-col min-h-screen transition-colors duration-300`}>
         

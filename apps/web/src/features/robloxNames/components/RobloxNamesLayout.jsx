@@ -1,10 +1,43 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import SeoHead from '@/seo/SeoHead.jsx';
+import { faqPageSchema } from '@/seo/schema.js';
+import { robloxHubBreadcrumbJsonLd } from '@/seo/layoutBreadcrumbs.js';
 
-export const RobloxNamesLayout = ({ children, title, description }) => {
+const CHILD_LABEL = {
+  cool: 'Cool',
+  funny: 'Funny',
+  aesthetic: 'Aesthetic',
+  tryhard: 'Tryhard',
+};
+
+/** @param {{ q: string, a: string }[]} faqs */
+function faqSchemaFromQA(faqs) {
+  if (!faqs?.length) return null;
+  return faqPageSchema(faqs.map((f) => ({ question: f.q, answer: f.a })));
+}
+
+export const RobloxNamesLayout = ({
+  children,
+  title,
+  description,
+  seoTitle,
+  seoDescription,
+  faqs,
+}) => {
   const location = useLocation();
-  
+  const pathname = location.pathname;
+  const isHub = pathname === '/roblox-names';
+  const childKey = pathname.startsWith('/roblox-names/') ? pathname.replace('/roblox-names/', '') : '';
+  const jsonLd = [
+    robloxHubBreadcrumbJsonLd(pathname),
+    faqSchemaFromQA(faqs),
+  ].filter(Boolean);
+
+  const pageTitle = seoTitle || `${title} | TryhardNames`;
+  const pageDesc = seoDescription || description || '';
+
   const navLinks = [
     { path: '/roblox-names', label: 'All Names', isParent: true },
     { path: '/roblox-names/cool', label: 'Cool', isParent: false },
@@ -14,13 +47,25 @@ export const RobloxNamesLayout = ({ children, title, description }) => {
   ];
   
   return (
-    <div className="min-h-screen transition-colors duration-300 bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-50">
+    <>
+      <SeoHead title={pageTitle} description={pageDesc} path={pathname} jsonLd={jsonLd} />
+      <div className="min-h-screen transition-colors duration-300 bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center text-sm text-slate-500 dark:text-dark-400 mb-8" aria-label="Breadcrumb">
+        <nav className="flex items-center text-sm text-slate-500 dark:text-dark-400 mb-8 flex-wrap" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 mx-2 opacity-50" />
-          <span className="text-slate-900 dark:text-dark-50 font-medium" aria-current="page">Roblox Names</span>
+          <ChevronRight className="w-4 h-4 mx-2 opacity-50 flex-shrink-0" />
+          {!isHub ? (
+            <>
+              <Link to="/roblox-names" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Roblox Names</Link>
+              <ChevronRight className="w-4 h-4 mx-2 opacity-50 flex-shrink-0" />
+              <span className="text-slate-900 dark:text-dark-50 font-medium" aria-current="page">
+                {CHILD_LABEL[childKey] || childKey}
+              </span>
+            </>
+          ) : (
+            <span className="text-slate-900 dark:text-dark-50 font-medium" aria-current="page">Roblox Names</span>
+          )}
         </nav>
 
         {/* Page Header */}
@@ -83,5 +128,6 @@ export const RobloxNamesLayout = ({ children, title, description }) => {
         </footer>
       </main>
     </div>
+    </>
   );
 };

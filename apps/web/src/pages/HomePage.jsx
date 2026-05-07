@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import SeoHead from '@/seo/SeoHead.jsx';
+import { faqPageSchema } from '@/seo/schema.js';
+import { HOME_PAGE_FAQS } from '@/seo/data/homeFaqs.js';
 import { Sparkles, RefreshCw, Hash, AtSign, Share2, ChevronDown, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -101,6 +103,30 @@ const HomePage = () => {
     'CrimsonBlade', 'SilentHunter', 'ThunderStorm', 'IceWizard'
   ];
 
+  const popularCategories = [
+    { title: 'Roblox Names', desc: 'Cool, funny, aesthetic, tryhard.', to: '/roblox-names' },
+    { title: 'Gamer Names', desc: 'Cool, pro, funny, edgy.', to: '/gamer-names' },
+    { title: 'Stylish Text', desc: 'Fonts for Discord, TikTok, Twitch.', to: '/stylish-text-generator' },
+    { title: 'Nickname Symbols', desc: 'Symbols, separators, decorations.', to: '/nickname-symbols' },
+  ];
+
+  const trendingStyles = [
+    { label: 'Tryhard', to: '/roblox-names/tryhard' },
+    { label: 'Cool', to: '/gamer-names/cool' },
+    { label: 'Funny', to: '/roblox-names/funny' },
+    { label: 'Aesthetic', to: '/roblox-names/aesthetic' },
+    { label: 'Pro', to: '/gamer-names/pro' },
+    { label: 'Edgy', to: '/gamer-names/edgy' },
+  ];
+
+  const popularGames = [
+    { label: 'Valorant', to: '/valorant/sweaty' },
+    { label: 'Fortnite', to: '/fortnite/tryhard' },
+    { label: 'Call of Duty', to: '/cod/sweaty' },
+    { label: 'Free Fire', to: '/free-fire' },
+    { label: 'League of Legends', to: '/league-of-legends-names' },
+  ];
+
   const faqs = [
     { q: 'Are these names free to use?', a: 'Yes, our platform is completely free. You can generate, copy, and use as many names as you want without any hidden fees or subscriptions. We believe everyone deserves a great gaming identity.' },
     { q: 'Can I use these names on any platform?', a: 'Absolutely. The names generated here are designed to be compatible with major gaming platforms including PC, Xbox, PlayStation, Nintendo Switch, and mobile games. Just be sure to check the specific character limits of the game you are playing.' },
@@ -109,10 +135,12 @@ const HomePage = () => {
 
   return (
     <div className="bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-300 flex-grow flex flex-col transition-colors duration-300">
-      <Helmet>
-        <title>Tryhard Names Generator – Stylish Gamer Tags & Clan Names</title>
-        <meta name="description" content="Generate sweaty tryhard names, stylish gamer tags and powerful clan names instantly. Copy & paste ready for Fortnite, Valorant, Free Fire and more." />
-      </Helmet>
+      <SeoHead
+        title="Tryhard Names Generator – Stylish Gamer Tags & Clan Names"
+        description="Generate sweaty tryhard names, stylish gamer tags and powerful clan names instantly. Copy-ready for competitive games—browse Roblox & gamer hubs, stylish text and symbol tools."
+        path="/"
+        jsonLd={[faqPageSchema(HOME_PAGE_FAQS)]}
+      />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden py-6 sm:py-12 md:py-16 lg:py-20 min-h-[400px] flex flex-col justify-center px-4">
@@ -148,7 +176,27 @@ const HomePage = () => {
               >
                 Generate Your Gamer Name
               </Button>
+              <Link
+                to="/roblox-names"
+                className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-dark-700 bg-white/70 dark:bg-dark-900/60 px-8 py-4 sm:py-3 font-bold text-slate-900 dark:text-dark-50 hover:border-accent-cyan/50 hover:text-accent-cyan transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                Browse Popular Categories
+              </Link>
             </div>
+
+            <nav aria-label="Trending styles" className="pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {trendingStyles.map((s) => (
+                  <Link
+                    key={s.to}
+                    to={s.to}
+                    className="px-3 py-2 rounded-full text-sm font-semibold bg-white/70 dark:bg-dark-900/60 border border-slate-200 dark:border-dark-700 text-slate-700 dark:text-dark-200 hover:border-accent-purple/50 hover:text-accent-purple transition-colors"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </nav>
           </motion.div>
         </div>
       </section>
@@ -242,11 +290,113 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Internal Linking + Engagement Sections */}
+      <section className="container mx-auto max-w-6xl px-4 pb-6 sm:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          <section className="lg:col-span-2 bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 rounded-2xl p-5 sm:p-8 shadow-refined">
+            <header className="mb-6">
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-dark-50 tracking-tight">
+                Popular Categories
+              </h2>
+              <p className="text-slate-600 dark:text-dark-300 mt-2 leading-relaxed">
+                Jump into the most-used generators and explore deeper pages that match your vibe.
+              </p>
+            </header>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              {popularCategories.map((c) => (
+                <Link
+                  key={c.to}
+                  to={c.to}
+                  className="group rounded-xl border border-slate-200 dark:border-dark-700 bg-slate-50 dark:bg-dark-900 p-4 sm:p-5 hover:border-accent-cyan/50 transition-all duration-300 shadow-sm hover:shadow-md"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-lg font-black text-slate-900 dark:text-dark-50 group-hover:text-accent-cyan transition-colors">
+                        {c.title}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-dark-300 mt-1 leading-relaxed">
+                        {c.desc}
+                      </p>
+                    </div>
+                    <ChevronDown className="w-5 h-5 text-slate-400 dark:text-dark-400 group-hover:text-accent-cyan transition-colors rotate-[-90deg] mt-1" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-slate-200 dark:border-dark-700">
+              <h3 className="text-lg font-black text-slate-900 dark:text-dark-50 mb-3">
+                Trending Name Styles
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {trendingStyles.map((s) => (
+                  <Link
+                    key={`style-${s.to}`}
+                    to={s.to}
+                    className="px-3 py-2 rounded-full text-sm font-bold bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 text-slate-700 dark:text-dark-200 hover:border-accent-purple/50 hover:text-accent-purple transition-colors"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <aside className="bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 rounded-2xl p-5 sm:p-8 shadow-refined h-full">
+            <header className="mb-6">
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-dark-50 tracking-tight">
+                Popular Games
+              </h2>
+              <p className="text-slate-600 dark:text-dark-300 mt-2 leading-relaxed">
+                Game-specific pages help you find names that “fit” the community faster.
+              </p>
+            </header>
+
+            <div className="flex flex-wrap gap-2">
+              {popularGames.map((g) => (
+                <Link
+                  key={g.to}
+                  to={g.to}
+                  className="px-3 py-2 rounded-full text-sm font-bold bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 text-slate-800 dark:text-dark-100 hover:border-accent-cyan/50 hover:text-accent-cyan transition-colors"
+                >
+                  {g.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-slate-200 dark:border-dark-700">
+              <h3 className="text-lg font-black text-slate-900 dark:text-dark-50 mb-2">
+                Future Ad Slot
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-dark-300 leading-relaxed">
+                Reserved space for in-content monetization (no ads shown in dev).
+              </p>
+              <div className="mt-4 rounded-xl border border-dashed border-slate-300 dark:border-dark-600 bg-slate-50/60 dark:bg-dark-900/40 min-h-[140px] flex items-center justify-center text-xs font-bold text-slate-500 dark:text-dark-400">
+                In-content placeholder
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section className="container mx-auto max-w-6xl px-4">
+        <TrendingNamesSection />
+      </section>
+
+      <section className="container mx-auto max-w-6xl px-4">
+        <PopularToolsSection />
+      </section>
+
+      <section className="container mx-auto max-w-6xl px-4">
+        <BuildYourIdentitySection />
+      </section>
+
       {/* Standardized SEO Section */}
       <section className="mt-16 max-w-4xl mx-auto px-4 pb-20">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-3xl md:text-4xl font-black mb-4 text-slate-900 dark:text-dark-50 tracking-tight">
           Free Online Name Generators & Stylish Text Tools
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-4 leading-relaxed">
           Discover the ultimate AI-powered name generators designed specifically for building your gaming identity. Whether you are launching a new streaming channel, joining a competitive esports team, or simply starting a fresh playthrough, finding the perfect username is your first critical step. Our advanced algorithms analyze thousands of gaming trends to deliver names that command respect and capture attention.
         </p>

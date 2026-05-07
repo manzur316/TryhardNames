@@ -30,6 +30,9 @@ export const GamerNamesProPage = () => {
     <GamerNamesLayout 
       title="Pro Gamer Names" 
       description="Clean, short, and professional names for competitive esports."
+      seoTitle="Pro Gamer Names – Clean Esports & Competitive Tags | TryhardNames"
+      seoDescription="Pro-style gamertags: short, broadcast-friendly aliases that read serious on leaderboards and are easier to reuse across brands."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

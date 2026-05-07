@@ -38,6 +38,9 @@ export const GamerNamesPage = () => {
     <GamerNamesLayout 
       title="Gamer Names Generator" 
       description="Find the ultimate gamertag for Xbox, PlayStation, or PC gaming. Choose a category to get started."
+      seoTitle="Gamer Names Generator – Gamertags for PC, Xbox & PlayStation | TryhardNames"
+      seoDescription="Cross-platform gamer name ideas: cool, funny, pro and edgy styles. Build a consistent alias for Discord, Steam, consoles and social profiles."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">

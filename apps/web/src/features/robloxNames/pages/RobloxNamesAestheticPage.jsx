@@ -30,6 +30,9 @@ export const RobloxNamesAestheticPage = () => {
     <RobloxNamesLayout 
       title="Aesthetic Roblox Names" 
       description="Soft, pleasing, and stylish names for a chill vibe."
+      seoTitle="Aesthetic Roblox Names – Soft, Stylish & Cute Ideas | TryhardNames"
+      seoDescription="Aesthetic Roblox name styles: lowercase vibes, soft themes, and clean spelling swaps that still fit Roblox username rules."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

@@ -1,17 +1,16 @@
 import React from 'react';
-import { useSEO } from '@/hooks/useSEO.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 
 const TermsOfServicePage = () => {
-  useSEO({
-    title: 'Terms of Service - TryhardNames',
-    description: 'Terms of Service and usage guidelines for TryhardNames.',
-    url: 'https://tryhardnames.com/terms-of-service',
-    type: 'website'
-  });
-
   const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
+    <>
+    <SeoHead
+      title="Terms of Service – TryhardNames"
+      description="Terms governing use of TryhardNames generators, content, and acceptable use of our free gaming tools."
+      path="/terms-of-service"
+    />
     <div className="bg-gradient-dark text-dark-300 font-sans py-20 px-4 flex-grow flex flex-col">
       <div className="container mx-auto max-w-4xl bg-dark-800 border border-dark-700 rounded-3xl p-8 md:p-12">
         <h1 className="text-4xl md:text-5xl font-black text-dark-50 mb-4">Terms of Service</h1>
@@ -91,6 +90,7 @@ const TermsOfServicePage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

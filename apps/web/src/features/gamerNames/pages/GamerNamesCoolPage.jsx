@@ -30,6 +30,9 @@ export const GamerNamesCoolPage = () => {
     <GamerNamesLayout 
       title="Cool Gamer Names" 
       description="Sleek, memorable, and awesome gamertags for any platform."
+      seoTitle="Cool Gamer Names – Sleek Gamertag Ideas for PC & Console | TryhardNames"
+      seoDescription="Cool gamertag styles that work on Xbox, PlayStation, Steam and Discord: memorable wording, clean spelling, and naming habits recruiters notice."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

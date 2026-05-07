@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Helmet } from 'react-helmet';
+import SeoHead from '@/seo/SeoHead.jsx';
+import { faqPageSchema } from '@/seo/schema.js';
 import { Link } from 'react-router-dom';
 import { 
   Copy, Check, AlertCircle, Zap, 
@@ -195,12 +196,16 @@ const StylishTextGeneratorPage = () => {
     { q: 'Is there a limit to how much text I can convert?', a: 'Our tool currently supports up to 500 characters at a time to ensure fast performance and prevent browser lag.' }
   ];
 
+  const faqJsonLd = faqPageSchema(faqs.map((f) => ({ question: f.q, answer: f.a })));
+
   return (
     <>
-      <Helmet>
-        <title>Stylish Text Generator – Convert Text to Cool Fonts & Symbols</title>
-        <meta name="description" content="Generate 50+ stylish text fonts, cool symbols, and Unicode text instantly. Copy and paste bold, italic, cursive, and aesthetic fonts for social media and gaming." />
-      </Helmet>
+      <SeoHead
+        title="Stylish Text Generator – Unicode Fonts & Cool Symbols | TryhardNames"
+        description="Generate 50+ stylish Unicode fonts and aesthetic text styles—bold, cursive, mirrored and decorative. Copy/paste for bios, Discord, TikTok and gaming tags."
+        path="/stylish-text-generator"
+        jsonLd={[faqJsonLd]}
+      />
 
       <div className="bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-50 flex-grow flex flex-col min-h-screen transition-colors duration-300">
         

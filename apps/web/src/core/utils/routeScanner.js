@@ -4,7 +4,6 @@ export const LEGACY_ROUTE_PATTERNS = [
   '/valorant-names',
   '/fortnite-names',
   '/fortnite-tryhard-names',
-  '/gamer-bio-generator',
   '/cool-gamer-bio',
   '/funny-gamer-bio',
   '/roblox-names-generator',

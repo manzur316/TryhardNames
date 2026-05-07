@@ -30,6 +30,9 @@ export const GamerNamesFunnyPage = () => {
     <GamerNamesLayout 
       title="Funny Gamer Names" 
       description="Hilarious gamertags that will get a laugh in every lobby."
+      seoTitle="Funny Gamer Names – Comedy Gamertags & Meme Tags | TryhardNames"
+      seoDescription="Funny gamertag ideas for streams and casual play: clean jokes, clever wordplay, and memorable punchlines without risky wording."
+      faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

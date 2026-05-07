@@ -8,21 +8,20 @@ import RecentlyGeneratedBios from '@/components/RecentlyGeneratedBios.jsx';
 import MostCopiedBiosSection from '@/components/MostCopiedBiosSection.jsx';
 import BuildYourIdentitySection from '@/components/BuildYourIdentitySection.jsx';
 import { ArrowDown } from 'lucide-react';
-import { useSEO } from '@/hooks/useSEO.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 
 const GamerBioGeneratorPage = () => {
-  useSEO({
-    title: 'Gamer Bio Generator - Create Your Perfect Gaming Bio',
-    description: 'Generate creative and unique gaming bios instantly. Perfect for Discord, Twitch, YouTube and more.',
-    url: 'https://tryhardnames.com',
-    type: 'website'
-  });
-
   const scrollToGenerator = () => {
     document.getElementById('generator')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
+    <>
+    <SeoHead
+      title="Gamer Bio Generator – Discord, Twitch & Social Bios | TryhardNames"
+      description="Generate short, aesthetic and tryhard-style gaming bios—optimized for Discord, Twitch and social profiles. Copy-ready lines with symbols and tone presets."
+      path="/gamer-bio-generator"
+    />
     <div className="bg-gradient-dark text-dark-300 selection:bg-accent-cyan/30 flex-grow flex flex-col">
       {/* Hero Section */}
       <section className="relative pt-20 pb-12 px-4 overflow-hidden min-h-[350px] md:min-h-[400px] flex flex-col items-center justify-center">
@@ -92,6 +91,7 @@ const GamerBioGeneratorPage = () => {
         <BuildYourIdentitySection />
       </section>
     </div>
+    </>
   );
 };
 
