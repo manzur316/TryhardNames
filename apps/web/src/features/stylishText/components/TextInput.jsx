@@ -9,9 +9,9 @@ export const TextInput = ({ value, onChange, onClear, maxLength = 500, isDarkMod
   return (
     <div className="relative">
       <div className="flex justify-between items-center mb-3">
-        <label htmlFor="text-input" className={`text-sm font-bold uppercase tracking-wider flex items-center gap-2 ${textMuted}`}>
-          <Type className="w-4 h-4 text-accent-cyan" />
-          Your Text
+        <label htmlFor="text-input" className={`text-sm font-semibold flex items-center gap-2 ${textMuted}`}>
+          <Type className="w-4 h-4 text-accent-cyan shrink-0" aria-hidden />
+          Your text
         </label>
         <div className="flex items-center gap-4">
           <span className={`text-xs font-medium ${value.length >= maxLength ? 'text-red-500' : textMuted}`}>

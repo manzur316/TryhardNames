@@ -22,7 +22,7 @@ const FAQSection = () => {
         {faqs.map((faq, index) => (
           <div 
             key={index} 
-            className={`bg-card border rounded-xl overflow-hidden transition-colors duration-300 ${openIndex === index ? 'border-primary/50 shadow-[0_0_15px_rgba(0,255,136,0.05)]' : 'border-border/50 hover:border-border'}`}
+            className={`bg-card border rounded-xl overflow-hidden transition-colors duration-300 ${openIndex === index ? 'border-primary/40' : 'border-border/50 hover:border-border'}`}
           >
             <button
               onClick={() => setOpenIndex(openIndex === index ? -1 : index)}

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ToggleSwitch from '@/components/ToggleSwitch.jsx';
 import { useToast } from '@/hooks/use-toast.js';
 import { useLocation } from 'react-router-dom';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const LeagueOfLegendsNameGenerator = ({ onGenerate }) => {
   const [generatedName, setGeneratedName] = useState('');
@@ -109,17 +110,19 @@ const LeagueOfLegendsNameGenerator = ({ onGenerate }) => {
     }, 500);
   };
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
-    
     toast({
       title: "Copied. Dominate Summoner's Rift.",
       className: "bg-card border-[#C89B3C] text-foreground",
       duration: 2000,
     });
-
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   const handleShare = () => {
@@ -241,18 +244,18 @@ const LeagueOfLegendsNameGenerator = ({ onGenerate }) => {
           <Button
             onClick={handleGenerateSingle}
             disabled={isGenerating}
-            className="bg-[#0A8CC9] text-white hover:bg-[#0A8CC9]/90 shadow-[0_0_15px_rgba(10,140,201,0.4)] hover:shadow-[0_0_25px_rgba(10,140,201,0.6)] text-lg py-8 font-bold transition-all duration-300 hover:scale-[1.02] w-full"
+            className="bg-[#0A8CC9] text-white hover:bg-[#0A8CC9]/90 shadow-md text-lg py-8 font-bold transition-colors duration-300 w-full"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Sparkles className="w-6 h-6 mr-2" />}
-            Generate LoL Name
+            Sample LoL tag
           </Button>
           <Button
             onClick={handleGenerateMultiple}
             disabled={isGenerating}
-            className="bg-[#5B2C6F] text-white hover:bg-[#5B2C6F]/90 text-lg py-8 font-bold transition-smooth hover:scale-[1.02] w-full"
+            className="bg-[#5B2C6F] text-white hover:bg-[#5B2C6F]/90 text-lg py-8 font-bold transition-colors duration-300 w-full"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Type className="w-6 h-6 mr-2" />}
-            Generate 10 Names
+            Sample 10 tags
           </Button>
         </div>
 

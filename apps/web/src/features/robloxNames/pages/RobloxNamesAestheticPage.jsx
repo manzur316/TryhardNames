@@ -70,8 +70,8 @@ export const RobloxNamesAestheticPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Aesthetic Names"
-            buttonLabel="Generate Aesthetic Roblox Names"
+            title="Sample aesthetic tags"
+            buttonLabel="Sample more aesthetic tags"
             defaultCount={12}
           />
         </div>

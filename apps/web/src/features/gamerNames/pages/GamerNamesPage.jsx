@@ -72,8 +72,8 @@ export const GamerNamesPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Gamer Names"
-            buttonLabel="Generate More Gamer Names"
+            title="Sample gamer tags"
+            buttonLabel="Sample more gamer tags"
             defaultCount={12}
           />
         </div>

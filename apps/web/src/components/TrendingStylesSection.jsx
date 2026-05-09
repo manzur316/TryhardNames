@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const initialTrending = [
   { id: 1, text: '★ 𝘛𝘰𝘹𝘪𝘤 𝘎𝘢𝘮𝘦𝘳 ★', category: 'Gaming' },
@@ -38,8 +39,12 @@ const TrendingStylesSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleCopy = (item) => {
-    navigator.clipboard.writeText(item.text);
+  const handleCopy = async (item) => {
+    const res = await copyTextToClipboard(item.text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(item.id);
     
     toast({
@@ -49,7 +54,7 @@ const TrendingStylesSection = () => {
       duration: 2000,
     });
 
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   return (

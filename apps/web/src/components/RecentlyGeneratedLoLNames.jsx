@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Copy, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const RecentlyGeneratedLoLNames = () => {
   const [recentNames, setRecentNames] = useState([]);
@@ -30,15 +31,19 @@ const RecentlyGeneratedLoLNames = () => {
     };
   }, []);
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     toast({
       title: "Copied!",
       className: "bg-card border-[#0A8CC9] text-foreground",
       duration: 2000
     });
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   const formatTime = (timestamp) => {

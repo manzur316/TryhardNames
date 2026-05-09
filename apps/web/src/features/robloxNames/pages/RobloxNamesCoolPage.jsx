@@ -70,8 +70,8 @@ export const RobloxNamesCoolPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Cool Names"
-            buttonLabel="Generate Cool Roblox Names"
+            title="Sample cool tags"
+            buttonLabel="Sample more cool tags"
             defaultCount={12}
           />
         </div>

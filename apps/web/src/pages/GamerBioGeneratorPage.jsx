@@ -1,5 +1,5 @@
 import React from 'react';
-import Breadcrumb from '@/components/Breadcrumb.jsx';
+import { Link } from 'react-router-dom';
 import GamerBioGenerator from '@/components/GamerBioGenerator.jsx';
 import GamerBioPageSEOContent from '@/components/GamerBioPageSEOContent.jsx';
 import GamerBioFAQSection from '@/components/GamerBioFAQSection.jsx';
@@ -19,7 +19,7 @@ const GamerBioGeneratorPage = () => {
     <>
     <SeoHead
       title="Gamer Bio Generator – Discord, Twitch & Social Bios | TryhardNames"
-      description="Generate short, aesthetic and tryhard-style gaming bios—optimized for Discord, Twitch and social profiles. Copy-ready lines with symbols and tone presets."
+      description="Short gaming bios for Discord, Twitch, and profiles—tryhard, aesthetic, and clean tones with copy-ready lines."
       path="/gamer-bio-generator"
     />
     <div className="bg-gradient-dark text-dark-300 selection:bg-accent-cyan/30 flex-grow flex flex-col">
@@ -29,15 +29,18 @@ const GamerBioGeneratorPage = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-accent-cyan/5 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
         
         <div className="container mx-auto max-w-4xl relative z-10 text-center space-y-6">
-          <div className="flex justify-center mb-2">
-            <Breadcrumb items={[{ name: 'Gamer Bio Generator', path: '/gamer-bio-generator' }]} />
-          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-dark-50 tracking-tight leading-tight">
             Gamer Bio Generator – <br className="hidden md:block" />
             <span className="text-accent-cyan">Tryhard & Aesthetic</span> Bios
           </h1>
           <p className="text-lg md:text-xl text-dark-300 max-w-2xl mx-auto font-medium">
-            Generate stylish and competitive gamer bios instantly. Perfect for Discord, Twitch, Instagram, and your in-game profiles.
+            Lines tuned for how bios read in Discord, Twitch, and profiles—pick a tone, copy, refine.
+          </p>
+          <p className="text-sm text-dark-400 max-w-xl mx-auto">
+            <Link to="/identity-kit" className="text-accent-cyan/90 hover:underline underline-offset-4">
+              Drop your best line into an Identity Kit
+            </Link>
+            —bundle it with your handle and export a card.
           </p>
           
           <div className="pt-4">
@@ -45,7 +48,7 @@ const GamerBioGeneratorPage = () => {
               onClick={scrollToGenerator}
               className="bg-gradient-cyan-purple text-white hover:opacity-90 text-lg px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2 mx-auto w-full sm:w-auto justify-center"
             >
-              Start Generating <ArrowDown className="w-5 h-5 animate-bounce" />
+              Explore bios <ArrowDown className="w-5 h-5 animate-bounce" />
             </button>
           </div>
         </div>

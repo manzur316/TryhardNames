@@ -18,7 +18,8 @@ export const LEGACY_ROUTE_MAP = {
   '/cool-gamer-names': '/gamer-names/cool',
   '/funny-gamer-names': '/gamer-names/funny',
   '/pro-gamer-names': '/gamer-names/pro',
-  '/edgy-gamer-names': '/gamer-names/edgy'
+  '/edgy-gamer-names': '/gamer-names/edgy',
+  '/league-of-legends-names': '/league-of-legends',
 };
 
 export const useLegacyRouteRedirect = () => {

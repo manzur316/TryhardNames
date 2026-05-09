@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Copy, Check, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const TrendingLoLNamesSection = () => {
   const [copiedId, setCopiedId] = useState(null);
@@ -27,8 +28,12 @@ const TrendingLoLNamesSection = () => {
     { name: 'DominantForce', category: 'Team' }
   ];
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     
     toast({
@@ -37,7 +42,7 @@ const TrendingLoLNamesSection = () => {
       className: "bg-card border-[#C89B3C] text-foreground"
     });
 
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   return (

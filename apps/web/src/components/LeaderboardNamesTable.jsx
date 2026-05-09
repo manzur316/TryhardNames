@@ -3,16 +3,21 @@ import { Copy, Check, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import FavoriteButton from './FavoriteButton.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const LeaderboardNamesTable = ({ data }) => {
   const [copiedId, setCopiedId] = useState(null);
   const { toast } = useToast();
 
-  const handleCopy = (name, id) => {
-    navigator.clipboard.writeText(name);
+  const handleCopy = async (name, id) => {
+    const res = await copyTextToClipboard(name, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     toast({ title: "Copied!", description: `${name} copied to clipboard.`, className: "bg-card border-primary text-foreground" });
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   const renderTrend = (trend, percent) => {

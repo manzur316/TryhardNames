@@ -9,7 +9,7 @@ const AboutPage = () => {
     {
       icon: Zap,
       title: 'Fast & Easy',
-      description: 'Generate hundreds of unique names in milliseconds. No waiting, just instant results.'
+      description: 'Pull large lists quickly—sample until something clicks.'
     },
     {
       icon: Gamepad2,
@@ -32,7 +32,7 @@ const AboutPage = () => {
     <>
     <SeoHead
       title="About TryhardNames – Gaming Name & Unicode Tools"
-      description="TryhardNames builds free generators for gamer tags, Roblox/gamer hubs, stylish Unicode text and nickname symbols—made for players who care about identity."
+      description="Free tools for gaming handles, Roblox and gamer hubs, Unicode text, and nickname symbols—built for readable online identity."
       path="/about"
     />
     <div className="bg-gradient-dark text-dark-300 font-sans selection:bg-accent-cyan/30 flex-grow flex flex-col">

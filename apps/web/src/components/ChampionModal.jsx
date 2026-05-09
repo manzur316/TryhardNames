@@ -170,7 +170,7 @@ const ChampionModal = ({ champion, isOpen, onClose, onGenerateName }) => {
               }}
               className="bg-primary text-black hover:bg-primary/90 font-bold px-6"
             >
-              <Zap className="w-4 h-4 mr-2" /> Generate Name for {champion.name}
+              <Zap className="w-4 h-4 mr-2" /> Sample tag for {champion.name}
             </Button>
           </div>
         </motion.div>

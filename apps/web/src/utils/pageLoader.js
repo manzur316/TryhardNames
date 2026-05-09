@@ -19,6 +19,7 @@ export const clusters = {
   fortnite: getProgrammaticPagesByCategory('fortnite'),
   cod: getProgrammaticPagesByCategory('cod'),
   roblox: getProgrammaticPagesByCategory('roblox'),
+  'league-of-legends': getProgrammaticPagesByCategory('league-of-legends'),
   general: getProgrammaticPagesByCategory('general'),
 };
 

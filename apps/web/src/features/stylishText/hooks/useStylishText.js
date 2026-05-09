@@ -1,20 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useData } from '@/core/hooks/useData.js';
-import { useLazyFetch } from '@/core/hooks/useLazyFetch.js';
-import { useDebouncedSearch } from '@/core/hooks/useDebouncedSearch.js';
-import { dataService } from '@/core/api/dataService.js';
+import { getAllStyles } from '@/utils/textStyleConverter.js';
 import { validateTransform } from '../utils/textStyleConverter.js';
 
-const FALLBACK_STYLES = {
-  success: true,
-  data: [
-    { id: 'bold', name: 'Bold', category: 'All' },
-    { id: 'italic', name: 'Italic', category: 'All' },
-    { id: 'monospace', name: 'Monospace', category: 'All' },
-    { id: 'script', name: 'Script', category: 'All' }
-  ],
-  pagination: { page: 1, limit: 50, total: 4, pages: 1, hasMore: false }
-};
+/** Client-side catalog (single source of truth with `textStyles` transforms). Avoids API ids that never matched real transforms. */
+export const STYLISH_TEXT_FALLBACK_STYLE_LIST = getAllStyles().slice(0, 12).map(({ id, name, category }) => ({ id, name, category }));
 
 export const useStylishText = () => {
   const { names } = useData();
@@ -23,30 +13,19 @@ export const useStylishText = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [savedTexts, setSavedTexts] = useState([]);
   const [isLoadingTexts, setIsLoadingTexts] = useState(false);
-  const limit = 50;
 
-  const { 
-    query: searchQuery, 
-    handleSearch, 
-    clearSearch 
-  } = useDebouncedSearch(async (q) => {
-    setCurrentPage(1);
-    return q;
-  }, 300);
+  /** Full local catalog — page filters by category/search for instant UX. */
+  const styles = useMemo(() => getAllStyles(), []);
 
-  const { 
-    data: stylesData, 
-    isLoading: isLoadingStyles, 
-    error: stylesError, 
-    fetch: fetchStyles,
-    isFallback: isUsingFallback
-  } = useLazyFetch(
-    (page, l, cat, search) => dataService.getStyles(page, l, cat, search),
-    { 
-      useHybridCache: true, 
-      cacheKey: `styles-${currentPage}-${limit}-${selectedStyle}-${searchQuery}`,
-      fallbackData: FALLBACK_STYLES
-    }
+  const pagination = useMemo(
+    () => ({
+      page: 1,
+      limit: styles.length,
+      total: styles.length,
+      pages: 1,
+      hasMore: false
+    }),
+    [styles.length]
   );
 
   useEffect(() => {
@@ -59,22 +38,16 @@ export const useStylishText = () => {
         setIsLoadingTexts(false);
       }
     };
-    
+
     loadSavedTexts();
   }, [names]);
 
-  useEffect(() => {
-    fetchStyles(currentPage, limit, selectedStyle, searchQuery);
-  }, [currentPage, limit, selectedStyle, searchQuery, fetchStyles]);
-
   const handleNextPage = useCallback(() => {
-    if (stylesData?.pagination?.hasMore) {
-      setCurrentPage(prev => prev + 1);
-    }
-  }, [stylesData]);
+    setCurrentPage((prev) => prev + 1);
+  }, []);
 
   const handlePreviousPage = useCallback(() => {
-    setCurrentPage(prev => Math.max(1, prev - 1));
+    setCurrentPage((prev) => Math.max(1, prev - 1));
   }, []);
 
   const generateStylishText = (text, styleTransform) => {
@@ -105,26 +78,26 @@ export const useStylishText = () => {
     }
   };
 
-  return { 
-    inputText, 
-    setInputText, 
-    selectedStyle, 
-    setSelectedStyle, 
-    savedTexts, 
+  return {
+    inputText,
+    setInputText,
+    selectedStyle,
+    setSelectedStyle,
+    savedTexts,
     isLoadingTexts,
-    styles: stylesData?.data || [],
-    pagination: stylesData?.pagination || null,
+    styles,
+    pagination,
     currentPage,
-    searchQuery,
-    isUsingFallback,
-    handleSearch,
-    clearSearch,
+    searchQuery: '',
+    isUsingFallback: false,
+    handleSearch: () => {},
+    clearSearch: () => {},
     handleNextPage,
     handlePreviousPage,
-    isLoadingStyles,
-    stylesError,
-    generateStylishText, 
-    saveText, 
+    isLoadingStyles: false,
+    stylesError: null,
+    generateStylishText,
+    saveText,
     deleteText,
     updateText
   };

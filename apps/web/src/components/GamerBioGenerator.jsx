@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 import BioStyleSelector from './BioStyleSelector.jsx';
 import { generateSingleBio, generateMultipleBios } from '@/utils/gamerBioGenerator.js';
 
@@ -58,8 +59,12 @@ const GamerBioGenerator = () => {
     }, 400);
   };
 
-  const handleCopy = (text, index) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, index) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedIndex(index);
     
     toast({
@@ -68,7 +73,7 @@ const GamerBioGenerator = () => {
       duration: 2000,
     });
 
-    setTimeout(() => setCopiedIndex(null), 2000);
+    setTimeout(() => setCopiedIndex(null), 1200);
   };
 
   const handleStyleSelect = (newStyle) => {
@@ -117,18 +122,18 @@ const GamerBioGenerator = () => {
           <Button
             onClick={() => handleGenerate(1)}
             disabled={isGenerating}
-            className="bg-[#00ff88] text-black hover:bg-[#00ff88]/90 text-lg py-6 min-h-[48px] font-bold shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:shadow-[0_0_25px_rgba(0,255,136,0.5)] transition-all duration-300 hover:scale-[1.02] w-full rounded-xl"
+            className="bg-[#00ff88] text-black hover:bg-[#00ff88]/90 text-lg py-6 min-h-[48px] font-bold shadow-md transition-colors duration-300 w-full rounded-xl"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Sparkles className="w-6 h-6 mr-2" />}
-            Generate 1 Bio
+            Sample one bio
           </Button>
           <Button
             onClick={() => handleGenerate(5)}
             disabled={isGenerating}
-            className="bg-secondary text-white hover:bg-secondary/90 text-lg py-6 min-h-[48px] font-bold transition-all duration-300 hover:scale-[1.02] w-full rounded-xl"
+            className="bg-secondary text-white hover:bg-secondary/90 text-lg py-6 min-h-[48px] font-bold transition-colors duration-300 w-full rounded-xl"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <RefreshCw className="w-6 h-6 mr-2" />}
-            Generate 5 Bios
+            Sample five bios
           </Button>
         </div>
 
@@ -146,7 +151,7 @@ const GamerBioGenerator = () => {
                   animate={{ opacity: 1, scale: 1 }} 
                   className="text-[#00ff88] font-bold text-center mb-4 text-sm tracking-wider uppercase drop-shadow-[0_0_15px_rgba(0,255,136,0.8)] animate-pulse"
                 >
-                  ⭐ Elite Bio Unlocked
+                  Standout variant
                 </motion.div>
               )}
 

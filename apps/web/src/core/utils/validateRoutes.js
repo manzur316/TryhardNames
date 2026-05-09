@@ -1,3 +1,5 @@
+import { APP_REGISTERED_STATIC_PATHS } from '../routing/routeCatalog.js';
+
 export const validateRoutes = () => {
   const legacyRoutes = [
     '/cool-names',
@@ -19,23 +21,7 @@ export const validateRoutes = () => {
     '/edgy-gamer-names'
   ];
 
-  const validRoutes = [
-    '/',
-    '/stylish-text-generator',
-    '/nickname-symbols',
-    '/roblox-names',
-    '/roblox-names/cool',
-    '/roblox-names/funny',
-    '/roblox-names/aesthetic',
-    '/roblox-names/tryhard',
-    '/gamer-names',
-    '/gamer-names/cool',
-    '/gamer-names/funny',
-    '/gamer-names/pro',
-    '/gamer-names/edgy',
-    '/gamer-bio-generator',
-    '*'
-  ];
+  const validRoutes = [...APP_REGISTERED_STATIC_PATHS, '*'];
 
   return { legacyRoutes, validRoutes };
 };

@@ -1,8 +1,9 @@
 
 import { getAllValidSlugs } from './pageLoader.js';
+import { getAllTopicHubPaths } from '../seo/programmatic/hubs.js';
 
-const toolPages = ['/stylish-text-generator', '/nickname-symbols'];
-const hubPages = ['/roblox-names', '/gamer-names'];
+const toolPages = ['/stylish-text-generator', '/nickname-symbols', '/identity-kit'];
+const hubPages = ['/roblox-names', '/gamer-names', '/league-of-legends'];
 
 /** Indexable static routes not covered by hub/tool/dynamic lists */
 const staticPages = [
@@ -70,6 +71,7 @@ export const getPageMetadata = (path) => {
 
 export const getSitemapUrls = () => {
   const homepage = ['/'];
+  const topicHubs = getAllTopicHubPaths();
 
   // Get dynamic slugs (format: 'category/keyword') and format as paths
   const dynamicPaths = getAllValidSlugs().map(slug => {
@@ -81,6 +83,7 @@ export const getSitemapUrls = () => {
   const allPaths = [...new Set([
     ...homepage,
     ...hubPages,
+    ...topicHubs,
     ...toolPages,
     ...staticPages,
     ...dynamicPaths

@@ -3,21 +3,26 @@ import { Copy, Check, Share2, Trash2, Gamepad2, Tag, User, Heart } from 'lucide-
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRemoveFavorite } from '@/hooks/useFavorites.js';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const FavoritesGrid = ({ favorites }) => {
   const removeFavorite = useRemoveFavorite();
   const { toast } = useToast();
   const [copiedId, setCopiedId] = useState(null);
 
-  const handleCopy = (name, id) => {
-    navigator.clipboard.writeText(name);
+  const handleCopy = async (name, id) => {
+    const res = await copyTextToClipboard(name, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     toast({
       title: "Copied!",
       description: `${name} copied to clipboard.`,
       className: "bg-card border-primary text-foreground"
     });
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   const handleShare = (name) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Hash, Copy, Check, Flame } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const MostPopularLoLTagsSection = () => {
   const [copiedId, setCopiedId] = useState(null);
@@ -17,8 +18,12 @@ const MostPopularLoLTagsSection = () => {
     { tag: 'SHD', copies: '3.9k', trend: 'up' }
   ];
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     
     toast({
@@ -27,7 +32,7 @@ const MostPopularLoLTagsSection = () => {
       duration: 2000
     });
 
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   return (

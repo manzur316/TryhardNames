@@ -6,20 +6,20 @@ import { Shield, Type, UserCircle, Target, Crosshair, Gamepad2, Laugh, Crown } f
 
 const crossLinks = {
   fortnite: [
-    { path: '/valorant/sweaty', title: 'Valorant Names', desc: 'Sweaty competitive names', icon: Crosshair, color: 'text-red-500' },
-    { path: '/cod/sweaty', title: 'COD Names', desc: 'Sweaty COD names', icon: Target, color: 'text-green-600' }
+    { path: '/valorant/sweaty', title: 'Valorant Names', desc: 'Ranked tags & killfeed reads', icon: Crosshair, color: 'text-red-500' },
+    { path: '/cod/sweaty', title: 'COD Names', desc: 'Squad-ready aliases', icon: Target, color: 'text-green-600' }
   ],
   valorant: [
-    { path: '/fortnite/tryhard', title: 'Fortnite Names', desc: 'Tryhard Fortnite names', icon: Target, color: 'text-purple-500' },
-    { path: '/cod/funny', title: 'COD Names', desc: 'Funny COD names', icon: Laugh, color: 'text-orange-500' }
+    { path: '/fortnite/tryhard', title: 'Fortnite Names', desc: 'Display names & overlays', icon: Target, color: 'text-purple-500' },
+    { path: '/cod/funny', title: 'COD Names', desc: 'Humor-forward tags', icon: Laugh, color: 'text-orange-500' }
   ],
   roblox: [
-    { path: '/valorant/sweaty', title: 'Valorant Names', desc: 'Sweaty Valorant names', icon: Crosshair, color: 'text-red-500' },
-    { path: '/fortnite/og', title: 'Fortnite Names', desc: 'OG Fortnite names', icon: Crown, color: 'text-yellow-500' }
+    { path: '/valorant/sweaty', title: 'Valorant Names', desc: 'Tactical tags for Riot UI', icon: Crosshair, color: 'text-red-500' },
+    { path: '/fortnite/og', title: 'Fortnite Names', desc: 'Classic OG-style handles', icon: Crown, color: 'text-yellow-500' }
   ],
   cod: [
-    { path: '/valorant/aesthetic', title: 'Valorant Names', desc: 'Aesthetic Valorant names', icon: Crosshair, color: 'text-pink-400' },
-    { path: '/fortnite/tryhard', title: 'Fortnite Names', desc: 'Tryhard Fortnite names', icon: Target, color: 'text-purple-500' }
+    { path: '/valorant/aesthetic', title: 'Valorant Names', desc: 'Minimal & aesthetic reads', icon: Crosshair, color: 'text-pink-400' },
+    { path: '/fortnite/tryhard', title: 'Fortnite Names', desc: 'Tryhard display energy', icon: Target, color: 'text-purple-500' }
   ]
 };
 
@@ -28,8 +28,8 @@ const ExploreMoreToolsSection = ({ game }) => {
 
   const tools = [
     {
-      title: 'Stylish Text Generator',
-      description: 'Create stylish text for Discord and Twitch',
+      title: 'Stylish text',
+      description: 'Unicode styles for Discord, bios, and chats',
       icon: Type,
       path: '/stylish-text-generator',
       color: 'text-primary',
@@ -37,8 +37,8 @@ const ExploreMoreToolsSection = ({ game }) => {
       border: 'hover:border-primary/50'
     },
     {
-      title: 'Clan Name Generator',
-      description: 'Generate clan names for your esports team',
+      title: 'Clan names',
+      description: 'Team tags for rosters, streams, and squads',
       icon: Shield,
       path: '/clan-name-generator',
       color: 'text-secondary',
@@ -46,8 +46,8 @@ const ExploreMoreToolsSection = ({ game }) => {
       border: 'hover:border-secondary/50'
     },
     {
-      title: 'Gamer Bio Generator',
-      description: 'Build your perfect gamer bio',
+      title: 'Gamer bios',
+      description: 'Profile lines for Discord, Twitch, and in-game',
       icon: UserCircle,
       path: '/gamer-bio-generator',
       color: 'text-accent',
@@ -69,10 +69,10 @@ const ExploreMoreToolsSection = ({ game }) => {
     <section className="py-16 border-t border-border/15">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-tight">
-          Explore More Tools
+          More identity tools
         </h2>
         <p className="text-lg text-[#d6d6d6] max-w-2xl mx-auto">
-          Level up your entire gaming identity with our suite of free generators.
+          Same trunk—handles, bios, and text styling you can paste anywhere.
         </p>
       </div>
 

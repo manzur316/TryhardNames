@@ -67,7 +67,7 @@ const SEOContent = () => {
         "name": "How often can I generate new names?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "You can generate unlimited tryhard names completely free! Use the 'Generate Tryhard Name' button for single names or 'Generate 10 Names' for bulk generation. There are no limits or restrictions - keep generating until you find the perfect name."
+          "text": "You can pull fresh name samples whenever you want—there's no paywall. Use the single-name action for one tag at a time or batch samples when you're comparing options. Keep iterating until something fits your profile or in-game constraints."
         }
       },
       {
@@ -252,7 +252,7 @@ const SEOContent = () => {
             <div className="space-y-2 border-b border-border/15 pb-6 last:border-0 last:pb-0">
               <h3 className="text-xl font-semibold text-secondary">How often can I generate new names?</h3>
               <p className="text-foreground/90 leading-relaxed">
-                You can generate unlimited tryhard names completely free! Use the 'Generate Tryhard Name' button for single names or 'Generate 10 Names' for bulk generation. There are no limits or restrictions - keep generating until you find the perfect name.
+                You can pull fresh name samples whenever you want—there's no paywall. Use the single-name action for one tag at a time or batch samples when you're comparing options. Keep iterating until something fits your profile or in-game constraints.
               </p>
             </div>
 

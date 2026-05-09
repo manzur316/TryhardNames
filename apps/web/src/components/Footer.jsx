@@ -38,12 +38,12 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Zap className="w-6 h-6 text-accent-cyan" />
-              <span className="text-lg font-bold text-dark-50 tracking-wide">
-                Tryhard<span className="text-transparent bg-clip-text bg-gradient-cyan-purple">Names</span>
+              <span className="text-lg font-semibold text-dark-50 tracking-tight">
+                TryhardNames
               </span>
             </div>
             <p className="text-sm text-dark-300 leading-relaxed">
-              The ultimate gamer name and bio generator. Generate stylish, sweaty, and aesthetic nicknames instantly for your favorite games.
+              Identity-first handles, bios, and Unicode tools—built for how usernames read in lobbies, chats, and profiles.
             </p>
             <div className="flex gap-3 pt-2">
               {socialLinks.map((social) => (

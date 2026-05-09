@@ -6,6 +6,7 @@ import ToggleSwitch from '@/components/ToggleSwitch.jsx';
 import { useToast } from '@/hooks/use-toast.js';
 import GenderSelector from './GenderSelector.jsx';
 import robloxNamesDatabase from '@/data/robloxNamesDatabase.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const RobloxNameGenerator = ({ onGenerate }) => {
   const [generatedName, setGeneratedName] = useState('');
@@ -66,11 +67,15 @@ const RobloxNameGenerator = ({ onGenerate }) => {
     }, 500);
   };
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     toast({ title: "Copied!", description: `${text} copied to clipboard.`, className: "bg-card border-primary text-foreground" });
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   return (
@@ -135,11 +140,11 @@ const RobloxNameGenerator = ({ onGenerate }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button onClick={handleGenerateSingle} disabled={isGenerating} className="bg-primary text-black hover:bg-primary/90 text-lg py-8 font-bold w-full">
               {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Sparkles className="w-6 h-6 mr-2" />}
-              Generate Name
+              Sample name
             </Button>
             <Button onClick={handleGenerateMultiple} disabled={isGenerating} className="bg-secondary text-white hover:bg-secondary/90 text-lg py-8 font-bold w-full">
               {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Sparkles className="w-6 h-6 mr-2" />}
-              Generate 10 Names
+              Sample 10 names
             </Button>
           </div>
 

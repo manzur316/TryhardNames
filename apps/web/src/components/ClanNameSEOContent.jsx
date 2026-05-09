@@ -29,7 +29,7 @@ const ClanNameSEOContent = () => {
         "name": "What are the best clan names for esports?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Esports team names tend to be clean, professional, and impactful. Words like 'Cloud', 'Liquid', 'FaZe', or 'Optic' set the standard. Our generator uses similar modern, aggressive words like 'Apex', 'Nexus', and 'Vanguard' to create esports-ready names."
+          "text": "Esports team names tend to be clean, professional, and impactful. Words like 'Cloud', 'Liquid', 'FaZe', or 'Optic' set the standard. This lane blends similar modern, aggressive words like 'Apex', 'Nexus', and 'Vanguard' to surface esports-ready names."
         }
       },
       {
@@ -102,14 +102,14 @@ const ClanNameSEOContent = () => {
       <section className="max-w-4xl mx-auto py-12 space-y-12 md:space-y-16">
         <div className="prose prose-invert max-w-none space-y-6">
           <p className="text-lg text-foreground/90 leading-relaxed">
-            Welcome to the ultimate <strong>Free Clan Name Generator</strong>. Whether you're forming a casual squad with friends or building a highly competitive esports organization, finding the perfect team name is crucial. Your clan name is your identity on the battlefield—it's what enemies see in the kill feed and what allies rally behind. Generate thousands of cool, tryhard, and sweaty clan names instantly.
+            Plan a <strong>clan name</strong> that reads clean on rosters, streams, and killfeeds—whether you're a casual squad or an esports roster. Your team title is the banner opponents clock first and allies rally behind. Sample cool, tryhard, and sweaty clan-style tags here until something fits your vibe and platform rules.
           </p>
         </div>
 
         <article className="space-y-4 border-t border-border/15 pt-10 md:pt-14">
           <h2 className="text-3xl font-bold text-primary">Cool Clan Names</h2>
           <p className="text-foreground/90 leading-relaxed">
-            A cool clan name strikes the perfect balance between edgy and memorable. It shouldn't be too complicated. The best cool names often combine a powerful adjective with a strong noun. Think of legendary groups in gaming history—their names are usually just one or two syllables. Our generator uses a curated library of modern gaming terminology to ensure every output sounds like a legitimate, established team.
+            A cool clan name strikes the perfect balance between edgy and memorable. It shouldn't be too complicated. The best cool names often combine a powerful adjective with a strong noun. Think of legendary groups in gaming history—their names are usually just one or two syllables. This lane pulls from a curated library of modern gaming terminology so samples read like legitimate, established teams.
           </p>
           <div className="bg-card border border-border/50 rounded-xl p-6 mt-4 shadow-refined">
             <h3 className="text-xl font-semibold text-foreground mb-3">Examples of Cool Clan Names:</h3>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Download, Share2, CopyCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const InteractionButtons = ({ allNames = [] }) => {
   const { toast } = useToast();
@@ -28,22 +29,32 @@ const InteractionButtons = ({ allNames = [] }) => {
         url: window.location.href 
       }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast({ 
-        title: 'Link Copied!', 
-        description: 'Share link copied to clipboard.',
-        className: "bg-card border-primary text-foreground"
+      copyTextToClipboard(window.location.href, { preventRepeatMs: 650, vibrateMs: 12 }).then((res) => {
+        if (!res.ok) {
+          toast({ title: 'Copy failed', description: 'Clipboard blocked by your browser.', variant: 'destructive' });
+          return;
+        }
+        toast({ 
+          title: 'Link Copied!', 
+          description: 'Share link copied to clipboard.',
+          className: "bg-card border-primary text-foreground"
+        });
       });
     }
   };
 
   const handleCopyAll = () => {
     const text = allNames.slice(0, 100).join('\n') + '\n...and hundreds more!';
-    navigator.clipboard.writeText(text);
-    toast({ 
-      title: 'Copied!', 
-      description: 'Names copied to clipboard.',
-      className: "bg-card border-primary text-foreground"
+    copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 12 }).then((res) => {
+      if (!res.ok) {
+        toast({ title: 'Copy failed', description: 'Clipboard blocked by your browser.', variant: 'destructive' });
+        return;
+      }
+      toast({ 
+        title: 'Copied!', 
+        description: 'Names copied to clipboard.',
+        className: "bg-card border-primary text-foreground"
+      });
     });
   };
 

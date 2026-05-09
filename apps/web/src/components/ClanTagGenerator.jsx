@@ -50,7 +50,7 @@ const ClanTagGenerator = () => {
             className="ml-2 border-primary text-primary hover:bg-primary/10"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />
-            Generate Tag
+            New tags
           </Button>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ToggleSwitch from '@/components/ToggleSwitch.jsx';
 import RoleSelector from './RoleSelector.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const LeagueOfLegendsRoleGenerator = () => {
   const [selectedRole, setSelectedRole] = useState('Mid');
@@ -52,9 +53,13 @@ const LeagueOfLegendsRoleGenerator = () => {
     }, 400);
   };
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (!generatedName) return;
-    navigator.clipboard.writeText(generatedName);
+    const res = await copyTextToClipboard(generatedName, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopied(true);
     
     toast({
@@ -63,7 +68,7 @@ const LeagueOfLegendsRoleGenerator = () => {
       className: "bg-card border-primary text-foreground"
     });
 
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), 1200);
   };
 
   return (
@@ -88,10 +93,10 @@ const LeagueOfLegendsRoleGenerator = () => {
         <Button
           onClick={handleGenerate}
           disabled={isGenerating}
-          className="bg-primary text-black hover:bg-primary/90 text-lg py-6 px-12 font-bold transition-all duration-300 hover:scale-105 w-full md:w-auto"
+          className="bg-primary text-black hover:bg-primary/90 text-lg py-6 px-12 font-bold transition-colors duration-300 w-full md:w-auto"
         >
           {isGenerating ? <Sparkles className="w-5 h-5 mr-2 animate-spin" /> : <Sparkles className="w-5 h-5 mr-2" />}
-          Generate {selectedRole} Name
+          Sample {selectedRole} tag
         </Button>
 
         <AnimatePresence mode="wait">

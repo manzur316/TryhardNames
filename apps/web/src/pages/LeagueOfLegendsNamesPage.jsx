@@ -104,8 +104,8 @@ const LeagueOfLegendsNamesPage = () => {
   return (
     <>
       <Helmet>
-        <title>League of Legends Tryhard Names – Pro & Competitive Names 2026</title>
-        <meta name="description" content="Generate the best League of Legends tryhard names by role (Top, Jungle, Mid, ADC, Support). Challenger, Diamond, and smurf account names included." />
+        <title>League Summoner Tags — Tryhard Names by Role & Rank | TryhardNames</title>
+        <meta name="description" content="LoL summoner name ideas by role (Top, Jungle, Mid, ADC, Support)—readable Riot IDs for client and match history." />
         <link rel="canonical" href="https://tryhardnames.com/league-of-legends-tryhard-names" />
         <link rel="alternate" hrefLang="en" href="https://tryhardnames.com/league-of-legends-tryhard-names" />
         <link rel="alternate" hrefLang="es" href="https://tryhardnames.com/es/nombres-lol-tryhard" />
@@ -115,11 +115,11 @@ const LeagueOfLegendsNamesPage = () => {
 
       <div className="bg-background text-foreground selection:bg-[#C89B3C]/30 flex-grow flex flex-col">
         {/* Hero Section */}
-        <section className="relative pt-24 pb-32 overflow-hidden min-h-[80vh] flex items-center">
+        <section className="relative pt-20 pb-24 md:pt-24 md:pb-28 overflow-hidden min-h-[55vh] flex items-center">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-[#0A8CC9]/10 via-background to-background z-10"></div>
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5B2C6F]/20 rounded-full blur-[120px] animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C89B3C]/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5B2C6F]/15 rounded-full blur-[120px]"></div>
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C89B3C]/10 rounded-full blur-[120px]"></div>
           </div>
 
           <div className="container mx-auto px-4 relative z-20">
@@ -129,14 +129,14 @@ const LeagueOfLegendsNamesPage = () => {
               transition={{ duration: 0.8 }}
               className="max-w-4xl mx-auto text-center space-y-8"
             >
-              <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight">
-                League of Legends <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0A8CC9] via-[#C89B3C] to-[#5B2C6F]">
-                  Tryhard Names
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight">
+                <span className="block text-foreground">League summoner tags</span>
+                <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-[#0A8CC9] via-[#C89B3C] to-[#5B2C6F]">
+                  By role, rank & lane
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-foreground/80 max-w-2xl mx-auto font-medium leading-relaxed">
-                Dominate the Rift with the most intimidating, competitive, and professional League of Legends names for every role and rank.
+              <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto font-medium leading-relaxed">
+                Readable Riot IDs for client, match history, and comms—not just loud flex.
               </p>
             </motion.div>
           </div>

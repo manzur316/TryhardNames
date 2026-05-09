@@ -6,6 +6,7 @@ import ToggleSwitch from '@/components/ToggleSwitch.jsx';
 import { useToast } from '@/hooks/use-toast.js';
 import { trackGenerationCount } from '@/utils/behavioralPsychology.js';
 import { useLocation } from 'react-router-dom';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate }) => {
   const [generatedName, setGeneratedName] = useState('');
@@ -65,12 +66,12 @@ const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate 
 
   const getMicroFeedback = () => {
     const messages = [
-      "That one hits.",
-      "Ready for ranked?",
-      "This sounds pro.",
-      `Perfect for ${gameName}.`,
-      "Flex on them.",
-      "Competitive vibes."
+      "That one reads clean.",
+      "Solid for your profile.",
+      "Nice recall.",
+      `Fits ${gameName} energy.`,
+      "Worth a paste.",
+      "Lobby-clear vibe."
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   };
@@ -114,24 +115,26 @@ const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate 
     }, 500);
   };
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
-    
     toast({
-      title: "Copied. Dominate the match.",
+      title: "Copied — ready to paste.",
       className: "bg-card border-primary text-foreground",
       duration: 2000,
     });
-
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   const handleShare = () => {
-    const textToShare = generatedName || `Check out these awesome ${gameName} names!`;
+    const textToShare = generatedName || `${gameName} name ideas from TryhardNames`;
     if (navigator.share) {
       navigator.share({
-        title: `${gameName} Names Generator`,
+        title: `${gameName} name tags`,
         text: textToShare,
         url: window.location.href
       }).catch(() => {});
@@ -173,7 +176,7 @@ const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate 
                   animate={{ opacity: 1, y: 0 }} 
                   className="text-[#00ff88] font-bold text-sm md:text-base tracking-wider uppercase drop-shadow-[0_0_15px_rgba(0,255,136,0.8)] animate-pulse"
                 >
-                  ⭐ Rare Tryhard Name Unlocked
+                  Rare pick — strong roll
                 </motion.div>
               )}
               
@@ -250,18 +253,18 @@ const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate 
           <Button
             onClick={handleGenerateSingle}
             disabled={isGenerating}
-            className="bg-[#00ff88] text-black hover:bg-[#00cc6a] shadow-[0_0_15px_rgba(0,255,136,0.4)] hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] text-lg py-8 font-bold transition-all duration-300 hover:scale-[1.02] w-full"
+            className="bg-[#00ff88] text-black hover:bg-[#00cc6a] shadow-md text-lg py-8 font-bold transition-colors duration-300 w-full"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Sparkles className="w-6 h-6 mr-2" />}
-            Generate {gameName} Name
+            Sample {gameName} tag
           </Button>
           <Button
             onClick={handleGenerateMultiple}
             disabled={isGenerating}
-            className="bg-secondary text-white hover:bg-secondary/90 text-lg py-8 font-bold glow-blue transition-smooth hover:scale-[1.02] w-full"
+            className="bg-secondary text-white hover:bg-secondary/90 text-lg py-8 font-bold transition-colors duration-300 w-full"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <TrendingUp className="w-6 h-6 mr-2" />}
-            Generate 10 Names
+            Sample 10 tags
           </Button>
         </div>
 
@@ -276,7 +279,7 @@ const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate 
       <div className="space-y-6">
         <div className="text-center">
           <h3 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
-            <TrendingUp className="w-6 h-6 text-primary" /> Trending {gameName} Names
+            <TrendingUp className="w-6 h-6 text-primary" /> Trending {gameName} samples
           </h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -296,7 +299,7 @@ const GameNameGenerator = ({ gameName, wordLibraries, trendingNames, onGenerate 
       <div className="space-y-6">
         <div className="text-center">
           <h3 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
-            <Clock className="w-6 h-6 text-secondary" /> Recently Generated
+            <Clock className="w-6 h-6 text-secondary" /> Recent samples
           </h3>
         </div>
         <div className="bg-card border border-border/50 rounded-2xl p-6 max-h-64 overflow-y-auto custom-scrollbar shadow-refined">

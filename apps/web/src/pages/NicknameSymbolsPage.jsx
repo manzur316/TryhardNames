@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button.jsx';
 import Breadcrumb from '@/components/Breadcrumb.jsx';
 import AdPlaceholderZone from '@/components/AdPlaceholderZone.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 import { NamesGrid, TrendingNames } from '@/core/components/index.js';
 
 const NicknameSymbolsPage = () => {
@@ -42,14 +43,15 @@ const NicknameSymbolsPage = () => {
     }
   ];
 
-  const handleCopy = (symbol) => {
-    navigator.clipboard.writeText(symbol);
+  const handleCopy = async (symbol) => {
+    const res = await copyTextToClipboard(symbol, { preventRepeatMs: 320, vibrateMs: 10 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedSymbol(symbol);
-    toast({
-      title: "Copied!",
-      description: `Symbol ${symbol} copied to clipboard.`,
-    });
-    setTimeout(() => setCopiedSymbol(null), 2000);
+    toast({ title: "Copied!", description: `Symbol ${symbol} copied to clipboard.` });
+    setTimeout(() => setCopiedSymbol(null), 1200);
   };
 
   const faqs = [

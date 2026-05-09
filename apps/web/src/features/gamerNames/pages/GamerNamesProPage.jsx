@@ -70,8 +70,8 @@ export const GamerNamesProPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Pro Names"
-            buttonLabel="Generate Pro Gamer Names"
+            title="Sample pro-clean tags"
+            buttonLabel="Sample more pro tags"
             defaultCount={12}
           />
         </div>

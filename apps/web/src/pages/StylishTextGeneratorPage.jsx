@@ -21,6 +21,7 @@ import {
   generateCustomNicknameSymbols,
   getNicknameSymbolCategories
 } from '@/utils/textStyleConverter.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const CATEGORIES = ['All', 'Math', 'Width', 'Numbers', 'Decorative', 'Symbols', 'Spacing', 'Flip'];
 const PRESETS = ['Gaming', 'Stylish', 'Cool', 'Gamer', 'Clan'];
@@ -122,10 +123,15 @@ const StylishTextGeneratorPage = () => {
   };
 
   const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    showToast('Copied to clipboard!');
-    setTimeout(() => setCopiedId(null), 2000);
+    copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 }).then((res) => {
+      if (!res.ok) {
+        showToast('Copy failed', 'error');
+        return;
+      }
+      setCopiedId(id);
+      showToast('Copied to clipboard!');
+      setTimeout(() => setCopiedId(null), 1200);
+    });
   };
 
   const handleGenerateSymbols = () => {
@@ -176,8 +182,13 @@ const StylishTextGeneratorPage = () => {
 
   const copyAllStyles = () => {
     const allText = searchFilteredStyles.filter(s => s.success).map(s => s.text).join('\n');
-    navigator.clipboard.writeText(allText);
-    showToast('All styles copied to clipboard!');
+    copyTextToClipboard(allText, { preventRepeatMs: 650, vibrateMs: 12 }).then((res) => {
+      if (!res.ok) {
+        showToast('Copy failed', 'error');
+        return;
+      }
+      showToast('All styles copied to clipboard!');
+    });
   };
 
   const handleDownloadFile = () => {
@@ -239,7 +250,7 @@ const StylishTextGeneratorPage = () => {
     <>
       <Helmet>
         <title>Stylish Text Generator – Convert Text to Cool Fonts & Styles</title>
-        <meta name="description" content="Generate 50+ stylish text fonts, cool symbols, and Unicode text instantly. Copy and paste bold, italic, cursive, and aesthetic fonts for social media and gaming." />
+        <meta name="description" content="Convert text into 50+ Unicode styles—bold, italic, aesthetic, and symbol-framed layouts for bios, Discord, and gaming profiles." />
       </Helmet>
 
       <div className={`${bgMain} ${textMain} flex-grow flex flex-col min-h-screen transition-colors duration-300`}>
@@ -521,7 +532,7 @@ const StylishTextGeneratorPage = () => {
                       <GenerateButton 
                         onClick={handleGenerateSymbols}
                         disabled={!nicknameInput.trim()}
-                        label="Generate Symbols"
+                        label="Apply symbols"
                         className="bg-accent-cyan text-dark-950 hover:bg-accent-cyan/90"
                       />
                     </div>
@@ -627,9 +638,9 @@ const StylishTextGeneratorPage = () => {
                 {generatedSymbols.length > 0 && (
                   <>
                     <div className="flex justify-between items-center">
-                      <h3 className="text-xl font-bold">Generated Variations</h3>
+                      <h3 className="text-xl font-bold">Symbol layouts</h3>
                       <Button onClick={handleGenerateSymbols} variant="outline" className={`border-accent-cyan text-accent-cyan hover:bg-accent-cyan/10 min-h-[44px]`}>
-                        <Sparkles className="w-4 h-4 mr-2" /> RE-GENERATE
+                        <Sparkles className="w-4 h-4 mr-2" /> Refresh layouts
                       </Button>
                     </div>
 

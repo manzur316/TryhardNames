@@ -22,9 +22,16 @@ import {
   PrivacyPolicyPage,
   TermsOfServicePage,
   GamerBioGeneratorPage,
+  FavoritesPage,
+  LeaderboardsPage,
 } from '@/features/index.js';
 import NotFoundPage from '@/pages/NotFoundPage.jsx';
 import DynamicPage from '@/pages/DynamicPage.jsx';
+import TopicHubPage from '@/pages/TopicHubPage.jsx';
+import LeagueOfLegendsHubPage from '@/pages/LeagueOfLegendsHubPage.jsx';
+import IdentityKitPage from '@/pages/IdentityKitPage.jsx';
+import { TOPIC_HUB_ROUTES } from '@/seo/programmatic/topicHubRoutes.js';
+import MinimalFavoritesPeek from '@/components/MinimalFavoritesPeek.jsx';
 
 // Lazy Loaded Routes
 const RobloxNamesMainPage = lazy(() => import('@/features/robloxNames').then(m => ({ default: m.RobloxNamesPage })));
@@ -69,12 +76,23 @@ function App() {
                             <Route path="/" element={<HomePage />} />
                             <Route path="/stylish-text-generator" element={<StylishTextGeneratorPage />} />
                             <Route path="/nickname-symbols" element={<NicknameSymbolsPage />} />
+                            <Route path="/identity-kit" element={<IdentityKitPage />} />
 
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/contact" element={<ContactPage />} />
                             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                             <Route path="/terms-of-service" element={<TermsOfServicePage />} />
                             <Route path="/gamer-bio-generator" element={<GamerBioGeneratorPage />} />
+                            <Route path="/favorites" element={<FavoritesPage />} />
+                            <Route path="/leaderboards" element={<LeaderboardsPage />} />
+                            <Route path="/404" element={<NotFoundPage />} />
+
+                            {/* Topic Hubs (semantic intent hubs) */}
+                            {TOPIC_HUB_ROUTES.map((r) => (
+                              <Route key={r.slug} path={r.path} element={<TopicHubPage hubSlug={r.slug} />} />
+                            ))}
+
+                            <Route path="/league-of-legends" element={<LeagueOfLegendsHubPage />} />
                             
                             {/* Lazy Loaded Roblox Routes */}
                             <Route path="/roblox-names" element={<Suspense fallback={<PageLoader />}><RobloxNamesMainPage /></Suspense>} />
@@ -100,6 +118,7 @@ function App() {
                         <Footer />
                       </div>
                       <Toaster />
+                      <MinimalFavoritesPeek />
                     </FavoritesProvider>
                   </LegacyRouteHandler>
                 </RouteGuard>

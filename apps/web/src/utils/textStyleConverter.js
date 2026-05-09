@@ -167,25 +167,19 @@ const mirrorMap = {
   'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
 };
 
-const applyZalgo = (text) => {
-  const marks = [
-    '\u030d', '\u030e', '\u0304', '\u0305', '\u033f', '\u0311', '\u0306', '\u0310', '\u0352', '\u0351', '\u030b',
-    '\u030f', '\u0312', '\u0313', '\u0314', '\u030c', '\u0311', '\u0309', '\u0331', '\u0339', '\u033a', '\u033b',
-    '\u033c', '\u0345', '\u0347', '\u0348', '\u0349', '\u034d', '\u034e', '\u0353', '\u0354', '\u0355', '\u0356',
-    '\u0359', '\u035a', '\u0323', '\u0324', '\u0325', '\u0326', '\u0329', '\u032a', '\u032b', '\u032c', '\u032d',
-    '\u032e', '\u032f', '\u0330', '\u0331', '\u0332', '\u0333', '\u0315', '\u031b', '\u0340', '\u0341', '\u0358',
-    '\u0321', '\u0322', '\u0327', '\u0328', '\u0334', '\u0335', '\u0336', '\u034f', '\u035c', '\u035d', '\u035e',
-    '\u035f', '\u0360', '\u0362', '\u0338', '\u0337', '\u0361', '\u0489'
-  ];
-  return Array.from(text).map(char => {
-    if (char === ' ') return char;
-    let newChar = char;
-    const numMarks = Math.floor(Math.random() * 5) + 2;
-    for (let i = 0; i < numMarks; i++) {
-      newChar += marks[Math.floor(Math.random() * marks.length)];
-    }
-    return newChar;
-  }).join('');
+/** Deterministic “glitch” using combining marks — readable, no random Zalgo spam. */
+const glitchDeterministic = (text) => {
+  const stroke = '\u0336';
+  return Array.from(text)
+    .map((c, i) => (c === ' ' ? c : i % 3 === 0 ? c + stroke : c))
+    .join('');
+};
+
+const leetLite = (text) => {
+  const map = { a: '4', e: '3', i: '1', o: '0', s: '5', t: '7', l: '1' };
+  return Array.from(text.toLowerCase())
+    .map((c) => map[c] || c)
+    .join('');
 };
 
 // --- Validation & Fallback Functions ---
@@ -257,36 +251,36 @@ export const validateTransform = (text, transformFn) => {
 
 export const textStyles = {
   // Math & Standard (Using correct Unicode Math Alphanumeric Symbols)
-  mathBold: { name: 'Math Bold', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBold)) },
-  mathItalic: { name: 'Math Italic', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathItalic)) },
-  mathBoldItalic: { name: 'Math Bold Italic', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBoldItalic)) },
-  mathScript: { name: 'Math Script', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScript)) },
-  mathScriptBold: { name: 'Math Script Bold', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScriptBold)) },
-  mathFraktur: { name: 'Math Fraktur', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFraktur)) },
-  mathFrakturBold: { name: 'Math Fraktur Bold', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFrakturBold)) },
-  mathDoubleStruck: { name: 'Math Double-Struck', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathDoubleStruck)) },
-  mathMonospace: { name: 'Math Monospace', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathMonospace)) },
-  mathSansSerifNew: { name: 'Math Sans-Serif', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifNew)) },
-  mathSansSerifBold: { name: 'Math Sans-Serif Bold', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifBold)) },
-  mathSansSerifItalic: { name: 'Math Sans-Serif Italic', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifItalic)) },
-  mathSansSerifBoldItalic: { name: 'Math Sans-Serif Bold Italic', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifBoldItalic)) },
+  mathBold: { name: 'Math Bold', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBold)) },
+  mathItalic: { name: 'Math Italic', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathItalic)) },
+  mathBoldItalic: { name: 'Math Bold Italic', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBoldItalic)) },
+  mathScript: { name: 'Math Script', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScript)) },
+  mathScriptBold: { name: 'Math Script Bold', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScriptBold)) },
+  mathFraktur: { name: 'Math Fraktur', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFraktur)) },
+  mathFrakturBold: { name: 'Math Fraktur Bold', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFrakturBold)) },
+  mathDoubleStruck: { name: 'Math Double-Struck', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathDoubleStruck)) },
+  mathMonospace: { name: 'Math Monospace', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathMonospace)) },
+  mathSansSerifNew: { name: 'Math Sans-Serif', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifNew)) },
+  mathSansSerifBold: { name: 'Math Sans-Serif Bold', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifBold)) },
+  mathSansSerifItalic: { name: 'Math Sans-Serif Italic', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifItalic)) },
+  mathSansSerifBoldItalic: { name: 'Math Sans-Serif Bold Italic', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifBoldItalic)) },
   
   // Legacy aliases to prevent breaking existing code
-  bold: { name: 'Bold', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBold)) },
-  italic: { name: 'Italic', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathItalic)) },
-  boldItalic: { name: 'Bold Italic', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBoldItalic)) },
-  script: { name: 'Script', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScript)) },
-  boldScript: { name: 'Bold Script', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScriptBold)) },
-  fraktur: { name: 'Fraktur', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFraktur)) },
-  boldFraktur: { name: 'Bold Fraktur', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFrakturBold)) },
-  doubleStruck: { name: 'Double-Struck', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathDoubleStruck)) },
-  monospace: { name: 'Monospace', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathMonospace)) },
-  sansSerif: { name: 'Sans-Serif', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifNew)) },
-  smallCaps: { name: 'Small Caps', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.smallCaps)) },
+  bold: { name: 'Bold', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBold)) },
+  italic: { name: 'Italic', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathItalic)) },
+  boldItalic: { name: 'Bold Italic', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathBoldItalic)) },
+  script: { name: 'Script', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScript)) },
+  boldScript: { name: 'Bold Script', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathScriptBold)) },
+  fraktur: { name: 'Fraktur', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFraktur)) },
+  boldFraktur: { name: 'Bold Fraktur', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathFrakturBold)) },
+  doubleStruck: { name: 'Double-Struck', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathDoubleStruck)) },
+  monospace: { name: 'Monospace', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathMonospace)) },
+  sansSerif: { name: 'Sans-Serif', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.mathSansSerifNew)) },
+  smallCaps: { name: 'Small Caps', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.smallCaps)) },
   
   // Sub/Super
-  superscript: { name: 'Superscript', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.superscript)) },
-  subscript: { name: 'Subscript', category: 'Math', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.subscript)) },
+  superscript: { name: 'Superscript', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.superscript)) },
+  subscript: { name: 'Subscript', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.subscript)) },
   
   // Enclosed
   bubble: { name: 'Bubble', category: 'Decorative', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.bubble)) },
@@ -299,9 +293,9 @@ export const textStyles = {
   angled: { name: 'Angled', category: 'Decorative', transform: t => applyWrapper(t, '<', '>') },
   
   // Flip & Mirror
-  upsideDown: { name: 'Upside Down', category: 'Flip', transform: t => Array.from(t).reverse().map(c => upsideDownMap[c] || c).join('') },
-  mirrorText: { name: 'Mirror Text', category: 'Flip', transform: t => Array.from(t).reverse().map(c => mirrorMap[c] || c).join('') },
-  reverseText: { name: 'Reverse Text', category: 'Flip', transform: t => Array.from(t).reverse().join('') },
+  upsideDown: { name: 'Upside Down', category: 'Identity', transform: t => Array.from(t).reverse().map(c => upsideDownMap[c] || c).join('') },
+  mirrorText: { name: 'Mirror Text', category: 'Identity', transform: t => Array.from(t).reverse().map(c => mirrorMap[c] || c).join('') },
+  reverseText: { name: 'Reverse Text', category: 'Identity', transform: t => Array.from(t).reverse().join('') },
   
   // Combining Marks
   strikethrough: { name: 'Strikethrough', category: 'Decorative', transform: t => applyCombiningMark(t, '\u0336') },
@@ -316,21 +310,21 @@ export const textStyles = {
   accentedText: { name: 'Accented Text', category: 'Decorative', transform: t => applyCombiningMark(t, '\u0301') },
   
   // Width & Spacing
-  fullWidth: { name: 'Full Width', category: 'Width', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.fullWidth)) },
-  spacedText: { name: 'Spaced Text', category: 'Spacing', transform: t => applySeparator(t, ' ') },
-  wideSpaced: { name: 'Wide Spaced', category: 'Spacing', transform: t => applySeparator(t, '   ') },
+  fullWidth: { name: 'Full Width', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.fullWidth)) },
+  spacedText: { name: 'Spaced Text', category: 'Identity', transform: t => applySeparator(t, ' ') },
+  wideSpaced: { name: 'Wide Spaced', category: 'Identity', transform: t => applySeparator(t, '   ') },
   
   // Separators
-  dotSeparated: { name: 'Dot Separated', category: 'Spacing', transform: t => applySeparator(t, '.') },
-  dashSeparated: { name: 'Dash Separated', category: 'Spacing', transform: t => applySeparator(t, '-') },
-  slashSeparated: { name: 'Slash Separated', category: 'Spacing', transform: t => applySeparator(t, '/') },
-  backslashSeparated: { name: 'Backslash Separated', category: 'Spacing', transform: t => applySeparator(t, '\\') },
-  pipeSeparated: { name: 'Pipe Separated', category: 'Spacing', transform: t => applySeparator(t, '|') },
-  plusSeparated: { name: 'Plus Separated', category: 'Spacing', transform: t => applySeparator(t, '+') },
-  equalSeparated: { name: 'Equal Separated', category: 'Spacing', transform: t => applySeparator(t, '=') },
-  tildeSeparated: { name: 'Tilde Separated', category: 'Spacing', transform: t => applySeparator(t, '~') },
-  caretSeparated: { name: 'Caret Separated', category: 'Spacing', transform: t => applySeparator(t, '^') },
-  starSeparated: { name: 'Star Separated', category: 'Spacing', transform: t => applySeparator(t, '★') },
+  dotSeparated: { name: 'Dot Separated', category: 'Identity', transform: t => applySeparator(t, '.') },
+  dashSeparated: { name: 'Dash Separated', category: 'Identity', transform: t => applySeparator(t, '-') },
+  slashSeparated: { name: 'Slash Separated', category: 'Identity', transform: t => applySeparator(t, '/') },
+  backslashSeparated: { name: 'Backslash Separated', category: 'Identity', transform: t => applySeparator(t, '\\') },
+  pipeSeparated: { name: 'Pipe Separated', category: 'Identity', transform: t => applySeparator(t, '|') },
+  plusSeparated: { name: 'Plus Separated', category: 'Identity', transform: t => applySeparator(t, '+') },
+  equalSeparated: { name: 'Equal Separated', category: 'Identity', transform: t => applySeparator(t, '=') },
+  tildeSeparated: { name: 'Tilde Separated', category: 'Identity', transform: t => applySeparator(t, '~') },
+  caretSeparated: { name: 'Caret Separated', category: 'Identity', transform: t => applySeparator(t, '^') },
+  starSeparated: { name: 'Star Separated', category: 'Identity', transform: t => applySeparator(t, '★') },
   
   // Symbols & Prefixes
   greekLetters: { name: 'Greek Letters', category: 'Symbols', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.greek)) },
@@ -347,30 +341,84 @@ export const textStyles = {
   backtickQuoted: { name: 'Backtick Quoted', category: 'Symbols', transform: t => `\`${t}\`` },
   
   // Decorative & Emoji
-  zalgo: { name: 'Zalgo (Chaos)', category: 'Decorative', transform: t => applyZalgo(t) },
-  sparkles: { name: 'Sparkles', category: 'Decorative', transform: t => `✨ ${t} ✨` },
-  starText: { name: 'Star Text', category: 'Decorative', transform: t => `★ ${t} ★` },
-  heartText: { name: 'Heart Text', category: 'Decorative', transform: t => `💖 ${t} 💖` },
-  fireText: { name: 'Fire Text', category: 'Decorative', transform: t => `🔥 ${t} 🔥` },
-  crownText: { name: 'Crown Text', category: 'Decorative', transform: t => `👑 ${t} 👑` },
-  skullText: { name: 'Skull Text', category: 'Decorative', transform: t => `💀 ${t} 💀` },
+  zalgo: { name: 'Glitch Scan', category: 'Decorative', transform: t => glitchDeterministic(t) },
+  sparkles: { name: 'Sparkles', category: 'Bio', transform: t => `✨ ${t} ✨` },
+  starText: { name: 'Star Text', category: 'Bio', transform: t => `★ ${t} ★` },
+  heartText: { name: 'Heart Text', category: 'Bio', transform: t => `💖 ${t} 💖` },
+  fireText: { name: 'Fire Text', category: 'Competitive', transform: t => `🔥 ${t} 🔥` },
+  crownText: { name: 'Crown Text', category: 'Competitive', transform: t => `👑 ${t} 👑` },
+  skullText: { name: 'Skull Text', category: 'Competitive', transform: t => `💀 ${t} 💀` },
   diamondText: { name: 'Diamond Text', category: 'Decorative', transform: t => `♦ ${t} ♦` },
-  ribbonText: { name: 'Ribbon Text', category: 'Decorative', transform: t => `🎀 ${t} 🎀` },
+  ribbonText: { name: 'Ribbon Text', category: 'Bio', transform: t => `🎀 ${t} 🎀` },
   vaporwave: { name: 'Vaporwave', category: 'Decorative', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.fullWidth)).split('').join(' ') },
-  aesthetic: { name: 'Aesthetic', category: 'Decorative', transform: t => `✧･ﾟ: *✧･ﾟ:* ${t} *:･ﾟ✧*:･ﾟ✧` },
+  aesthetic: { name: 'Aesthetic Banner', category: 'Bio', transform: t => `✧･ﾟ: *✧･ﾟ:* ${t} *:･ﾟ✧*:･ﾟ✧` },
   
   // Numbers Specific
-  circledNumbers: { name: 'Circled Numbers', category: 'Numbers', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.bubble)) },
-  squaredNumbers: { name: 'Squared Numbers', category: 'Numbers', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.squared)) },
+  circledNumbers: { name: 'Circled Numbers', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.bubble)) },
+  squaredNumbers: { name: 'Squared Numbers', category: 'Unicode', transform: t => transformWithFallback(t, text => transformWithMap(text, maps.squared)) },
   romanNumerals: { 
     name: 'Roman Numerals', 
-    category: 'Numbers', 
+    category: 'Unicode', 
     transform: t => {
       const romanMap = { '1': 'Ⅰ', '2': 'Ⅱ', '3': 'Ⅲ', '4': 'Ⅳ', '5': 'Ⅴ', '6': 'Ⅵ', '7': 'Ⅶ', '8': 'Ⅷ', '9': 'Ⅸ', '0': '〇' };
       return Array.from(t).map(c => romanMap[c] || c).join('');
     }
   },
-  numberedText: { name: 'Numbered Text', category: 'Numbers', transform: t => Array.from(t).map((c, i) => `${i+1}. ${c}`).join(' ') },
+  numberedText: { name: 'Numbered Text', category: 'Unicode', transform: t => Array.from(t).map((c, i) => `${i + 1}. ${c}`).join(' ') },
+
+  // --- Competitive: clan-ready, tryhard-readable tags ---
+  comp_xClassic: { name: 'xX Classic', category: 'Competitive', transform: t => `xX_${t}_Xx` },
+  comp_clanBox: { name: 'Clan Box', category: 'Competitive', transform: t => `【${t}】` },
+  comp_pipeRun: { name: 'Pipe Run', category: 'Competitive', transform: t => Array.from(t).join('|') },
+  comp_dotRun: { name: 'Dot Run', category: 'Competitive', transform: t => Array.from(t).join('·') },
+  comp_altCase: { name: 'Alt Case', category: 'Competitive', transform: t => Array.from(t).map((c, i) => (c === ' ' ? ' ' : i % 2 ? c.toUpperCase() : c.toLowerCase())).join('') },
+  comp_cornerJP: { name: 'Corner Brackets', category: 'Competitive', transform: t => `「${t}」` },
+  comp_lenticular: { name: 'Lenticular', category: 'Competitive', transform: t => `〖${t}〗` },
+  comp_doubleAngle: { name: 'Double Angle', category: 'Competitive', transform: t => `《${t}》` },
+  comp_wingRune: { name: 'Wing Rune', category: 'Competitive', transform: t => `༺ ${t} ༻` },
+  comp_ornateArc: { name: 'Ornate Arc', category: 'Competitive', transform: t => `꧁ ${t} ꧂` },
+  comp_streamBracket: { name: 'Stream Bracket', category: 'Competitive', transform: t => `⟨${t}⟩` },
+  comp_starkMono: { name: 'Stark Mono', category: 'Competitive', transform: t => transformWithFallback(t, (x) => transformWithMap(x, maps.mathMonospace)) },
+  comp_hardSans: { name: 'Hard Sans', category: 'Competitive', transform: t => transformWithFallback(t, (x) => transformWithMap(x, maps.mathSansSerifBold)) },
+  comp_wideTag: { name: 'Wide Tag', category: 'Competitive', transform: t => transformWithFallback(t, (x) => transformWithMap(x, maps.fullWidth)) },
+  comp_underSnake: { name: 'Underscore Tag', category: 'Competitive', transform: t => t.trim().replace(/\s+/g, '_') },
+  comp_bulletCore: { name: 'Bullet Core', category: 'Competitive', transform: t => `• ${t} •` },
+  comp_doubleStruckPro: { name: 'Double-Struck Pro', category: 'Competitive', transform: t => transformWithFallback(t, (x) => transformWithMap(x, maps.mathDoubleStruck)) },
+
+  // --- Bio & social rhythm ---
+  bio_tiktokDots: { name: 'TikTok Dot Rhythm', category: 'Bio', transform: t => Array.from(t).join('・') },
+  bio_softLower: { name: 'Soft Lowercase', category: 'Bio', transform: t => t.toLowerCase() },
+  bio_bannerUpper: { name: 'Banner Upper', category: 'Bio', transform: t => t.toUpperCase() },
+  bio_emDash: { name: 'Em Dash Line', category: 'Bio', transform: t => `— ${t} —` },
+  bio_sparkleSoft: { name: 'Sparkle Soft', category: 'Bio', transform: t => `✧ ${t} ✧` },
+  bio_moonFrame: { name: 'Moon Frame', category: 'Bio', transform: t => `☾ ${t} ☽` },
+  bio_starDivider: { name: 'Star Divider', category: 'Bio', transform: t => `⋆ ${t} ⋆` },
+  bio_sakuraWrap: { name: 'Sakura Wrap', category: 'Bio', transform: t => `❀ ${t} ❀` },
+  bio_statusLine: { name: 'Status Line', category: 'Bio', transform: t => `▸ ${t} ◂` },
+  bio_softQuote: { name: 'Soft Quote', category: 'Bio', transform: t => `“${t}”` },
+
+  // --- Identity shaping (casing & rhythm) ---
+  id_compact: { name: 'Compact Tag', category: 'Identity', transform: t => t.replace(/\s+/g, '') },
+  id_snake: { name: 'Snake Case', category: 'Identity', transform: t => t.trim().replace(/\s+/g, '_').toLowerCase() },
+  id_kebab: { name: 'Kebab Case', category: 'Identity', transform: t => t.trim().toLowerCase().replace(/\s+/g, '-') },
+  id_leet: { name: 'Leet Lite', category: 'Identity', transform: t => leetLite(t) },
+  id_titleCase: { name: 'Title Case', category: 'Identity', transform: t => t.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()) },
+  id_reverseWords: { name: 'Word Reverse', category: 'Identity', transform: t => t.split(/\s+/).reverse().join(' ') },
+
+  // --- Symbol framing (extra) ---
+  sym_angleQuote: { name: 'Guillemets', category: 'Symbols', transform: t => `«${t}»` },
+  sym_fullParen: { name: 'Fullwidth Paren', category: 'Symbols', transform: t => `（${t}）` },
+  sym_cornerHex: { name: 'Corner Quotes', category: 'Symbols', transform: t => `⌜${t}⌝` },
+  sym_blossomFrame: { name: 'Fleur Frame', category: 'Symbols', transform: t => `⚜ ${t} ⚜` },
+  sym_infinityGate: { name: 'Infinity Gate', category: 'Symbols', transform: t => `∞ ${t} ∞` },
+
+  // --- Decorative depth (deterministic) ---
+  deco_vaporRhythm: { name: 'Vapor Rhythm', category: 'Decorative', transform: t => transformWithFallback(t, (x) => Array.from(transformWithMap(x, maps.fullWidth)).join('‧')) },
+  deco_scanTunnel: { name: 'Scan Tunnel', category: 'Decorative', transform: t => Array.from(t).join('┊') },
+  deco_neonFence: { name: 'Neon Fence', category: 'Decorative', transform: t => `│ ${t} │` },
+  deco_shadowStrike: { name: 'Short Strike', category: 'Decorative', transform: t => applyCombiningMark(t, '\u0335') },
+  deco_medievalBar: { name: 'Medieval Bar', category: 'Decorative', transform: t => `⚔ ${t} ⚔` },
+  deco_runeDots: { name: 'Rune Dots', category: 'Decorative', transform: t => Array.from(t).join(' ∘ ') }
 };
 
 // --- Nickname Symbols Library ---

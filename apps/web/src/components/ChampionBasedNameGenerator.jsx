@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 import leagueOfLegendsChampions from '@/data/leagueOfLegendsChampions.js';
 
 const ChampionBasedNameGenerator = ({ initialChampion = null }) => {
@@ -59,15 +60,19 @@ const ChampionBasedNameGenerator = ({ initialChampion = null }) => {
     }, 500);
   };
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     toast({
       title: "Copied!",
       description: `${text} copied to clipboard.`,
       className: "bg-card border-primary text-foreground"
     });
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   return (
@@ -136,14 +141,14 @@ const ChampionBasedNameGenerator = ({ initialChampion = null }) => {
             className="w-full bg-primary text-black hover:bg-primary/90 font-bold py-6"
           >
             {isGenerating ? <RefreshCw className="w-5 h-5 mr-2 animate-spin" /> : <Sparkles className="w-5 h-5 mr-2" />}
-            Generate Names
+            Sample tags
           </Button>
         </div>
 
         {/* Right: Generated Names */}
         <div className="w-full md:w-2/3">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold">Generated {selectedChampion.name} Names</h3>
+            <h3 className="text-xl font-bold">Samples · {selectedChampion.name}</h3>
             {generatedNames.length > 0 && (
               <Button variant="ghost" size="sm" onClick={() => handleGenerate(selectedChampion)} disabled={isGenerating}>
                 <RefreshCw className={`w-4 h-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} /> Refresh

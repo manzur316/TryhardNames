@@ -1,38 +1,38 @@
 /** Shared FAQ copy for homepage accordion + FAQ JSON-LD (must stay in sync) */
 export const HOME_PAGE_FAQS = [
   {
-    question: 'What makes a good tryhard gamer name?',
+    question: 'What makes a strong gaming handle?',
     answer:
-      "A good tryhard name combines aggressive or competitive words with stylish symbols and numbers. It should sound intimidating, memorable, and reflect your gaming prowess. Popular elements include dark themes (Shadow, Phantom), competitive terms (Clutch, Cracked), and stylish Unicode symbols (★, ⚡, ✨).",
+      'Clarity beats noise: short enough to read at a glance, easy to say in voice chat, and consistent with the vibe you want (competitive, funny, or aesthetic). Symbols and numbers can help—until they hurt readability. Toggle symbols off when a platform is picky.',
   },
   {
-    question: 'Are these generated names unique?',
+    question: 'Will my generated name be unique everywhere?',
     answer:
-      "Our generator creates millions of unique combinations by mixing different word categories, numbers, and symbols. While we can't guarantee absolute uniqueness across all gaming platforms, the vast combination possibilities make it highly likely your generated name will be available.",
+      'Names here are assembled from curated word pools, patterns, and toggles—not scraped from live platforms—so you get usable ideas fast. Availability always depends on the game or network; copy what you like and check it where you play.',
   },
   {
-    question: 'Can I use these names on console (PlayStation/Xbox)?',
+    question: 'Can I use these names on console (PlayStation / Xbox)?',
     answer:
-      "Yes! The base alphanumeric names work perfectly on PSN and Xbox Live. However, keep in mind that console networks often restrict special Unicode symbols (like ★ or ⚡). If you're generating a name for console, we recommend toggling off the 'Add Symbols' option.",
+      'Alphanumeric handles generally work well on consoles. Many networks restrict exotic Unicode—if you are unsure, turn off symbols and keep the string simple.',
   },
   {
     question: 'How do I change my name in Fortnite or Valorant?',
     answer:
-      'For Fortnite, log into your Epic Games account online and edit your Display Name (can be changed every 2 weeks). For Valorant, log into your Riot Games account and change your Riot ID and Tagline (can be changed every 90 days).',
+      'Fortnite: change your Epic display name from your Epic Games account (rate limits apply). Valorant: update your Riot ID + Tagline from your Riot account (rate limits apply).',
   },
   {
-    question: 'What is a sweaty gamer name?',
+    question: 'What do people mean by a “sweaty” or tryhard name?',
     answer:
-      "Sweaty gamer names are competitive, tryhard-style nicknames that convey skill, dedication, and intensity. They often include words like 'Grind', 'Sweat', 'Clutch', 'Cracked', or 'Goated' combined with aggressive or dark-themed words.",
+      'Usually a competitive-sounding alias: intense verbs, clean spelling, esports-adjacent shorthand—styled to read serious in a lobby or killfeed.',
   },
   {
-    question: 'Is the stylish text generator safe to use?',
+    question: 'Is the stylish text tool safe to use?',
     answer:
-      'Absolutely. Our stylish text generator simply converts standard text into Unicode characters. It does not use any hacks, exploits, or third-party software. It is 100% safe to copy and paste these fonts into your social media bios or game profiles.',
+      'Yes—it renders styled Unicode text you can copy. No installs, no cheats; paste anywhere your platform allows Unicode.',
   },
   {
-    question: 'Are all these tools completely free?',
+    question: 'Is TryhardNames free?',
     answer:
-      'Yes! TryhardNames.com is completely free to use. You can generate unlimited gamer names, clan names, stylish texts, and bios without any hidden fees, subscriptions, or sign-ups required.',
+      'Yes. Generate, preview, and copy without paywalls. Saved favorites stay on your device unless you export them yourself.',
   },
 ];

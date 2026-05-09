@@ -7,7 +7,7 @@ const ClanExploreMoreSection = () => {
   const tools = [
     {
       title: 'Tryhard Name Generator',
-      description: 'Generate tryhard names for competitive players',
+      description: 'Tryhard clan tags for competitive rosters',
       icon: Sparkles,
       path: '/',
       color: 'text-primary',

@@ -70,8 +70,8 @@ export const GamerNamesEdgyPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Edgy Names"
-            buttonLabel="Generate Edgy Gamer Names"
+            title="Sample edgy tags"
+            buttonLabel="Sample more edgy tags"
             defaultCount={12}
           />
         </div>

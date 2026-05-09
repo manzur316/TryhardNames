@@ -3,7 +3,7 @@ import { RefreshCw, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { cn } from '@/lib/utils.js';
 
-export const GenerateButton = ({ onClick, isGenerating, label = "Generate", className, icon }) => {
+export const GenerateButton = ({ onClick, isGenerating, label = "Sample", className, icon }) => {
   return (
     <Button
       onClick={onClick}

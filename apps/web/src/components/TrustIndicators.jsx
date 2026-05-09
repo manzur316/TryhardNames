@@ -33,10 +33,10 @@ const TrustIndicators = () => {
         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
           <ShieldCheck className="w-6 h-6 text-primary" />
         </div>
-        <h4 className="text-3xl font-black text-foreground tracking-tight">
+        <h4 className="text-3xl font-bold text-foreground tracking-tight">
           <Counter end={128000} suffix="+" />
         </h4>
-        <p className="text-sm text-foreground/60 font-medium uppercase tracking-wider">Names Generated Today</p>
+        <p className="text-sm text-foreground/60 font-medium uppercase tracking-wider">Samples today</p>
       </motion.div>
 
       <motion.div 
@@ -49,10 +49,10 @@ const TrustIndicators = () => {
         <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-2">
           <Users className="w-6 h-6 text-secondary" />
         </div>
-        <h4 className="text-3xl font-black text-foreground tracking-tight">
+        <h4 className="text-3xl font-bold text-foreground tracking-tight">
           <Counter end={45000} suffix="+" />
         </h4>
-        <p className="text-sm text-foreground/60 font-medium uppercase tracking-wider">Competitive Gamers</p>
+        <p className="text-sm text-foreground/60 font-medium uppercase tracking-wider">Players browsing</p>
       </motion.div>
 
       <motion.div 
@@ -65,10 +65,10 @@ const TrustIndicators = () => {
         <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-2">
           <Star className="w-6 h-6 text-accent fill-accent" />
         </div>
-        <h4 className="text-3xl font-black text-foreground tracking-tight flex items-center gap-1">
+        <h4 className="text-3xl font-bold text-foreground tracking-tight flex items-center gap-1">
           4.8 <span className="text-lg text-foreground/50 font-medium">/ 5</span>
         </h4>
-        <p className="text-sm text-foreground/60 font-medium uppercase tracking-wider">From 2,340 Reviews</p>
+        <p className="text-sm text-foreground/60 font-medium uppercase tracking-wider">Avg. rating (signals)</p>
       </motion.div>
     </div>
   );

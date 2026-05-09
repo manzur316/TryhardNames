@@ -5,6 +5,7 @@ export const SITEMAP_ROUTES = [
   '/',
   '/stylish-text-generator',
   '/nickname-symbols',
+  '/identity-kit',
   '/roblox-names',
   '/roblox-names/cool',
   '/roblox-names/funny',

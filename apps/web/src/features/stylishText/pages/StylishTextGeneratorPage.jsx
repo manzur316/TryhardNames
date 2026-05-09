@@ -1,27 +1,23 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import SeoHead from '@/seo/SeoHead.jsx';
 import { faqPageSchema } from '@/seo/schema.js';
 import { Link } from 'react-router-dom';
 import { 
-  Copy, Check, AlertCircle, Zap, 
-  Search, Download, FileJson, FileSpreadsheet, Share2, 
-  History, X, Trash2, Loader2, ArrowRight
+  Copy, Check, AlertCircle, 
+  Search, Download, Share2, 
+  X, Trash2, ChevronDown, ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
-import Breadcrumb from '@/components/Breadcrumb.jsx';
 import AdPlaceholderZone from '@/components/AdPlaceholderZone.jsx';
 import { useTheme } from '@/core/context/ThemeContext.jsx';
 import { TextInput } from '../components/TextInput.jsx';
 import { StyleGrid } from '../components/StyleGrid.jsx';
+import { CuratedStyleRails } from '../components/CuratedStyleRails.jsx';
 import { useStylishText } from '../hooks/useStylishText.js';
-import { 
-  textStyles, 
-  exportAsText, 
-  exportAsJSON, 
-  exportAsCSV
-} from '../utils/textStyleConverter.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
+import { textStyles, exportAsText } from '../utils/textStyleConverter.js';
 
-const CATEGORIES = ['All', 'Math', 'Width', 'Numbers', 'Decorative', 'Symbols', 'Spacing', 'Flip'];
+const CATEGORIES = ['All', 'Competitive', 'Unicode', 'Decorative', 'Bio', 'Symbols', 'Identity'];
 const PRESETS = ['Gaming', 'Stylish', 'Cool', 'Gamer', 'Clan'];
 const MAX_INPUT_LENGTH = 500;
 
@@ -34,8 +30,6 @@ const StylishTextGeneratorPage = () => {
     setSelectedStyle, 
     savedTexts, 
     styles,
-    isLoadingStyles,
-    stylesError,
     saveText, 
     deleteText,
     generateStylishText
@@ -45,13 +39,86 @@ const StylishTextGeneratorPage = () => {
   const [copiedId, setCopiedId] = useState(null);
   const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
 
-  // Keyboard shortcuts
+  const showToast = useCallback((message, type = 'success') => {
+    setToast({ visible: true, message, type });
+    setTimeout(() => setToast({ visible: false, message: '', type: 'success' }), 3000);
+  }, []);
+
+  const handleInputChange = useCallback((val) => {
+    if (val.length <= MAX_INPUT_LENGTH) {
+      setInputText(val);
+    } else {
+      showToast(`Maximum length is ${MAX_INPUT_LENGTH} characters`, 'error');
+    }
+  }, [setInputText, showToast]);
+
+  const transformCacheRef = useRef(new Map());
+
+  const categorySource = styles;
+
+  const handleCopy = useCallback((text, id) => {
+    copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 }).then((res) => {
+      if (!res.ok) {
+        showToast('Copy failed', 'error');
+        return;
+      }
+      setCopiedId(id);
+      saveText(text, 'copied');
+      showToast('Copied to clipboard!');
+      setTimeout(() => setCopiedId(null), 1200);
+    });
+  }, [saveText, showToast]);
+
+  const searchFilteredStyles = useMemo(() => {
+    if (!styles?.length) return [];
+
+    const textToTransform = inputText || 'Stylish Text';
+    const cache = transformCacheRef.current;
+    const cacheKeyPrefix = `${textToTransform}\u0001`;
+
+    return styles
+      .map((style) => {
+        const localStyle = textStyles[style.id] || textStyles[style.name?.toLowerCase()] || Object.values(textStyles)[0];
+        const ck = cacheKeyPrefix + style.id;
+        let computed = cache.get(ck);
+        if (!computed) {
+          computed = generateStylishText(textToTransform, localStyle.transform);
+          cache.set(ck, computed);
+          if (cache.size > 1200) cache.clear();
+        }
+        return { ...style, ...computed };
+      })
+      .filter((style) => {
+        const matchesCategory = selectedStyle === 'All' || style.category === selectedStyle;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch =
+          !q ||
+          style.name?.toLowerCase().includes(q) ||
+          style.category?.toLowerCase().includes(q);
+        return matchesCategory && matchesSearch;
+      });
+  }, [styles, inputText, selectedStyle, searchQuery, generateStylishText]);
+
+  const availableCategories = useMemo(() => {
+    const fromData = new Set(categorySource.map((s) => s.category).filter(Boolean));
+    if (fromData.size === 0) return ['All'];
+    const list = CATEGORIES.filter((c) => c === 'All' || fromData.has(c));
+    return list.length ? list : ['All'];
+  }, [categorySource]);
+
+  useEffect(() => {
+    if (availableCategories.length && !availableCategories.includes(selectedStyle)) {
+      setSelectedStyle('All');
+    }
+  }, [availableCategories, selectedStyle, setSelectedStyle]);
+
+  // Keyboard shortcuts (single subscription; deps stable per interaction contract)
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       const cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
 
-      if (cmdOrCtrl && e.key === 'a' && document.activeElement.id !== 'text-input') {
+      if (cmdOrCtrl && e.key === 'a' && document.activeElement?.id !== 'text-input') {
         e.preventDefault();
         const input = document.getElementById('text-input');
         if (input) {
@@ -59,13 +126,13 @@ const StylishTextGeneratorPage = () => {
           input.select();
         }
       }
-      if (cmdOrCtrl && e.key === 'c' && document.activeElement.id !== 'text-input') {
+      if (cmdOrCtrl && e.key === 'c' && document.activeElement?.id !== 'text-input') {
         if (searchFilteredStyles.length > 0 && searchFilteredStyles[0].success) {
           e.preventDefault();
           handleCopy(searchFilteredStyles[0].text, searchFilteredStyles[0].id);
         }
       }
-      if (cmdOrCtrl && e.key === 'x' && document.activeElement.id !== 'text-input') {
+      if (cmdOrCtrl && e.key === 'x' && document.activeElement?.id !== 'text-input') {
         e.preventDefault();
         setInputText('');
       }
@@ -73,59 +140,12 @@ const StylishTextGeneratorPage = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  });
-
-  const showToast = (message, type = 'success') => {
-    setToast({ visible: true, message, type });
-    setTimeout(() => setToast({ visible: false, message: '', type: 'success' }), 3000);
-  };
-
-  const handleInputChange = (val) => {
-    if (val.length <= MAX_INPUT_LENGTH) {
-      setInputText(val);
-    } else {
-      showToast(`Maximum length is ${MAX_INPUT_LENGTH} characters`, 'error');
-    }
-  };
+  }, [searchFilteredStyles, handleCopy, setInputText]);
 
   const applyPreset = (preset) => {
     setInputText(preset);
     saveText(preset, 'preset');
   };
-
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    saveText(text, 'copied');
-    showToast('Copied to clipboard!');
-    setTimeout(() => setCopiedId(null), 2000);
-  };
-
-  const handleGenerate = () => {
-    if (inputText && styles.length > 0) {
-      const localStyle = textStyles[styles[0].id] || Object.values(textStyles)[0];
-      generateStylishText(inputText, localStyle.transform);
-      saveText(inputText, 'generated');
-      showToast('Text generated and saved!');
-    }
-  };
-
-  const searchFilteredStyles = useMemo(() => {
-    if (!styles || styles.length === 0) return [];
-    
-    const textToTransform = inputText || 'Stylish Text';
-    
-    return styles.map(style => {
-      const localStyle = textStyles[style.id] || textStyles[style.name?.toLowerCase()] || Object.values(textStyles)[0];
-      const { success, text, hasWarning, error } = generateStylishText(textToTransform, localStyle.transform);
-      return { ...style, success, text, hasWarning, error };
-    }).filter(style => {
-      const matchesCategory = selectedStyle === 'All' || style.category === selectedStyle;
-      const matchesSearch = style.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            style.category?.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [styles, inputText, selectedStyle, searchQuery, generateStylishText]);
 
   const stats = useMemo(() => {
     return searchFilteredStyles.reduce((acc, curr) => {
@@ -139,8 +159,13 @@ const StylishTextGeneratorPage = () => {
 
   const copyAllStyles = () => {
     const allText = searchFilteredStyles.filter(s => s.success).map(s => s.text).join('\n');
-    navigator.clipboard.writeText(allText);
-    showToast('All styles copied to clipboard!');
+    copyTextToClipboard(allText, { preventRepeatMs: 650, vibrateMs: 12 }).then((res) => {
+      if (!res.ok) {
+        showToast('Copy failed', 'error');
+        return;
+      }
+      showToast('All styles copied to clipboard!');
+    });
   };
 
   const handleDownloadFile = () => {
@@ -153,30 +178,6 @@ const StylishTextGeneratorPage = () => {
     a.click();
     URL.revokeObjectURL(url);
     showToast('Downloaded as TXT file');
-  };
-
-  const handleExportJSON = () => {
-    const jsonString = exportAsJSON(inputText, searchFilteredStyles);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'stylish-text.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('Exported as JSON');
-  };
-
-  const handleExportCSV = () => {
-    const csvString = exportAsCSV(searchFilteredStyles);
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'stylish-text.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('Exported as CSV');
   };
 
   const shareOnSocial = () => {
@@ -202,36 +203,38 @@ const StylishTextGeneratorPage = () => {
     <>
       <SeoHead
         title="Stylish Text Generator – Unicode Fonts & Cool Symbols | TryhardNames"
-        description="Generate 50+ stylish Unicode fonts and aesthetic text styles—bold, cursive, mirrored and decorative. Copy/paste for bios, Discord, TikTok and gaming tags."
+        description="Create stylish Unicode text—bold, cursive, mirrored and decorative. Copy/paste for bios, Discord, TikTok and gaming tags."
         path="/stylish-text-generator"
         jsonLd={[faqJsonLd]}
       />
 
       <div className="bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-50 flex-grow flex flex-col min-h-screen transition-colors duration-300">
         
-        <section className="relative pt-12 pb-8 px-4 overflow-hidden flex flex-col items-center justify-center border-b border-slate-200 dark:border-dark-700">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-accent-cyan/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
-          
-          <div className="container mx-auto max-w-5xl relative z-10 text-center space-y-6">
-            <div className="flex justify-center mb-2">
-              <Breadcrumb items={[{ name: 'Stylish Text Generator', path: '/stylish-text-generator' }]} />
-            </div>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
-              Stylish Text Generator <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan to-accent-purple">Convert Text to Cool Fonts</span>
+        <section className="relative pt-10 pb-6 px-4 border-b border-slate-200/80 dark:border-dark-800">
+          <div className="container mx-auto max-w-5xl text-center space-y-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-dark-50">
+              Stylish Text Generator
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-dark-400 max-w-2xl mx-auto font-medium">
-              Type your text below to instantly generate 50+ Unicode styles. Copy and paste bold, italic, cursive, and aesthetic fonts anywhere.
+            <p className="text-base sm:text-lg text-slate-600 dark:text-dark-400 max-w-xl mx-auto leading-relaxed">
+              Type once—every style updates live. Copy the row you want. Unicode fonts for Discord, bios, and tags.
             </p>
+            <div className="flex justify-center pt-2">
+              <Link
+                to={`/identity-kit${inputText.trim() ? `?primary=${encodeURIComponent(inputText.trim())}` : ''}`}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-dark-700 bg-white/90 dark:bg-dark-900/90 px-4 py-2 text-sm font-medium text-slate-700 dark:text-dark-200 hover:border-accent-cyan/45 hover:text-accent-cyan transition-colors"
+              >
+                Compose an Identity Kit <ArrowRight className="w-4 h-4 shrink-0" aria-hidden />
+              </Link>
+            </div>
           </div>
         </section>
 
         <AdPlaceholderZone position="top" />
 
-        <section className="container mx-auto max-w-6xl px-4 py-8 sm:py-12">
-          <div className="max-w-5xl mx-auto space-y-8">
+        <section className="container mx-auto max-w-6xl px-4 py-8 sm:py-10">
+          <div className="max-w-5xl mx-auto space-y-6">
             
-            <div className="bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow relative">
+            <div className="bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-2xl p-4 sm:p-6 shadow-sm">
               <TextInput 
                 value={inputText} 
                 onChange={handleInputChange} 
@@ -240,148 +243,177 @@ const StylishTextGeneratorPage = () => {
                 isDarkMode={isDarkMode}
               />
 
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <Button 
-                  onClick={handleGenerate}
-                  disabled={isLoadingStyles || styles.length === 0 || !inputText}
-                  className="bg-accent-cyan text-dark-950 hover:bg-accent-cyan/90 font-semibold"
-                >
-                  <Zap className="w-4 h-4 mr-2" /> Generate
-                </Button>
-                <Button onClick={copyAllStyles} variant="outline" className="border-accent-cyan text-accent-cyan hover:bg-accent-cyan/10" aria-label="Copy all styles">
-                  <Copy className="w-4 h-4 mr-2" /> Copy All
-                </Button>
-                <Button onClick={handleDownloadFile} variant="outline" className="border-slate-200 dark:border-dark-700 text-slate-500 dark:text-dark-400 hover:text-slate-900 dark:hover:text-dark-50" aria-label="Download as TXT">
-                  <Download className="w-4 h-4 mr-2" /> TXT
-                </Button>
-                <Button onClick={handleExportJSON} variant="outline" className="border-slate-200 dark:border-dark-700 text-slate-500 dark:text-dark-400 hover:text-slate-900 dark:hover:text-dark-50" aria-label="Export as JSON">
-                  <FileJson className="w-4 h-4 mr-2" /> JSON
-                </Button>
-                <Button onClick={handleExportCSV} variant="outline" className="border-slate-200 dark:border-dark-700 text-slate-500 dark:text-dark-400 hover:text-slate-900 dark:hover:text-dark-50" aria-label="Export as CSV">
-                  <FileSpreadsheet className="w-4 h-4 mr-2" /> CSV
-                </Button>
-                <Button onClick={shareOnSocial} variant="outline" className="border-slate-200 dark:border-dark-700 text-slate-500 dark:text-dark-400 hover:text-slate-900 dark:hover:text-dark-50" aria-label="Share on Twitter">
-                  <Share2 className="w-4 h-4 mr-2" /> Share
-                </Button>
+              <div className="mt-5 pt-5 border-t border-slate-200 dark:border-dark-800 space-y-4">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-dark-500 mb-2">
+                    Quick fill
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {PRESETS.map((preset) => (
+                      <button
+                        key={preset}
+                        type="button"
+                        onClick={() => applyPreset(preset)}
+                        className="px-3 py-1.5 text-sm rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-700 dark:text-dark-200 hover:bg-slate-200 dark:hover:bg-dark-700 border border-transparent hover:border-slate-300 dark:hover:border-dark-600 transition-colors min-h-[40px]"
+                      >
+                        {preset}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {savedTexts.length > 0 && (
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-dark-500 mb-2">
+                      Recent (tap to reuse)
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {savedTexts.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center gap-0.5 pl-2 pr-1 py-1 rounded-lg bg-slate-100 dark:bg-dark-800 border border-slate-200/80 dark:border-dark-700 max-w-full min-h-[40px]"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setInputText(item.text)}
+                            className="text-sm truncate max-w-[min(200px,55vw)] text-left text-slate-800 dark:text-dark-100 hover:text-accent-cyan"
+                            title={item.text}
+                          >
+                            {item.text}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteText(item.id)}
+                            className="p-2 rounded-md text-slate-400 hover:text-red-500 hover:bg-red-500/10 shrink-0"
+                            aria-label="Remove from history"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-5 border-t border-slate-200 dark:border-dark-800">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    type="button"
+                    onClick={copyAllStyles}
+                    disabled={searchFilteredStyles.filter((s) => s.success).length === 0}
+                    variant="outline"
+                    className="border-slate-200 dark:border-dark-700 min-h-[44px] font-medium"
+                    aria-label="Copy all visible styles"
+                  >
+                    <Copy className="w-4 h-4 mr-2" /> Copy all rows
+                  </Button>
+                  <details className="relative group min-h-[44px] flex items-center">
+                    <summary className="list-none cursor-pointer flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-200 dark:border-dark-700 text-sm font-medium text-slate-600 dark:text-dark-300 hover:bg-slate-50 dark:hover:bg-dark-800 min-h-[44px] [&::-webkit-details-marker]:hidden">
+                      More
+                      <ChevronDown className="w-4 h-4 opacity-70" aria-hidden />
+                    </summary>
+                    <div className="absolute left-0 top-full z-20 mt-1 min-w-[200px] rounded-lg border border-slate-200 dark:border-dark-700 bg-white dark:bg-dark-900 py-1 shadow-lg">
+                      <button
+                        type="button"
+                        onClick={handleDownloadFile}
+                        className="w-full flex items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-slate-100 dark:hover:bg-dark-800"
+                      >
+                        <Download className="w-4 h-4 shrink-0" aria-hidden />
+                        Download .txt
+                      </button>
+                      <button
+                        type="button"
+                        onClick={shareOnSocial}
+                        className="w-full flex items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-slate-100 dark:hover:bg-dark-800"
+                      >
+                        <Share2 className="w-4 h-4 shrink-0" aria-hidden />
+                        Share on X
+                      </button>
+                    </div>
+                  </details>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-dark-500 max-w-md sm:text-right leading-snug">
+                  Outside the text field: Ctrl/Cmd+C copies the first visible style. Ctrl/Cmd+A focuses the field.
+                </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl p-4">
-                <h3 className="text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 text-slate-500 dark:text-dark-400">
-                  <Zap className="w-4 h-4 text-accent-purple" /> Presets
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {PRESETS.map(preset => (
-                    <button 
-                      key={preset} 
-                      onClick={() => applyPreset(preset)}
-                      className="px-3 py-1.5 text-sm rounded-lg bg-slate-100 dark:bg-dark-800 hover:bg-accent-purple/20 hover:text-accent-purple transition-colors"
+            <CuratedStyleRails
+              inputText={inputText}
+              generateStylishText={generateStylishText}
+              onCopy={handleCopy}
+              copiedId={copiedId}
+              isDarkMode={isDarkMode}
+            />
+
+            <div className="space-y-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="relative w-full sm:max-w-xs">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-dark-400 pointer-events-none" />
+                  <input 
+                    type="text" 
+                    placeholder="Filter styles by name…" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    aria-label="Filter styles"
+                    className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 text-sm focus:ring-2 focus:ring-accent-cyan/40 focus:border-accent-cyan outline-none transition-all"
+                  />
+                  {searchQuery && (
+                    <button type="button" onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-slate-200/80 dark:hover:bg-dark-700" aria-label="Clear filter">
+                      <X className="w-4 h-4 text-slate-500 dark:text-dark-400" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-dark-400">
+                  <span className="tabular-nums" title="Styles matching filters">
+                    {stats.total} styles
+                  </span>
+                </div>
+              </div>
+
+              {availableCategories.length > 1 && (
+                <div className="flex flex-wrap gap-2" aria-label="Category filters">
+                  {availableCategories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedStyle(cat)}
+                      aria-pressed={selectedStyle === cat}
+                      className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors active:scale-[0.98] ${
+                        selectedStyle === cat 
+                          ? 'bg-accent-cyan text-dark-950 ring-1 ring-accent-cyan/40' 
+                          : 'bg-white dark:bg-dark-900 text-slate-600 dark:text-dark-400 hover:bg-slate-100 dark:hover:bg-dark-800 border border-slate-200 dark:border-dark-700'
+                      }`}
                     >
-                      {preset}
+                      {cat}
                     </button>
                   ))}
                 </div>
-              </div>
-              
-              <div className="bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl p-4">
-                <h3 className="text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 text-slate-500 dark:text-dark-400">
-                  <History className="w-4 h-4 text-accent-pink" /> Recent History
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {savedTexts.length === 0 ? (
-                    <span className="text-sm text-slate-500 dark:text-dark-400">No history yet</span>
-                  ) : (
-                    savedTexts.map((item) => (
-                      <div key={item.id} className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg bg-slate-100 dark:bg-dark-800 hover:bg-accent-pink/10 transition-colors">
-                        <button 
-                          onClick={() => setInputText(item.text)}
-                          className="hover:text-accent-pink truncate max-w-[120px]"
-                          title={item.text}
-                        >
-                          {item.text}
-                        </button>
-                        <button onClick={() => deleteText(item.id)} className="text-red-400 hover:text-red-600 ml-1">
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
+              )}
             </div>
 
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="relative w-full sm:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-dark-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search styles..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    aria-label="Search styles"
-                    className="w-full pl-9 pr-4 py-2 rounded-lg bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 focus:ring-2 focus:ring-accent-cyan outline-none transition-all"
-                  />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2">
-                      <X className="w-4 h-4 text-slate-500 dark:text-dark-400 hover:text-slate-900 dark:hover:text-dark-50" />
-                    </button>
-                  )}
+            <div>
+              {styles.length > 0 ? (
+                <StyleGrid 
+                  styles={searchFilteredStyles} 
+                  copiedId={copiedId} 
+                  onCopy={handleCopy} 
+                  isDarkMode={isDarkMode} 
+                />
+              ) : (
+                <div className="rounded-xl border border-dashed border-slate-300 dark:border-dark-700 py-14 px-4 text-center text-slate-500 dark:text-dark-400 text-sm">
+                  No styles to display. Try again shortly.
                 </div>
-
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="px-2 py-1 rounded bg-slate-100 dark:bg-dark-800 text-slate-500 dark:text-dark-400" title="Total Styles">Total: {stats.total}</span>
-                  <span className="px-2 py-1 rounded bg-green-500/10 text-green-500" title="Successful">✓ {stats.success}</span>
-                  {stats.warnings > 0 && <span className="px-2 py-1 rounded bg-yellow-500/10 text-yellow-500" title="Warnings">⚠ {stats.warnings}</span>}
-                  {stats.errors > 0 && <span className="px-2 py-1 rounded bg-red-500/10 text-red-500" title="Errors">✕ {stats.errors}</span>}
-                </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-2" aria-label="Category filters">
-                {CATEGORIES.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedStyle(cat)}
-                    aria-pressed={selectedStyle === cat}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all active:scale-95 ${
-                      selectedStyle === cat 
-                        ? 'bg-accent-cyan text-dark-950 shadow-[0_0_15px_rgba(6,182,212,0.4)]' 
-                        : 'bg-white dark:bg-dark-900 text-slate-500 dark:text-dark-400 hover:bg-slate-100 dark:hover:bg-dark-800 hover:text-slate-900 dark:hover:text-dark-50 border border-slate-200 dark:border-dark-700'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
+              )}
             </div>
-
-            {isLoadingStyles ? (
-              <div className="flex flex-col items-center justify-center py-16 space-y-4">
-                <Loader2 className="w-10 h-10 animate-spin text-accent-cyan" />
-                <p className="text-slate-500 dark:text-dark-400">Loading styles from server...</p>
-              </div>
-            ) : stylesError ? (
-              <div className="flex flex-col items-center justify-center py-16 space-y-4 text-red-500">
-                <AlertCircle className="w-10 h-10" />
-                <p>Failed to load styles: {stylesError.message}</p>
-              </div>
-            ) : styles.length > 0 ? (
-              <StyleGrid 
-                styles={searchFilteredStyles} 
-                copiedId={copiedId} 
-                onCopy={handleCopy} 
-                isDarkMode={isDarkMode} 
-              />
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">No styles available.</div>
-            )}
 
             {/* Standardized SEO Section */}
             <section className="mt-16 max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
                 Stylish Text Generator - Create Decorative Fonts & Symbols
-              </h1>
+              </h2>
               <p className="text-slate-700 dark:text-dark-300 mb-4 leading-relaxed">
                 Transform your standard text into eye-catching, decorative fonts instantly. Our stylish text generator helps you stand out on social media, gaming profiles, and messaging apps. With dozens of unique styles, you can perfectly match your digital aesthetic.
               </p>
@@ -412,9 +444,9 @@ const StylishTextGeneratorPage = () => {
               </h2>
               <div className="space-y-4 mb-12">
                 {faqs.map((faq, i) => (
-                  <div key={i} className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
-                    <h3 className="font-bold text-slate-900 dark:text-dark-50 mb-2">{faq.q}</h3>
-                    <p className="text-slate-700 dark:text-dark-300 leading-relaxed">{faq.a}</p>
+                  <div key={i} className="p-4 rounded-lg border border-slate-200 dark:border-dark-700 bg-slate-50/80 dark:bg-dark-900/50">
+                    <h3 className="font-semibold text-slate-900 dark:text-dark-50 mb-2">{faq.q}</h3>
+                    <p className="text-slate-700 dark:text-dark-300 leading-relaxed text-[15px]">{faq.a}</p>
                   </div>
                 ))}
               </div>
@@ -422,9 +454,13 @@ const StylishTextGeneratorPage = () => {
               {/* CTA Section */}
               <div className="mt-12 pt-8 border-t border-slate-200 dark:border-dark-800">
                 <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-dark-50">Explore More Tools</h2>
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/roblox-names" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">Roblox Names</Link>
-                  <Link to="/gamer-names" className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">Gamer Names</Link>
+                <div className="flex flex-wrap gap-3">
+                  <Link to="/roblox-names" className="px-5 py-2.5 rounded-lg font-medium border border-slate-300 dark:border-dark-600 text-slate-800 dark:text-dark-100 hover:bg-slate-100 dark:hover:bg-dark-800 transition-colors">
+                    Roblox Names
+                  </Link>
+                  <Link to="/gamer-names" className="px-5 py-2.5 rounded-lg font-medium border border-slate-300 dark:border-dark-600 text-slate-800 dark:text-dark-100 hover:bg-slate-100 dark:hover:bg-dark-800 transition-colors">
+                    Gamer Names
+                  </Link>
                 </div>
               </div>
             </section>

@@ -39,7 +39,7 @@ export const RobloxNamesPage = () => {
       title="Roblox Names Generator" 
       description="Discover the perfect Roblox username. Browse through our curated categories to find a name that matches your gaming style."
       seoTitle="Roblox Names Generator – Unique Usernames, Styles & Ideas | TryhardNames"
-      seoDescription="Generate Roblox username ideas that fit competitive and aesthetic styles. Browse cool, funny, tryhard and aesthetic categories — free, fast, copy-ready names."
+      seoDescription="Roblox username ideas for competitive and aesthetic styles. Browse cool, funny, tryhard and aesthetic lanes — free, fast, copy-ready tags."
       faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -72,8 +72,8 @@ export const RobloxNamesPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Roblox Names"
-            buttonLabel="Generate More Roblox Names"
+            title="Sample Roblox tags"
+            buttonLabel="Sample more Roblox tags"
             defaultCount={12}
           />
         </div>

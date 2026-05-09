@@ -70,8 +70,8 @@ export const RobloxNamesTryhardPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Tryhard Names"
-            buttonLabel="Generate Tryhard Roblox Names"
+            title="Sample tryhard tags"
+            buttonLabel="Sample more tryhard tags"
             defaultCount={12}
           />
         </div>

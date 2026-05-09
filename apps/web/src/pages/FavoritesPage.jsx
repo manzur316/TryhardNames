@@ -7,6 +7,7 @@ import FavoritesGrid from '@/components/FavoritesGrid.jsx';
 import FavoritesStats from '@/components/FavoritesStats.jsx';
 import FavoritesFilters from '@/components/FavoritesFilters.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const FavoritesPage = () => {
   const favorites = useFavorites();
@@ -84,8 +85,13 @@ const FavoritesPage = () => {
 
   const handleShareAll = () => {
     const names = favorites.map(f => f.name).join('\n');
-    navigator.clipboard.writeText(names);
-    toast({ title: "Copied All", description: "All favorite names copied to clipboard!", className: "bg-card border-primary text-foreground" });
+    copyTextToClipboard(names, { preventRepeatMs: 650, vibrateMs: 12 }).then((res) => {
+      if (!res.ok) {
+        toast({ title: "Copy failed", description: "Clipboard blocked by your browser. Try again or use a different browser.", variant: "destructive" });
+        return;
+      }
+      toast({ title: "Copied All", description: "All favorite names copied to clipboard!", className: "bg-card border-primary text-foreground" });
+    });
   };
 
   return (

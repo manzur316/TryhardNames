@@ -19,8 +19,8 @@ const ClanNameGeneratorPage = () => {
   return (
     <>
       <Helmet>
-        <title>Clan Name Generator – Cool, Tryhard & Esports Team Names 2026</title>
-        <meta name="description" content="Generate cool, tryhard and competitive clan names instantly. Perfect for Fortnite, Valorant, COD, Roblox and esports teams." />
+        <title>Clan Names & Team Tags — Esports-Readable Rosters | TryhardNames</title>
+        <meta name="description" content="Clan name ideas for squads and esports—short team tags that read clean on leaderboards and streams." />
       </Helmet>
 
       <div className="bg-background text-[#d6d6d6] selection:bg-primary/30 flex-grow flex flex-col">
@@ -33,20 +33,20 @@ const ClanNameGeneratorPage = () => {
             <div className="flex justify-center mb-2">
               <Breadcrumb items={[{ name: 'Clan Name Generator', path: '/clan-name-generator' }]} />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tight leading-tight">
-              Clan Name Generator – <br className="hidden md:block" />
-              <span className="text-primary">Cool & Competitive</span> Team Names
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-tight">
+              Clan names & team tags – <br className="hidden md:block" />
+              <span className="text-primary">Esports-ready · roster-clear</span>
             </h1>
             <p className="text-lg md:text-xl text-[#d6d6d6] max-w-2xl mx-auto font-medium">
-              Generate stylish and competitive clan names instantly. Perfect for esports rosters, gaming squads, and guilds.
+              Sample squad titles and taglines tuned for leaderboards, streams, and rosters.
             </p>
             
             <div className="pt-4">
               <button 
                 onClick={scrollToGenerator}
-                className="bg-primary text-black hover:bg-primary/90 text-lg px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2 mx-auto w-full sm:w-auto justify-center"
+                className="bg-primary text-black hover:bg-primary/90 text-lg px-8 py-4 rounded-xl font-bold transition-colors duration-300 flex items-center gap-2 mx-auto w-full sm:w-auto justify-center"
               >
-                Start Generating <ArrowDown className="w-5 h-5 animate-bounce" />
+                Open samples <ArrowDown className="w-5 h-5 animate-bounce" />
               </button>
             </div>
           </div>

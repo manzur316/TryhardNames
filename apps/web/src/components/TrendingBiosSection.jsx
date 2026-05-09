@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const trendingData = [
   { text: "★ Ranked Demon ★ | No excuses, just results. 💀", style: "Tryhard", copies: 1420 },
@@ -27,10 +28,11 @@ const TrendingBiosSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleCopy = (text, index) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, index) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) return;
     setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    setTimeout(() => setCopiedIndex(null), 1200);
   };
 
   return (

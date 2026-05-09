@@ -70,8 +70,8 @@ export const RobloxNamesFunnyPage = () => {
             generatedNames={generatedNames}
             isGenerating={isGenerating}
             error={error}
-            title="Generate Funny Names"
-            buttonLabel="Generate Funny Roblox Names"
+            title="Sample funny tags"
+            buttonLabel="Sample more funny tags"
             defaultCount={12}
           />
         </div>

@@ -24,8 +24,8 @@ const FortniteNamesPage = () => {
   return (
     <>
       <Helmet>
-        <title>Fortnite Tryhard Names – Stylish & Competitive Gamer Tags 2026</title>
-        <meta name="description" content="Generate stylish and competitive tryhard names for Fortnite. Cool, sweaty and aesthetic gamer tags instantly." />
+        <title>Fortnite Display Names — Sweaty Tags & Party UI Handles | TryhardNames</title>
+        <meta name="description" content="Fortnite display name ideas—competitive and aesthetic tags that stay legible on console and in creator overlays." />
       </Helmet>
 
       <div className="bg-background text-foreground flex-grow flex flex-col">
@@ -38,11 +38,13 @@ const FortniteNamesPage = () => {
           
           <div className="container mx-auto max-w-4xl relative z-10 text-center space-y-6">
             <Breadcrumb items={[{ name: 'Fortnite Names', path: '/fortnite-tryhard-names' }]} />
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tight">
-              Fortnite Tryhard Names Generator – <br className="hidden md:block" />
-              <span className="text-primary glow-neon">Cool & Competitive</span> Gamer Tags
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight text-balance">
+              <span className="block">Fortnite display names</span>
+              <span className="block mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-amber-400/95">
+                Replay-ready · party UI · overlays
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-foreground/80 font-medium">Trusted by competitive players worldwide.</p>
+            <p className="text-lg md:text-xl text-foreground/80 font-medium">Aliases tuned for replays, party UI, and creator overlays.</p>
           </div>
         </section>
 
@@ -62,10 +64,10 @@ const FortniteNamesPage = () => {
               animate={{ opacity: 1, y: 0 }} 
               className="mt-8 bg-gradient-to-r from-card to-background border border-secondary/30 rounded-xl p-6 text-center shadow-refined"
             >
-              <h3 className="text-xl font-bold text-foreground mb-2">Want something more aggressive?</h3>
-              <p className="text-sm text-foreground/70 mb-4">Create a unified identity for your entire squad.</p>
+              <h3 className="text-xl font-bold text-foreground mb-2">Squad tags</h3>
+              <p className="text-sm text-foreground/70 mb-4">Short clan handles that stay legible in rosters and killfeeds.</p>
               <Link to="/clan-name-generator" className="inline-flex items-center px-6 py-3 bg-secondary/10 text-secondary border border-secondary/30 rounded-lg hover:bg-secondary hover:text-white transition-all duration-300 font-medium">
-                <Shield className="w-4 h-4 mr-2" /> Explore Clan Name Generator
+                <Shield className="w-4 h-4 mr-2" /> Clan name ideas
               </Link>
             </motion.div>
           )}

@@ -28,8 +28,8 @@ const RobloxNamesPage = () => {
   return (
     <>
       <Helmet>
-        <title>Roblox Tryhard Names – Stylish & Competitive Gamer Tags 2026</title>
-        <meta name="description" content="Generate stylish and competitive tryhard names for Roblox. Cool, sweaty and aesthetic gamer tags instantly." />
+        <title>Roblox Usernames & Display Tags — Tryhard Handles 2026 | TryhardNames</title>
+        <meta name="description" content="Roblox username and display name ideas—readable tags for profiles, trading, and competitive experiences." />
       </Helmet>
 
       <div className="bg-background text-foreground flex-grow flex flex-col">
@@ -41,11 +41,13 @@ const RobloxNamesPage = () => {
           
           <div className="container mx-auto max-w-4xl relative z-10 text-center space-y-6">
             <Breadcrumb items={[{ name: 'Roblox Names', path: '/roblox-tryhard-names' }]} />
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tight">
-              Roblox Tryhard Names Generator – <br className="hidden md:block" />
-              <span className="text-accent glow-cyan">Cool & Competitive</span> Gamer Tags
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight text-balance">
+              <span className="block">Roblox identity tags</span>
+              <span className="block mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-sky-400/95">
+                Profiles · discoverability · experiences
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-foreground/80 font-medium">Trusted by competitive players worldwide.</p>
+            <p className="text-lg md:text-xl text-foreground/80 font-medium">Usernames and display names tuned for profile reads—not generic filler.</p>
           </div>
         </section>
 
@@ -54,7 +56,7 @@ const RobloxNamesPage = () => {
         <section className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-transparent h-auto mb-8">
-              <TabsTrigger value="generator" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Name Generator</TabsTrigger>
+              <TabsTrigger value="generator" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Tag sampler</TabsTrigger>
               <TabsTrigger value="gametype" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">By Game Type</TabsTrigger>
               <TabsTrigger value="games" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Popular Games</TabsTrigger>
               <TabsTrigger value="history" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">History</TabsTrigger>

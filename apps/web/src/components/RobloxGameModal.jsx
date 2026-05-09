@@ -94,7 +94,7 @@ const RobloxGameModal = ({ game, isOpen, onClose, onGenerateName }) => {
               }}
               className="bg-primary text-black hover:bg-primary/90 font-bold px-6"
             >
-              <Sparkles className="w-4 h-4 mr-2" /> Generate {game.gameType} Names
+              <Sparkles className="w-4 h-4 mr-2" /> Sample {game.gameType} tags
             </Button>
           </div>
         </motion.div>

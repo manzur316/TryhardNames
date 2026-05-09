@@ -16,7 +16,7 @@ const Header = () => {
     { name: 'Valorant Names', path: '/valorant/sweaty' },
     { name: 'Roblox Names', path: '/roblox-tryhard-names' },
     { name: 'COD Names', path: '/cod/sweaty' },
-    { name: 'League of Legends Names', path: '/league-of-legends-names' },
+    { name: 'League of Legends', path: '/league-of-legends' },
   ];
 
   // Load dynamic pages for the dropdown

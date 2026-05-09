@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import pb from '@/lib/pocketbaseClient.js';
+import { readUnifiedFavoriteNames, writeUnifiedFavoriteNames } from '@/utils/favoritesSoT.js';
 
 export const FavoritesContext = createContext();
 
@@ -21,11 +22,36 @@ export const FavoritesProvider = ({ children }) => {
           setFavorites(records);
           // Backup to local storage
           localStorage.setItem('tryhard_favorites', JSON.stringify(records));
+          // Source-of-truth mirror for other UI surfaces (names-only)
+          writeUnifiedFavoriteNames(records.map((r) => r?.name).filter(Boolean));
         } else {
           // Load from local storage
           const localFavs = localStorage.getItem('tryhard_favorites');
           if (localFavs) {
-            setFavorites(JSON.parse(localFavs));
+            const parsed = JSON.parse(localFavs);
+            setFavorites(parsed);
+            // Also ensure SoT has all names (merge with v1)
+            const mergedNames = readUnifiedFavoriteNames();
+            const fromLegacy = Array.isArray(parsed) ? parsed.map((r) => r?.name).filter(Boolean) : [];
+            writeUnifiedFavoriteNames([...mergedNames, ...fromLegacy]);
+          }
+          // If legacy storage absent, still hydrate from v1 so favorites UI isn't “empty”
+          if (!localFavs) {
+            const names = readUnifiedFavoriteNames();
+            if (names.length) {
+              setFavorites(
+                names.map((name) => ({
+                  nameId: String(name).toLowerCase().replace(/\s+/g, '_'),
+                  name: String(name),
+                  category: 'General',
+                  gameType: 'General',
+                  gender: 'Neutral',
+                  addedDate: new Date().toISOString(),
+                  copyCount: 0,
+                  rating: 5,
+                }))
+              );
+            }
           }
         }
       } catch (error) {
@@ -33,7 +59,27 @@ export const FavoritesProvider = ({ children }) => {
         // Fallback to local storage on error
         const localFavs = localStorage.getItem('tryhard_favorites');
         if (localFavs) {
-          setFavorites(JSON.parse(localFavs));
+          const parsed = JSON.parse(localFavs);
+          setFavorites(parsed);
+          const mergedNames = readUnifiedFavoriteNames();
+          const fromLegacy = Array.isArray(parsed) ? parsed.map((r) => r?.name).filter(Boolean) : [];
+          writeUnifiedFavoriteNames([...mergedNames, ...fromLegacy]);
+        } else {
+          const names = readUnifiedFavoriteNames();
+          if (names.length) {
+            setFavorites(
+              names.map((name) => ({
+                nameId: String(name).toLowerCase().replace(/\s+/g, '_'),
+                name: String(name),
+                category: 'General',
+                gameType: 'General',
+                gender: 'Neutral',
+                addedDate: new Date().toISOString(),
+                copyCount: 0,
+                rating: 5,
+              }))
+            );
+          }
         }
       } finally {
         setIsLoading(false);
@@ -56,6 +102,8 @@ export const FavoritesProvider = ({ children }) => {
   useEffect(() => {
     if (!isLoading) {
       localStorage.setItem('tryhard_favorites', JSON.stringify(favorites));
+      // Keep SoT up to date for other surfaces (names-only).
+      writeUnifiedFavoriteNames(favorites.map((f) => f?.name).filter(Boolean));
     }
   }, [favorites, isLoading]);
 
@@ -77,6 +125,7 @@ export const FavoritesProvider = ({ children }) => {
 
     // Optimistic update
     setFavorites(prev => [newFavorite, ...prev]);
+    writeUnifiedFavoriteNames(readUnifiedFavoriteNames().concat([name]));
 
     if (pb.authStore.isValid) {
       try {
@@ -106,6 +155,8 @@ export const FavoritesProvider = ({ children }) => {
 
     // Optimistic update
     setFavorites(prev => prev.filter(f => f.nameId !== nameId && f.id !== nameId));
+    const nextNames = readUnifiedFavoriteNames().filter((n) => String(n) !== String(favToRemove.name));
+    writeUnifiedFavoriteNames(nextNames);
 
     if (pb.authStore.isValid && favToRemove.id) {
       try {
@@ -129,6 +180,7 @@ export const FavoritesProvider = ({ children }) => {
     const currentFavs = [...favorites];
     setFavorites([]);
     localStorage.removeItem('tryhard_favorites');
+    writeUnifiedFavoriteNames([], { mirrorLegacy: false });
 
     if (pb.authStore.isValid) {
       try {

@@ -34,8 +34,8 @@ const LeagueOfLegendsNamesGeneratorPage = () => {
   return (
     <>
       <Helmet>
-        <title>League of Legends Names Generator – Cool & Competitive LoL Names</title>
-        <meta name="description" content="Create the perfect name for your League of Legends champion, team, or account. Generate cool, competitive and unique LoL names instantly." />
+        <title>League Summoner Tools — Names by Champion & Role | TryhardNames</title>
+        <meta name="description" content="League of Legends summoner name ideas by champion, role, and style—readable tags for client, match history, and Discord." />
       </Helmet>
 
       <div className="bg-background text-foreground flex-grow flex flex-col">
@@ -43,20 +43,20 @@ const LeagueOfLegendsNamesGeneratorPage = () => {
         <section className="relative py-16 md:py-24 min-h-[400px] flex flex-col justify-center px-4 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-[#0A8CC9]/10 via-background to-background z-10"></div>
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5B2C6F]/20 rounded-full blur-[120px] animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C89B3C]/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5B2C6F]/15 rounded-full blur-[120px]"></div>
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C89B3C]/10 rounded-full blur-[120px]"></div>
           </div>
           
           <div className="container mx-auto max-w-4xl relative z-10 text-center space-y-6">
             <Breadcrumb items={[{ name: 'League of Legends Names', path: '/league-of-legends-names' }]} />
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tight">
-              League of Legends <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0A8CC9] via-[#C89B3C] to-[#5B2C6F]">
-                Names Generator
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
+              <span className="block">League summoner tools</span>
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#0A8CC9] via-[#C89B3C] to-[#5B2C6F] md:text-5xl lg:text-6xl">
+                Tags · champions · lanes
               </span>
             </h1>
             <p className="text-lg md:text-xl text-foreground/80 font-medium max-w-2xl mx-auto">
-              Create the perfect identity for Summoner's Rift. Generate names by role, champion, or competitive style.
+              Shape how you read on Summoner's Rift—sample tags by role, champion, or lane.
             </p>
           </div>
         </section>
@@ -67,7 +67,7 @@ const LeagueOfLegendsNamesGeneratorPage = () => {
         <section className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-transparent h-auto mb-8">
-              <TabsTrigger value="general" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Name Generator</TabsTrigger>
+              <TabsTrigger value="general" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Summoner tags</TabsTrigger>
               <TabsTrigger value="gallery" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Champions</TabsTrigger>
               <TabsTrigger value="champion" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">Champion Gen</TabsTrigger>
               <TabsTrigger value="world" className="data-[state=active]:bg-primary data-[state=active]:text-black border border-border/50 py-3 rounded-xl font-bold">World Stats</TabsTrigger>

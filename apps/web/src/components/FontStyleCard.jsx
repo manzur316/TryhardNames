@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
+import { INTERACTION_TIMING, useAsyncLock, useTransientFlag } from '@/utils/interactionState.js';
 
 const feedbackMessages = [
   "That looks clean.",
@@ -13,33 +15,42 @@ const feedbackMessages = [
 ];
 
 const FontStyleCard = ({ fontName, fontCategory, fontPreview }) => {
-  const [copied, setCopied] = useState(false);
+  const { value: copied, setOn: flashCopied, setOff: clearCopied } = useTransientFlag({ durationMs: INTERACTION_TIMING.feedbackMs });
+  const { locked: busy, run } = useAsyncLock();
   const { toast } = useToast();
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(fontPreview);
-    setCopied(true);
+  const handleCopy = async (e) => {
+    if (e?.preventDefault) e.preventDefault();
+    if (e?.stopPropagation) e.stopPropagation();
+    if (busy) return;
+    await run(async () => {
+      const res = await copyTextToClipboard(fontPreview, { preventRepeatMs: INTERACTION_TIMING.preventRepeatCopyMs, vibrateMs: 12 });
+      if (!res.ok) {
+        clearCopied();
+        toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+        return;
+      }
+      flashCopied();
     
-    // Save to recently copied
-    try {
-      const recent = JSON.parse(localStorage.getItem('recentStyles') || '[]');
-      const newRecent = [{ text: fontPreview, name: fontName, id: Date.now() }, ...recent.filter(item => item.text !== fontPreview)].slice(0, 6);
-      localStorage.setItem('recentStyles', JSON.stringify(newRecent));
-      window.dispatchEvent(new Event('stylesCopied'));
-    } catch (e) {
-      console.error('Could not save to local storage', e);
-    }
+      // Save to recently copied
+      try {
+        const recent = JSON.parse(localStorage.getItem('recentStyles') || '[]');
+        const newRecent = [{ text: fontPreview, name: fontName, id: Date.now() }, ...recent.filter(item => item.text !== fontPreview)].slice(0, 6);
+        localStorage.setItem('recentStyles', JSON.stringify(newRecent));
+        window.dispatchEvent(new Event('stylesCopied'));
+      } catch (e) {
+        console.error('Could not save to local storage', e);
+      }
 
-    const randomMsg = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
+      const randomMsg = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
     
-    toast({
-      title: "Copied to clipboard!",
-      description: randomMsg,
-      className: "bg-card border-primary text-foreground",
-      duration: 2000,
+      toast({
+        title: "Copied to clipboard!",
+        description: randomMsg,
+        className: "bg-card border-primary text-foreground",
+        duration: 2000,
+      });
     });
-
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (

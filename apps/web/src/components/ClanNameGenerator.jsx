@@ -8,6 +8,7 @@ import ClanNameToggleControls from './ClanNameToggleControls.jsx';
 import { generateSingleClanName, generateMultipleClanNames, generateClanTag } from '@/utils/clanNameGenerator.js';
 import { trackGenerationCount } from '@/utils/behavioralPsychology.js';
 import { useLocation } from 'react-router-dom';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const ClanNameGenerator = () => {
   const [customPrefix, setCustomPrefix] = useState('');
@@ -120,8 +121,12 @@ const ClanNameGenerator = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addNumbers, addSymbols, shortTagMode]);
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, id) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
     setCopiedId(id);
     
     toast({
@@ -130,7 +135,7 @@ const ClanNameGenerator = () => {
       duration: 2000,
     });
 
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1200);
   };
 
   const handleToggleNumbers = (val) => {
@@ -183,7 +188,7 @@ const ClanNameGenerator = () => {
             className="bg-[#00ff88] text-black hover:bg-[#00ff88]/90 shadow-[0_0_15px_rgba(0,255,136,0.4)] hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] text-lg py-6 min-h-[48px] font-bold transition-all duration-300 hover:scale-[1.02] w-full rounded-xl"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <Sparkles className="w-6 h-6 mr-2" />}
-            Generate Clan Name
+            Sample clan name
           </Button>
           <Button
             onClick={handleGenerateMultiple}
@@ -191,7 +196,7 @@ const ClanNameGenerator = () => {
             className="bg-secondary text-white hover:bg-secondary/90 text-lg py-6 min-h-[48px] font-bold transition-all duration-300 hover:scale-[1.02] w-full rounded-xl"
           >
             {isGenerating ? <RefreshCw className="w-6 h-6 mr-2 animate-spin" /> : <RefreshCw className="w-6 h-6 mr-2" />}
-            Generate 10 Names
+            Sample 10 names
           </Button>
         </div>
 

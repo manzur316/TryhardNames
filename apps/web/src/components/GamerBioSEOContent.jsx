@@ -102,12 +102,12 @@ const GamerBioSEOContent = () => {
       <section className="max-w-4xl mx-auto py-16 space-y-16">
         <div className="prose prose-invert max-w-none space-y-6">
           <p className="text-lg text-foreground/90 leading-relaxed">
-            Welcome to the ultimate <strong>Free Gamer Bio Generator</strong>. Your bio is the first thing people see when they click on your profile in Discord, Twitch, or in-game. A blank or boring bio says nothing about you, but a well-crafted, aesthetic, or tryhard bio instantly establishes your gaming identity. Use our tool to generate thousands of unique captions and bios tailored to your exact style.
+            Your bio is the first read when someone opens Discord, Twitch, or your in-game profile. A flat line reads anonymous; a tight, aesthetic, or tryhard line signals intent. Use this lane to sample captions and bios you can tune to your games, tone, and formatting—then paste what fits.
           </p>
         </div>
 
         <article className="space-y-4">
-          <h2 className="text-3xl font-bold text-primary glow-neon">Cool Gamer Bios</h2>
+          <h2 className="text-3xl font-bold text-primary">Cool Gamer Bios</h2>
           <p className="text-foreground/90 leading-relaxed">
             A cool gamer bio doesn't try too hard. It's effortless, clean, and lets your gameplay do the talking. These bios are perfect for players who want to look professional and stylish without coming across as overly aggressive. They often utilize clean formatting, minimal emojis, and focus on the games you love to play.
           </p>
@@ -160,7 +160,7 @@ const GamerBioSEOContent = () => {
         <AdPlaceholder position="banner" />
 
         <article className="space-y-4">
-          <h2 className="text-3xl font-bold text-primary glow-neon">Aesthetic Gamer Bios</h2>
+          <h2 className="text-3xl font-bold text-primary">Aesthetic Gamer Bios</h2>
           <p className="text-foreground/90 leading-relaxed">
             Aesthetic bios are all about the vibe. They use specific symbols (like moons, stars, and sparkles), lowercase text, and poetic phrases. These are incredibly popular in communities like Roblox, Minecraft, and among cozy gamers or VTubers.
           </p>

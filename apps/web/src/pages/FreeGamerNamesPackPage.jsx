@@ -74,7 +74,7 @@ const FreeGamerNamesPackPage = () => {
               variant="outline"
               className="border-accent-cyan/50 text-accent-cyan hover:bg-accent-cyan/10 font-bold text-lg h-14 px-8 rounded-full"
             >
-              <Zap className="mr-2 w-5 h-5" /> Generate Random
+              <Zap className="mr-2 w-5 h-5" /> Another pick
             </Button>
 
             <Button 

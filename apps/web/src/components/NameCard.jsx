@@ -1,16 +1,23 @@
 import React from 'react';
 import { Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const NameCard = ({ name, color }) => {
   const { toast } = useToast();
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(name);
-    toast({ 
-      title: 'Copied!', 
-      description: `${name} copied to clipboard.`, 
-      className: "bg-card border-primary text-foreground" 
+  const handleCopy = async (e) => {
+    if (e?.preventDefault) e.preventDefault();
+    if (e?.stopPropagation) e.stopPropagation();
+    const res = await copyTextToClipboard(name, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: 'Copy failed', description: 'Clipboard blocked by your browser.', variant: 'destructive' });
+      return;
+    }
+    toast({
+      title: 'Copied!',
+      description: `${name} copied to clipboard.`,
+      className: "bg-card border-primary text-foreground"
     });
   };
 

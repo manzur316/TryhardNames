@@ -22,7 +22,7 @@ const PopularToolsSection = () => {
       <div className="text-center mb-10">
         <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 flex items-center justify-center gap-2">
           <Zap className="w-6 h-6 text-primary" />
-          Popular Generators
+          Popular lanes
         </h2>
       </div>
 

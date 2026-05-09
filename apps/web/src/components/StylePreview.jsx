@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const StylePreview = ({ styleName, text }) => {
   const [copied, setCopied] = useState(false);
@@ -9,26 +10,23 @@ const StylePreview = ({ styleName, text }) => {
 
   const handleCopy = async () => {
     if (!text) return;
-    
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      toast({
-        title: "Copied!",
-        description: `Copied to clipboard`,
-        className: "bg-card border-primary text-foreground"
-      });
+
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
+    }
+
+    setCopied(true);
+    toast({
+      title: "Copied!",
+      description: `Copied to clipboard`,
+      className: "bg-card border-primary text-foreground"
+    });
 
       setTimeout(() => {
         setCopied(false);
-      }, 2000);
-    } catch (err) {
-      toast({
-        title: "Copy failed",
-        description: "Please try again",
-        variant: "destructive"
-      });
-    }
+      }, 1200);
   };
 
   return (

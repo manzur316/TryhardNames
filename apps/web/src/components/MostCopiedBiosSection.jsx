@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const popularData = [
   { text: "I carry my team heavier than my groceries. 🔥", copies: 25430 },
@@ -24,10 +25,11 @@ const MostCopiedBiosSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleCopy = (text, index) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, index) => {
+    const res = await copyTextToClipboard(text, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) return;
     setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    setTimeout(() => setCopiedIndex(null), 1200);
   };
 
   return (

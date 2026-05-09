@@ -25,7 +25,7 @@ const BuildYourIdentitySection = () => {
     },
     {
       title: 'Tryhard Names',
-      description: 'Generate sweaty, competitive usernames for any game.',
+      description: 'Ranked-forward tags for competitive lobbies.',
       icon: Sparkles,
       path: '/fortnite-names',
       color: 'text-accent',
@@ -46,10 +46,10 @@ const BuildYourIdentitySection = () => {
   return (
     <section className="py-16 border-t border-border/30">
       <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-tight">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-dark-50 mb-4 tracking-tight">
           Complete Your Competitive Profile
         </h2>
-        <p className="text-lg text-[#d6d6d6] max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           A great clan name is just the beginning. Level up your entire gaming identity with our suite of free tools.
         </p>
       </div>
@@ -65,10 +65,10 @@ const BuildYourIdentitySection = () => {
               <div className={`w-12 h-12 rounded-xl ${tool.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                 <tool.icon className={`w-6 h-6 ${tool.color}`} />
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-white transition-colors">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-dark-50 mb-2 group-hover:text-primary transition-colors">
                 {tool.title}
               </h3>
-              <p className="text-[#d6d6d6] text-sm leading-relaxed mb-6 flex-grow">
+              <p className="text-sm text-slate-600 dark:text-dark-300 leading-relaxed mb-6 flex-grow">
                 {tool.description}
               </p>
               <div className={`flex items-center font-bold text-sm ${tool.color} mt-auto`}>

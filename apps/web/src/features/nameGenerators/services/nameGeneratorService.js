@@ -61,7 +61,24 @@ const categoryMetadata = {
 };
 
 export const getNamesByCategory = (type, category) => {
-  if (!nameDatabase[type] || !nameDatabase[type][category]) return [];
+  if (!nameDatabase[type]) return [];
+
+  /** Hub pages use category `all` — merge every pool for that game type (deduped). */
+  if (category === 'all') {
+    const seen = new Set();
+    const merged = [];
+    for (const pool of Object.values(nameDatabase[type])) {
+      for (const name of pool) {
+        if (name && !seen.has(name)) {
+          seen.add(name);
+          merged.push(name);
+        }
+      }
+    }
+    return merged;
+  }
+
+  if (!nameDatabase[type][category]) return [];
   return [...nameDatabase[type][category]];
 };
 

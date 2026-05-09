@@ -3,7 +3,7 @@ export * as nicknameSymbols from './nicknameSymbols/index.js';
 
 // Centralized Feature Exports
 export { StylishTextGeneratorPage, useStylishText, TextInput, StyleGrid, textStyleConverter } from './stylishText/index.js';
-export { NicknameSymbolsPage, useNicknameSymbols, SymbolInput, SymbolGrid, symbolGenerator } from './nicknameSymbols/index.js';
+export { NicknameSymbolsPage, useNicknameSymbols, SymbolInput, SymbolGrid, SymbolExplorer, symbolGenerator } from './nicknameSymbols/index.js';
 
 // Legacy Pages
 export { default as HomePage } from '../pages/HomePage.jsx';
@@ -28,4 +28,5 @@ export { default as ContactPage } from '../pages/ContactPage.jsx';
 export { default as PrivacyPolicyPage } from '../pages/PrivacyPolicyPage.jsx';
 export { default as TermsOfServicePage } from '../pages/TermsOfServicePage.jsx';
 export { default as DynamicPage } from '../pages/DynamicPage.jsx';
+export { default as IdentityKitPage } from '../pages/IdentityKitPage.jsx';
 export { default as SitemapPage } from '../pages/SitemapPage.jsx';

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Copy, Check, MessageSquare, Twitch, Instagram, Youtube, Gamepad2 } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useToast } from '@/hooks/use-toast.js';
+import { copyTextToClipboard } from '@/utils/clipboard.js';
 
 const BioPreview = ({ bio }) => {
   const [copied, setCopied] = useState(false);
@@ -9,26 +10,23 @@ const BioPreview = ({ bio }) => {
 
   const handleCopy = async () => {
     if (!bio) return;
-    
-    try {
-      await navigator.clipboard.writeText(bio);
-      setCopied(true);
-      toast({
-        title: "Bio Copied!",
-        description: "Ready to paste into your profile.",
-        className: "bg-card border-primary text-foreground"
-      });
 
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
-    } catch (err) {
-      toast({
-        title: "Copy failed",
-        description: "Please try again",
-        variant: "destructive"
-      });
+    const res = await copyTextToClipboard(bio, { preventRepeatMs: 450, vibrateMs: 12 });
+    if (!res.ok) {
+      toast({ title: "Copy failed", description: "Clipboard blocked by your browser.", variant: "destructive" });
+      return;
     }
+
+    setCopied(true);
+    toast({
+      title: "Bio Copied!",
+      description: "Ready to paste into your profile.",
+      className: "bg-card border-primary text-foreground"
+    });
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1200);
   };
 
   return (

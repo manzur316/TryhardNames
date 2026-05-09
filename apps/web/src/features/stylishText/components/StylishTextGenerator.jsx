@@ -140,7 +140,7 @@ const StylishTextGenerator = () => {
               onClick={handleShowMore}
               className="flex items-center gap-2 bg-card border border-border/50 hover:border-primary/50 text-foreground px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:shadow-md group"
             >
-              Generate More Styles
+              More styles
               <ChevronDown className="w-5 h-5 text-primary group-hover:translate-y-1 transition-transform" />
             </button>
           </motion.div>

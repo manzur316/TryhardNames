@@ -1,53 +1,32 @@
-export const VALID_ROUTES = [
-  '/',
-  '/about',
-  '/contact',
-  '/privacy-policy',
-  '/terms-of-service',
-  '/roblox-names',
-  '/roblox-names/cool',
-  '/roblox-names/funny',
-  '/roblox-names/aesthetic',
-  '/roblox-names/tryhard',
-  '/gamer-names',
-  '/gamer-names/cool',
-  '/gamer-names/funny',
-  '/gamer-names/pro',
-  '/gamer-names/edgy',
-  '/stylish-text-generator',
-  '/nickname-symbols',
-  '/gamer-bio-generator',
-  '/sitemap',
-  '/sitemap.xml'
-];
+import {
+  APP_REGISTERED_STATIC_PATHS,
+  isAppRegisteredStaticRoute,
+  META_OR_EDGE_PATHS,
+} from '../routing/routeCatalog.js';
+import { isValidSlug } from '../../utils/pageLoader.js';
 
-export const VALID_PATTERNS = [
-  /^\/$/,
-  /^\/about\/?$/,
-  /^\/contact\/?$/,
-  /^\/privacy-policy\/?$/,
-  /^\/terms-of-service\/?$/,
-  /^\/roblox-names(\/(cool|funny|aesthetic|tryhard))?\/?$/,
-  /^\/gamer-names(\/(cool|funny|pro|edgy))?\/?$/,
-  /^\/stylish-text-generator\/?$/,
-  /^\/nickname-symbols\/?$/,
-  /^\/gamer-bio-generator\/?$/,
-  /^\/sitemap(\.xml)?\/?$/
-];
+/**
+ * Known static SPA paths — alias of catalog for tooling (`productionValidation`, legacy imports).
+ * @type {readonly string[]}
+ */
+export const VALID_ROUTES = APP_REGISTERED_STATIC_PATHS;
+
+/**
+ * Legacy regex list — superseded by `routeCatalog` + `isValidSlug` for dynamic programmatic URLs.
+ * Kept as empty frozen array so imports do not break; use `isValidRoute()` instead.
+ * @deprecated
+ */
+export const VALID_PATTERNS = Object.freeze([]);
 
 export const sanitizePathname = (pathname) => {
   if (!pathname) return '/';
-  // Remove multiple slashes and convert to lowercase
   const sanitized = pathname.replace(/\/+/g, '/').toLowerCase();
-  // Remove trailing slash unless it's the root
-  return sanitized.length > 1 && sanitized.endsWith('/') 
-    ? sanitized.slice(0, -1) 
-    : sanitized;
+  return sanitized.length > 1 && sanitized.endsWith('/') ? sanitized.slice(0, -1) : sanitized;
 };
 
 export const getClosestValidRoute = (pathname) => {
   const sanitized = sanitizePathname(pathname);
-  
+
   const legacyMap = {
     '/cool-names': '/gamer-names/cool',
     '/funny-names': '/gamer-names/funny',
@@ -65,7 +44,8 @@ export const getClosestValidRoute = (pathname) => {
     '/cool-gamer-names': '/gamer-names/cool',
     '/funny-gamer-names': '/gamer-names/funny',
     '/pro-gamer-names': '/gamer-names/pro',
-    '/edgy-gamer-names': '/gamer-names/edgy'
+    '/edgy-gamer-names': '/gamer-names/edgy',
+    '/league-of-legends-names': '/league-of-legends',
   };
 
   return legacyMap[sanitized] || null;
@@ -75,17 +55,21 @@ export const isLegacyRoute = (pathname) => {
   return getClosestValidRoute(pathname) !== null;
 };
 
+/**
+ * Whether `pathname` is allowed in this app: static catalog, meta file paths, or valid programmatic slug.
+ */
 export const isValidRoute = (pathname) => {
   const sanitized = sanitizePathname(pathname);
-  return VALID_PATTERNS.some(pattern => pattern.test(sanitized));
+  if (isAppRegisteredStaticRoute(sanitized)) return true;
+  if (META_OR_EDGE_PATHS.includes(sanitized)) return true;
+  return isValidSlug(sanitized);
 };
 
 export const validateURL = (url) => {
   try {
-    // Handle both relative and absolute URLs
     const parsedUrl = new URL(url, window.location.origin);
     return isValidRoute(parsedUrl.pathname);
-  } catch (error) {
+  } catch {
     return false;
   }
 };

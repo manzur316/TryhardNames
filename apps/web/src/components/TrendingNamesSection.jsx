@@ -16,16 +16,16 @@ const TrendingNamesSection = () => {
   ];
 
   return (
-    <section className="py-12">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3 flex items-center justify-center gap-3">
+    <section className="relative py-12 overflow-hidden th-atmosphere-section-soft">
+      <div className="text-center mb-10 relative z-[1]">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-dark-50 mb-3 flex items-center justify-center gap-3">
           <TrendingUp className="w-8 h-8 text-primary" />
           Trending Tryhard Names
         </h2>
-        <p className="text-foreground/70">The most copied names in the last 24 hours</p>
+        <p className="text-muted-foreground">The most copied names in the last 24 hours</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-[1]">
         {trendingData.map((item, index) => (
           <motion.div
             key={index}
@@ -33,7 +33,7 @@ const TrendingNamesSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.05 }}
-            className="bg-card border border-border/50 rounded-xl p-5 flex flex-col justify-between group hover:border-primary/50 transition-all duration-300 shadow-refined hover:scale-[1.02]"
+            className="bg-card border border-border/55 rounded-xl p-5 flex flex-col justify-between group hover:border-primary/40 transition-all duration-300 shadow-[0_14px_40px_-28px_rgba(15,23,42,0.12)] hover:shadow-[0_18px_44px_-22px_rgba(6,182,212,0.14)] dark:shadow-[0_14px_40px_-28px_rgba(0,0,0,0.35)] dark:hover:shadow-[0_18px_44px_-22px_rgba(34,211,238,0.1)]"
           >
             <div className="flex justify-between items-start mb-4">
               <span className={`text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 ${item.bg} ${item.color}`}>
@@ -42,7 +42,7 @@ const TrendingNamesSection = () => {
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors tracking-wide">
+              <span className="text-xl font-bold text-slate-900 dark:text-dark-50 group-hover:text-primary transition-colors tracking-wide">
                 {item.name}
               </span>
               <CopyButton textToCopy={item.name} className="w-auto opacity-0 group-hover:opacity-100 transition-opacity" />

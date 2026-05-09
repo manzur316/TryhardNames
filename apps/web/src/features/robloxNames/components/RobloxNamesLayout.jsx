@@ -1,16 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
 import SeoHead from '@/seo/SeoHead.jsx';
 import { faqPageSchema } from '@/seo/schema.js';
-import { robloxHubBreadcrumbJsonLd } from '@/seo/layoutBreadcrumbs.js';
-
-const CHILD_LABEL = {
-  cool: 'Cool',
-  funny: 'Funny',
-  aesthetic: 'Aesthetic',
-  tryhard: 'Tryhard',
-};
 
 /** @param {{ q: string, a: string }[]} faqs */
 function faqSchemaFromQA(faqs) {
@@ -28,12 +19,7 @@ export const RobloxNamesLayout = ({
 }) => {
   const location = useLocation();
   const pathname = location.pathname;
-  const isHub = pathname === '/roblox-names';
-  const childKey = pathname.startsWith('/roblox-names/') ? pathname.replace('/roblox-names/', '') : '';
-  const jsonLd = [
-    robloxHubBreadcrumbJsonLd(pathname),
-    faqSchemaFromQA(faqs),
-  ].filter(Boolean);
+  const jsonLd = [faqSchemaFromQA(faqs)].filter(Boolean);
 
   const pageTitle = seoTitle || `${title} | TryhardNames`;
   const pageDesc = seoDescription || description || '';
@@ -50,38 +36,29 @@ export const RobloxNamesLayout = ({
     <>
       <SeoHead title={pageTitle} description={pageDesc} path={pathname} jsonLd={jsonLd} />
       <div className="min-h-screen transition-colors duration-300 bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-50">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center text-sm text-slate-500 dark:text-dark-400 mb-8 flex-wrap" aria-label="Breadcrumb">
-          <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 mx-2 opacity-50 flex-shrink-0" />
-          {!isHub ? (
-            <>
-              <Link to="/roblox-names" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Roblox Names</Link>
-              <ChevronRight className="w-4 h-4 mx-2 opacity-50 flex-shrink-0" />
-              <span className="text-slate-900 dark:text-dark-50 font-medium" aria-current="page">
-                {CHILD_LABEL[childKey] || childKey}
-              </span>
-            </>
-          ) : (
-            <span className="text-slate-900 dark:text-dark-50 font-medium" aria-current="page">Roblox Names</span>
-          )}
-        </nav>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pt-8">
+        <div className="relative mb-14 md:mb-16 overflow-hidden rounded-[2rem] border border-slate-200/95 dark:border-dark-700/90 bg-gradient-to-b from-white via-slate-50 to-slate-100/90 dark:from-dark-900 dark:via-dark-950 dark:to-[#07080c] px-5 py-10 sm:px-10 sm:py-12 md:py-14 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.35)] dark:shadow-[0_32px_80px_-36px_rgba(0,0,0,0.75)] ring-1 ring-slate-900/[0.05] dark:ring-white/[0.06]">
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_-25%,rgba(59,130,246,0.11),transparent_58%)] dark:bg-[radial-gradient(ellipse_72%_52%_at_50%_-22%,rgba(96,165,250,0.12),transparent_58%)]"
+            aria-hidden
+          />
+          <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-blue-400/25 to-transparent dark:via-blue-400/20" aria-hidden />
 
-        {/* Page Header */}
-        <header className="text-center mb-10 max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-balance" style={{ letterSpacing: '-0.02em' }}>
-            {title}
-          </h1>
-          {description && (
-            <p className="text-lg md:text-xl text-slate-600 dark:text-dark-300 max-w-2xl mx-auto text-balance leading-relaxed">
-              {description}
+          <header className="relative text-center max-w-4xl mx-auto">
+            <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-700/90 dark:text-blue-400/95 mb-5">
+              Roblox identity hub
             </p>
-          )}
-        </header>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] font-black tracking-[-0.035em] leading-[1.08] mb-6 text-balance text-slate-950 dark:text-dark-50">
+              {title}
+            </h1>
+            {description && (
+              <p className="text-lg md:text-xl text-slate-600 dark:text-dark-300 max-w-2xl mx-auto text-balance leading-relaxed font-medium">
+                {description}
+              </p>
+            )}
+          </header>
 
-        {/* Category Navigation */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
+          <div className="relative flex flex-wrap justify-center gap-3 mt-10 pt-2">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
             if (link.isParent) {
@@ -115,6 +92,7 @@ export const RobloxNamesLayout = ({
               </Link>
             );
           })}
+          </div>
         </div>
 
         {/* Main Content Area */}

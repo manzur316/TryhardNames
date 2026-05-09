@@ -19,7 +19,7 @@ const LeaderboardGamesTable = ({ data }) => {
       'Roblox': '/roblox-tryhard-names',
       'Call of Duty': '/cod-tryhard-names',
       'Free Fire': '/free-fire-tryhard-names',
-      'League of Legends': '/league-of-legends-names'
+      'League of Legends': '/league-of-legends'
     };
     return map[gameName] || '/';
   };

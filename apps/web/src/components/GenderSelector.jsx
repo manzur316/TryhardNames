@@ -7,11 +7,11 @@ const GenderSelector = ({ selectedGender, onSelectGender }) => {
     { id: 'Masculine', icon: User, desc: 'Strong & bold names', color: 'hover:border-blue-500 hover:text-blue-500', activeColor: 'border-blue-500 text-blue-500 bg-blue-500/10' },
     { id: 'Feminine', icon: UserPlus, desc: 'Elegant & cute names', color: 'hover:border-pink-500 hover:text-pink-500', activeColor: 'border-pink-500 text-pink-500 bg-pink-500/10' },
     { id: 'Neutral', icon: Users, desc: 'Balanced & versatile', color: 'hover:border-green-500 hover:text-green-500', activeColor: 'border-green-500 text-green-500 bg-green-500/10' },
-    { id: 'Epic', icon: Zap, desc: 'Mythical & powerful', color: 'hover:border-yellow-500 hover:text-yellow-500', activeColor: 'border-yellow-500 text-yellow-500 bg-yellow-500/10' },
+    { id: 'Epic', icon: Zap, desc: 'Bold · standout tone', color: 'hover:border-yellow-500 hover:text-yellow-500', activeColor: 'border-yellow-500 text-yellow-500 bg-yellow-500/10' },
     { id: 'Gaming', icon: Gamepad2, desc: 'Sweaty & competitive', color: 'hover:border-red-500 hover:text-red-500', activeColor: 'border-red-500 text-red-500 bg-red-500/10' },
     { id: 'Anime', icon: Tv, desc: 'Weeb & Japanese style', color: 'hover:border-purple-500 hover:text-purple-500', activeColor: 'border-purple-500 text-purple-500 bg-purple-500/10' },
     { id: 'Stylish', icon: Sparkles, desc: 'Aesthetic & clean', color: 'hover:border-cyan-500 hover:text-cyan-500', activeColor: 'border-cyan-500 text-cyan-500 bg-cyan-500/10' },
-    { id: 'Rare', icon: Gem, desc: 'Unique & uncommon', color: 'hover:border-indigo-500 hover:text-indigo-500', activeColor: 'border-indigo-500 text-indigo-500 bg-indigo-500/10' },
+    { id: 'Rare', icon: Gem, desc: 'Less common reads', color: 'hover:border-indigo-500 hover:text-indigo-500', activeColor: 'border-indigo-500 text-indigo-500 bg-indigo-500/10' },
     { id: 'Trending', icon: TrendingUp, desc: 'Popular right now', color: 'hover:border-orange-500 hover:text-orange-500', activeColor: 'border-orange-500 text-orange-500 bg-orange-500/10' }
   ];
 
