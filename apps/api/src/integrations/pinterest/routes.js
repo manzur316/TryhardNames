@@ -7,12 +7,9 @@ import { getPinterestConfig, getPinterestPublishConfig } from './config.js';
 import { createPinterestState, validatePinterestState } from './oauthState.js';
 import {
   publishPinterestPin,
+  validatePublishDirectPayload,
   validatePublishPayload,
 } from './publishPin.js';
-import {
-  isPinterestOAuthBootstrapTokenExposureActive,
-  markPinterestBootstrapPublishSucceeded,
-} from './oauthBootstrap.js';
 import { exchangePinterestCode } from './tokenExchange.js';
 
 const r = Router();
@@ -34,7 +31,12 @@ r.get('/', (req, res) => {
     missing: cfg.missing,
     scopes: cfg.scopes,
     hasPublishToken: cfg.hasAccessToken,
-    capabilities: ['oauth_authorize_url', 'publish_contract_validation', 'controlled_publish'],
+    capabilities: [
+      'oauth_authorize_url',
+      'publish_contract_validation',
+      'controlled_publish',
+      'pinterest_publish_direct',
+    ],
   }));
 });
 
@@ -96,26 +98,13 @@ r.get('/callback', async (req, res) => {
     }));
   }
 
-  const body = {
+  res.json(ok({
     integration: 'pinterest',
     status: 'authorized',
     token: exchanged.token,
     persistence: 'not_configured',
     next: 'Store tokens securely before enabling any publish flow',
-  };
-
-  if (isPinterestOAuthBootstrapTokenExposureActive() && exchanged.accessToken) {
-    body.oauth_bootstrap_manual = true;
-    body.oauth_bootstrap_mode = 'manual_initial_env_only';
-    body.oauth_bootstrap_warning =
-      'TEMPORARY: full access_token included for one-time manual configuration (copy to PINTEREST_ACCESS_TOKEN). '
-      + 'This response is not logged by the server. Tokens are not stored. '
-      + 'Unset PINTEREST_OAUTH_BOOTSTRAP_EXPOSE_TOKEN after setup. '
-      + 'After the first successful controlled publish in this process, the callback will omit the raw token again.';
-    body.access_token = exchanged.accessToken;
-  }
-
-  res.json(ok(body));
+  }));
 });
 
 /** Controlled export-to-Pinterest publish. No scheduling or automation lives here. */
@@ -159,14 +148,48 @@ r.post('/publish', async (req, res) => {
     }));
   }
 
-  markPinterestBootstrapPublishSucceeded();
-
   res.status(201).json(ok({
     integration: 'pinterest',
     status: 'published',
     pin: published.pin,
     normalizedExport: parsed.value,
     automation: 'manual_controlled_publish',
+  }));
+});
+
+/**
+ * Automation gateway: publish a pin from a caller-provided public HTTPS image URL
+ * (e.g. Cloudinary secure_url). No export contract, no /exports/render, no artifacts.
+ */
+r.post('/publish-direct', async (req, res) => {
+  const cfg = getPinterestPublishConfig();
+  if (!cfg.ok) {
+    return res.status(401).json(fail('unauthorized', {
+      integration: 'pinterest',
+      missing: cfg.missing,
+      hint: 'Configure PINTEREST_ACCESS_TOKEN for Pinterest publish',
+    }));
+  }
+
+  const direct = validatePublishDirectPayload(req.body || {});
+  if (!direct.ok) {
+    return res.status(400).json(fail(direct.error));
+  }
+
+  const published = await publishPinterestPin(direct.value, cfg);
+  if (!published.ok) {
+    return res.status(502).json(fail('publish_failed', {
+      integration: 'pinterest',
+      status: published.status,
+      details: published.details,
+    }));
+  }
+
+  res.status(201).json(ok({
+    integration: 'pinterest',
+    status: 'published',
+    pin: published.pin,
+    automation: 'pinterest_publish_direct',
   }));
 });
 

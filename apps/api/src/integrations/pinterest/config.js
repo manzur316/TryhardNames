@@ -1,9 +1,6 @@
 /**
  * Pinterest configuration reads environment names only. No secrets live in code.
  * OAuth credentials are provided by runtime environment.
- *
- * Optional: PINTEREST_OAUTH_BOOTSTRAP_EXPOSE_TOKEN=true — callback JSON may include the raw
- * access_token once for manual env setup (see oauthBootstrap.js). Unset after configuration.
  */
 
 export function getPinterestConfig() {

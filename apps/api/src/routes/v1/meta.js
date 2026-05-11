@@ -9,7 +9,7 @@ r.get('/', (req, res) => {
     name: 'tryhardnames-api',
     layer: API_LAYER,
     version: API_VERSION,
-    capabilities: ['export_contracts', 'integration_readiness', 'n8n_compatibility'],
+    capabilities: ['export_contracts', 'integration_readiness', 'n8n_compatibility', 'pinterest_content'],
     posture: 'modular_identity_infrastructure',
   }));
 });

@@ -46,13 +46,9 @@ export async function exchangePinterestCode(code, cfg) {
     };
   }
 
-  const accessToken = typeof data.access_token === 'string' ? data.access_token : '';
-
   return {
     ok: true,
     status: response.status,
     token: sanitizeTokenResponse(data),
-    /** Present for callback bootstrap only; never log or persist server-side. */
-    accessToken,
   };
 }

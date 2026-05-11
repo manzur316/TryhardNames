@@ -25,7 +25,7 @@ export default function routes() {
 
   // Log registered routes on startup
   logger.info(
-    'Routes registered: /health, /contact, /data, /api/v1 (integrations, exports)',
+    'Routes registered: /health, /contact, /data, /api/v1 (integrations, exports, pinterest)',
   );
 
   return router;
