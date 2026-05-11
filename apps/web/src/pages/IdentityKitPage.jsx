@@ -312,7 +312,9 @@ const IdentityKitPage = () => {
             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400 dark:text-dark-500 mb-4">
               Artifact preview
             </p>
-            <IdentityKitArtifact ref={cardRef} kit={kit} />
+            <div className="rounded-[1.15rem] p-3 sm:p-4 bg-slate-100/65 dark:bg-dark-900/25 ring-1 ring-slate-200/75 dark:ring-white/[0.06]">
+              <IdentityKitArtifact ref={cardRef} kit={kit} />
+            </div>
             <IdentityCultureNote kit={kit} />
             <p className="mt-4 text-xs text-slate-500 dark:text-dark-500 leading-relaxed max-w-[520px] mx-auto text-center">
               Saved only on this device. No accounts — export if you want a backup.

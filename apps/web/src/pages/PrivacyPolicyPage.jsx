@@ -20,57 +20,143 @@ const PrivacyPolicyPage = () => {
           <section>
             <h2 className="text-2xl font-bold text-dark-50 mb-4">1. Introduction</h2>
             <p className="text-dark-300 leading-relaxed">
-              Welcome to TryhardNames. We respect your privacy and are committed to protecting your personal data. 
-              This Privacy Policy will inform you as to how we look after your personal data when you visit our website 
-              and tell you about your privacy rights and how the law protects you.
+              Welcome to TryhardNames. We respect your privacy and are committed to protecting your personal data.
+              This Privacy Policy explains how we handle information when you visit our website and use our free tools.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">2. Information Collection and Use</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">2. Information We Collect</h2>
             <p className="text-dark-300 leading-relaxed mb-4">
-              We collect several different types of information for various purposes to provide and improve our Service to you.
+              We collect limited information needed to operate and improve the Service:
             </p>
-            <h3 className="text-xl font-semibold text-dark-50 mb-2 mt-6">Types of Data Collected:</h3>
             <ul className="list-disc pl-6 space-y-2 text-dark-300">
-              <li><strong>Personal Data:</strong> While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you (e.g., Email address, First name and last name).</li>
-              <li><strong>Usage Data:</strong> We may also collect information on how the Service is accessed and used. This Usage Data may include information such as your computer's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</li>
-              <li><strong>Tracking & Cookies Data:</strong> We use cookies and similar tracking technologies to track the activity on our Service and hold certain information.</li>
+              <li><strong>Information you provide:</strong> For example, if you contact us (such as name, email address, and message content).</li>
+              <li><strong>Usage data:</strong> Such as pages viewed, approximate region from IP, browser type, device type, and timestamps. This helps us understand performance and fix issues.</li>
+              <li><strong>Cookies and similar technologies:</strong> Small files or storage used to remember preferences, measure traffic, and support security.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">3. Use of Data</h2>
-            <p className="text-dark-300 leading-relaxed mb-4">
-              TryhardNames uses the collected data for various purposes:
-            </p>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">3. How We Use Information</h2>
             <ul className="list-disc pl-6 space-y-2 text-dark-300">
-              <li>To provide and maintain the Service</li>
-              <li>To notify you about changes to our Service</li>
-              <li>To allow you to participate in interactive features of our Service when you choose to do so</li>
-              <li>To provide customer care and support</li>
-              <li>To provide analysis or valuable information so that we can improve the Service</li>
-              <li>To monitor the usage of the Service</li>
-              <li>To detect, prevent and address technical issues</li>
+              <li>To provide, maintain, and secure the Service</li>
+              <li>To respond to support requests and communications</li>
+              <li>To understand aggregate usage and improve performance and content quality</li>
+              <li>To detect, prevent, and address technical or abusive activity</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">4. Security of Data</h2>
-            <p className="text-dark-300 leading-relaxed">
-              The security of your data is important to us, but remember that no method of transmission over the Internet, 
-              or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect 
-              your Personal Data, we cannot guarantee its absolute security.
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">4. Cookies and Similar Technologies</h2>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              We and our partners may use cookies, local storage, pixels, and similar technologies for purposes such as:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-dark-300">
+              <li>Remembering preferences (for example theme settings stored locally in your browser)</li>
+              <li>Measuring traffic and product analytics</li>
+              <li>Delivering and measuring advertising where enabled (see below)</li>
+            </ul>
+            <p className="text-dark-300 leading-relaxed mt-4">
+              You can control cookies through your browser settings. Blocking some cookies may affect certain features.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">5. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">5. Advertising and Google AdSense</h2>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              On selected pages, we may use third-party advertising services such as <strong>Google AdSense</strong> to show ads.
+              Google and its partners may use cookies and similar technologies to serve ads based on your visits to this and other sites.
+            </p>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              Where applicable, ads may be personalized (including based on prior visits to TryhardNames or other sites), subject to your settings and applicable law.
+            </p>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              For how Google uses data when you use our partners&apos; sites or apps, see{' '}
+              <a
+                href="https://policies.google.com/technologies/partner-sites"
+                className="text-accent-cyan hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google&apos;s Privacy &amp; Terms
+              </a>
+              . You can manage personalized advertising preferences via{' '}
+              <a
+                href="https://www.google.com/settings/ads"
+                className="text-accent-cyan hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google Ads Settings
+              </a>
+              .
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">6. Analytics</h2>
             <p className="text-dark-300 leading-relaxed">
-              If you have any questions about this Privacy Policy, please contact us:
+              We use analytics tools (such as Google Analytics) to understand aggregated usage. These tools may collect device and usage information as described by their providers.
+              We configure analytics to prioritize privacy where possible (for example IP anonymization where available).
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">7. Sharing of Information</h2>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              We do not sell your personal information. We may share information with:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-dark-300">
+              <li>Service providers who help us host, analyze, or secure the website</li>
+              <li>Advertising and analytics partners where those services are enabled</li>
+              <li>Authorities when required by law or to protect rights and safety</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">8. Data Retention</h2>
+            <p className="text-dark-300 leading-relaxed">
+              We retain information only as long as needed for the purposes described in this policy, unless a longer period is required or permitted by law.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">9. Security</h2>
+            <p className="text-dark-300 leading-relaxed">
+              We use commercially reasonable safeguards to protect information. No online transmission or storage is completely secure.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">10. Children&apos;s Privacy</h2>
+            <p className="text-dark-300 leading-relaxed">
+              TryhardNames is not directed to children under 13, and we do not knowingly collect personal information from children.
+              If you believe we have collected information from a child, please contact us and we will take appropriate steps.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">11. International Visitors</h2>
+            <p className="text-dark-300 leading-relaxed">
+              If you access the Service from outside your home country, your information may be processed in countries where our providers operate.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">12. Changes to This Policy</h2>
+            <p className="text-dark-300 leading-relaxed">
+              We may update this Privacy Policy from time to time. Continued use of the Service after changes means you accept the updated policy.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">13. Contact Us</h2>
+            <p className="text-dark-300 leading-relaxed">
+              If you have questions about this Privacy Policy, please contact us:
             </p>
             <ul className="list-disc pl-6 mt-4 space-y-2 text-dark-300">
-              <li>By visiting this page on our website: <a href="/contact" className="text-accent-cyan hover:underline">Contact Us</a></li>
+              <li>By visiting: <a href="/contact" className="text-accent-cyan hover:underline">Contact Us</a></li>
               <li>By email: support@tryhardnames.com</li>
             </ul>
           </section>

@@ -3,7 +3,7 @@
  * Opens cleanly in Figma/Illustrator/Inkscape for edits; Unicode preserved via UTF-8.
  */
 
-import { normalizeIdentityKit, IDENTITY_SURFACES } from './identityKitModel.js';
+import { normalizeIdentityKit, IDENTITY_SURFACES, READABILITY_TIERS } from './identityKitModel.js';
 import { getKitInterpretation } from './identityCultureNotes.js';
 
 const BG = '#070A12';
@@ -57,7 +57,7 @@ export function wrapSvgPlainText(text, maxChars) {
   return lines.length ? lines : [''];
 }
 
-const FONT_STACK = 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif';
+const FONT_STACK = "'Rajdhani', 'DM Sans', ui-sans-serif, system-ui, sans-serif";
 
 /**
  * @param {object} kitRaw
@@ -111,6 +111,8 @@ export function buildIdentityKitSvgString(kitRaw, opts = {}) {
 function buildBannerSvg({ k, accent, surfaceLabel, display, subLine, interp }) {
   const W = 720;
   const padX = 44;
+  const readabilityLabel =
+    READABILITY_TIERS.find((x) => x.id === k.readabilityTier)?.label ?? 'Balanced read';
   const parts = [];
   let y = 52;
 
@@ -148,7 +150,7 @@ function buildBannerSvg({ k, accent, surfaceLabel, display, subLine, interp }) {
 
   /* Chips after body — matches React banner; avoids collision with tall aliases */
   y += 12;
-  const chipLine = `${surfaceLabel.toUpperCase()}  ·  READ ${k.readabilityTier}`;
+  const chipLine = `${surfaceLabel.toUpperCase()}  ·  ${readabilityLabel.toUpperCase()}`;
   parts.push(
     `<text x="${padX}" y="${y}" fill="rgba(255,255,255,0.35)" font-size="10" font-weight="600" font-family="${FONT_STACK}" letter-spacing="0.14em">${xmlEscape(chipLine)}</text>`
   );
@@ -167,6 +169,10 @@ function buildBannerSvg({ k, accent, surfaceLabel, display, subLine, interp }) {
   y += 16;
   parts.push(
     `<text x="${padX}" y="${y}" fill="rgba(255,255,255,0.42)" font-size="11" font-family="${FONT_STACK}" text-rendering="optimizeLegibility">${xmlEscape(interp.readability)}</text>`
+  );
+  y += 16;
+  parts.push(
+    `<text x="${padX}" y="${y}" fill="rgba(255,255,255,0.42)" font-size="11" font-family="${FONT_STACK}" text-rendering="optimizeLegibility">${xmlEscape(interp.mood)}</text>`
   );
   y += 16;
   for (const ty of interp.typography.slice(0, 2)) {
@@ -199,6 +205,8 @@ function buildBannerSvg({ k, accent, surfaceLabel, display, subLine, interp }) {
 function buildVerticalSvg({ k, accent, surfaceLabel, display, subLine, interp }) {
   const W = 520;
   const padX = 44;
+  const readabilityLabel =
+    READABILITY_TIERS.find((x) => x.id === k.readabilityTier)?.label ?? 'Balanced read';
   const parts = [];
   let y = 48;
 
@@ -243,7 +251,7 @@ function buildVerticalSvg({ k, accent, surfaceLabel, display, subLine, interp })
     `<text x="${padX}" y="${y}" fill="rgba(255,255,255,0.35)" font-size="10" font-weight="600" font-family="${FONT_STACK}" letter-spacing="0.18em">${xmlEscape(surfaceLabel.toUpperCase())}</text>`
   );
   parts.push(
-    `<text x="${padX + 152}" y="${y}" fill="rgba(255,255,255,0.35)" font-size="10" font-weight="600" font-family="${FONT_STACK}" letter-spacing="0.18em">${xmlEscape(`READ ${k.readabilityTier}`)}</text>`
+    `<text x="${padX + 152}" y="${y}" fill="rgba(255,255,255,0.35)" font-size="10" font-weight="600" font-family="${FONT_STACK}" letter-spacing="0.12em">${xmlEscape(readabilityLabel.toUpperCase())}</text>`
   );
   y += 36;
   parts.push(
@@ -259,6 +267,10 @@ function buildVerticalSvg({ k, accent, surfaceLabel, display, subLine, interp })
   y += 18;
   parts.push(
     `<text x="${padX}" y="${y}" fill="rgba(255,255,255,0.42)" font-size="11" font-family="${FONT_STACK}">${xmlEscape(interp.readability)}</text>`
+  );
+  y += 18;
+  parts.push(
+    `<text x="${padX}" y="${y}" fill="rgba(255,255,255,0.42)" font-size="11" font-family="${FONT_STACK}">${xmlEscape(interp.mood)}</text>`
   );
   y += 18;
   for (const ty of interp.typography.slice(0, 2)) {

@@ -5,19 +5,28 @@
 
 /** @type {Record<string, string>} */
 export const SURFACE_NOTES = {
-  generic: 'Verify spacing on each surface — universal tags still change shape by UI.',
-  riot: 'Clearer in narrow lobby rows.',
-  discord: 'Lower visual pressure in busy servers.',
-  twitch: 'Readable at small overlay scale.',
-  steam: 'Holds better in older UI layouts.',
-  roblox: 'Profile and discovery surfaces — chat lines truncate fast.',
+  generic: 'Same spelling reads different per UI density — verify in-client.',
+  riot: 'Summoner culture: reads cleaner in narrow lobby rows.',
+  discord: 'Discord-native: softer pressure than Riot-tight HUD lines.',
+  twitch: 'Streamer read: survives small overlay type.',
+  steam: 'Older-era profile chrome — favors plain roman.',
+  roblox: 'Discovery + chat: long lines truncate fast.',
 };
 
 /** @type {Record<string, string>} */
 export const READABILITY_INSIGHTS = {
-  A: 'High recall at a fast glance.',
-  B: 'Balanced readability with mild styling.',
-  C: 'Better for profile identity than rapid feeds.',
+  A: 'Fast-glance recall — safest for killfeeds and dense rows.',
+  B: 'Readable with light styling — default ranked/profile balance.',
+  C: 'Statement-forward — better for bios than split-second feeds.',
+};
+
+/** One curated line per mood — visible identity stance, not gamification */
+/** @type {Record<string, string>} */
+export const MOOD_INSIGHTS = {
+  calm: 'Quiet stance — lowers friction in public reads.',
+  sharp: 'Assertive silhouette — cuts through busy chrome.',
+  soft: 'Softer presence — profile-forward, less killfeed aggression.',
+  neutral: 'Neutral stance — flexible across surfaces.',
 };
 
 /**
@@ -64,7 +73,7 @@ function insightsForText(s) {
       chars.length > 24 ||
       /[\u3000-\u9FFF\uFF00-\uFFEF]/.test(s);
     if (hasSignal) {
-      out.push('Compare styled and plain reads in-client before you commit.');
+      out.push('Match styled vs plain in-client before you ship the tag.');
     }
   }
 
@@ -119,15 +128,17 @@ export function resolveTypographyInsights(styledAlias, primaryAlias = '') {
 
 /**
  * Single source for interpretation copy — preview card, aside note, and text bundle appendix.
- * @param {{ surfaceId?: string, readabilityTier?: string, styledAlias?: string, primaryAlias?: string }} kit
- * @returns {{ surface: string, readability: string, typography: string[] }}
+ * @param {{ surfaceId?: string, readabilityTier?: string, moodId?: string, styledAlias?: string, primaryAlias?: string }} kit
+ * @returns {{ surface: string, readability: string, mood: string, typography: string[] }}
  */
 export function getKitInterpretation(kit) {
   const surfaceId = kit.surfaceId || 'generic';
   const tier = kit.readabilityTier || 'B';
+  const moodId = kit.moodId || 'neutral';
   return {
     surface: getSurfaceNote(surfaceId),
     readability: getReadabilityInsight(tier),
+    mood: MOOD_INSIGHTS[moodId] || MOOD_INSIGHTS.neutral,
     typography: resolveTypographyInsights(kit.styledAlias, kit.primaryAlias),
   };
 }
@@ -145,6 +156,7 @@ export function formatCultureBundleAppendix(kit) {
   lines.push('—'.repeat(24));
   lines.push(`Surface: ${i.surface}`);
   lines.push(`Readability: ${i.readability}`);
+  lines.push(`Stance: ${i.mood}`);
   if (i.typography.length) {
     i.typography.forEach((t) => lines.push(`Typography: ${t}`));
   }

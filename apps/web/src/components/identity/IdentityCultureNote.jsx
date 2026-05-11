@@ -24,6 +24,7 @@ export default function IdentityCultureNote({ kit }) {
       <div className="space-y-2.5 text-xs leading-relaxed text-slate-600 dark:text-dark-400">
         <p>{interp.surface}</p>
         <p>{interp.readability}</p>
+        <p className="text-slate-600 dark:text-dark-400">{interp.mood}</p>
         {interp.typography.map((line) => (
           <p key={line.slice(0, 48)} className="text-slate-500 dark:text-dark-500">
             {line}

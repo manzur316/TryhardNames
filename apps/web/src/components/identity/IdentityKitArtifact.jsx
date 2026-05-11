@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils.js';
 import {
   normalizeIdentityKit,
   IDENTITY_SURFACES,
+  READABILITY_TIERS,
   moodAccentClass,
 } from '@/utils/identityKitModel.js';
 import { getKitInterpretation } from '@/utils/identityCultureNotes.js';
@@ -28,6 +29,8 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
       : '';
 
   const interp = getKitInterpretation(k);
+  const readabilityLabel =
+    READABILITY_TIERS.find((x) => x.id === k.readabilityTier)?.label ?? 'Balanced read';
 
   if (layout === 'banner') {
     const t = getBannerArtifactTokens(k.surfaceId);
@@ -35,17 +38,18 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
       <div
         ref={ref}
         className={cn(
-          'relative w-full mx-auto rounded-2xl border border-white/10 bg-[#070A12] text-left shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85) overflow-hidden border-l-4',
+          'relative w-full mx-auto rounded-2xl border border-white/10 bg-[#070A12] text-left shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85) overflow-hidden border-l-4 font-[Rajdhani,DM_Sans,sans-serif]',
           moodAccentClass(k.moodId),
           t.shellMax
         )}
-        style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] to-transparent pointer-events-none" aria-hidden />
         <div className={t.inner}>
           <p className={t.kitLabel}>{k.kitLabel ? `Kit · ${k.kitLabel}` : 'Identity kit'}</p>
 
-          <p className={t.display}>{display}</p>
+          <p className={cn(t.display, "font-['Orbitron','Rajdhani',sans-serif] tracking-[-0.02em]")}>
+            {display}
+          </p>
           {subLine ? <p className={t.subLine}>{subLine}</p> : null}
           {k.bioLine.trim() ? <p className={t.bio}>{k.bioLine.trim()}</p> : null}
 
@@ -54,7 +58,7 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
               {surfaceMeta?.label || 'Surface'}
             </span>
             <span className="px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03]">
-              Read {k.readabilityTier}
+              {readabilityLabel}
             </span>
           </div>
 
@@ -62,6 +66,7 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
             <p className={t.contextLabel}>Read context</p>
             <p className={t.contextLine}>{interp.surface}</p>
             <p className={t.contextLine}>{interp.readability}</p>
+            <p className={t.contextLine}>{interp.mood}</p>
             {interp.typography.map((line) => (
               <p key={line.slice(0, 56)} className={t.contextTypo}>
                 {line}
@@ -78,16 +83,15 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
     <div
       ref={ref}
       className={cn(
-        'relative w-full max-w-[520px] mx-auto rounded-2xl border border-white/10 bg-[#070A12] text-left shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85) overflow-hidden border-l-4',
+        'relative w-full max-w-[520px] mx-auto rounded-2xl border border-white/10 bg-[#070A12] text-left shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85) overflow-hidden border-l-4 font-[Rajdhani,DM_Sans,sans-serif]',
         moodAccentClass(k.moodId)
       )}
-      style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] to-transparent pointer-events-none" aria-hidden />
       <div className={t.inner}>
         <p className={t.kitLabel}>{k.kitLabel ? `Kit · ${k.kitLabel}` : 'Identity kit'}</p>
 
-        <p className={t.display}>{display}</p>
+        <p className={cn(t.display, "font-['Orbitron','Rajdhani',sans-serif] tracking-[-0.02em]")}>{display}</p>
 
         {subLine ? <p className={t.subLine}>{subLine}</p> : null}
 
@@ -98,7 +102,7 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
             {surfaceMeta?.label || 'Surface'}
           </span>
           <span className="px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03]">
-            Read {k.readabilityTier}
+            {readabilityLabel}
           </span>
         </div>
 
@@ -106,6 +110,7 @@ const IdentityKitArtifact = forwardRef(function IdentityKitArtifact({ kit }, ref
           <p className={t.contextLabel}>Read context</p>
           <p className={t.contextLine}>{interp.surface}</p>
           <p className={t.contextLine}>{interp.readability}</p>
+          <p className={t.contextLine}>{interp.mood}</p>
           {interp.typography.map((line) => (
             <p key={line.slice(0, 56)} className={t.contextTypo}>
               {line}

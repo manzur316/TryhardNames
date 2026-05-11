@@ -31,6 +31,7 @@ import {
 } from '@/seo/leagueOfLegends/krDiscoverySurface.js';
 import { bumpKrEcologyDraw, readKrEcologySession } from '@/seo/leagueOfLegends/krSessionSalt.js';
 import { cn } from '@/lib/utils.js';
+import AdSlot from '@/components/ads/AdSlot.jsx';
 
 const SeoTemplate = ({ pageData }) => {
   const path = `/${pageData.slug}`;
@@ -1385,6 +1386,7 @@ const SeoTemplate = ({ pageData }) => {
         </div>
       </div>
 
+      <AdSlot />
       <AnalyticsDebugPanel />
     </>
   );

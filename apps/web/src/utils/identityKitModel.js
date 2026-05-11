@@ -24,11 +24,11 @@ export const IDENTITY_MOODS = [
   { id: 'neutral', label: 'Neutral' },
 ];
 
-/** Readability tier — semantic, not gamified */
+/** Readability tier — editorial labels (no internal letter codes in UI) */
 export const READABILITY_TIERS = [
-  { id: 'A', label: 'A · Max legibility' },
-  { id: 'B', label: 'B · Balanced' },
-  { id: 'C', label: 'C · Expressive' },
+  { id: 'A', label: 'Legibility-first' },
+  { id: 'B', label: 'Balanced read' },
+  { id: 'C', label: 'Expressive read' },
 ];
 
 /** Official export layouts — two controlled templates only */

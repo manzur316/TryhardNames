@@ -95,10 +95,10 @@ const ContactPage = () => {
                 <MessageSquare className="w-6 h-6 text-accent-cyan" />
               </div>
               <h3 className="text-xl font-bold text-dark-50 mb-2">Community</h3>
-              <p className="text-dark-300 mb-4">Join our Discord to chat with other gamers.</p>
-              <a href="#" className="text-accent-cyan hover:text-accent-cyan/80 font-medium transition-colors">
-                Join Discord Server
-              </a>
+              <p className="text-dark-300">
+                Public Discord and other community channels will be linked here when they are officially launched. Until then,
+                please use email for feedback and support.
+              </p>
             </div>
           </div>
 

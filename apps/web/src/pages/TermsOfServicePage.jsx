@@ -82,7 +82,17 @@ const TermsOfServicePage = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">9. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">9. Third-Party Services and Advertising</h2>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              TryhardNames may display third-party advertisements (including through services such as Google AdSense) on selected pages.
+              Those services are subject to their own terms and privacy policies. How Google uses data when showing ads is described in our{' '}
+              <a href="/privacy-policy" className="text-accent-cyan hover:underline">Privacy Policy</a>{' '}
+              and in Google&apos;s documentation for publishers and users.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">10. Contact Us</h2>
             <p className="text-dark-300 leading-relaxed">
               If you have any questions about these Terms, please contact us at <a href="/contact" className="text-accent-cyan hover:underline">our contact page</a>.
             </p>
