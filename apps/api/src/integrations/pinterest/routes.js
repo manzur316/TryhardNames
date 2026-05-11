@@ -9,6 +9,10 @@ import {
   publishPinterestPin,
   validatePublishPayload,
 } from './publishPin.js';
+import {
+  isPinterestOAuthBootstrapTokenExposureActive,
+  markPinterestBootstrapPublishSucceeded,
+} from './oauthBootstrap.js';
 import { exchangePinterestCode } from './tokenExchange.js';
 
 const r = Router();
@@ -92,13 +96,26 @@ r.get('/callback', async (req, res) => {
     }));
   }
 
-  res.json(ok({
+  const body = {
     integration: 'pinterest',
     status: 'authorized',
     token: exchanged.token,
     persistence: 'not_configured',
     next: 'Store tokens securely before enabling any publish flow',
-  }));
+  };
+
+  if (isPinterestOAuthBootstrapTokenExposureActive() && exchanged.accessToken) {
+    body.oauth_bootstrap_manual = true;
+    body.oauth_bootstrap_mode = 'manual_initial_env_only';
+    body.oauth_bootstrap_warning =
+      'TEMPORARY: full access_token included for one-time manual configuration (copy to PINTEREST_ACCESS_TOKEN). '
+      + 'This response is not logged by the server. Tokens are not stored. '
+      + 'Unset PINTEREST_OAUTH_BOOTSTRAP_EXPOSE_TOKEN after setup. '
+      + 'After the first successful controlled publish in this process, the callback will omit the raw token again.';
+    body.access_token = exchanged.accessToken;
+  }
+
+  res.json(ok(body));
 });
 
 /** Controlled export-to-Pinterest publish. No scheduling or automation lives here. */
@@ -141,6 +158,8 @@ r.post('/publish', async (req, res) => {
       normalizedExport: parsed.value,
     }));
   }
+
+  markPinterestBootstrapPublishSucceeded();
 
   res.status(201).json(ok({
     integration: 'pinterest',
