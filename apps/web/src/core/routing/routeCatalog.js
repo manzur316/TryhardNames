@@ -18,6 +18,8 @@ export const APP_REGISTERED_STATIC_PATHS = Object.freeze([
   '/',
   '/404',
   '/about',
+  '/account',
+  '/auth/callback',
   '/contact',
   '/favorites',
   '/gamer-bio-generator',
@@ -36,6 +38,8 @@ export const APP_REGISTERED_STATIC_PATHS = Object.freeze([
   '/roblox-names/cool',
   '/roblox-names/funny',
   '/roblox-names/tryhard',
+  '/sign-in',
+  '/sign-up',
   '/stylish-text-generator',
   '/terms-of-service',
   ...TOPIC_HUB_ROUTES.map((r) => r.path),
@@ -60,6 +64,8 @@ export function isAppRegisteredStaticRoute(pathname) {
  */
 export const SINGLE_SEGMENT_BREADCRUMB_LABELS = Object.freeze({
   about: 'About',
+  account: 'Account',
+  auth: 'Auth',
   contact: 'Contact',
   'privacy-policy': 'Privacy Policy',
   'terms-of-service': 'Terms of Service',

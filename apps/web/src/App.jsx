@@ -30,6 +30,10 @@ import DynamicPage from '@/pages/DynamicPage.jsx';
 import TopicHubPage from '@/pages/TopicHubPage.jsx';
 import LeagueOfLegendsHubPage from '@/pages/LeagueOfLegendsHubPage.jsx';
 import IdentityKitPage from '@/pages/IdentityKitPage.jsx';
+import AccountPage from '@/pages/AccountPage.jsx';
+import AuthCallbackPage from '@/pages/auth/AuthCallbackPage.jsx';
+import SignInPage from '@/pages/auth/SignInPage.jsx';
+import SignUpPage from '@/pages/auth/SignUpPage.jsx';
 import { TOPIC_HUB_ROUTES } from '@/seo/programmatic/topicHubRoutes.js';
 import MinimalFavoritesPeek from '@/components/MinimalFavoritesPeek.jsx';
 
@@ -77,6 +81,10 @@ function App() {
                             <Route path="/stylish-text-generator" element={<StylishTextGeneratorPage />} />
                             <Route path="/nickname-symbols" element={<NicknameSymbolsPage />} />
                             <Route path="/identity-kit" element={<IdentityKitPage />} />
+                            <Route path="/sign-in" element={<SignInPage />} />
+                            <Route path="/sign-up" element={<SignUpPage />} />
+                            <Route path="/auth/callback" element={<AuthCallbackPage />} />
+                            <Route path="/account" element={<AccountPage />} />
 
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/contact" element={<ContactPage />} />
