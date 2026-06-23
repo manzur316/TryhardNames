@@ -4,6 +4,7 @@ import { getAllTopicHubPaths } from '../seo/programmatic/hubs.js';
 
 const toolPages = ['/stylish-text-generator', '/nickname-symbols', '/identity-kit'];
 const hubPages = ['/roblox-names', '/gamer-names', '/league-of-legends'];
+const DEFAULT_SITEMAP_LASTMOD = '2026-05-10';
 
 /** Indexable static routes not covered by hub/tool/dynamic lists */
 const staticPages = [
@@ -22,13 +23,7 @@ const staticPages = [
   '/gamer-names/edgy',
 ];
 
-/**
- * Returns the current date in ISO format (YYYY-MM-DD)
- * @returns {string}
- */
-export const getCurrentDate = () => {
-  return new Date().toISOString().split('T')[0];
-};
+export const getSitemapLastmod = () => DEFAULT_SITEMAP_LASTMOD;
 
 /**
  * Automatically determines page priority and change frequency based on URL structure.
@@ -103,7 +98,7 @@ export const getSitemapUrls = () => {
 export const generateSitemap = () => {
   const baseUrl = 'https://tryhardnames.com';
   const urls = getSitemapUrls();
-  const date = getCurrentDate();
+  const date = getSitemapLastmod();
 
   const urlElements = urls.map(url => `  <url>
     <loc>${baseUrl}${url.path}</loc>

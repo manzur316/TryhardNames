@@ -6,10 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "vite --host :: --port 3000",
-    "build": "node scripts/generate-sitemap.js && (node tools/generate-llms.js || true) && vite build",
+    "build": "node scripts/generate-sitemap.js && node tools/generate-llms.js && vite build",
     "start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
     "lint": "eslint . --quiet",
-    "lint:warn": "eslint ."
+    "lint:warn": "eslint .",
+    "test": "node --test tests/seo/sitemap.test.js",
+    "test:seo": "node --test tests/seo/sitemap.test.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
