@@ -19,3 +19,6 @@ apps/pocketbase/pocketbase
 *.sqlite
 *.sqlite3
 *.tar.gz
+
+supabase/.temp/
+supabase/.branches/
