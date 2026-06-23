@@ -1,6 +1,30 @@
 # Gaming Passport Data Model
 
-This is a proposed model only. It does not create SQL, views, RPC functions, Supabase projects, migrations, keys, or runtime connections.
+This document defines the conceptual data model and tracks the local database foundation introduced after the domain contract. PR3 adds reviewable local Supabase migration files and database tests only. It does not connect to a remote project, create production tables, add public RPCs, store secrets, or change runtime behavior.
+
+## PR3 Implementation Status
+
+Implemented locally:
+
+- `gaming_passports`;
+- `linked_provider_accounts`;
+- `verified_proofs`;
+- `passport_featured_proofs`;
+- `passport_visibility_settings`.
+
+Aplazado:
+
+- provider token or credential storage;
+- cosmetics;
+- profile themes;
+- cosmetic unlocks;
+- equipped cosmetics;
+- sync jobs;
+- audit logs;
+- public RPCs or views;
+- public serving endpoints.
+
+`auth.users` is the parent auth principal for PR3. `owners` remains a logical concept in product documentation and does not imply an `owners` table. A separate profile table should only be added if a future migration has a concrete need for owner profile data that cannot live in the Passport model.
 
 ## Proposed Entities
 
@@ -15,13 +39,13 @@ This is a proposed model only. It does not create SQL, views, RPC functions, Sup
 9. `passport_equipped_cosmetics`
 10. `provider_credentials` or `provider_tokens`, server-side only
 
-`owners` is a logical principal in this document, not a required table. With Supabase it can map directly to `auth.users.id`. A separate profile table should be created only if a future migration has a concrete need for profile data beyond the auth principal. PR2 does not decide that storage detail.
+`owners` is a logical principal in this document, not a table. With Supabase it maps to `auth.users.id` unless a later reviewed migration proves that a separate profile table is necessary.
 
 ## Relational Model
 
 ```mermaid
 erDiagram
-  owners ||--|| gaming_passports : owns
+  auth_users ||--|| gaming_passports : owns
   gaming_passports ||--o{ linked_provider_accounts : has
   linked_provider_accounts ||--o{ verified_proofs : emits
   gaming_passports ||--o{ passport_featured_proofs : selects
@@ -29,13 +53,12 @@ erDiagram
   gaming_passports ||--|| passport_visibility_settings : configures
   gaming_passports ||--o{ passport_equipped_cosmetics : equips
   cosmetics ||--o{ passport_equipped_cosmetics : equipped
-  owners ||--o{ cosmetic_unlocks : earns
+  auth_users ||--o{ cosmetic_unlocks : earns
   cosmetics ||--o{ cosmetic_unlocks : unlocked
   linked_provider_accounts ||--o{ provider_tokens : has_server_secret
 
-  owners {
+  auth_users {
     uuid id
-    string parent_auth_subject
   }
 
   gaming_passports {
@@ -45,20 +68,26 @@ erDiagram
     string status
     string alias
     string avatar_url
+    string bio_short
+    boolean publication_consent
+    json scene_config
     datetime created_at
     datetime updated_at
     datetime published_at
+    datetime unpublished_at
     datetime suspended_at
   }
 
   linked_provider_accounts {
     uuid id
     uuid passport_id
+    uuid owner_id
     string provider
     string external_account_id
     string display_name
     string status
     string visibility
+    json metadata_safe
     datetime verified_at
     datetime last_synced_at
     datetime stale_at
@@ -67,6 +96,8 @@ erDiagram
 
   verified_proofs {
     uuid id
+    uuid passport_id
+    uuid owner_id
     uuid linked_provider_account_id
     string provider
     string game
@@ -91,13 +122,14 @@ erDiagram
 
   passport_featured_proofs {
     uuid passport_id
+    uuid owner_id
     uuid verified_proof_id
     number sort_order
   }
 
   passport_visibility_settings {
     uuid passport_id
-    boolean publication_consent
+    uuid owner_id
     boolean show_linked_providers
     boolean show_last_updated
   }
@@ -139,14 +171,22 @@ erDiagram
 
 ## Constraints
 
-Minimum rules for a future migration:
+Minimum rules enforced by the local PR3 migration or reserved for the next reviewed migrations:
 
 - exactly one `gaming_passports` row per owner;
 - `slug` is globally unique when present;
+- `slug` must already be canonical when persisted;
+- a published Passport must have a canonical slug, persisted consent, and `published_at`;
 - `UNIQUE(provider, external_account_id)` is global;
 - one external provider account cannot belong to two users;
 - `external_account_id` is opaque to the shared domain;
+- `external_account_id`, proof `source_key`, proof `mode`, and `normalizerVersion` are persisted already-trimmed;
 - each ProviderAdapter must persist a `canonicalExternalAccountId` using official provider rules;
+- composite foreign keys prevent crossing a Passport, owner, provider account, and proof from different ownership trees;
+- browser writes to `gaming_passports` are limited to safe presentation fields;
+- provider accounts and proofs are server-owned records;
+- JSONB payloads have byte-size caps to prevent arbitrary large blobs;
+- helper functions live outside the exposed API schema;
 - provider tokens are separate from public data;
 - provider tokens are never accessible through frontend reads;
 - public reads use an allowlist projection;
@@ -169,6 +209,7 @@ Suggested fields:
 - `alias`;
 - `avatar_url`;
 - `bio_short`;
+- `publication_consent`;
 - `scene_config`;
 - `created_at`;
 - `updated_at`;
@@ -184,6 +225,8 @@ Allowed `status` values:
 - `suspended`.
 
 Do not persist `publishable`; calculate it.
+
+Authenticated browser writes may create only a private draft and may update only presentation fields: `alias`, `avatar_url`, `bio_short`, and `scene_config`. Slug claiming, publication consent, publication state, suspension, and deletion are future server-side command flows.
 
 ## Linked Provider Account
 
@@ -225,6 +268,8 @@ Provider visibility controls whether the linked provider summary appears in the 
 Riot ownership may emit a `provider_ownership` proof. It does not emit a `competitive_rank` proof unless a GameAdapter synchronizes a real game rank.
 
 Discord ownership may emit a `social_verification` proof. It does not emit competitive proofs.
+
+Provider accounts are server-owned in PR3. The browser can select owner-visible rows through RLS but cannot create, update, revoke, stale, or delete them.
 
 ## Verified Proof
 
@@ -282,17 +327,22 @@ Structural invariants:
 
 The proof provider must match the provider on the source linked provider account. `sourceKey` and `normalizerVersion` are required internally but are not public DTO fields.
 
+Proofs are server-owned in PR3. The browser can select owner-visible rows through RLS but cannot create, update, revoke, stale, or delete them.
+
+`metadataSafe` remains private by default and is capped to 4096 bytes in the local schema. That cap prevents oversized payloads; it is not a public allowlist.
+
 ## Featured Proofs
 
 `passport_featured_proofs` stores owner ordering for public highlights.
 
 Rules:
 
-- only proofs that pass public display policy can be featured;
-- revoked proofs never display;
+- the database guarantees only that the proof belongs to the same Passport and owner;
+- the database reserves six structural positions, `0` through `5`;
+- current/public eligibility is still enforced by the pure domain projection;
+- revoked proofs never display through the public projection;
 - stale proofs retain `status: "stale"` if displayed;
-- max visible proofs defaults to 6;
-- future UI may recommend 4 to 6, but the domain cap is 6.
+- future UI may recommend 4 to 6, but the hard cap remains 6.
 
 ## Visibility Settings
 
@@ -301,14 +351,15 @@ Rules:
 Suggested fields:
 
 - `passport_id`;
-- `publication_consent`;
+- `owner_id`;
 - `show_linked_providers`;
 - `show_last_updated`;
-- `proof_visibility_defaults`;
 - `created_at`;
 - `updated_at`.
 
-Publication consent is required for `publishable`.
+Publication consent is stored on `gaming_passports` because it is part of publication state, not a display preference.
+
+The browser may manage visibility settings rows it owns, but publication state remains outside direct browser writes.
 
 ## Token Storage
 
@@ -321,6 +372,25 @@ Rules:
 - no token in `metadataSafe`;
 - no raw access token, refresh token, API token, client secret, bearer string, or authorization header in profile JSON;
 - secrets must be encrypted or referenced through a server secret manager in a future implementation.
+
+## JSON Payload Limits
+
+The local PR3 schema uses byte-size checks:
+
+- `scene_config`: 8192 bytes;
+- linked provider `metadata_safe`: 4096 bytes;
+- verified proof `metadata_safe`: 4096 bytes.
+
+Future provider-specific metadata schemas must be explicit and reviewed separately.
+
+## Internal SQL Functions
+
+Database helpers live in a non-exposed schema and are not public RPCs:
+
+- `private.set_updated_at`;
+- `private.is_canonical_gaming_passport_slug`.
+
+The slug table constraint is inline, so browser roles do not need helper function execution privileges.
 
 ## Projections
 
@@ -405,14 +475,12 @@ It is not a persisted Passport state.
 
 The owner publishability projection is distinct from anonymous public serving. Owner publishing requires authenticated Parent Auth. Public serving requires only persisted public state: published status, canonical slug, consent, not suspended, and at least one still-verified linked provider.
 
-## Future Migration Shape
+## PR3 Local Migration Shape
 
-A future Supabase PR should be additive and reviewable:
+PR3 ships local SQL only:
 
-- one migration for base tables and constraints;
-- one migration for RLS and owner policies;
-- one migration for public projection or RPC;
-- one migration for provider token storage if needed;
-- tests or SQL comments proving public allowlist behavior.
+- one migration for base tables, constraints, RLS policies, and `updated_at` triggers;
+- one pgTAP test file for schema, ownership, invariants, and RLS behavior;
+- one CI database job that runs Supabase locally without secrets.
 
-This PR intentionally ships no SQL.
+Future reviewed migrations may add public RPCs, token storage, cosmetics, sync jobs, and production rollout steps. Those are deliberately outside PR3.
