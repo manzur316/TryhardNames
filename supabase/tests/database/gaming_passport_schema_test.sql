@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(36);
+select plan(76);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -59,13 +59,109 @@ select ok(
   'RLS is enabled for passport_visibility_settings'
 );
 
+select ok(
+  has_table_privilege('authenticated', 'public.gaming_passports', 'SELECT'),
+  'authenticated can select owned Passports through RLS'
+);
+select ok(
+  has_column_privilege('authenticated', 'public.gaming_passports', 'owner_id', 'INSERT'),
+  'authenticated can provide owner_id when creating a draft Passport'
+);
+select ok(
+  not has_column_privilege('authenticated', 'public.gaming_passports', 'status', 'INSERT'),
+  'authenticated cannot provide Passport status on insert'
+);
+select ok(
+  has_column_privilege('authenticated', 'public.gaming_passports', 'alias', 'UPDATE'),
+  'authenticated can update Passport presentation fields'
+);
+select ok(
+  not has_column_privilege('authenticated', 'public.gaming_passports', 'status', 'UPDATE'),
+  'authenticated cannot update Passport status'
+);
+select ok(
+  not has_column_privilege('authenticated', 'public.gaming_passports', 'suspended_at', 'UPDATE'),
+  'authenticated cannot update Passport suspension timestamp'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.gaming_passports', 'DELETE'),
+  'authenticated cannot delete Passports directly'
+);
+
+select ok(
+  has_table_privilege('authenticated', 'public.linked_provider_accounts', 'SELECT'),
+  'authenticated can select owned provider accounts through RLS'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.linked_provider_accounts', 'INSERT'),
+  'authenticated cannot insert provider accounts'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.linked_provider_accounts', 'UPDATE'),
+  'authenticated cannot update provider accounts'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.linked_provider_accounts', 'DELETE'),
+  'authenticated cannot delete provider accounts'
+);
+
+select ok(
+  has_table_privilege('authenticated', 'public.verified_proofs', 'SELECT'),
+  'authenticated can select owned proofs through RLS'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.verified_proofs', 'INSERT'),
+  'authenticated cannot insert proofs'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.verified_proofs', 'UPDATE'),
+  'authenticated cannot update proofs'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.verified_proofs', 'DELETE'),
+  'authenticated cannot delete proofs'
+);
+select ok(
+  not has_function_privilege(
+    'authenticated',
+    'private.is_canonical_gaming_passport_slug(text)',
+    'EXECUTE'
+  ),
+  'authenticated cannot execute internal helper functions directly'
+);
+
+select ok(
+  exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.passport_featured_proofs'::regclass
+      and contype = 'p'
+      and conkey = array[
+        (
+          select attnum
+          from pg_attribute
+          where attrelid = 'public.passport_featured_proofs'::regclass
+            and attname = 'passport_id'
+        ),
+        (
+          select attnum
+          from pg_attribute
+          where attrelid = 'public.passport_featured_proofs'::regclass
+            and attname = 'verified_proof_id'
+        )
+      ]::smallint[]
+  ),
+  'featured proofs use (passport_id, verified_proof_id) as primary key'
+);
+
 insert into auth.users (id, aud, role, created_at, updated_at)
-values
-  ('00000000-0000-0000-0000-000000000001', 'authenticated', 'authenticated', now(), now()),
-  ('00000000-0000-0000-0000-000000000002', 'authenticated', 'authenticated', now(), now()),
-  ('00000000-0000-0000-0000-000000000003', 'authenticated', 'authenticated', now(), now()),
-  ('00000000-0000-0000-0000-000000000004', 'authenticated', 'authenticated', now(), now()),
-  ('00000000-0000-0000-0000-000000000005', 'authenticated', 'authenticated', now(), now());
+select
+  ('00000000-0000-0000-0000-' || lpad(i::text, 12, '0'))::uuid,
+  'authenticated',
+  'authenticated',
+  now(),
+  now()
+from generate_series(1, 12) as i;
 
 insert into public.gaming_passports (
   id,
@@ -104,6 +200,11 @@ values (
   true,
   now()
 );
+
+insert into public.passport_visibility_settings (passport_id, owner_id)
+values
+  ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
+  ('10000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002');
 
 select is(
   pg_temp.test_sqlstate($$
@@ -180,6 +281,47 @@ select is(
   $$),
   '23505',
   'duplicate slug is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.gaming_passports (
+      id,
+      owner_id,
+      status,
+      publication_consent,
+      published_at
+    )
+    values (
+      '10000000-0000-0000-0000-000000000007',
+      '00000000-0000-0000-0000-000000000006',
+      'published',
+      true,
+      now()
+    )
+  $$),
+  '23514',
+  'published Passport without slug is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.gaming_passports (
+      id,
+      owner_id,
+      scene_config
+    )
+    values (
+      '10000000-0000-0000-0000-000000000008',
+      '00000000-0000-0000-0000-000000000008',
+      jsonb_build_object(
+        'blob',
+        (select string_agg(md5(i::text), '') from generate_series(1, 400) as i)
+      )
+    )
+  $$),
+  '23514',
+  'oversized scene_config is rejected'
 );
 
 insert into public.linked_provider_accounts (
@@ -279,6 +421,27 @@ select is(
     values (
       '20000000-0000-0000-0000-000000000005',
       '10000000-0000-0000-0000-000000000001',
+      '00000000-0000-0000-0000-000000000001',
+      'discord',
+      ' SpacedDiscord '
+    )
+  $$),
+  '23514',
+  'external_account_id with surrounding spaces is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.linked_provider_accounts (
+      id,
+      passport_id,
+      owner_id,
+      provider,
+      external_account_id
+    )
+    values (
+      '20000000-0000-0000-0000-000000000006',
+      '10000000-0000-0000-0000-000000000001',
       '00000000-0000-0000-0000-000000000002',
       'discord',
       'CrossOwnerDiscord'
@@ -286,6 +449,32 @@ select is(
   $$),
   '23503',
   'provider owner_id must match the owning Passport'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.linked_provider_accounts (
+      id,
+      passport_id,
+      owner_id,
+      provider,
+      external_account_id,
+      metadata_safe
+    )
+    values (
+      '20000000-0000-0000-0000-000000000007',
+      '10000000-0000-0000-0000-000000000001',
+      '00000000-0000-0000-0000-000000000001',
+      'discord',
+      'OversizedDiscord',
+      jsonb_build_object(
+        'blob',
+        (select string_agg(md5(i::text), '') from generate_series(1, 400) as i)
+      )
+    )
+  $$),
+  '23514',
+  'oversized linked provider metadata_safe is rejected'
 );
 
 insert into public.verified_proofs (
@@ -554,6 +743,175 @@ select is(
 
 select is(
   pg_temp.test_sqlstate($$
+    insert into public.verified_proofs (
+      id,
+      passport_id,
+      owner_id,
+      linked_provider_account_id,
+      provider,
+      game,
+      proof_type,
+      source_key,
+      mode,
+      title,
+      display_value,
+      source,
+      verification_method,
+      normalizer_version,
+      verified_at
+    )
+    values (
+      '30000000-0000-0000-0000-000000000008',
+      '10000000-0000-0000-0000-000000000001',
+      '00000000-0000-0000-0000-000000000001',
+      '20000000-0000-0000-0000-000000000001',
+      'riot',
+      'league_of_legends',
+      'competitive_rank',
+      ' lol:spaced ',
+      'solo_duo',
+      'Solo/Duo Rank',
+      'Emerald IV',
+      'game_adapter',
+      'game_api',
+      'lol-rank-v1',
+      now()
+    )
+  $$),
+  '23514',
+  'source_key with surrounding spaces is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.verified_proofs (
+      id,
+      passport_id,
+      owner_id,
+      linked_provider_account_id,
+      provider,
+      game,
+      proof_type,
+      source_key,
+      mode,
+      title,
+      display_value,
+      source,
+      verification_method,
+      normalizer_version,
+      verified_at
+    )
+    values (
+      '30000000-0000-0000-0000-000000000009',
+      '10000000-0000-0000-0000-000000000001',
+      '00000000-0000-0000-0000-000000000001',
+      '20000000-0000-0000-0000-000000000001',
+      'riot',
+      'league_of_legends',
+      'competitive_rank',
+      'lol:spaced-mode',
+      ' solo_duo ',
+      'Solo/Duo Rank',
+      'Emerald IV',
+      'game_adapter',
+      'game_api',
+      'lol-rank-v1',
+      now()
+    )
+  $$),
+  '23514',
+  'mode with surrounding spaces is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.verified_proofs (
+      id,
+      passport_id,
+      owner_id,
+      linked_provider_account_id,
+      provider,
+      game,
+      proof_type,
+      source_key,
+      mode,
+      title,
+      display_value,
+      source,
+      verification_method,
+      normalizer_version,
+      verified_at
+    )
+    values (
+      '30000000-0000-0000-0000-000000000010',
+      '10000000-0000-0000-0000-000000000001',
+      '00000000-0000-0000-0000-000000000001',
+      '20000000-0000-0000-0000-000000000001',
+      'riot',
+      'league_of_legends',
+      'competitive_rank',
+      'lol:spaced-normalizer',
+      'solo_duo',
+      'Solo/Duo Rank',
+      'Emerald IV',
+      'game_adapter',
+      'game_api',
+      ' lol-rank-v1 ',
+      now()
+    )
+  $$),
+  '23514',
+  'normalizer_version with surrounding spaces is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.verified_proofs (
+      id,
+      passport_id,
+      owner_id,
+      linked_provider_account_id,
+      provider,
+      game,
+      proof_type,
+      source_key,
+      mode,
+      title,
+      display_value,
+      source,
+      verification_method,
+      metadata_safe,
+      normalizer_version,
+      verified_at
+    )
+    values (
+      '30000000-0000-0000-0000-000000000011',
+      '10000000-0000-0000-0000-000000000001',
+      '00000000-0000-0000-0000-000000000001',
+      '20000000-0000-0000-0000-000000000001',
+      'riot',
+      'league_of_legends',
+      'competitive_rank',
+      'lol:oversized-metadata',
+      'solo_duo',
+      'Solo/Duo Rank',
+      'Emerald IV',
+      'game_adapter',
+      'game_api',
+      jsonb_build_object(
+        'blob',
+        (select string_agg(md5(i::text), '') from generate_series(1, 400) as i)
+      ),
+      'lol-rank-v1',
+      now()
+    )
+  $$),
+  '23514',
+  'oversized proof metadata_safe is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
     insert into public.passport_featured_proofs (
       passport_id,
       owner_id,
@@ -569,6 +927,26 @@ select is(
   $$),
   '23514',
   'featured proof positions are limited to 0 through 5'
+);
+
+set local role anon;
+set local request.jwt.claim.sub = '';
+set local request.jwt.claim.role = 'anon';
+
+select is(
+  pg_temp.test_sqlstate($$
+    select private.is_canonical_gaming_passport_slug('player-one')
+  $$),
+  '42501',
+  'anon cannot execute the canonical slug helper'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    select private.set_updated_at()
+  $$),
+  '42501',
+  'anon cannot execute the updated_at trigger helper'
 );
 
 set local role authenticated;
@@ -595,6 +973,36 @@ select is(
   ),
   0,
   'owner B cannot read owner A Passport'
+);
+
+select is(
+  (
+    select count(*)::integer
+    from public.linked_provider_accounts
+    where passport_id = '10000000-0000-0000-0000-000000000001'
+  ),
+  0,
+  'owner B cannot read owner A provider accounts'
+);
+
+select is(
+  (
+    select count(*)::integer
+    from public.verified_proofs
+    where passport_id = '10000000-0000-0000-0000-000000000001'
+  ),
+  0,
+  'owner B cannot read owner A proofs'
+);
+
+select is(
+  (
+    select count(*)::integer
+    from public.passport_visibility_settings
+    where passport_id = '10000000-0000-0000-0000-000000000001'
+  ),
+  0,
+  'owner B cannot read owner A visibility settings'
 );
 
 set local role anon;
@@ -634,7 +1042,7 @@ select is(
       external_account_id
     )
     values (
-      '20000000-0000-0000-0000-000000000006',
+      '20000000-0000-0000-0000-000000000008',
       '10000000-0000-0000-0000-000000000001',
       '00000000-0000-0000-0000-000000000001',
       'discord',
@@ -643,6 +1051,25 @@ select is(
   $$),
   '42501',
   'owner cannot insert provider accounts from the client role'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    update public.linked_provider_accounts
+    set display_name = 'Changed by client'
+    where id = '20000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'owner cannot update provider accounts from the client role'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    delete from public.linked_provider_accounts
+    where id = '20000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'owner cannot delete provider accounts from the client role'
 );
 
 select is(
@@ -675,7 +1102,7 @@ select is(
       verified_at
     )
     values (
-      '30000000-0000-0000-0000-000000000008',
+      '30000000-0000-0000-0000-000000000012',
       '10000000-0000-0000-0000-000000000001',
       '00000000-0000-0000-0000-000000000001',
       '20000000-0000-0000-0000-000000000001',
@@ -697,13 +1124,109 @@ select is(
 );
 
 select is(
-  pg_temp.test_row_count($$
+  pg_temp.test_sqlstate($$
     update public.verified_proofs
     set title = 'Changed by client'
     where id = '30000000-0000-0000-0000-000000000001'
   $$),
-  0,
-  'owner cannot modify proofs from the client role'
+  '42501',
+  'owner cannot update proofs from the client role'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    delete from public.verified_proofs
+    where id = '30000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'owner cannot delete proofs from the client role'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000009';
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.gaming_passports (
+      owner_id,
+      slug,
+      status,
+      publication_consent,
+      published_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000009',
+      'client-published',
+      'published',
+      true,
+      now()
+    )
+  $$),
+  '42501',
+  'authenticated cannot insert an already-published Passport'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000007';
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.gaming_passports (
+      owner_id,
+      alias,
+      avatar_url,
+      bio_short,
+      scene_config
+    )
+    values (
+      '00000000-0000-0000-0000-000000000007',
+      'Draft Player',
+      'https://example.test/avatar.png',
+      'Short bio',
+      '{"layout":"default"}'::jsonb
+    )
+  $$),
+  '00000',
+  'authenticated can insert a safe private draft Passport'
+);
+
+select is(
+  (
+    select status
+    from public.gaming_passports
+    where owner_id = '00000000-0000-0000-0000-000000000007'
+  ),
+  'draft_private',
+  'authenticated draft insert defaults to draft_private'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
+
+select is(
+  pg_temp.test_sqlstate($$
+    update public.gaming_passports
+    set status = 'suspended'
+    where id = '10000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'authenticated cannot modify Passport status'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    update public.gaming_passports
+    set suspended_at = now()
+    where id = '10000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'authenticated cannot modify Passport suspended_at'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    delete from public.gaming_passports
+    where id = '10000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'authenticated cannot delete Passports directly'
 );
 
 select is(
@@ -724,6 +1247,20 @@ select is(
   '00000',
   'owner can feature one of their proofs'
 );
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000002';
+
+select is(
+  (
+    select count(*)::integer
+    from public.passport_featured_proofs
+    where passport_id = '10000000-0000-0000-0000-000000000001'
+  ),
+  0,
+  'owner B cannot read owner A featured proofs'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
 
 select is(
   pg_temp.test_row_count($$

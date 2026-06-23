@@ -14,6 +14,30 @@ PR3 creates the five MVP tables:
 
 These tables cover owner-owned Passport state, linked provider ownership records, normalized verified proofs, owner-selected featured proofs, and private visibility preferences.
 
+## Browser Write Boundary
+
+Authenticated browser writes are intentionally narrow.
+
+For `gaming_passports`, the browser can:
+
+- select the owner row through RLS;
+- insert a private draft with `owner_id` and safe presentation fields;
+- update only `alias`, `avatar_url`, `bio_short`, and `scene_config`.
+
+The browser cannot directly set or change:
+
+- `owner_id` after insert;
+- `slug`;
+- `status`;
+- `publication_consent`;
+- `published_at`;
+- `unpublished_at`;
+- `suspended_at`;
+- `created_at`;
+- `updated_at`.
+
+Publication, unpublication, suspension, slug claiming, consent changes, and Passport deletion are future server-side command flows. PR3 does not implement those commands or RPCs.
+
 ## Deliberately Aplazado
 
 PR3 does not create:
@@ -52,11 +76,41 @@ Owner client access:
 
 There are no anon policies and no direct public table reads. Provider accounts and proofs are written by future backend code, not by the browser client.
 
+Provider accounts and proofs are server-owned records. The browser can read owner-visible state, but it cannot create, update, revoke, stale, delete, or otherwise mutate provider ownership or verified proof rows.
+
+SQL privileges and RLS are both required:
+
+- SQL privileges define which tables and columns a role may touch at all.
+- RLS limits which rows are visible or mutable after privileges allow an operation.
+
+PR3 uses column-level privileges for `gaming_passports` so RLS cannot accidentally become the only guardrail for system fields.
+
+## Internal Functions
+
+Auxiliary functions live in the non-exposed `private` schema:
+
+- `private.set_updated_at`;
+- `private.is_canonical_gaming_passport_slug`.
+
+The API schema list does not expose `private`, and direct execute privileges are revoked from browser roles. The slug constraint is inline in the table definition, so the browser does not need direct execute access to the helper function.
+
+## JSON Limits
+
+PR3 caps JSONB payload size to avoid arbitrary third-party or UI payload growth:
+
+- `gaming_passports.scene_config`: 8192 bytes;
+- `linked_provider_accounts.metadata_safe`: 4096 bytes;
+- `verified_proofs.metadata_safe`: 4096 bytes.
+
+These are byte-size caps, not public metadata schemas. Future GameAdapters must still define explicit public attribute schemas before any provider-specific metadata can enter public projections.
+
 ## Owner Data vs Public Projection
 
 The database stores owner data and verified internal state. It does not serve `/id/:slug` directly.
 
 Public serving remains a separate future surface that must use a backend or RPC allowlist. Public projection rules from the domain still decide which providers and proofs can leave the private ownership model.
+
+`status = published` requires a canonical non-null slug, persisted consent, and `published_at`. PR3 does not check provider existence in SQL and does not auto-publish from triggers.
 
 ## Local Workflow
 
@@ -122,6 +176,7 @@ Known risks for the future rollout:
 
 - canonical slug rules must match the JavaScript domain contract;
 - provider external identifiers are opaque and case-sensitive after adapter canonicalization;
+- provider external identifiers must already be trimmed before persistence;
 - composite ownership constraints are required to prevent cross-owner association bugs;
 - public profile reads must not query tables directly;
 - metadata remains private by default until explicit GameAdapter public schemas exist;

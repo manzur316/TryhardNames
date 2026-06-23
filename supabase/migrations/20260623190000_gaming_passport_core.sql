@@ -1,6 +1,12 @@
 create extension if not exists pgcrypto with schema extensions;
 
-create or replace function public.set_updated_at()
+create schema if not exists private;
+
+revoke all on schema private from public;
+revoke all on schema private from anon;
+revoke all on schema private from authenticated;
+
+create or replace function private.set_updated_at()
 returns trigger
 language plpgsql
 as $$
@@ -10,7 +16,7 @@ begin
 end;
 $$;
 
-create or replace function public.is_canonical_gaming_passport_slug(value text)
+create or replace function private.is_canonical_gaming_passport_slug(value text)
 returns boolean
 language sql
 immutable
@@ -34,6 +40,13 @@ as $$
     );
 $$;
 
+revoke all on function private.set_updated_at() from public;
+revoke all on function private.set_updated_at() from anon;
+revoke all on function private.set_updated_at() from authenticated;
+revoke all on function private.is_canonical_gaming_passport_slug(text) from public;
+revoke all on function private.is_canonical_gaming_passport_slug(text) from anon;
+revoke all on function private.is_canonical_gaming_passport_slug(text) from authenticated;
+
 create table public.gaming_passports (
   id uuid primary key default extensions.gen_random_uuid(),
   owner_id uuid not null references auth.users(id) on delete cascade,
@@ -55,7 +68,24 @@ create table public.gaming_passports (
     status in ('draft_private', 'published', 'unpublished', 'suspended')
   ),
   constraint gaming_passports_slug_check check (
-    slug is null or public.is_canonical_gaming_passport_slug(slug)
+    slug is null or (
+      slug = lower(slug)
+      and char_length(slug) between 2 and 32
+      and slug ~ '^[a-z0-9]([a-z0-9-]{0,30}[a-z0-9])?$'
+      and slug not in (
+        'account',
+        'admin',
+        'api',
+        'auth',
+        'gaming-passport',
+        'id',
+        'null',
+        'sign-in',
+        'sign-up',
+        'undefined',
+        'www'
+      )
+    )
   ),
   constraint gaming_passports_alias_length check (alias is null or char_length(alias) <= 64),
   constraint gaming_passports_avatar_url_length check (
@@ -65,8 +95,10 @@ create table public.gaming_passports (
     bio_short is null or char_length(bio_short) <= 200
   ),
   constraint gaming_passports_scene_config_object check (jsonb_typeof(scene_config) = 'object'),
+  constraint gaming_passports_scene_config_size check (pg_column_size(scene_config) <= 8192),
   constraint gaming_passports_published_coherent check (
-    status <> 'published' or (publication_consent is true and published_at is not null)
+    status <> 'published'
+    or (publication_consent is true and published_at is not null and slug is not null)
   ),
   constraint gaming_passports_unpublished_coherent check (
     status <> 'unpublished' or unpublished_at is not null
@@ -109,7 +141,8 @@ create table public.linked_provider_accounts (
   ),
   constraint linked_provider_accounts_provider_check check (provider in ('discord', 'riot')),
   constraint linked_provider_accounts_external_account_id_length check (
-    char_length(btrim(external_account_id)) between 1 and 256
+    external_account_id = btrim(external_account_id)
+    and char_length(external_account_id) between 1 and 256
   ),
   constraint linked_provider_accounts_display_name_length check (
     display_name is null or char_length(display_name) <= 120
@@ -120,6 +153,9 @@ create table public.linked_provider_accounts (
   constraint linked_provider_accounts_visibility_check check (visibility in ('private', 'public')),
   constraint linked_provider_accounts_metadata_safe_object check (
     jsonb_typeof(metadata_safe) = 'object'
+  ),
+  constraint linked_provider_accounts_metadata_safe_size check (
+    pg_column_size(metadata_safe) <= 4096
   ),
   constraint linked_provider_accounts_verified_coherent check (
     status <> 'verified' or verified_at is not null
@@ -188,9 +224,13 @@ create table public.verified_proofs (
     )
   ),
   constraint verified_proofs_source_key_length check (
-    char_length(btrim(source_key)) between 1 and 256
+    source_key = btrim(source_key)
+    and char_length(source_key) between 1 and 256
   ),
-  constraint verified_proofs_mode_length check (char_length(btrim(mode)) between 1 and 64),
+  constraint verified_proofs_mode_length check (
+    mode = btrim(mode)
+    and char_length(mode) between 1 and 64
+  ),
   constraint verified_proofs_title_length check (char_length(btrim(title)) between 1 and 120),
   constraint verified_proofs_display_value_length check (
     char_length(btrim(display_value)) between 1 and 120
@@ -206,8 +246,10 @@ create table public.verified_proofs (
   constraint verified_proofs_status_check check (status in ('current', 'stale', 'revoked')),
   constraint verified_proofs_visibility_check check (visibility in ('private', 'public')),
   constraint verified_proofs_metadata_safe_object check (jsonb_typeof(metadata_safe) = 'object'),
+  constraint verified_proofs_metadata_safe_size check (pg_column_size(metadata_safe) <= 4096),
   constraint verified_proofs_normalizer_version_length check (
-    char_length(btrim(normalizer_version)) between 1 and 80
+    normalizer_version = btrim(normalizer_version)
+    and char_length(normalizer_version) between 1 and 80
   ),
   constraint verified_proofs_stale_coherent check (status <> 'stale' or stale_at is not null),
   constraint verified_proofs_revoked_coherent check (status <> 'revoked' or revoked_at is not null),
@@ -252,7 +294,7 @@ create table public.passport_featured_proofs (
   )
     references public.verified_proofs (id, passport_id, owner_id)
     on delete cascade,
-  constraint passport_featured_proofs_proof_uid unique (passport_id, verified_proof_id),
+  constraint passport_featured_proofs_pkey primary key (passport_id, verified_proof_id),
   constraint passport_featured_proofs_sort_order_uid unique (passport_id, sort_order),
   constraint passport_featured_proofs_sort_order_check check (sort_order between 0 and 5)
 );
@@ -278,19 +320,19 @@ create index passport_visibility_settings_owner_idx
 
 create trigger set_gaming_passports_updated_at
 before update on public.gaming_passports
-for each row execute function public.set_updated_at();
+for each row execute function private.set_updated_at();
 
 create trigger set_linked_provider_accounts_updated_at
 before update on public.linked_provider_accounts
-for each row execute function public.set_updated_at();
+for each row execute function private.set_updated_at();
 
 create trigger set_verified_proofs_updated_at
 before update on public.verified_proofs
-for each row execute function public.set_updated_at();
+for each row execute function private.set_updated_at();
 
 create trigger set_passport_visibility_settings_updated_at
 before update on public.passport_visibility_settings
-for each row execute function public.set_updated_at();
+for each row execute function private.set_updated_at();
 
 alter table public.gaming_passports enable row level security;
 alter table public.linked_provider_accounts enable row level security;
@@ -314,13 +356,38 @@ revoke all on table
   public.passport_visibility_settings
 from public;
 
-grant select, insert, update, delete on table
+revoke all on table
   public.gaming_passports,
   public.linked_provider_accounts,
   public.verified_proofs,
   public.passport_featured_proofs,
   public.passport_visibility_settings
-to authenticated;
+from authenticated;
+
+grant select on table public.gaming_passports to authenticated;
+
+grant insert (
+  owner_id,
+  alias,
+  avatar_url,
+  bio_short,
+  scene_config
+) on public.gaming_passports to authenticated;
+
+grant update (
+  alias,
+  avatar_url,
+  bio_short,
+  scene_config
+) on public.gaming_passports to authenticated;
+
+grant select on table public.linked_provider_accounts to authenticated;
+
+grant select on table public.verified_proofs to authenticated;
+
+grant select, insert, update, delete on table public.passport_featured_proofs to authenticated;
+
+grant select, insert, update, delete on table public.passport_visibility_settings to authenticated;
 
 create policy "gaming_passports_select_own"
 on public.gaming_passports
@@ -332,7 +399,14 @@ create policy "gaming_passports_insert_own"
 on public.gaming_passports
 for insert
 to authenticated
-with check (owner_id = auth.uid());
+with check (
+  owner_id = auth.uid()
+  and status = 'draft_private'
+  and publication_consent is false
+  and published_at is null
+  and unpublished_at is null
+  and suspended_at is null
+);
 
 create policy "gaming_passports_update_own"
 on public.gaming_passports
@@ -340,12 +414,6 @@ for update
 to authenticated
 using (owner_id = auth.uid())
 with check (owner_id = auth.uid());
-
-create policy "gaming_passports_delete_own"
-on public.gaming_passports
-for delete
-to authenticated
-using (owner_id = auth.uid());
 
 create policy "passport_visibility_settings_select_own"
 on public.passport_visibility_settings
