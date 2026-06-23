@@ -37,5 +37,8 @@ jobs:
       - name: SEO tests
         run: npm run test:seo
 
+      - name: Gaming Passport domain tests
+        run: npm run test:passport
+
       - name: Build
         run: npm run build

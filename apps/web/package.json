@@ -11,7 +11,8 @@
     "lint": "eslint . --quiet",
     "lint:warn": "eslint .",
     "test": "node --test tests/seo/sitemap.test.js",
-    "test:seo": "node --test tests/seo/sitemap.test.js"
+    "test:seo": "node --test tests/seo/sitemap.test.js",
+    "test:passport": "node --test tests/gaming-passport/domain.test.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
