@@ -24,6 +24,13 @@ VITE_AUTH_GOOGLE_ENABLED=false
 
 The app must not receive administrative Supabase credentials. Do not set service-role, secret, or admin keys in browser environment variables.
 
+Accepted browser keys are:
+
+- modern publishable keys beginning with `sb_publishable_`;
+- legacy anon JWT keys whose decoded payload contains `role = anon`.
+
+Rejected browser keys include secret keys, service-role JWTs, malformed JWT-like values, empty keys, and non-http(s) URLs.
+
 ## Local Supabase
 
 Start local Supabase from the repository root:
@@ -41,6 +48,15 @@ Copy values from local status:
 
 Never commit those values.
 
+The local Supabase config allows these callback URLs:
+
+- `http://localhost:3000/auth/callback`
+- `http://127.0.0.1:3000/auth/callback`
+
+Production, staging, and Vercel previews need their own allowed callback URLs in their own Supabase auth configuration before OAuth is enabled there.
+
+PR4 uses a manual PKCE callback strategy. The browser client does not auto-detect sessions from the URL; `/auth/callback` captures the returned `code`, cleans query/hash parameters, exchanges the code once, and then redirects to `/account`.
+
 ## Google OAuth
 
 Google is disabled by default:
@@ -50,6 +66,8 @@ VITE_AUTH_GOOGLE_ENABLED=false
 ```
 
 To test Google locally, a developer must configure their own Google OAuth credentials in the local Supabase auth settings and set the flag to `true`. PR4 only wires the Supabase OAuth call and callback route; it does not provide or assume Google credentials.
+
+Do not enable Google in production or previews until both Google Cloud OAuth credentials and Supabase redirect URLs are configured for that exact environment.
 
 ## Running The App
 
@@ -117,3 +135,13 @@ PR4 does not:
 - use service role;
 - deploy functions;
 - alter production auth settings.
+
+## Bundle Check
+
+Compared against `origin/main` during PR4 hardening:
+
+- `origin/main` entry JS: 1,262,886 bytes raw / 378,557 bytes gzip.
+- PR4 entry JS: 1,271,281 bytes raw / 381,239 bytes gzip.
+- Entry delta: +8,395 bytes raw / +2,682 bytes gzip.
+
+`@supabase/supabase-js` is not loaded by the HTML entry script. It is loaded through a separate lazy chunk when Parent Auth runtime is configured or an auth/account surface is visited. PR4 also splits `/sign-in`, `/sign-up`, `/auth/callback`, and `/account` into lazy route chunks.

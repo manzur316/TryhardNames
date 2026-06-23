@@ -8,13 +8,20 @@ import {
   getOrCreatePrivateDraft,
   getOwnedPassport,
   mapPassportRow,
+  mapPassportToPresentationForm,
   sanitizeSceneConfig,
+  shouldLoadDraftForOwner,
   updatePassportPresentation,
   validatePresentationInput,
 } from '../../src/gaming-passport/data/passportRepository.js';
 import {
+  applySignedOutSessionState,
+  completeAuthCallback,
   createSupabaseClientFromFactory,
+  getSupabaseRuntime,
+  parseAuthCallbackParams,
   readSupabaseConfig,
+  resetSupabaseRuntimeForTests,
   sanitizeReturnTo,
   signInWithEmail,
   signInWithGoogle,
@@ -22,6 +29,7 @@ import {
   signUpWithEmail,
 } from '../../src/lib/supabase/index.js';
 import { buildPublicPassportProjection } from '../../src/gaming-passport/domain/index.js';
+import { getAccountNavigationState } from '../../src/core/routing/accountNavigation.js';
 
 describe('Parent Auth configuration', () => {
   it('keeps missing Supabase config from breaking imports or creating a client', () => {
@@ -39,15 +47,16 @@ describe('Parent Auth configuration', () => {
   it('creates a Supabase client only when URL and publishable key are present', () => {
     const config = readSupabaseConfig({
       VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
-      VITE_SUPABASE_PUBLISHABLE_KEY: 'anon-key',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_local',
     });
     const client = createSupabaseClientFromFactory((url, key, options) => ({ url, key, options }), config);
 
     assert.equal(config.isConfigured, true);
     assert.equal(client.url, 'http://127.0.0.1:54321');
-    assert.equal(client.key, 'anon-key');
+    assert.equal(client.key, 'sb_publishable_local');
     assert.equal(client.options.auth.flowType, 'pkce');
     assert.equal(client.options.auth.persistSession, true);
+    assert.equal(client.options.auth.detectSessionInUrl, false);
   });
 
   it('rejects prohibited admin-shaped browser config', () => {
@@ -57,6 +66,67 @@ describe('Parent Auth configuration', () => {
     });
 
     assert.equal(config.isConfigured, false);
+  });
+
+  it('accepts modern publishable keys and legacy anon JWT keys', () => {
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'https://project.supabase.co',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_abc123',
+    }).isConfigured, true);
+
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+      VITE_SUPABASE_PUBLISHABLE_KEY: makeJwt({ role: 'anon' }),
+    }).isConfigured, true);
+  });
+
+  it('rejects secret keys, service role JWTs, malformed JWTs, and unsafe URLs', () => {
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'https://project.supabase.co',
+      VITE_SUPABASE_PUBLISHABLE_KEY: ['sb', 'secret_abc123'].join('_'),
+    }).isConfigured, false);
+
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'https://project.supabase.co',
+      VITE_SUPABASE_PUBLISHABLE_KEY: makeJwt({ role: 'service_role' }),
+    }).isConfigured, false);
+
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'https://project.supabase.co',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'header.not-json.signature',
+    }).isConfigured, false);
+
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'javascript:alert(1)',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_abc123',
+    }).isConfigured, false);
+
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'file:///tmp/project',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_abc123',
+    }).isConfigured, false);
+
+    assert.equal(readSupabaseConfig({
+      VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_abc123',
+    }).isConfigured, true);
+  });
+
+  it('keeps runtime safe when createClient throws', async () => {
+    resetSupabaseRuntimeForTests();
+    const runtime = await getSupabaseRuntime({
+      config: readSupabaseConfig({
+        VITE_SUPABASE_URL: 'https://project.supabase.co',
+        VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_abc123',
+      }),
+      factory: () => {
+        throw new Error('bad client');
+      },
+    });
+
+    assert.equal(runtime.client, null);
+    assert.equal(runtime.config.isConfigured, false);
+    resetSupabaseRuntimeForTests();
   });
 });
 
@@ -138,6 +208,90 @@ describe('Parent Auth service calls', () => {
     assert.equal(result.ok, true);
     assert.equal(called, true);
   });
+
+  it('keeps current session state when sign-out fails', async () => {
+    const currentState = {
+      user: { id: 'owner-1' },
+      session: { user: { id: 'owner-1' } },
+    };
+
+    assert.deepEqual(applySignedOutSessionState({ ok: false }, currentState), currentState);
+    assert.deepEqual(applySignedOutSessionState({ ok: true }, currentState), {
+      user: null,
+      session: null,
+    });
+  });
+});
+
+describe('Manual PKCE callback policy', () => {
+  it('exchanges a code exactly once and uses the returned session', async () => {
+    let exchangeCalls = 0;
+    let getSessionCalls = 0;
+    const callbackParams = parseAuthCallbackParams('?code=abc123', '');
+
+    const result = await completeAuthCallback({
+      client: {},
+      callbackParams,
+      getCurrentSession: async () => {
+        getSessionCalls += 1;
+        return null;
+      },
+      exchangeCodeForSession: async (_client, code) => {
+        exchangeCalls += 1;
+        assert.equal(code, 'abc123');
+        return { ok: true, data: { session: { user: { id: 'owner-1' } } } };
+      },
+    });
+
+    assert.equal(callbackParams.shouldCleanUrl, true);
+    assert.equal(result.ok, true);
+    assert.equal(result.session.user.id, 'owner-1');
+    assert.equal(exchangeCalls, 1);
+    assert.equal(getSessionCalls, 0);
+  });
+
+  it('continues without code when an existing session is present', async () => {
+    const result = await completeAuthCallback({
+      client: {},
+      callbackParams: parseAuthCallbackParams('', ''),
+      getCurrentSession: async () => ({ user: { id: 'owner-1' } }),
+      exchangeCodeForSession: async () => {
+        throw new Error('must not exchange');
+      },
+    });
+
+    assert.equal(result.ok, true);
+    assert.equal(result.session.user.id, 'owner-1');
+  });
+
+  it('fails without code and without an existing session', async () => {
+    const result = await completeAuthCallback({
+      client: {},
+      callbackParams: parseAuthCallbackParams('', ''),
+      getCurrentSession: async () => null,
+    });
+
+    assert.equal(result.ok, false);
+    assert.match(result.error, /No active session/);
+  });
+
+  it('sanitizes OAuth errors and marks callback params for cleanup', async () => {
+    const callbackParams = parseAuthCallbackParams(
+      '?error=server_error&error_code=bad&error_description=raw-secret',
+      '#code=ignored',
+    );
+    const result = await completeAuthCallback({
+      client: {},
+      callbackParams,
+      getCurrentSession: async () => ({ user: { id: 'owner-1' } }),
+    });
+
+    assert.equal(callbackParams.hasOAuthError, true);
+    assert.equal(callbackParams.shouldCleanUrl, true);
+    assert.equal(result.ok, false);
+    assert.equal(result.error.includes('raw-secret'), false);
+    assert.equal(result.error, 'Sign-in could not be completed. Please try again.');
+  });
 });
 
 describe('Safe redirects and public projection', () => {
@@ -179,6 +333,23 @@ describe('Safe redirects and public projection', () => {
   });
 });
 
+describe('Auth navigation policy', () => {
+  it('hides account navigation when Supabase is not configured', () => {
+    assert.equal(getAccountNavigationState({ isConfigured: false, session: null }), null);
+  });
+
+  it('shows Sign in when configured without a session and Account with a session', () => {
+    assert.deepEqual(getAccountNavigationState({ isConfigured: true, session: null }), {
+      href: '/sign-in',
+      label: 'Sign in',
+    });
+    assert.deepEqual(getAccountNavigationState({ isConfigured: true, session: { user: { id: 'owner-1' } } }), {
+      href: '/account',
+      label: 'Account',
+    });
+  });
+});
+
 describe('Gaming Passport draft repository', () => {
   it('transforms owned Passport rows into the frontend model', async () => {
     const row = samplePassportRow();
@@ -190,6 +361,12 @@ describe('Gaming Passport draft repository', () => {
     assert.equal(passport.avatarUrl, row.avatar_url);
     assert.equal(passport.bioShort, row.bio_short);
     assert.deepEqual(passport.sceneConfig, row.scene_config);
+    assert.deepEqual(mapPassportToPresentationForm(passport), {
+      alias: row.alias,
+      avatarUrl: row.avatar_url,
+      bioShort: row.bio_short,
+      sceneConfig: row.scene_config,
+    });
   });
 
   it('createPrivateDraft sends only allowed create fields', async () => {
@@ -319,10 +496,44 @@ describe('Gaming Passport draft repository', () => {
       density: 'comfortable',
     });
   });
+
+  it('does not reload a dirty draft for the same owner during session refresh', () => {
+    assert.equal(shouldLoadDraftForOwner({
+      isConfigured: true,
+      ownerId: 'owner-1',
+      loadedOwnerId: null,
+    }), true);
+
+    assert.equal(shouldLoadDraftForOwner({
+      isConfigured: true,
+      ownerId: 'owner-1',
+      loadedOwnerId: 'owner-1',
+      isDirty: true,
+    }), false);
+
+    assert.equal(shouldLoadDraftForOwner({
+      isConfigured: true,
+      ownerId: 'owner-2',
+      loadedOwnerId: 'owner-1',
+    }), true);
+  });
 });
 
 function sampleSession() {
   return { user: { id: 'owner-1', email: 'player@example.test' } };
+}
+
+function makeJwt(payload) {
+  return [
+    encodeBase64Url({ alg: 'HS256', typ: 'JWT' }),
+    encodeBase64Url(payload),
+    'signature',
+  ].join('.');
+}
+
+function encodeBase64Url(value) {
+  return Buffer.from(JSON.stringify(value))
+    .toString('base64url');
 }
 
 function samplePassportRow() {

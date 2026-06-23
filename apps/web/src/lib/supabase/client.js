@@ -1,4 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
 import { readSupabaseConfig } from './config.js';
 
 let cachedClient;
@@ -12,18 +11,35 @@ export function createSupabaseClientFromFactory(factory, config = readSupabaseCo
       flowType: 'pkce',
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true,
+      detectSessionInUrl: false,
     },
   });
 }
 
-export function getSupabaseRuntime() {
+export async function getSupabaseRuntime({ factory, config: configOverride } = {}) {
   if (cachedConfig) {
     return { client: cachedClient, config: cachedConfig };
   }
 
-  cachedConfig = readSupabaseConfig();
-  cachedClient = createSupabaseClientFromFactory(createClient, cachedConfig);
+  cachedConfig = configOverride || readSupabaseConfig();
+  cachedClient = null;
+
+  if (!cachedConfig.isConfigured) {
+    return { client: cachedClient, config: cachedConfig };
+  }
+
+  try {
+    const createClient = factory || (await import('@supabase/supabase-js')).createClient;
+    cachedClient = createSupabaseClientFromFactory(createClient, cachedConfig);
+  } catch {
+    cachedConfig = {
+      ...cachedConfig,
+      isConfigured: false,
+      reason: 'Supabase client could not be initialized safely.',
+    };
+    cachedClient = null;
+  }
+
   return { client: cachedClient, config: cachedConfig };
 }
 

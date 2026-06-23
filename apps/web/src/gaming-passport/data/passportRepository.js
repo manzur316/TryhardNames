@@ -47,6 +47,21 @@ export function mapPassportRow(row) {
   };
 }
 
+export function mapPassportToPresentationForm(passport) {
+  return {
+    alias: passport?.alias || '',
+    avatarUrl: passport?.avatarUrl || '',
+    bioShort: passport?.bioShort || '',
+    sceneConfig: sanitizeSceneConfig(passport?.sceneConfig),
+  };
+}
+
+export function shouldLoadDraftForOwner({ isConfigured, ownerId, loadedOwnerId, isDirty = false }) {
+  if (!isConfigured || !ownerId) return false;
+  if (isDirty && ownerId === loadedOwnerId) return false;
+  return ownerId !== loadedOwnerId;
+}
+
 export async function getOwnedPassport(client, session) {
   const ownerId = getSessionOwnerId(session);
   const { data, error } = await client
@@ -69,7 +84,9 @@ export async function createPrivateDraft(client, session, input = {}) {
     .maybeSingle();
 
   if (error) throw error;
-  return mapPassportRow(data);
+  const passport = mapPassportRow(data);
+  if (!passport) throw new Error('Passport update did not return a row.');
+  return passport;
 }
 
 export async function getOrCreatePrivateDraft(client, session, input = {}) {

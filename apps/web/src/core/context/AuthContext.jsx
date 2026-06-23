@@ -1,5 +1,7 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { getSupabaseRuntime } from '@/lib/supabase/client.js';
+import { readSupabaseConfig } from '@/lib/supabase/config.js';
+import { applySignedOutSessionState } from '@/lib/supabase/sessionState.js';
 import {
   signInWithEmail as signInWithEmailRequest,
   signInWithGoogle as signInWithGoogleRequest,
@@ -16,61 +18,94 @@ export const AuthContext = createContext({
   signInWithEmail: async () => ({ ok: false }),
   signInWithGoogle: async () => ({ ok: false }),
   signOut: async () => ({ ok: false }),
-  refreshSession: async () => null,
+  getCurrentSession: async () => null,
+  setCurrentSession: () => {},
   login: async () => ({ ok: false }),
   logout: async () => ({ ok: false }),
 });
 
 export const AuthProvider = ({ children }) => {
-  const { client, config } = useMemo(() => getSupabaseRuntime(), []);
+  const initialConfig = useMemo(() => readSupabaseConfig(), []);
+  const [runtime, setRuntime] = useState({ client: null, config: initialConfig });
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
+    let subscription;
 
-    if (!client) {
-      setUser(null);
-      setSession(null);
-      setIsLoading(false);
-      return () => {
-        isMounted = false;
-      };
+    async function initializeAuth() {
+      if (!initialConfig.isConfigured) {
+        setUser(null);
+        setSession(null);
+        setIsLoading(false);
+        return;
+      }
+
+      const nextRuntime = await getSupabaseRuntime();
+      if (!isMounted) return;
+      setRuntime(nextRuntime);
+
+      const { client } = nextRuntime;
+      if (!client) {
+        setUser(null);
+        setSession(null);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data } = await client.auth.getSession();
+        if (!isMounted) return;
+        setSession(data.session || null);
+        setUser(data.session?.user || null);
+      } catch {
+        if (!isMounted) return;
+        setSession(null);
+        setUser(null);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+
+      const { data } = client.auth.onAuthStateChange((_event, nextSession) => {
+        if (!isMounted) return;
+        setSession(nextSession || null);
+        setUser(nextSession?.user || null);
+        setIsLoading(false);
+      });
+      subscription = data?.subscription;
     }
 
-    client.auth.getSession().then(({ data }) => {
-      if (!isMounted) return;
-      setSession(data.session || null);
-      setUser(data.session?.user || null);
-      setIsLoading(false);
-    }).catch(() => {
-      if (!isMounted) return;
-      setSession(null);
-      setUser(null);
-      setIsLoading(false);
-    });
-
-    const { data } = client.auth.onAuthStateChange((_event, nextSession) => {
-      if (!isMounted) return;
-      setSession(nextSession || null);
-      setUser(nextSession?.user || null);
-      setIsLoading(false);
-    });
+    initializeAuth();
 
     return () => {
       isMounted = false;
-      data?.subscription?.unsubscribe?.();
+      subscription?.unsubscribe?.();
     };
+  }, [initialConfig]);
+
+  const client = runtime.client;
+  const config = runtime.config;
+
+  const getCurrentSession = useCallback(async () => {
+    if (!client) return null;
+    try {
+      const { data } = await client.auth.getSession();
+      setSession(data.session || null);
+      setUser(data.session?.user || null);
+      return data.session || null;
+    } catch {
+      setSession(null);
+      setUser(null);
+      return null;
+    }
   }, [client]);
 
-  const refreshSession = useCallback(async () => {
-    if (!client) return null;
-    const { data } = await client.auth.getSession();
-    setSession(data.session || null);
-    setUser(data.session?.user || null);
-    return data.session || null;
-  }, [client]);
+  const setCurrentSession = useCallback((nextSession) => {
+    setSession(nextSession || null);
+    setUser(nextSession?.user || null);
+  }, []);
 
   const signUpWithEmail = useCallback(async (credentials) => {
     if (!client) return authNotConfigured();
@@ -93,10 +128,11 @@ export const AuthProvider = ({ children }) => {
   const signOut = useCallback(async () => {
     if (!client) return authNotConfigured();
     const result = await signOutWithSupabase(client);
-    setUser(null);
-    setSession(null);
+    const next = applySignedOutSessionState(result, { user, session });
+    setUser(next.user);
+    setSession(next.session);
     return result;
-  }, [client]);
+  }, [client, session, user]);
 
   const value = useMemo(() => ({
     user,
@@ -109,7 +145,8 @@ export const AuthProvider = ({ children }) => {
     signInWithEmail,
     signInWithGoogle,
     signOut,
-    refreshSession,
+    getCurrentSession,
+    setCurrentSession,
     login: signInWithEmail,
     logout: signOut,
   }), [
@@ -123,7 +160,8 @@ export const AuthProvider = ({ children }) => {
     signInWithEmail,
     signInWithGoogle,
     signOut,
-    refreshSession,
+    getCurrentSession,
+    setCurrentSession,
   ]);
 
   return (

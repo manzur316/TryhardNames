@@ -3,10 +3,13 @@ import { Navigate } from 'react-router-dom';
 import { LogOut, Save } from 'lucide-react';
 import { useAuth } from '@/core/hooks/useAuth.js';
 import { getSupabaseRuntime } from '@/lib/supabase/client.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 import {
   DEFAULT_SCENE_CONFIG,
   SCENE_CONFIG_OPTIONS,
   getOrCreatePrivateDraft,
+  mapPassportToPresentationForm,
+  shouldLoadDraftForOwner,
   updatePassportPresentation,
   validatePresentationInput,
 } from '@/gaming-passport/data/passportRepository.js';
@@ -23,29 +26,29 @@ export default function AccountPage() {
   });
   const [isDraftLoading, setIsDraftLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [loadedOwnerId, setLoadedOwnerId] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const ownerId = auth.user?.id || null;
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadDraft() {
-      if (!auth.session || !auth.isConfigured) return;
+      if (!shouldLoadDraftForOwner({ isConfigured: auth.isConfigured, ownerId, loadedOwnerId, isDirty })) return;
       setIsDraftLoading(true);
       setError('');
       try {
-        const { client } = getSupabaseRuntime();
+        const { client } = await getSupabaseRuntime();
         const draft = await getOrCreatePrivateDraft(client, auth.session, {
           alias: getEmailAlias(auth.user?.email),
         });
         if (!isMounted) return;
         setPassport(draft);
-        setForm({
-          alias: draft.alias,
-          avatarUrl: draft.avatarUrl,
-          bioShort: draft.bioShort,
-          sceneConfig: draft.sceneConfig,
-        });
+        setForm(mapPassportToPresentationForm(draft));
+        setLoadedOwnerId(ownerId);
+        setIsDirty(false);
       } catch {
         if (isMounted) setError('Could not load your private Gaming Passport draft.');
       } finally {
@@ -58,10 +61,20 @@ export default function AccountPage() {
     return () => {
       isMounted = false;
     };
-  }, [auth.session, auth.isConfigured, auth.user?.email]);
+  }, [auth.isConfigured, auth.session, auth.user?.email, isDirty, loadedOwnerId, ownerId]);
 
-  if (!auth.isConfigured) return <AuthUnavailable />;
-  if (auth.isLoading) return <AccountLoading />;
+  const seo = (
+    <SeoHead
+      title="Account | TryhardNames"
+      description="Manage your private TryhardNames account and Gaming Passport draft."
+      path="/account"
+      noIndex
+      skipCanonical
+    />
+  );
+
+  if (!auth.isConfigured) return <>{seo}<AuthUnavailable /></>;
+  if (auth.isLoading) return <>{seo}<AccountLoading /></>;
   if (!auth.session) return <Navigate to="/sign-in?returnTo=%2Faccount" replace />;
 
   const validation = validatePresentationInput(form);
@@ -75,9 +88,11 @@ export default function AccountPage() {
 
     setIsSaving(true);
     try {
-      const { client } = getSupabaseRuntime();
-      const updated = await updatePassportPresentation(client, auth.session, passport.id, form);
+      const runtime = await getSupabaseRuntime();
+      const updated = await updatePassportPresentation(runtime.client, auth.session, passport.id, form);
       setPassport(updated);
+      setForm(mapPassportToPresentationForm(updated));
+      setIsDirty(false);
       setMessage('Draft saved.');
     } catch {
       setError('Could not save the draft.');
@@ -86,8 +101,15 @@ export default function AccountPage() {
     }
   }
 
+  function updateForm(patch) {
+    setForm((current) => ({ ...current, ...patch }));
+    setIsDirty(true);
+    setMessage('');
+  }
+
   return (
     <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[0.9fr_1.1fr]">
+      {seo}
       <section className="space-y-6">
         <div className="rounded-lg border border-white/10 bg-white/[0.04] p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -122,7 +144,7 @@ export default function AccountPage() {
               maxLength={64}
               disabled={isDraftLoading || isSaving}
               value={form.alias}
-              onChange={(event) => setForm({ ...form, alias: event.target.value })}
+              onChange={(event) => updateForm({ alias: event.target.value })}
               className="mt-2 w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-white outline-none ring-cyan-400/40 focus:ring-2"
             />
             {validation.errors.alias && <p className="mt-1 text-sm text-red-200">{validation.errors.alias}</p>}
@@ -138,7 +160,7 @@ export default function AccountPage() {
               maxLength={500}
               disabled={isDraftLoading || isSaving}
               value={form.avatarUrl}
-              onChange={(event) => setForm({ ...form, avatarUrl: event.target.value })}
+              onChange={(event) => updateForm({ avatarUrl: event.target.value })}
               className="mt-2 w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-white outline-none ring-cyan-400/40 focus:ring-2"
             />
             {validation.errors.avatarUrl && <p className="mt-1 text-sm text-red-200">{validation.errors.avatarUrl}</p>}
@@ -153,16 +175,17 @@ export default function AccountPage() {
               maxLength={200}
               disabled={isDraftLoading || isSaving}
               value={form.bioShort}
-              onChange={(event) => setForm({ ...form, bioShort: event.target.value })}
+              onChange={(event) => updateForm({ bioShort: event.target.value })}
               className="mt-2 min-h-24 w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-white outline-none ring-cyan-400/40 focus:ring-2"
             />
             <p className="mt-1 text-xs text-slate-500">{form.bioShort.length}/200</p>
             {validation.errors.bioShort && <p className="mt-1 text-sm text-red-200">{validation.errors.bioShort}</p>}
           </div>
 
-          <SceneConfigControls form={form} setForm={setForm} disabled={isDraftLoading || isSaving} />
+          <SceneConfigControls form={form} updateForm={updateForm} disabled={isDraftLoading || isSaving} />
 
           {error && <p role="alert" className="rounded-md border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-100">{error}</p>}
+          {isDirty && !message && <p role="status" className="text-sm text-slate-300">Unsaved draft changes.</p>}
           {message && <p role="status" className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-100">{message}</p>}
 
           <button
@@ -183,11 +206,10 @@ export default function AccountPage() {
   );
 }
 
-function SceneConfigControls({ form, setForm, disabled }) {
+function SceneConfigControls({ form, updateForm, disabled }) {
   const sceneConfig = form.sceneConfig || DEFAULT_SCENE_CONFIG;
   const updateScene = (key, value) => {
-    setForm({
-      ...form,
+    updateForm({
       sceneConfig: {
         layout: sceneConfig.layout,
         accent: sceneConfig.accent,

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/core/hooks/useAuth.js';
 import { getSupabaseRuntime } from '@/lib/supabase/client.js';
-import { exchangeCodeForSession } from '@/lib/supabase/authService.js';
+import { completeAuthCallback, parseAuthCallbackParams } from '@/lib/supabase/callback.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 import AuthUnavailable from './AuthUnavailable.jsx';
 
 export default function AuthCallbackPage() {
-  const { isConfigured, refreshSession } = useAuth();
+  const { isConfigured, getCurrentSession, setCurrentSession } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
@@ -15,28 +16,24 @@ export default function AuthCallbackPage() {
 
     async function handleCallback() {
       if (!isConfigured) return;
-      const { client } = getSupabaseRuntime();
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get('code');
-      const shouldCleanUrl = Boolean(window.location.search || window.location.hash);
-
-      if (code) {
-        const result = await exchangeCodeForSession(client, code);
-        if (!isMounted) return;
-        if (!result.ok) {
-          if (shouldCleanUrl) window.history.replaceState({}, document.title, '/auth/callback');
-          setError(result.error);
-          return;
-        }
+      const callbackParams = parseAuthCallbackParams(window.location.search, window.location.hash);
+      if (callbackParams.shouldCleanUrl) {
+        window.history.replaceState({}, document.title, '/auth/callback');
       }
 
-      if (shouldCleanUrl) window.history.replaceState({}, document.title, '/auth/callback');
-      const session = await refreshSession();
+      const { client } = await getSupabaseRuntime();
+      const result = await completeAuthCallback({
+        client,
+        callbackParams,
+        getCurrentSession,
+      });
       if (!isMounted) return;
-      if (session) {
+
+      if (result.ok) {
+        setCurrentSession(result.session);
         navigate('/account', { replace: true });
       } else {
-        setError('No active session was found after auth callback.');
+        setError(result.error);
       }
     }
 
@@ -45,16 +42,32 @@ export default function AuthCallbackPage() {
     return () => {
       isMounted = false;
     };
-  }, [isConfigured, navigate, refreshSession]);
+  }, [getCurrentSession, isConfigured, navigate, setCurrentSession]);
 
-  if (!isConfigured) return <AuthUnavailable />;
+  const seo = (
+    <SeoHead
+      title="Auth Callback | TryhardNames"
+      description="Finish signing in to your private TryhardNames account."
+      path="/auth/callback"
+      noIndex
+      skipCanonical
+    />
+  );
+
+  if (!isConfigured) return <>{seo}<AuthUnavailable /></>;
 
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-16 text-center">
+      {seo}
       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Auth callback</p>
       <h1 className="text-3xl font-semibold text-white">{error ? 'Could not finish sign-in' : 'Finishing sign-in...'}</h1>
       {error ? (
-        <p role="alert" className="text-sm leading-6 text-red-100">{error}</p>
+        <>
+          <p role="alert" className="text-sm leading-6 text-red-100">{error}</p>
+          <Link className="text-sm font-medium text-cyan-300 hover:text-cyan-200" to="/sign-in">
+            Return to sign in
+          </Link>
+        </>
       ) : (
         <p className="text-sm leading-6 text-slate-300">Preparing your private account dashboard.</p>
       )}

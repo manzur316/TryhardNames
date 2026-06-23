@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Sun, Moon, UserCircle } from 'lucide-react';
 import { useTheme } from '@/core/context/ThemeContext.jsx';
 import { useAuth } from '@/core/hooks/useAuth.js';
+import { getAccountNavigationState } from '@/core/routing/accountNavigation.js';
 import { Dropdown } from './Dropdown.jsx';
 
 /** Dark-integrated links — navbar chrome is always atmospheric (see .th-nav-shell); no light-branch. */
@@ -14,9 +15,8 @@ const NAV_PANEL = 'th-nav-panel';
 export const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const { session } = useAuth();
-  const accountHref = session ? '/account' : '/sign-in';
-  const accountLabel = session ? 'Account' : 'Sign in';
+  const { isConfigured, session } = useAuth();
+  const accountNavigation = getAccountNavigationState({ isConfigured, session });
 
   const robloxItems = [
     { href: '/roblox-names/cool', label: 'Cool', description: 'Sharp tone · readable', icon: '⚡' },
@@ -143,13 +143,15 @@ export const Navigation = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <Link
-              to={accountHref}
-              className="hidden sm:inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/[0.08] hover:text-white transition-all duration-200"
-            >
-              <UserCircle className="h-4 w-4" aria-hidden="true" />
-              {accountLabel}
-            </Link>
+            {accountNavigation && (
+              <Link
+                to={accountNavigation.href}
+                className="hidden sm:inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/[0.08] hover:text-white transition-all duration-200"
+              >
+                <UserCircle className="h-4 w-4" aria-hidden="true" />
+                {accountNavigation.label}
+              </Link>
+            )}
             <button 
               onClick={toggleDarkMode}
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
@@ -220,10 +222,12 @@ export const Navigation = () => {
             </div>
 
             <div className="pt-2 space-y-1 border-t border-white/[0.08] mt-2">
-              <Link to={accountHref} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
-                <UserCircle className="h-5 w-5" aria-hidden="true" />
-                {accountLabel}
-              </Link>
+              {accountNavigation && (
+                <Link to={accountNavigation.href} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
+                  <UserCircle className="h-5 w-5" aria-hidden="true" />
+                  {accountNavigation.label}
+                </Link>
+              )}
               <Link to="/stylish-text-generator" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
                 Stylish Text
               </Link>

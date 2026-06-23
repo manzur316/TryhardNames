@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 import { useAuth } from '@/core/hooks/useAuth.js';
 import { sanitizeReturnTo } from '@/lib/supabase/redirects.js';
+import SeoHead from '@/seo/SeoHead.jsx';
 import AuthUnavailable from './AuthUnavailable.jsx';
 
 export default function SignUpPage() {
@@ -26,7 +27,17 @@ export default function SignUpPage() {
     }
   }, [auth.isLoading, auth.session, navigate, returnTo]);
 
-  if (!auth.isConfigured) return <AuthUnavailable />;
+  const seo = (
+    <SeoHead
+      title="Sign Up | TryhardNames"
+      description="Create a private TryhardNames account."
+      path="/sign-up"
+      noIndex
+      skipCanonical
+    />
+  );
+
+  if (!auth.isConfigured) return <>{seo}<AuthUnavailable /></>;
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -66,6 +77,7 @@ export default function SignUpPage() {
 
   return (
     <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 lg:grid-cols-[0.9fr_1.1fr]">
+      {seo}
       <section className="flex flex-col justify-center">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Parent Auth</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">Create your account</h1>
