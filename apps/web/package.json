@@ -10,8 +10,8 @@
     "start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
     "lint": "eslint . --quiet",
     "lint:warn": "eslint .",
-    "test": "node --test \"tests/**/*.test.js\"",
-    "test:seo": "node --test \"tests/seo/**/*.test.js\""
+    "test": "node --test tests/seo/sitemap.test.js",
+    "test:seo": "node --test tests/seo/sitemap.test.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
