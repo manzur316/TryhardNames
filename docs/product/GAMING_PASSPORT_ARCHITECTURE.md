@@ -59,6 +59,8 @@ flowchart LR
 
 Parent Auth is only for entering TryhardNames.
 
+PR4 implements the local Parent Auth runtime with Supabase sessions for email/password, prepares Google OAuth behind an explicit feature flag, and creates owner-only private Gaming Passport drafts. This runtime remains local/config-driven and does not connect to a remote Supabase project by itself.
+
 Future MVP:
 
 - email/password;
