@@ -177,10 +177,33 @@ Persisted Passport states:
 - a Parent Auth account is authenticated;
 - at least one `LinkedProviderAccount` is verified;
 - publication consent exists;
-- a valid slug exists;
+- a canonical valid slug exists;
 - the Passport is not `suspended`.
 
 `stale` and `revoked` belong to linked provider accounts and proofs, not to the whole Passport.
+
+## Owner Publish Policy And Public Serving Policy
+
+Two pure policies are intentionally separate.
+
+Owner publication command policy answers whether the signed-in owner may publish or republish. It requires:
+
+- authenticated Parent Auth;
+- at least one verified linked provider;
+- persisted publication consent;
+- canonical valid slug;
+- Passport not suspended.
+
+Anonymous public serving policy answers whether `/id/:slug` may return an already-published Passport to a visitor. It never receives Parent Auth and never depends on visitor authentication. It requires:
+
+- Passport exists;
+- `status === published`;
+- canonical valid slug;
+- persisted publication consent;
+- Passport not suspended;
+- at least one linked provider is still verified.
+
+Provider display visibility is separate from the ownership gate. PR2 does not decide the final product question of whether a verified but hidden provider should be sufficient for publication; the current domain keeps the ownership gate internal and only applies provider visibility to the public `linkedProviders` DTO.
 
 ## Draft Private Rules
 
@@ -260,7 +283,18 @@ Minimum fields:
 - `metadataSafe`;
 - `normalizerVersion`.
 
-Do not store full third-party payloads as public metadata. `metadataSafe` is an allowlisted, bounded object for display-safe primitives only.
+Do not store full third-party payloads as public metadata. `metadataSafe` is an internal optional field by default and is not projected publicly in PR2. Each future GameAdapter may define an explicit public attribute schema, but a generic metadata regex must not decide what becomes public.
+
+Proof structural invariants:
+
+- `social_verification`: `game === null`, `source === linked_provider`.
+- `provider_ownership`: `game === null`, `source === linked_provider`.
+- `competitive_rank`: `game` required, `source === game_adapter`.
+- `competitive_rating`: `game` required, `source === game_adapter`.
+- `progression_achievement`: `game` required, `source === game_adapter`.
+- `title_or_completion`: `game` required, `source === game_adapter`.
+
+The proof provider must match the source linked provider account.
 
 ## Linked Provider And Proof States
 
@@ -298,6 +332,50 @@ Rules:
 - do not show private information.
 
 Recommendations to connect more accounts belong only in the Owner Dashboard.
+
+## Public DTO Contract
+
+The public projection is minimal and allowlisted.
+
+Passport DTO keys:
+
+- `slug`;
+- `alias`;
+- `avatarUrl`;
+- `publishedAt`;
+- `updatedAt`;
+- `scene`;
+- `linkedProviders`;
+- `featuredProofs`.
+
+Linked provider DTO keys:
+
+- `provider`;
+- `displayName`;
+- `verifiedAt`;
+- `lastSyncedAt`.
+
+Proof DTO keys:
+
+- `provider`;
+- `game`;
+- `proofType`;
+- `mode`;
+- `title`;
+- `displayValue`;
+- `season`;
+- `status`;
+- `verifiedAt`;
+- `lastSyncedAt`;
+- `staleAt`.
+
+The public DTO must not expose Passport ids, linked provider ids, proof ids, owner ids, external account ids, `sourceKey`, `normalizedValue`, `verificationMethod`, `normalizerVersion`, generic `metadataSafe`, provider tokens, emails, or raw payloads.
+
+## Canonical Identifiers
+
+Persisted public slugs must already be canonical. `normalizePublicSlug(raw)` is for future form input; persisted publication and public serving must require `raw === normalizePublicSlug(raw)`.
+
+External account ids are opaque to the shared domain. `toProviderOwnershipKey` normalizes only the provider id and trims the external id. Each ProviderAdapter must produce a `canonicalExternalAccountId` using official provider rules before persistence.
 
 ## Cosmetics
 

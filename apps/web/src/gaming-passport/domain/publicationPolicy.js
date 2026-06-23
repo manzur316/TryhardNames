@@ -2,16 +2,14 @@ import {
   LINKED_PROVIDER_STATUSES,
   PASSPORT_STATUSES,
   PROOF_VISIBILITY,
+  PROVIDER_VISIBILITY,
   VERIFIED_PROOF_STATUSES,
 } from './constants.js';
 import {
   coerceFeaturedProofLimit,
-  isKnownGame,
+  isCanonicalPublicSlug,
   isKnownLinkedProvider,
-  isKnownProofSource,
-  isKnownProofType,
-  isKnownVerificationMethod,
-  isValidPublicSlug,
+  validateVerifiedProofContract,
 } from './contracts.js';
 
 export function isParentAccountAuthenticated(parentAuth) {
@@ -28,8 +26,16 @@ export function isLinkedProviderAccountValid(account) {
   );
 }
 
+export function isLinkedProviderAccountPubliclyVisible(account) {
+  return isLinkedProviderAccountValid(account) && account.visibility === PROVIDER_VISIBILITY.PUBLIC;
+}
+
 export function getVerifiedLinkedProviderAccounts(accounts) {
   return (Array.isArray(accounts) ? accounts : []).filter(isLinkedProviderAccountValid);
+}
+
+export function getPublicLinkedProviderAccounts(accounts) {
+  return (Array.isArray(accounts) ? accounts : []).filter(isLinkedProviderAccountPubliclyVisible);
 }
 
 export function hasVerifiedLinkedProvider(accounts) {
@@ -41,7 +47,7 @@ export function getPublishability({ passport, parentAuth, linkedProviderAccounts
   if (!isParentAccountAuthenticated(parentAuth)) missing.push('parent_auth');
   if (!hasVerifiedLinkedProvider(linkedProviderAccounts)) missing.push('verified_linked_provider');
   if (!passport?.publicationConsent) missing.push('publication_consent');
-  if (!isValidPublicSlug(passport?.slug)) missing.push('valid_slug');
+  if (!isCanonicalPublicSlug(passport?.slug)) missing.push('canonical_slug');
   if (passport?.status === PASSPORT_STATUSES.SUSPENDED) missing.push('not_suspended');
 
   return {
@@ -54,15 +60,21 @@ export function isPassportPublishable(input = {}) {
   return getPublishability(input).publishable;
 }
 
+export function canServePublishedPassport({ passport, linkedProviderAccounts } = {}) {
+  return Boolean(
+    passport &&
+      passport.status === PASSPORT_STATUSES.PUBLISHED &&
+      passport.publicationConsent === true &&
+      isCanonicalPublicSlug(passport.slug) &&
+      hasVerifiedLinkedProvider(linkedProviderAccounts)
+  );
+}
+
 export function canDisplayVerifiedProof(proof, linkedProviderAccounts = []) {
   if (!proof || typeof proof !== 'object') return false;
   if (proof.visibility !== PROOF_VISIBILITY.PUBLIC) return false;
   if (![VERIFIED_PROOF_STATUSES.CURRENT, VERIFIED_PROOF_STATUSES.STALE].includes(proof.status)) return false;
-  if (!isKnownLinkedProvider(proof.provider)) return false;
-  if (!isKnownGame(proof.game)) return false;
-  if (!isKnownProofType(proof.proofType)) return false;
-  if (!isKnownProofSource(proof.source)) return false;
-  if (!isKnownVerificationMethod(proof.verificationMethod)) return false;
+  if (!validateVerifiedProofContract(proof, linkedProviderAccounts).ok) return false;
 
   const accounts = Array.isArray(linkedProviderAccounts) ? linkedProviderAccounts : [];
   const sourceAccount = accounts.find((account) => account.id === proof.linkedProviderAccountId);

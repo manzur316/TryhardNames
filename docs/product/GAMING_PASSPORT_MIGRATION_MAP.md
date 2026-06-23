@@ -47,7 +47,7 @@ Read-only references inspected:
 - Slug validation as a future route requirement.
 - Explicit state machines for verification lifecycle.
 - Public projection by allowlist.
-- Metadata redaction and bounded display data.
+- Metadata private by default, with future explicit public schemas per adapter.
 - Provider ownership separated from competitive proof.
 - Public copy that avoids tracker and leaderboard framing.
 
@@ -96,7 +96,7 @@ Potentially reusable later:
 
 - slug normalization and reserved-route checks from `public-identity/publicSlug.js`;
 - finite transition approach from `verified-identity/verification/stateModel.js`;
-- metadata redaction pattern from `verified-identity/utils/redactMetadata.js`;
+- metadata redaction pattern from `verified-identity/utils/redactMetadata.js` for logs only, not for public DTO allowlisting;
 - public snapshot allowlist idea from `public-identity/buildHostedPublicIdentitySnapshot.js`;
 - bounded competitive redaction from `competitive-identity/verifiedCompetitivePresence.js`.
 
@@ -122,8 +122,39 @@ The new domain module therefore reimplements only pure, side-effect-free policie
 - constants;
 - contracts;
 - state transitions;
-- publication policy;
+- owner publication command policy;
+- anonymous public serving policy;
 - safe public projection.
+
+## Review Corrections Applied
+
+PR2 now separates owner publishability from anonymous public serving:
+
+- Owner publishability may depend on authenticated Parent Auth.
+- Public serving never receives Parent Auth and uses only persisted public state.
+
+Public DTOs are intentionally minimal:
+
+- no Passport ids;
+- no owner ids;
+- no linked provider account ids;
+- no proof ids;
+- no external account ids;
+- no `sourceKey`;
+- no `normalizedValue`;
+- no `verificationMethod`;
+- no `normalizerVersion`;
+- no generic `metadataSafe`.
+
+`metadataSafe` remains internal by default. Future GameAdapters must define explicit public attribute schemas before any metadata is exposed.
+
+Provider visibility is explicit on linked provider accounts. Public projection includes only verified providers with `visibility: public`; private verified providers may still support internal ownership policy. Whether hidden verified providers should be sufficient for publication remains a pending product decision.
+
+External account ids are opaque. ProviderAdapters must canonicalize them according to official provider rules before persistence; the shared domain does not lowercase them generically.
+
+Persisted slugs must be canonical. Normalization is for future form input, not for silently accepting non-canonical stored slugs.
+
+Verified proofs now have structural invariants by proof type. Social and ownership proofs are provider-sourced and have no game. Competitive, rating, progression, and title/completion proofs are game-adapter-sourced and require a game.
 
 ## Migration Direction
 

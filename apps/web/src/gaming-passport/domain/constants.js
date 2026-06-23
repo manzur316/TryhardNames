@@ -13,6 +13,11 @@ export const LINKED_PROVIDER_STATUSES = /** @type {const} */ ({
   REVOKED: 'revoked',
 });
 
+export const PROVIDER_VISIBILITY = /** @type {const} */ ({
+  PRIVATE: 'private',
+  PUBLIC: 'public',
+});
+
 export const VERIFIED_PROOF_STATUSES = /** @type {const} */ ({
   CURRENT: 'current',
   STALE: 'stale',
@@ -76,11 +81,9 @@ export const RESERVED_PUBLIC_SLUGS = new Set([
 ]);
 
 export const PUBLIC_PASSPORT_ALLOWED_KEYS = Object.freeze([
-  'id',
   'slug',
   'alias',
   'avatarUrl',
-  'status',
   'publishedAt',
   'updatedAt',
   'scene',
@@ -88,24 +91,23 @@ export const PUBLIC_PASSPORT_ALLOWED_KEYS = Object.freeze([
   'featuredProofs',
 ]);
 
+export const PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS = Object.freeze([
+  'provider',
+  'displayName',
+  'verifiedAt',
+  'lastSyncedAt',
+]);
+
 export const PUBLIC_PROOF_ALLOWED_KEYS = Object.freeze([
-  'id',
   'provider',
   'game',
   'proofType',
-  'sourceKey',
   'mode',
   'title',
   'displayValue',
-  'normalizedValue',
   'season',
-  'source',
-  'verificationMethod',
   'status',
   'verifiedAt',
   'lastSyncedAt',
   'staleAt',
-  'visibility',
-  'metadataSafe',
-  'normalizerVersion',
 ]);

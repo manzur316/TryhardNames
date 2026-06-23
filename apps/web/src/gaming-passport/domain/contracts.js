@@ -6,6 +6,8 @@ import {
   PASSPORT_STATUSES,
   PROOF_SOURCES,
   PROOF_TYPES,
+  PROOF_VISIBILITY,
+  PROVIDER_VISIBILITY,
   RESERVED_PUBLIC_SLUGS,
   VERIFIED_PROOF_STATUSES,
   VERIFICATION_METHODS,
@@ -14,6 +16,7 @@ import {
 /**
  * @typedef {typeof PASSPORT_STATUSES[keyof typeof PASSPORT_STATUSES]} PassportStatus
  * @typedef {typeof LINKED_PROVIDER_STATUSES[keyof typeof LINKED_PROVIDER_STATUSES]} LinkedProviderStatus
+ * @typedef {typeof PROVIDER_VISIBILITY[keyof typeof PROVIDER_VISIBILITY]} ProviderVisibility
  * @typedef {typeof VERIFIED_PROOF_STATUSES[keyof typeof VERIFIED_PROOF_STATUSES]} VerifiedProofStatus
  * @typedef {typeof LINKED_PROVIDER_IDS[keyof typeof LINKED_PROVIDER_IDS]} LinkedProviderId
  * @typedef {typeof GAME_IDS[keyof typeof GAME_IDS]} GameId
@@ -45,6 +48,7 @@ import {
  *   externalAccountId: string;
  *   displayName?: string;
  *   status: LinkedProviderStatus;
+ *   visibility: ProviderVisibility;
  *   verifiedAt?: string;
  *   lastSyncedAt?: string;
  *   staleAt?: string;
@@ -58,7 +62,7 @@ import {
  *   id: string;
  *   linkedProviderAccountId: string;
  *   provider: LinkedProviderId;
- *   game?: GameId | null;
+ *   game: GameId | null;
  *   proofType: ProofType;
  *   sourceKey: string;
  *   mode: string;
@@ -73,15 +77,17 @@ import {
  *   lastSyncedAt?: string | null;
  *   staleAt?: string | null;
  *   revokedAt?: string | null;
- *   visibility: string;
+ *   visibility: typeof PROOF_VISIBILITY[keyof typeof PROOF_VISIBILITY];
  *   metadataSafe?: Record<string, string | number | boolean | null>;
  *   normalizerVersion: string;
  * }} VerifiedProof
  */
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,30}[a-z0-9])$/;
-const SAFE_METADATA_KEY_RE = /^[a-zA-Z0-9_.:-]{1,64}$/;
-const PUBLIC_METADATA_DENY_RE = /token|secret|authorization|bearer|password|raw|payload|email|private/i;
+
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
 
 export function normalizePublicSlug(raw) {
   return String(raw || '')
@@ -92,13 +98,22 @@ export function normalizePublicSlug(raw) {
     .replace(/^-|-$/g, '');
 }
 
+export function isCanonicalPublicSlug(raw) {
+  if (typeof raw !== 'string') return false;
+  if (raw !== normalizePublicSlug(raw)) return false;
+  return raw.length >= 2 && raw.length <= 32 && SLUG_RE.test(raw) && !RESERVED_PUBLIC_SLUGS.has(raw);
+}
+
 export function isValidPublicSlug(raw) {
-  const slug = normalizePublicSlug(raw);
-  return slug.length >= 2 && slug.length <= 32 && SLUG_RE.test(slug) && !RESERVED_PUBLIC_SLUGS.has(slug);
+  return isCanonicalPublicSlug(raw);
 }
 
 export function isKnownLinkedProvider(provider) {
   return Object.values(LINKED_PROVIDER_IDS).includes(provider);
+}
+
+export function isKnownProviderVisibility(visibility) {
+  return Object.values(PROVIDER_VISIBILITY).includes(visibility);
 }
 
 export function isKnownGame(game) {
@@ -107,6 +122,10 @@ export function isKnownGame(game) {
 
 export function isKnownProofType(proofType) {
   return Object.values(PROOF_TYPES).includes(proofType);
+}
+
+export function isKnownProofVisibility(visibility) {
+  return Object.values(PROOF_VISIBILITY).includes(visibility);
 }
 
 export function isKnownVerificationMethod(method) {
@@ -118,7 +137,7 @@ export function isKnownProofSource(source) {
 }
 
 export function toProviderOwnershipKey(provider, externalAccountId) {
-  return `${String(provider || '').trim().toLowerCase()}::${String(externalAccountId || '').trim().toLowerCase()}`;
+  return `${String(provider || '').trim().toLowerCase()}::${String(externalAccountId ?? '').trim()}`;
 }
 
 export function validateGlobalProviderOwnership(accounts) {
@@ -142,22 +161,6 @@ export function coerceFeaturedProofLimit(limit) {
   return Math.min(n, MAX_PUBLIC_FEATURED_PROOFS);
 }
 
-export function pickMetadataSafe(metadata) {
-  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return {};
-  const out = {};
-  for (const [rawKey, value] of Object.entries(metadata)) {
-    const key = String(rawKey);
-    if (!SAFE_METADATA_KEY_RE.test(key)) continue;
-    if (PUBLIC_METADATA_DENY_RE.test(key)) continue;
-    if (value === null || typeof value === 'string' || typeof value === 'boolean') {
-      out[key] = typeof value === 'string' ? value.slice(0, 160) : value;
-    } else if (typeof value === 'number' && Number.isFinite(value)) {
-      out[key] = value;
-    }
-  }
-  return out;
-}
-
 export function isPassportContractStatus(status) {
   return Object.values(PASSPORT_STATUSES).includes(status);
 }
@@ -168,4 +171,70 @@ export function isLinkedProviderContractStatus(status) {
 
 export function isVerifiedProofContractStatus(status) {
   return Object.values(VERIFIED_PROOF_STATUSES).includes(status);
+}
+
+function addRequiredStringError(errors, proof, key) {
+  if (!isNonEmptyString(proof?.[key])) errors.push(`${key}_required`);
+}
+
+function validateProofTypeInvariant(errors, proof) {
+  if (!isKnownProofType(proof?.proofType)) return;
+
+  if (
+    proof.proofType === PROOF_TYPES.SOCIAL_VERIFICATION ||
+    proof.proofType === PROOF_TYPES.PROVIDER_OWNERSHIP
+  ) {
+    if (proof.game !== null) errors.push('game_must_be_null');
+    if (proof.source !== PROOF_SOURCES.LINKED_PROVIDER) errors.push('source_must_be_linked_provider');
+    return;
+  }
+
+  if (!proof.game) errors.push('game_required');
+  if (proof.game && !isKnownGame(proof.game)) errors.push('game_unknown');
+  if (proof.source !== PROOF_SOURCES.GAME_ADAPTER) errors.push('source_must_be_game_adapter');
+}
+
+export function validateVerifiedProofContract(proof, linkedProviderAccounts = []) {
+  const errors = [];
+  if (!proof || typeof proof !== 'object') {
+    return { ok: false, errors: ['proof_required'] };
+  }
+
+  for (const key of [
+    'id',
+    'linkedProviderAccountId',
+    'provider',
+    'proofType',
+    'sourceKey',
+    'mode',
+    'title',
+    'displayValue',
+    'source',
+    'verificationMethod',
+    'status',
+    'visibility',
+    'normalizerVersion',
+    'verifiedAt',
+  ]) {
+    addRequiredStringError(errors, proof, key);
+  }
+
+  if (!isKnownLinkedProvider(proof.provider)) errors.push('provider_unknown');
+  if (!isKnownProofType(proof.proofType)) errors.push('proof_type_unknown');
+  if (!isVerifiedProofContractStatus(proof.status)) errors.push('status_unknown');
+  if (!isKnownProofVisibility(proof.visibility)) errors.push('visibility_unknown');
+  if (!isKnownProofSource(proof.source)) errors.push('source_unknown');
+  if (!isKnownVerificationMethod(proof.verificationMethod)) errors.push('verification_method_unknown');
+
+  const accounts = Array.isArray(linkedProviderAccounts) ? linkedProviderAccounts : [];
+  const sourceAccount = accounts.find((account) => account.id === proof.linkedProviderAccountId);
+  if (!sourceAccount) {
+    errors.push('linked_provider_account_missing');
+  } else if (sourceAccount.provider !== proof.provider) {
+    errors.push('provider_mismatch');
+  }
+
+  validateProofTypeInvariant(errors, proof);
+
+  return errors.length ? { ok: false, errors } : { ok: true, errors: [] };
 }

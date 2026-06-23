@@ -15,6 +15,8 @@ This is a proposed model only. It does not create SQL, views, RPC functions, Sup
 9. `passport_equipped_cosmetics`
 10. `provider_credentials` or `provider_tokens`, server-side only
 
+`owners` is a logical principal in this document, not a required table. With Supabase it can map directly to `auth.users.id`. A separate profile table should be created only if a future migration has a concrete need for profile data beyond the auth principal. PR2 does not decide that storage detail.
+
 ## Relational Model
 
 ```mermaid
@@ -56,6 +58,7 @@ erDiagram
     string external_account_id
     string display_name
     string status
+    string visibility
     datetime verified_at
     datetime last_synced_at
     datetime stale_at
@@ -142,6 +145,8 @@ Minimum rules for a future migration:
 - `slug` is globally unique when present;
 - `UNIQUE(provider, external_account_id)` is global;
 - one external provider account cannot belong to two users;
+- `external_account_id` is opaque to the shared domain;
+- each ProviderAdapter must persist a `canonicalExternalAccountId` using official provider rules;
 - provider tokens are separate from public data;
 - provider tokens are never accessible through frontend reads;
 - public reads use an allowlist projection;
@@ -193,6 +198,7 @@ Suggested fields:
 - `external_account_id`;
 - `display_name`;
 - `status`;
+- `visibility`;
 - `verified_at`;
 - `last_synced_at`;
 - `stale_at`;
@@ -208,6 +214,13 @@ Allowed `status` values:
 - `failed`;
 - `stale`;
 - `revoked`.
+
+Allowed `visibility` values:
+
+- `private`;
+- `public`.
+
+Provider visibility controls whether the linked provider summary appears in the public DTO. Proof visibility remains independent. PR2 intentionally leaves open whether a verified but private provider is sufficient for final product publication policy; the current domain can use private providers for internal ownership validation while omitting them from `linkedProviders`.
 
 Riot ownership may emit a `provider_ownership` proof. It does not emit a `competitive_rank` proof unless a GameAdapter synchronizes a real game rank.
 
@@ -257,6 +270,17 @@ Allowed `status` values:
 - `revoked`.
 
 Manual declared data stays outside `verified_proofs`.
+
+Structural invariants:
+
+- `social_verification`: `game` is null and `source` is `linked_provider`.
+- `provider_ownership`: `game` is null and `source` is `linked_provider`.
+- `competitive_rank`: `game` is required and `source` is `game_adapter`.
+- `competitive_rating`: `game` is required and `source` is `game_adapter`.
+- `progression_achievement`: `game` is required and `source` is `game_adapter`.
+- `title_or_completion`: `game` is required and `source` is `game_adapter`.
+
+The proof provider must match the provider on the source linked provider account. `sourceKey` and `normalizerVersion` are required internally but are not public DTO fields.
 
 ## Featured Proofs
 
@@ -321,6 +345,8 @@ It must not expose raw tokens to the browser.
 
 Public projection is the only source for `/id/:slug`.
 
+It is served to anonymous visitors using persisted public state only. It does not require Parent Auth or visitor authentication once the Passport is already published.
+
 It may include:
 
 - slug;
@@ -338,12 +364,29 @@ It must exclude:
 - Parent Auth provider;
 - email;
 - private owner id;
+- Passport id;
+- linked provider account id;
+- proof id;
+- external account id;
+- `sourceKey`;
+- `normalizedValue`;
+- `verificationMethod`;
+- `normalizerVersion`;
+- generic `metadataSafe`;
 - provider tokens;
 - raw payloads;
 - private metadata;
 - full profile metadata;
 - local dashboard recommendations;
 - empty placeholders.
+
+Exact public DTO keys:
+
+- Passport: `slug`, `alias`, `avatarUrl`, `publishedAt`, `updatedAt`, `scene`, `linkedProviders`, `featuredProofs`.
+- Linked provider: `provider`, `displayName`, `verifiedAt`, `lastSyncedAt`.
+- Proof: `provider`, `game`, `proofType`, `mode`, `title`, `displayValue`, `season`, `status`, `verifiedAt`, `lastSyncedAt`, `staleAt`.
+
+`metadataSafe` remains an internal optional field in PR2. Future GameAdapters may propose explicit public attribute schemas in later PRs.
 
 ### Publishability Projection
 
@@ -359,6 +402,8 @@ It returns:
 - suspension state.
 
 It is not a persisted Passport state.
+
+The owner publishability projection is distinct from anonymous public serving. Owner publishing requires authenticated Parent Auth. Public serving requires only persisted public state: published status, canonical slug, consent, not suspended, and at least one still-verified linked provider.
 
 ## Future Migration Shape
 

@@ -1,9 +1,7 @@
-import { PASSPORT_STATUSES, PROOF_VISIBILITY } from './constants.js';
-import { normalizePublicSlug, pickMetadataSafe } from './contracts.js';
 import {
   getFeaturedVerifiedProofs,
-  getVerifiedLinkedProviderAccounts,
-  isPassportPublishable,
+  getPublicLinkedProviderAccounts,
+  canServePublishedPassport,
 } from './publicationPolicy.js';
 
 function optionalString(value) {
@@ -13,54 +11,39 @@ function optionalString(value) {
 
 function projectLinkedProvider(account) {
   return {
-    id: account.id,
     provider: account.provider,
     displayName: optionalString(account.displayName),
-    status: account.status,
     verifiedAt: optionalString(account.verifiedAt),
     lastSyncedAt: optionalString(account.lastSyncedAt),
   };
 }
 
 function projectProof(proof) {
-  const out = {
-    id: proof.id,
+  return {
     provider: proof.provider,
     game: proof.game || null,
     proofType: proof.proofType,
-    sourceKey: proof.sourceKey,
     mode: proof.mode,
     title: proof.title,
     displayValue: proof.displayValue,
-    source: proof.source,
-    verificationMethod: proof.verificationMethod,
+    season: optionalString(proof.season),
     status: proof.status,
     verifiedAt: proof.verifiedAt,
-    visibility: PROOF_VISIBILITY.PUBLIC,
-    metadataSafe: pickMetadataSafe(proof.metadataSafe),
-    normalizerVersion: proof.normalizerVersion,
+    lastSyncedAt: optionalString(proof.lastSyncedAt),
+    staleAt: optionalString(proof.staleAt),
   };
-
-  if (proof.normalizedValue != null) out.normalizedValue = proof.normalizedValue;
-  if (proof.season) out.season = proof.season;
-  if (proof.lastSyncedAt) out.lastSyncedAt = proof.lastSyncedAt;
-  if (proof.staleAt) out.staleAt = proof.staleAt;
-
-  return out;
 }
 
 export function buildPublicPassportProjection({
   passport,
-  parentAuth,
   linkedProviderAccounts,
   verifiedProofs,
   featuredProofIds,
   maxFeaturedProofs = 6,
 } = {}) {
-  if (!passport || passport.status !== PASSPORT_STATUSES.PUBLISHED) return null;
-  if (!isPassportPublishable({ passport, parentAuth, linkedProviderAccounts })) return null;
+  if (!canServePublishedPassport({ passport, linkedProviderAccounts })) return null;
 
-  const linkedProviders = getVerifiedLinkedProviderAccounts(linkedProviderAccounts).map(projectLinkedProvider);
+  const linkedProviders = getPublicLinkedProviderAccounts(linkedProviderAccounts).map(projectLinkedProvider);
   const featuredProofs = getFeaturedVerifiedProofs({
     proofs: verifiedProofs,
     featuredProofIds,
@@ -69,11 +52,9 @@ export function buildPublicPassportProjection({
   }).map(projectProof);
 
   return {
-    id: passport.id,
-    slug: normalizePublicSlug(passport.slug),
+    slug: passport.slug,
     alias: optionalString(passport.alias),
     avatarUrl: optionalString(passport.avatarUrl),
-    status: PASSPORT_STATUSES.PUBLISHED,
     publishedAt: optionalString(passport.publishedAt),
     updatedAt: optionalString(passport.updatedAt),
     scene: {

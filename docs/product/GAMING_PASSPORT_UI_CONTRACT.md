@@ -29,6 +29,8 @@ Owner Dashboard responsibilities:
 - recommendations for linking accounts;
 - publishability explanation.
 
+Owner publishability is a command policy. It may check Parent Auth because only the owner can publish or republish.
+
 Owner Dashboard may show:
 
 - Parent Auth account context;
@@ -58,6 +60,8 @@ Public Gaming Passport responsibilities:
 - share affordance;
 - safe public projection only.
 
+Public serving is a read policy for anonymous visitors. It must not require Parent Auth once the Passport is already `published`.
+
 Public Gaming Passport must not show:
 
 - empty proof slots;
@@ -71,6 +75,8 @@ Public Gaming Passport must not show:
 - raw provider payloads;
 - provider tokens;
 - dashboard recommendations.
+
+It also must not expose Passport ids, linked provider account ids, proof ids, owner ids, external account ids, source keys, normalized values, verification methods, normalizer versions, or generic metadata fields.
 
 ## Future Landing
 
@@ -105,9 +111,45 @@ sequenceDiagram
   Dashboard->>Policy: Evaluate publishability
   Policy-->>Dashboard: publishable + missing requirements
   Owner->>Dashboard: Consent and publish
-  Dashboard->>Public: Future public projection read
-  Public-->>Owner: One safe scene at /id/:slug
+  Dashboard->>Public: Persist published state for future read
+  Public-->>Owner: Anonymous-safe scene at /id/:slug
 ```
+
+## Public DTO Contract
+
+The public Passport DTO contains exactly:
+
+- `slug`;
+- `alias`;
+- `avatarUrl`;
+- `publishedAt`;
+- `updatedAt`;
+- `scene`;
+- `linkedProviders`;
+- `featuredProofs`.
+
+The linked provider DTO contains exactly:
+
+- `provider`;
+- `displayName`;
+- `verifiedAt`;
+- `lastSyncedAt`.
+
+The proof DTO contains exactly:
+
+- `provider`;
+- `game`;
+- `proofType`;
+- `mode`;
+- `title`;
+- `displayValue`;
+- `season`;
+- `status`;
+- `verifiedAt`;
+- `lastSyncedAt`;
+- `staleAt`.
+
+Provider visibility controls only whether a provider summary appears in `linkedProviders`. A private verified provider may still be used internally by policy while being omitted from public provider display; final product policy on hidden providers and publication remains pending.
 
 ## Visual Contract
 
@@ -129,6 +171,7 @@ Proof presentation rules:
 - no proof uses third-party raw payload JSON;
 - no proof uses private notes;
 - no proof renders if its source provider account is invalid.
+- no generic metadata field renders publicly until a future GameAdapter defines an explicit public attribute schema.
 
 Cosmetic rules:
 
