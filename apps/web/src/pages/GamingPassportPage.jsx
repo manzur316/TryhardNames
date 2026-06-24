@@ -22,6 +22,8 @@ const plannedProofs = [
 const noGoCards = [
   'No custom MMR or ELO',
   'No live-game advantage',
+  'No in-game recommendations',
+  'No OP.GG alternative',
   'No match-history dumping',
   'No hidden-player de-anonymization',
   'No selling Riot data',

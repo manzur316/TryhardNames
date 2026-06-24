@@ -14,7 +14,7 @@ PR6 adds a public `/gaming-passport` landing page for review context. It explain
 
 This landing does not implement Riot OAuth, Discord OAuth, Riot API calls, public profile publishing, slugs, providers, proofs, Supabase changes, secrets, migrations, Vercel changes, or Google Cloud changes.
 
-The page explicitly states that TryhardNames does not provide custom MMR, ELO calculations, alternative rankings, live-game recommendations, hidden-player data, match-history dumping, Riot data resale, or public profiles without consent.
+The page explicitly states that TryhardNames is not an OP.GG alternative and does not provide custom MMR, ELO calculations, alternative rankings, live-game recommendations, hidden-player data, match-history dumping, Riot data resale, or public profiles without consent.
 
 ## Monetization Boundary
 
