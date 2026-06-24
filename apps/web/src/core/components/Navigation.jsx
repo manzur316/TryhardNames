@@ -97,6 +97,9 @@ export const Navigation = () => {
             <Link to="/identity-kit" className={NAV_LINK}>
               Identity Kit
             </Link>
+            <Link to="/gaming-passport" className={NAV_LINK}>
+              Gaming Passport
+            </Link>
             <Dropdown label="Roblox Names" items={robloxItems} />
             <Dropdown label="Gamer Names" items={gamerItems} />
             
@@ -181,6 +184,9 @@ export const Navigation = () => {
             </Link>
             <Link to="/identity-kit" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
               Identity Kit
+            </Link>
+            <Link to="/gaming-passport" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
+              Gaming Passport
             </Link>
             
             <div className="py-2">

@@ -46,6 +46,7 @@ const HomePage = () => {
   ];
 
   const popularCategories = [
+    { title: 'Gaming Passport', desc: 'Private-first player resume for future verified proofs.', to: '/gaming-passport' },
     { title: 'Identity Kit', desc: 'Compose a paste-ready bundle + card export.', to: '/identity-kit' },
     { title: 'Roblox Names', desc: 'Cool, funny, aesthetic, tryhard.', to: '/roblox-names' },
     { title: 'Gamer Names', desc: 'Cool, pro, funny, edgy.', to: '/gamer-names' },
