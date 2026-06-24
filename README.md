@@ -153,9 +153,8 @@ Waiting:
 
 Next before Riot runtime:
 
-- README and public policy alignment.
-- Optional Riot response playbook/screenshots.
-- Privacy/terms maintenance.
+- Riot review response playbook and screenshot checklist, if Riot asks follow-up questions.
+- Public policy maintenance before any provider launch.
 
 After Riot approval:
 

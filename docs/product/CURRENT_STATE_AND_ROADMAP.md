@@ -73,9 +73,9 @@ Numbering may change.
 
 | Proposed PR | Scope | Notes |
 | --- | --- | --- |
-| PR10 | `docs/legal: align privacy and terms for Gaming Passport` | Keep public policies synchronized with Gaming Passport and pending provider status. |
-| PR11 | `docs/passport: add Riot review response playbook and screenshot checklist` | Prepare reviewer-response copy, screenshots, and smoke steps if Riot asks follow-up questions. |
-| PR12 | `chore/passport: plan Riot provider runtime contracts after approval` | Start runtime contract planning only after Riot approval/next steps are clear. |
+| PR10 | `docs(passport): add Riot review response playbook and screenshot checklist` | Reviewer-response copy, screenshots, smoke script, and portal follow-up checklist if Riot asks for more context. |
+| PR11 | `docs/legal: review privacy and terms after Riot response` | Policy maintenance only if Riot asks for copy changes or before any provider launch. |
+| PR12 | `chore(passport): plan Riot provider runtime contracts after approval` | Only after Riot approval/next steps are clear. |
 
 ## Do-Not-Build-Yet List
 
