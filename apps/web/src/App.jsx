@@ -45,6 +45,10 @@ const GamerNamesCoolPage = lazy(() => import('@/features/gamerNames').then(m => 
 const GamerNamesFunnyPage = lazy(() => import('@/features/gamerNames').then(m => ({ default: m.GamerNamesFunnyPage })));
 const GamerNamesProPage = lazy(() => import('@/features/gamerNames').then(m => ({ default: m.GamerNamesProPage })));
 const GamerNamesEdgyPage = lazy(() => import('@/features/gamerNames').then(m => ({ default: m.GamerNamesEdgyPage })));
+const AccountPage = lazy(() => import('@/pages/AccountPage.jsx'));
+const AuthCallbackPage = lazy(() => import('@/pages/auth/AuthCallbackPage.jsx'));
+const SignInPage = lazy(() => import('@/pages/auth/SignInPage.jsx'));
+const SignUpPage = lazy(() => import('@/pages/auth/SignUpPage.jsx'));
 
 const PageLoader = () => (
   <div className="flex-1 flex items-center justify-center min-h-[50vh]">
@@ -77,6 +81,10 @@ function App() {
                             <Route path="/stylish-text-generator" element={<StylishTextGeneratorPage />} />
                             <Route path="/nickname-symbols" element={<NicknameSymbolsPage />} />
                             <Route path="/identity-kit" element={<IdentityKitPage />} />
+                            <Route path="/sign-in" element={<Suspense fallback={<PageLoader />}><SignInPage /></Suspense>} />
+                            <Route path="/sign-up" element={<Suspense fallback={<PageLoader />}><SignUpPage /></Suspense>} />
+                            <Route path="/auth/callback" element={<Suspense fallback={<PageLoader />}><AuthCallbackPage /></Suspense>} />
+                            <Route path="/account" element={<Suspense fallback={<PageLoader />}><AccountPage /></Suspense>} />
 
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/contact" element={<ContactPage />} />
