@@ -4,6 +4,12 @@ Gaming Passport is the single identity product for TryhardNames: a visual, verif
 
 It is not a tracker, an OP.GG alternative, a parallel ranking, a custom MMR/ELO system, or a platform for comparing who is better.
 
+## Current Implementation Note
+
+This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, and PR3 added a local-only schema foundation. `/id/:slug` public profiles, linked provider runtime, proof sync, publishing commands, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
+
+Google is Parent Auth only. Riot and Discord remain future linked provider accounts. League of Legends remains a GameAdapter inside RiotProvider, not a standalone provider.
+
 ## Product Boundaries
 
 Current generators, tools, navigation, and public pages continue to work without an account. Gaming Passport adds an optional identity layer around ownership, verified proofs, publishing, and cosmetics. It does not replace the existing generators.
