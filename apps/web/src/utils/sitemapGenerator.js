@@ -2,7 +2,7 @@
 import { getAllValidSlugs } from './pageLoader.js';
 import { getAllTopicHubPaths } from '../seo/programmatic/hubs.js';
 
-const toolPages = ['/stylish-text-generator', '/nickname-symbols', '/identity-kit'];
+const toolPages = ['/stylish-text-generator', '/nickname-symbols', '/identity-kit', '/gaming-passport'];
 const hubPages = ['/roblox-names', '/gamer-names', '/league-of-legends'];
 const DEFAULT_SITEMAP_LASTMOD = '2026-05-10';
 

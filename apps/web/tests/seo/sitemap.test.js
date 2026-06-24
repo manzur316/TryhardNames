@@ -20,11 +20,13 @@ describe('sitemap generation', () => {
     assert.ok(paths.includes('/roblox-names'));
     assert.ok(paths.includes('/gamer-names'));
     assert.ok(paths.includes('/identity-kit'));
+    assert.ok(paths.includes('/gaming-passport'));
   });
 
   it('assigns expected metadata for public route classes', () => {
     assert.deepEqual(getPageMetadata('/'), { priority: 1.0, changefreq: 'daily' });
     assert.deepEqual(getPageMetadata('/identity-kit'), { priority: 0.8, changefreq: 'monthly' });
+    assert.deepEqual(getPageMetadata('/gaming-passport'), { priority: 0.8, changefreq: 'monthly' });
     assert.deepEqual(getPageMetadata('/roblox-names'), { priority: 0.9, changefreq: 'weekly' });
     assert.deepEqual(getPageMetadata('/roblox-names/cool'), {
       priority: 0.7,

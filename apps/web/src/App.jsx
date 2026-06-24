@@ -30,6 +30,7 @@ import DynamicPage from '@/pages/DynamicPage.jsx';
 import TopicHubPage from '@/pages/TopicHubPage.jsx';
 import LeagueOfLegendsHubPage from '@/pages/LeagueOfLegendsHubPage.jsx';
 import IdentityKitPage from '@/pages/IdentityKitPage.jsx';
+import GamingPassportPage from '@/pages/GamingPassportPage.jsx';
 import { TOPIC_HUB_ROUTES } from '@/seo/programmatic/topicHubRoutes.js';
 import MinimalFavoritesPeek from '@/components/MinimalFavoritesPeek.jsx';
 
@@ -81,6 +82,7 @@ function App() {
                             <Route path="/stylish-text-generator" element={<StylishTextGeneratorPage />} />
                             <Route path="/nickname-symbols" element={<NicknameSymbolsPage />} />
                             <Route path="/identity-kit" element={<IdentityKitPage />} />
+                            <Route path="/gaming-passport" element={<GamingPassportPage />} />
                             <Route path="/sign-in" element={<Suspense fallback={<PageLoader />}><SignInPage /></Suspense>} />
                             <Route path="/sign-up" element={<Suspense fallback={<PageLoader />}><SignUpPage /></Suspense>} />
                             <Route path="/auth/callback" element={<Suspense fallback={<PageLoader />}><AuthCallbackPage /></Suspense>} />
