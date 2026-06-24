@@ -2,6 +2,12 @@
 
 This document defines target surfaces only. It does not implement routes, React components, visible UI changes, Supabase reads, auth, Discord, Riot, or profile publishing.
 
+## Current Implementation Note
+
+This document began as a target UI contract. Since PR4 and PR6, `/account` and `/gaming-passport` have been implemented. `/account` is currently a protected Parent Auth private-draft surface, and `/gaming-passport` is a public review landing page. `/id/:slug` remains future/not implemented, and the public profile contract below still applies to that future route.
+
+Riot OAuth, Discord OAuth, linked provider management, provider proof sync, publishing, and public profile serving are still not implemented.
+
 ## Surfaces
 
 Two surfaces exist:
@@ -13,7 +19,7 @@ Identity Kit remains the existing editor during migration. It should become the 
 
 ## Owner Dashboard
 
-Target route, not implemented in this PR:
+Current route:
 
 - `/account`
 
@@ -80,11 +86,11 @@ It also must not expose Passport ids, linked provider account ids, proof ids, ow
 
 ## Future Landing
 
-Target route, not implemented in this PR:
+Current route:
 
 - `/gaming-passport`
 
-This is a future product landing surface. It must not block current generators or require an account for generator use.
+This is the current public product landing surface. It must not block current generators or require an account for generator use.
 
 ## Identity Kit Migration Route
 
@@ -184,12 +190,12 @@ Cosmetic rules:
 
 Documented target routes:
 
-- `/gaming-passport` -> future landing;
-- `/account` -> dashboard;
-- `/id/:slug` -> public Passport;
+- `/gaming-passport` -> implemented public landing;
+- `/account` -> implemented protected private draft dashboard;
+- `/id/:slug` -> future public Passport;
 - `/identity-kit` -> existing editor during migration.
 
-This PR must not implement or register these routes.
+The original contract PR did not implement or register these routes. Current implementation status is tracked in `docs/product/CURRENT_STATE_AND_ROADMAP.md`.
 
 ## Empty State Contract
 

@@ -8,7 +8,7 @@ const PrivacyPolicyPage = () => {
     <>
     <SeoHead
       title="Privacy Policy – TryhardNames"
-      description="How TryhardNames collects, uses, and protects data when you use our gaming name and text tools."
+      description="How TryhardNames collects, uses, and protects data for public tools, Parent Auth, and private Gaming Passport drafts."
       path="/privacy-policy"
     />
     <div className="bg-gradient-dark text-dark-300 font-sans py-20 px-4 flex-grow flex flex-col">
@@ -21,7 +21,8 @@ const PrivacyPolicyPage = () => {
             <h2 className="text-2xl font-bold text-dark-50 mb-4">1. Introduction</h2>
             <p className="text-dark-300 leading-relaxed">
               Welcome to TryhardNames. We respect your privacy and are committed to protecting your personal data.
-              This Privacy Policy explains how we handle information when you visit our website and use our free tools.
+              This Privacy Policy explains how we handle information when you visit our website, use our free tools,
+              sign in with Parent Auth, or manage a private Gaming Passport draft.
             </p>
           </section>
 
@@ -32,15 +33,39 @@ const PrivacyPolicyPage = () => {
             </p>
             <ul className="list-disc pl-6 space-y-2 text-dark-300">
               <li><strong>Information you provide:</strong> For example, if you contact us (such as name, email address, and message content).</li>
+              <li><strong>TryhardNames account and Parent Auth information:</strong> For example, account email, user ID, session state, and provider identifiers needed to sign you into TryhardNames.</li>
+              <li><strong>Gaming Passport private draft fields:</strong> For example, alias, avatar URL, short bio, and visual presentation choices that you save in your private draft.</li>
               <li><strong>Usage data:</strong> Such as pages viewed, approximate region from IP, browser type, device type, and timestamps. This helps us understand performance and fix issues.</li>
               <li><strong>Cookies and similar technologies:</strong> Small files or storage used to remember preferences, measure traffic, and support security.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">3. How We Use Information</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">3. Gaming Passport, Parent Auth, and Future Providers</h2>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              Parent Auth is the account system used to sign into TryhardNames. Google Auth signs users into
+              TryhardNames only. Google is Parent Auth only and is not shown as a gaming proof, badge, or public
+              provider account.
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-dark-300">
+              <li>Account email and user ID may be used to own a private Gaming Passport draft.</li>
+              <li>Gaming Passport starts as a private draft. Draft fields may include alias, avatar URL, short bio, and visual presentation choices.</li>
+              <li>A draft is not public by default. Publishing requires explicit user action.</li>
+              <li>Riot and Discord are future linked provider accounts and are not live yet.</li>
+              <li>Riot data is not currently collected in production.</li>
+              <li>If Riot or Discord providers are implemented later, they will require explicit authorization.</li>
+              <li>Provider tokens will stay server-side when implemented.</li>
+              <li>Public pages will show only approved/allowlisted fields.</li>
+              <li>We do not sell Riot data, use hidden player data, or put Riot data behind a paywall.</li>
+              <li>Unlink/revoke is planned before provider launch and is not currently available.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">4. How We Use Information</h2>
             <ul className="list-disc pl-6 space-y-2 text-dark-300">
               <li>To provide, maintain, and secure the Service</li>
+              <li>To authenticate TryhardNames accounts and protect private Gaming Passport drafts</li>
               <li>To respond to support requests and communications</li>
               <li>To understand aggregate usage and improve performance and content quality</li>
               <li>To detect, prevent, and address technical or abusive activity</li>
@@ -48,7 +73,7 @@ const PrivacyPolicyPage = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">4. Cookies and Similar Technologies</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">5. Cookies and Similar Technologies</h2>
             <p className="text-dark-300 leading-relaxed mb-4">
               We and our partners may use cookies, local storage, pixels, and similar technologies for purposes such as:
             </p>
@@ -63,7 +88,7 @@ const PrivacyPolicyPage = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">5. Advertising and Google AdSense</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">6. Advertising and Google AdSense</h2>
             <p className="text-dark-300 leading-relaxed mb-4">
               On selected pages, we may use third-party advertising services such as <strong>Google AdSense</strong> to show ads.
               Google and its partners may use cookies and similar technologies to serve ads based on your visits to this and other sites.
@@ -95,7 +120,7 @@ const PrivacyPolicyPage = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">6. Analytics</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">7. Analytics</h2>
             <p className="text-dark-300 leading-relaxed">
               We use analytics tools (such as Google Analytics) to understand aggregated usage. These tools may collect device and usage information as described by their providers.
               We configure analytics to prioritize privacy where possible (for example IP anonymization where available).
@@ -103,7 +128,7 @@ const PrivacyPolicyPage = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">7. Sharing of Information</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">8. Sharing of Information</h2>
             <p className="text-dark-300 leading-relaxed mb-4">
               We do not sell your personal information. We may share information with:
             </p>
@@ -112,24 +137,28 @@ const PrivacyPolicyPage = () => {
               <li>Advertising and analytics partners where those services are enabled</li>
               <li>Authorities when required by law or to protect rights and safety</li>
             </ul>
+            <p className="text-dark-300 leading-relaxed mt-4">
+              Riot data is not currently collected in production. If a Riot provider is implemented later, Riot data
+              will not be sold and will not be placed behind a paywall.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">8. Data Retention</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">9. Data Retention</h2>
             <p className="text-dark-300 leading-relaxed">
               We retain information only as long as needed for the purposes described in this policy, unless a longer period is required or permitted by law.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">9. Security</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">10. Security</h2>
             <p className="text-dark-300 leading-relaxed">
               We use commercially reasonable safeguards to protect information. No online transmission or storage is completely secure.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">10. Children&apos;s Privacy</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">11. Children&apos;s Privacy</h2>
             <p className="text-dark-300 leading-relaxed">
               TryhardNames is not directed to children under 13, and we do not knowingly collect personal information from children.
               If you believe we have collected information from a child, please contact us and we will take appropriate steps.
@@ -137,21 +166,21 @@ const PrivacyPolicyPage = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">11. International Visitors</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">12. International Visitors</h2>
             <p className="text-dark-300 leading-relaxed">
               If you access the Service from outside your home country, your information may be processed in countries where our providers operate.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">12. Changes to This Policy</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">13. Changes to This Policy</h2>
             <p className="text-dark-300 leading-relaxed">
               We may update this Privacy Policy from time to time. Continued use of the Service after changes means you accept the updated policy.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-dark-50 mb-4">13. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-dark-50 mb-4">14. Contact Us</h2>
             <p className="text-dark-300 leading-relaxed">
               If you have questions about this Privacy Policy, please contact us:
             </p>
