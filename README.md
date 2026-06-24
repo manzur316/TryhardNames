@@ -71,6 +71,13 @@ Current support docs:
 - VerifiedProof = normalized, source-backed proof.
 - PublicProjection = allowlisted output only.
 
+## Planning Documents
+
+- `docs/product/MASTER_PRODUCT_ROADMAP.md`
+- `docs/product/UI_THEME_SURFACE_CONTRACT.md`
+- `docs/product/THEME_AUDIT.md`
+- `docs/product/CURRENT_STATE_AND_ROADMAP.md`
+
 ## Development
 
 Install dependencies:

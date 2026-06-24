@@ -6,10 +6,18 @@ const readRepo = (path) => readFileSync(new URL(`../../../../${path}`, import.me
 const readWeb = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 const readmeUrl = new URL('../../../../README.md', import.meta.url);
+const masterRoadmapUrl = new URL('../../../../docs/product/MASTER_PRODUCT_ROADMAP.md', import.meta.url);
+const themeContractUrl = new URL('../../../../docs/product/UI_THEME_SURFACE_CONTRACT.md', import.meta.url);
+const themeAuditUrl = new URL('../../../../docs/product/THEME_AUDIT.md', import.meta.url);
 const readme = readRepo('README.md');
+const currentRoadmap = readRepo('docs/product/CURRENT_STATE_AND_ROADMAP.md');
+const masterRoadmap = readRepo('docs/product/MASTER_PRODUCT_ROADMAP.md');
+const themeContract = readRepo('docs/product/UI_THEME_SURFACE_CONTRACT.md');
+const themeAudit = readRepo('docs/product/THEME_AUDIT.md');
 const privacySource = readWeb('src/pages/PrivacyPolicyPage.jsx');
 const termsSource = readWeb('src/pages/TermsOfServicePage.jsx');
 const publicPolicyCopy = [readme, privacySource, termsSource].join('\n');
+const planningDocs = [readme, currentRoadmap, masterRoadmap, themeContract, themeAudit].join('\n');
 
 describe('README and public policy copy', () => {
   it('keeps the root README present and clear about Riot review status', () => {
@@ -38,5 +46,36 @@ describe('README and public policy copy', () => {
     assert.doesNotMatch(publicPolicyCopy, /Riot OAuth is live\b/i);
     assert.doesNotMatch(publicPolicyCopy, /production Riot key exists\b/i);
     assert.doesNotMatch(publicPolicyCopy, /real Riot data is live\b/i);
+  });
+
+  it('links and keeps master planning documents present', () => {
+    assert.match(readme, /docs\/product\/MASTER_PRODUCT_ROADMAP\.md/);
+    assert.match(readme, /docs\/product\/UI_THEME_SURFACE_CONTRACT\.md/);
+    assert.match(readme, /docs\/product\/THEME_AUDIT\.md/);
+    assert.equal(existsSync(masterRoadmapUrl), true);
+    assert.equal(existsSync(themeContractUrl), true);
+    assert.equal(existsSync(themeAuditUrl), true);
+  });
+
+  it('documents theme gates and current theme audit findings', () => {
+    assert.match(themeContract, /\| `\/account` \| Must be theme-aware\. \|/);
+    assert.match(themeAudit, /### `\/account`[\s\S]*Severity: High\./);
+    assert.match(themeAudit, /Needs a dark-branded vs theme-aware decision before visual fixes\./);
+  });
+
+  it('keeps roadmap dependency gates explicit', () => {
+    assert.match(masterRoadmap, /Provider-neutral foundation before Discord\/Riot OAuth/);
+    assert.match(masterRoadmap, /Riot approval before Riot runtime/);
+    assert.match(currentRoadmap, /PR10\.1 is the next implementation slice after PR10/);
+  });
+
+  it('does not claim PR10.1 or unavailable Riot runtime work is complete', () => {
+    assert.doesNotMatch(planningDocs, /PR10\.1 (is|was|has been) (complete|completed|done|implemented)/i);
+    assert.doesNotMatch(planningDocs, /Riot OAuth is live\b/i);
+    assert.doesNotMatch(planningDocs, /real Riot data is live\b/i);
+    assert.doesNotMatch(
+      planningDocs,
+      /(?:we have|there is|tryhardnames has|the repo has)\s+(?:a\s+)?production Riot key/i
+    );
   });
 });

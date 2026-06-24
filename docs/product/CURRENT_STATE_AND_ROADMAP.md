@@ -2,7 +2,7 @@
 
 ## Current Status
 
-This document reflects `main` after PR8.
+This document reflects `main` after PR9 and includes PR10 planning updates.
 
 TryhardNames currently has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, and a protected `/account` route that manages a private Gaming Passport draft. Riot project registration has been submitted in Riot Developer Portal and is awaiting Riot confirmation/review.
 
@@ -22,6 +22,7 @@ Gaming Passport is a visual, verifiable, shareable gaming resume. It is not a tr
 | PR6 | `feat(passport): add public Gaming Passport landing for Riot review` | Merged | Added public `/gaming-passport` landing and review-safe copy. | Public product page is live. | No Riot OAuth, Discord OAuth, Riot data, profile publishing, or provider activation. |
 | PR7 | `docs(passport): add Riot review submission pack` | Merged | Added Riot submission support packet with URLs, smoke results, and safe wording. | Documentation only. | No credentials, API calls, OAuth, production keys, or service config. |
 | PR8 | `docs(passport): audit Riot policy compliance` | Merged | Added compliance audit with `PASS WITH CONDITIONS` verdict. | Documentation only. | No runtime work, no secrets, no migrations, no RLS changes. |
+| PR9 | `docs(passport): document current state and policy alignment` | Merged | Added root README, public privacy/terms alignment, copy tests, and current roadmap. | Documentation and public policy copy only. | No runtime work, provider integration, secrets, migrations, RLS changes, or service config. |
 
 ## Live Surfaces
 
@@ -67,14 +68,25 @@ Riot Developer Portal confirmation/review is pending.
 
 No Riot runtime work should start until approval and next steps are clear. Do not assume production Riot credentials, RSO access, callback requirements, scopes, or approved data surfaces before Riot responds.
 
+## PR10 Planning Addendum
+
+PR10 defines the master roadmap and theme audit. It also defines the UI theme surface contract for future work.
+
+PR10.1 is the next implementation slice after PR10. PR10.1 fixes Account/Auth light-dark consistency for `/account`, `/sign-in`, `/sign-up`, `/auth/callback`, and `AuthUnavailable`.
+
+PR10.2 decides whether `/gaming-passport` remains a documented dark-branded landing or becomes a theme-aware landing.
+
 ## Next Recommended PRs
 
 Numbering may change.
 
 | Proposed PR | Scope | Notes |
 | --- | --- | --- |
-| PR10 | `docs(passport): add Riot review response playbook and screenshot checklist` | Reviewer-response copy, screenshots, smoke script, and portal follow-up checklist if Riot asks for more context. |
-| PR11 | `docs/legal: review privacy and terms after Riot response` | Policy maintenance only if Riot asks for copy changes or before any provider launch. |
+| PR10 | `docs(product): define roadmap and theme audit` | Defines master roadmap, dependency gates, anti-patch rules, theme contract, route-level theme audit, and PR10.1/PR10.2 slices. |
+| PR10.1 | `fix(auth): align account and auth surfaces with light-dark theme contract` | Fixes Account/Auth light-dark consistency without changing auth logic or provider runtime. |
+| PR10.2 | `fix(passport): decide and normalize Gaming Passport landing theme` | Chooses dark-branded or theme-aware `/gaming-passport` behavior while keeping Riot-safe copy. |
+| PR10.3 | `fix(legal): align legal/docs surfaces with theme contract if needed` | Handles privacy/terms visual theme only if the dark-only legal/docs decision is not accepted. |
+| PR11 | `docs(passport): add Riot review response playbook and screenshot checklist` | Reviewer-response copy, screenshots, smoke script, and portal follow-up checklist if Riot asks for more context. |
 | PR12 | `chore(passport): plan Riot provider runtime contracts after approval` | Only after Riot approval/next steps are clear. |
 
 ## Do-Not-Build-Yet List
