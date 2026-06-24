@@ -32,6 +32,21 @@ describe('Gaming Passport Riot review landing', () => {
     assert.match(pageSource, /No hidden player data/);
     assert.match(pageSource, /does\s+not claim Riot OAuth\s+is live today/);
     assert.match(pageSource, /does not claim a\s+production Riot key/);
+    assert.doesNotMatch(pageSource, /Riot OAuth is live in production/i);
+    assert.doesNotMatch(pageSource, /Riot OAuth is now live/i);
+    assert.doesNotMatch(pageSource, /production Riot key exists\b/i);
+    assert.doesNotMatch(pageSource, /real Riot data is live\b/i);
+  });
+
+  it('uses a theme-aware page surface instead of a dark-only root', () => {
+    assert.doesNotMatch(pageSource, /min-h-screen bg-slate-950 text-slate-100/);
+    assert.match(pageSource, /bg-slate-50/);
+    assert.match(pageSource, /dark:bg-slate-950/);
+    assert.match(pageSource, /text-slate-950 dark:text-white/);
+    assert.match(pageSource, /border-slate-200\/80 bg-white\/80/);
+    assert.match(pageSource, /dark:border-white\/10 dark:bg-white\/\[0\.035\]/);
+    assert.match(pageSource, /border-slate-300[\s\S]*bg-white[\s\S]*text-slate-700/);
+    assert.match(pageSource, /dark:border-white\/15 dark:bg-white\/\[0\.04\] dark:text-slate-100/);
   });
 
   it('keeps Parent Auth and future linked providers separate', () => {
@@ -43,6 +58,11 @@ describe('Gaming Passport Riot review landing', () => {
   it('renders the Riot legal notice visibly in page source', () => {
     assert.match(pageSource, /Riot Games notice/);
     assert.match(pageSource, /TryhardNames Gaming Passport is not endorsed by Riot Games/);
+  });
+
+  it('does not import Riot-owned visual assets or logos', () => {
+    assert.doesNotMatch(pageSource, /RiotLogo|riot-logo|riotLogo/);
+    assert.doesNotMatch(pageSource, /riot[^'"]*\.(png|svg|webp|jpg|jpeg)/i);
   });
 
   it('keeps Google Parent Auth free of gaming provider login copy', () => {
