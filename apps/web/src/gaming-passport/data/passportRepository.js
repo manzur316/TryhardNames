@@ -85,7 +85,7 @@ export async function createPrivateDraft(client, session, input = {}) {
 
   if (error) throw error;
   const passport = mapPassportRow(data);
-  if (!passport) throw new Error('Passport update did not return a row.');
+  if (!passport) throw new Error('Passport creation did not return a row.');
   return passport;
 }
 
@@ -115,7 +115,9 @@ export async function updatePassportPresentation(client, session, passportId, in
     .maybeSingle();
 
   if (error) throw error;
-  return mapPassportRow(data);
+  const passport = mapPassportRow(data);
+  if (!passport) throw new Error('Passport update did not return a row.');
+  return passport;
 }
 
 export function buildCreateDraftPayload(ownerId, input = {}) {

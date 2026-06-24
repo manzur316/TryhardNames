@@ -426,6 +426,17 @@ describe('Gaming Passport draft repository', () => {
     assert.equal(client.calls[0].payload.publication_consent, undefined);
   });
 
+  it('rejects when updatePassportPresentation returns no updated Passport row', async () => {
+    const client = createFakeSupabaseClient({ updateResults: [{ data: null, error: null }] });
+
+    await assert.rejects(
+      updatePassportPresentation(client, sampleSession(), 'passport-1', {
+        alias: 'Updated',
+      }),
+      /Passport update did not return a row\./,
+    );
+  });
+
   it('getOrCreate handles a missing row by inserting a private draft', async () => {
     const row = samplePassportRow();
     const client = createFakeSupabaseClient({
