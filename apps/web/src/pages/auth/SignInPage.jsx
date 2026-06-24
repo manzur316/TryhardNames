@@ -71,17 +71,17 @@ export default function SignInPage() {
     <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 lg:grid-cols-[0.9fr_1.1fr]">
       {seo}
       <section className="flex flex-col justify-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Parent Auth</p>
-        <h1 className="mt-3 text-4xl font-semibold text-white">Sign in to TryhardNames</h1>
-        <p className="mt-4 max-w-lg text-sm leading-6 text-slate-300">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">Parent Auth</p>
+        <h1 className="mt-3 text-4xl font-semibold text-slate-950 dark:text-white">Sign in to TryhardNames</h1>
+        <p className="mt-4 max-w-lg text-sm leading-6 text-slate-600 dark:text-slate-300">
           Access your private Gaming Passport draft. Generators stay public and do not require an account.
         </p>
       </section>
 
-      <section className="rounded-lg border border-white/10 bg-white/[0.04] p-6 shadow-2xl shadow-black/20">
+      <section className="rounded-lg border border-slate-200/80 bg-white/80 p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/20">
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="signin-email" className="block text-sm font-medium text-slate-200">
+            <label htmlFor="signin-email" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
               Email
             </label>
             <input
@@ -90,13 +90,13 @@ export default function SignInPage() {
               autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="mt-2 w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-white outline-none ring-cyan-400/40 focus:ring-2"
+              className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none ring-cyan-400/40 placeholder:text-slate-400 focus:ring-2 dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-slate-500"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="signin-password" className="block text-sm font-medium text-slate-200">
+            <label htmlFor="signin-password" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
               Password
             </label>
             <input
@@ -105,14 +105,14 @@ export default function SignInPage() {
               autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="mt-2 w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-white outline-none ring-cyan-400/40 focus:ring-2"
+              className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none ring-cyan-400/40 placeholder:text-slate-400 focus:ring-2 dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-slate-500"
               required
               minLength={6}
             />
           </div>
 
           {error && (
-            <p role="alert" className="rounded-md border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-100">
+            <p role="alert" className="rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-100">
               {error}
             </p>
           )}
@@ -132,15 +132,15 @@ export default function SignInPage() {
             type="button"
             onClick={handleGoogle}
             disabled={isSubmitting}
-            className="mt-3 w-full rounded-md border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-3 w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
           >
             Continue with Google
           </button>
         )}
 
-        <p className="mt-5 text-center text-sm text-slate-300">
+        <p className="mt-5 text-center text-sm text-slate-600 dark:text-slate-300">
           Need an account?{' '}
-          <Link className="font-medium text-cyan-300 hover:text-cyan-200" to={`/sign-up?returnTo=${encodeURIComponent(returnTo)}`}>
+          <Link className="font-medium text-cyan-700 hover:text-cyan-600 dark:text-cyan-300 dark:hover:text-cyan-200" to={`/sign-up?returnTo=${encodeURIComponent(returnTo)}`}>
             Sign up
           </Link>
         </p>

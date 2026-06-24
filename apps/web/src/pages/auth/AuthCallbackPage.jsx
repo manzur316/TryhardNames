@@ -59,17 +59,17 @@ export default function AuthCallbackPage() {
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-16 text-center">
       {seo}
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Auth callback</p>
-      <h1 className="text-3xl font-semibold text-white">{error ? 'Could not finish sign-in' : 'Finishing sign-in...'}</h1>
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">Auth callback</p>
+      <h1 className="text-3xl font-semibold text-slate-950 dark:text-white">{error ? 'Could not finish sign-in' : 'Finishing sign-in...'}</h1>
       {error ? (
         <>
-          <p role="alert" className="text-sm leading-6 text-red-100">{error}</p>
-          <Link className="text-sm font-medium text-cyan-300 hover:text-cyan-200" to="/sign-in">
+          <p role="alert" className="text-sm leading-6 text-red-700 dark:text-red-100">{error}</p>
+          <Link className="text-sm font-medium text-cyan-700 hover:text-cyan-600 dark:text-cyan-300 dark:hover:text-cyan-200" to="/sign-in">
             Return to sign in
           </Link>
         </>
       ) : (
-        <p className="text-sm leading-6 text-slate-300">Preparing your private account dashboard.</p>
+        <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">Preparing your private account dashboard.</p>
       )}
     </div>
   );
