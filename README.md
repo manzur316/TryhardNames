@@ -12,12 +12,12 @@ The site currently combines public name/text/symbol tools with a Gaming Passport
 - Public generators - free name, text, symbol, and identity utilities.
 - `/gaming-passport` - public Gaming Passport landing page for users and Riot review.
 - `/sign-in` - Parent Auth sign-in for the TryhardNames account.
-- `/account` - protected private Gaming Passport draft dashboard.
+- `/account` - protected Account Dashboard V2 with private Gaming Passport draft and saved-name guidance.
 - `/privacy-policy` - public Privacy Policy.
 - `/terms-of-service` - public Terms of Service.
 - `/sitemap.xml` - public sitemap.
 
-Public generators are free and usable without an account. `/gaming-passport` is public. `/account` requires Parent Auth and manages a private draft. `/id/:slug` public Gaming Passport profiles are not implemented yet.
+Public generators are free and usable without an account. `/gaming-passport` is public. `/account` requires Parent Auth and manages private account state. `/id/:slug` public Gaming Passport profiles are not implemented yet.
 
 ## Gaming Passport
 
@@ -74,6 +74,9 @@ Current support docs:
 ## Planning Documents
 
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
+- `docs/product/ROADMAP_STATUS_MATRIX.md`
+- `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
+- `docs/product/DECISION_LOG.md`
 - `docs/product/UI_THEME_SURFACE_CONTRACT.md`
 - `docs/product/THEME_AUDIT.md`
 - `docs/product/CURRENT_STATE_AND_ROADMAP.md`
@@ -149,28 +152,44 @@ Completed:
 - Domain foundation.
 - Local schema foundation.
 - Parent Auth/private draft.
+- Account Dashboard V2 and favorite-first saved-name UI.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
 - Riot policy compliance audit.
+- PR10.x theme, visual surface, tool audit, dynamic card, lineup, and feature generator card polish.
+- Publish Policy contract.
+- Public Projection contract.
+- Local saved-name/favorites SoT.
 
 Waiting:
 
 - Riot confirmation/review.
+- Saved Names Supabase persistence.
+- Private Gaming Passport Editor V2.
+- Publish runtime commands.
+- Public `/id/:slug`.
+- Provider runtime foundation.
 
-Next before Riot runtime:
+Next product blocks:
 
-- Riot review response playbook and screenshot checklist, if Riot asks follow-up questions.
-- Public policy maintenance before any provider launch.
+- PR11.0 Roadmap Reconciliation after Account Dashboard V2.
+- PR12 Saved Names Persistence + Account State Contract.
+- PR13 Private Gaming Passport Editor V2.
+- PR14 Publish Runtime Commands.
+- PR15 Public Gaming Passport MVP `/id/:slug`.
+- PR16 Provider Runtime Foundation.
 
-After Riot approval:
+After provider foundation and approvals:
 
+- First Provider Decision + Readiness Pack.
+- Discord pilot or Riot readiness, depending on gates.
 - RSO design.
 - Server-side token storage.
 - Unlink/revoke.
 - RiotProvider runtime.
 - LeagueOfLegendsAdapter.
 - Proof sync.
-- Public projection review.
+- Cosmetics, trust/safety, privacy controls, and launch readiness.
 
 No dates are promised. Riot runtime work should wait until approval and next steps are clear.
