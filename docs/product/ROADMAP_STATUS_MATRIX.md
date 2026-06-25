@@ -10,8 +10,8 @@ This matrix reflects the PR13 branch after PR10.8, PR11.1, PR12, and PR13.
 | Dynamic NameCard + Lineup visual redesign | done | `NAMECARD_LINEUP_VISUAL_REDESIGN.md` | Dynamic card clamp, hierarchy, drawer coverage work | Legacy internal cleanup only if needed | PR23 | Favorite/star is now the canonical save model. |
 | Feature generator visual alignment | done | `FEATURE_GENERATOR_CARD_VISUAL_ALIGNMENT.md` | GamerNames and RobloxNames card alignment | Account/editor depth | PR13 | No further visual patching unless critical. |
 | Parent Auth | done | `/sign-in`, `/sign-up`, `/auth/callback`, `/account` guard | TryhardNames account login and saved-name ownership | Editor depth and future account state | PR13 | Google is Parent Auth only, not public proof. |
-| Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js`, `PrivatePassportEditor.jsx` | Owner-only private draft create/read/update, Editor V2, private preview, completion checklist, private Saved Names highlights | Publish runtime commands | PR14 | Draft stays private by default. |
-| Account Dashboard V2 | done | PR11.1, `AccountPage.jsx`, PR13 components | Dashboard sections, favorite-first saved-name guidance, Account Hunting Guide, embedded Private Passport Editor V2 | Publish runtime commands | PR14 | Dashboard V2 is implemented. |
+| Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js`, `PrivatePassportEditor.jsx` | Owner-only private draft create/read/update, Editor V2, private preview, completion checklist, private Saved Names highlights | Public profile serving | PR15 | Draft stays private by default. |
+| Account Dashboard V2 | done | PR11.1, `AccountPage.jsx`, PR13/PR14 components | Dashboard sections, favorite-first saved-name guidance, Account Hunting Guide, embedded Private Passport Editor V2, private publish controls | Public profile serving | PR15 | Dashboard V2 is implemented. |
 | Saved Names local SoT | done | `FavoritesContext.jsx`, `favoritesSoT.js`, `localFavoritesBridge.js`, `FavoriteStarButton.jsx`, `MinimalFavoritesPeek.jsx` | Local fallback, compatibility bridge, account mirror | Future cleanup of PocketBase legacy fallback if safe | PR13 | Favorite/star is the canonical saved-name UX. |
 | Saved Names Persistence | done | `savedNamesRepository.js`, `20260625170000_saved_names.sql`, `saved_names_test.sql` | Supabase `saved_names`, owner RLS, local-to-account sync, account-to-local mirror | Future richer account-state analytics if needed | PR13 | Saved Names Supabase persistence is implemented with local fallback. |
 | Linked Provider domain | partial-contract | `constants.js`, architecture docs | Provider IDs and statuses | Runtime commands and provider service layer | PR16 | Linked providers are not Parent Auth. |
@@ -20,8 +20,8 @@ This matrix reflects the PR13 branch after PR10.8, PR11.1, PR12, and PR13.
 | Verified Proof domain | partial-contract | `constants.js`, data model docs | Proof types, visibility constants | Provider-backed proof creation | PR16 | Proofs must be source-backed. |
 | Verified Proof schema | partial-schema | Local schema foundation | `verified_proofs`, featured proofs, visibility settings | Remote rollout, migrations for runtime needs | PR16 | Schema is local foundation only. |
 | Verified Proof sync runtime | pending | No sync jobs or provider adapters | None | Sync jobs, stale/revoked states, audit | PR16 | No fake proof data. |
-| Publish Policy | partial-contract | `publicationPolicy.js` | `getPublishability`, `isPassportPublishable`, `canServePublishedPassport` | Publish/unpublish runtime commands | PR14 | Publish Policy already exists as a contract. |
-| Publish Runtime Commands | pending | No command runtime | None | Consent, slug claim, publish, unpublish, status transitions | PR14 | Runtime must enforce policy contract. |
+| Publish Policy | done | `publicationPolicy.js`, PR14 command domain | `getPublishability`, `isPassportPublishable`, `canServePublishedPassport`, command readiness gates | Public serving route/API | PR15 | Publish Policy exists as a contract and PR14 enforces it in commands. |
+| Publish Runtime Commands | done | `publishCommands.js`, `passportPublishRepository.js`, `PassportPublishControls.jsx`, `20260625200000_publish_runtime_commands.sql` | Consent, slug claim/update, publish attempt, unpublish, owner-only SQL RPCs, policy-blocked state | Public profile serving | PR15 | Publish remains blocked until verified linked provider exists. |
 | Public Projection | partial-contract | `publicProjection.js` | `buildPublicPassportProjection`, allowlisted DTO | Public route/API serving projection | PR15 | Public Projection already exists as a contract. |
 | Public Profile `/id/:slug` | pending | `App.jsx` has no `/id/:slug` route | None | Route, API, SEO/share metadata, 404/privacy behavior | PR15 | `/id/:slug` is pending, not implemented. |
 | Provider Runtime Foundation | pending | Roadmap docs only | Domain/schema pieces | Token storage, link/unlink/revoke, sync, audit, rate limits | PR16 | Provider runtime foundation must precede OAuth launch. |
@@ -38,7 +38,7 @@ This matrix reflects the PR13 branch after PR10.8, PR11.1, PR12, and PR13.
 - Account Dashboard V2 is implemented.
 - Private Gaming Passport Editor V2 is implemented as owner-only draft editing.
 - Publish Policy and Public Projection already exist as contracts.
-- Publish Runtime Commands are pending.
+- Publish Runtime Commands are implemented as private owner-controlled commands.
 - Public Profile `/id/:slug` is pending.
 - Provider-neutral domain/schema is partial, but Provider Runtime Foundation is pending.
 - Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.

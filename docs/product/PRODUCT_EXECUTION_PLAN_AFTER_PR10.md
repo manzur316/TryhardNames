@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, and PR13.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, and PR14.
 
 ## Closed Visual/Tooling Line
 
@@ -23,11 +23,13 @@ PR12 adds Supabase-backed saved names, owner-only RLS, local-to-account sync, ac
 
 PR13 adds Private Gaming Passport Editor V2, private preview, completion checklist, save-state clarity, and private Saved Names highlights in `scene_config.featuredSavedNames`. It does not add publish commands, public profiles, providers, or provider tokens.
 
+PR14 adds owner-controlled Publish Runtime Commands for consent, slug claim/update, publish attempt, and unpublish. It enforces the existing publication policy and keeps publish blocked until a verified linked provider exists. It does not add public `/id/:slug`, public profile serving, providers, or provider tokens.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Publish Runtime Commands -> Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
+Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
 
 ## Corrected Roadmap
 
@@ -65,15 +67,15 @@ Publish Runtime Commands -> Public Profile -> Provider Runtime Foundation -> Pro
 - Goal: Add the command flow that changes a Passport from private draft to publishable/public.
 - Why now: Public projection contract exists, but no runtime commands exist.
 - Already exists: `publicationPolicy.js` and `canServePublishedPassport`.
-- Status: pending.
-- Missing: Consent command, slug claim, publish, unpublish, revoke/stale handling, tests.
+- Implemented by PR14: Consent command, slug claim/update, publish attempt, unpublish, policy-blocked command results, owner-only SQL RPCs, repository functions, private `/account` controls, tests, and docs.
+- Missing: Public profile serving, provider runtime, token storage, and verified provider sync.
 - Non-goals: No public `/id/:slug` route yet, no providers.
 - Exit criteria: Server-side commands enforce publish policy and update owner-controlled status safely.
 
 ### PR15 Public Gaming Passport MVP `/id/:slug`
 
 - Goal: Serve the public allowlisted Passport view.
-- Why now: It should come after explicit publish commands.
+- Why now: It is next after explicit publish commands.
 - Already exists: `buildPublicPassportProjection` and public DTO allowlist.
 - Missing: Route/API, lookup by slug, SEO/share metadata, not-found/private behavior.
 - Non-goals: No provider OAuth launch, no hidden private fields.

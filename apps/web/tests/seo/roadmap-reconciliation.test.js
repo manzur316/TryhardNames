@@ -24,17 +24,18 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
   it('moves current roadmap beyond the stale PR9 state', () => {
     assert.doesNotMatch(currentRoadmap, /reflects `main` after PR9/i);
     assert.doesNotMatch(currentRoadmap, /Current State After PR9/i);
-    assert.match(currentRoadmap, /Current Status After PR13/);
+    assert.match(currentRoadmap, /Current Status After PR14/);
     assert.match(currentRoadmap, /PR11\.1/);
     assert.match(currentRoadmap, /PR12/);
     assert.match(currentRoadmap, /PR13/);
+    assert.match(currentRoadmap, /PR14/);
     assert.match(currentRoadmap, /fix\(generator\): align feature generator cards/);
     assert.match(currentRoadmap, /feat\(account\): add dashboard v2 and unify saved names/);
   });
 
   it('distinguishes publish contracts from runtime commands and public serving', () => {
     assert.match(masterRoadmap, /Publish Policy contract/i);
-    assert.match(masterRoadmap, /Publish Runtime Commands are still pending/i);
+    assert.match(masterRoadmap, /Publish Runtime Commands are implemented/i);
     assert.match(masterRoadmap, /Public Projection contract/i);
     assert.match(masterRoadmap, /Public Profile is the future `\/id\/:slug` surface and is not implemented/i);
     assert.match(combinedDocs, /Publish Policy and Public Projection already exist as contracts/i);
@@ -97,7 +98,8 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
     assert.match(combinedDocs, /Saved Names Supabase persistence is implemented/i);
     assert.match(combinedDocs, /Account Dashboard V2 is implemented/i);
     assert.match(combinedDocs, /Private Gaming Passport Editor V2 is implemented/i);
-    assert.match(combinedDocs, /Publish Runtime Commands[\s\S]*pending/i);
+    assert.match(combinedDocs, /Publish Runtime Commands[\s\S]*(implemented|done)/i);
+    assert.match(combinedDocs, /Public Profile `\/id\/:slug`[\s\S]*pending/i);
     assert.match(combinedDocs, /PR10\.x visual\/tooling line is closed/i);
   });
 

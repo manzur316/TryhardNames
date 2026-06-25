@@ -65,7 +65,7 @@ describe('Private Gaming Passport Editor V2', () => {
     assert.match(checklistSource, /Visual style selected/);
     assert.match(checklistSource, /Saved Names highlights selected/);
     assert.match(checklistSource, /Draft saved/);
-    assert.match(checklistSource, /Publish remains locked for a later PR/);
+    assert.match(checklistSource, /Public profile remains locked for a later PR/);
   });
 
   it('does not add public profile routes or provider runtime surfaces', () => {
@@ -75,10 +75,10 @@ describe('Private Gaming Passport Editor V2', () => {
   });
 
   it('updates roadmap docs and is wired into auth tests', () => {
-    assert.match(currentRoadmap, /Current Status After PR13/);
+    assert.match(currentRoadmap, /Current Status After PR14/);
     assert.match(currentRoadmap, /Private Gaming Passport Editor V2 exists/);
     assert.match(executionPlan, /PR13 Private Gaming Passport Editor V2[\s\S]*Implemented by PR13/);
-    assert.match(executionPlan, /PR14 Publish Runtime Commands[\s\S]*pending/);
+    assert.match(executionPlan, /PR14 Publish Runtime Commands[\s\S]*Implemented by PR14/);
     assert.match(packageJson.scripts['test:auth'], /private-passport-editor-v2\.test\.js/);
   });
 });

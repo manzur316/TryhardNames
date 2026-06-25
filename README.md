@@ -155,6 +155,7 @@ Completed:
 - Account Dashboard V2 and favorite-first saved-name UI.
 - Saved Names Supabase persistence.
 - Private Gaming Passport Editor V2.
+- Publish Runtime Commands.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -167,13 +168,11 @@ Completed:
 Waiting:
 
 - Riot confirmation/review.
-- Publish runtime commands.
 - Public `/id/:slug`.
 - Provider runtime foundation.
 
 Next product blocks:
 
-- PR14 Publish Runtime Commands.
 - PR15 Public Gaming Passport MVP `/id/:slug`.
 - PR16 Provider Runtime Foundation.
 

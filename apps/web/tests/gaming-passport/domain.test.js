@@ -16,11 +16,18 @@ import {
   VERIFIED_PROOF_STATUSES,
   VERIFICATION_METHODS,
   buildPublicPassportProjection,
+  buildPublishCommandResult,
+  buildPublishReadiness,
+  buildUnpublishCommandResult,
+  canClaimSlug,
   canDisplayVerifiedProof,
+  canPublishPassport,
   canServePublishedPassport,
+  canSetPublicationConsent,
   canTransitionLinkedProviderStatus,
   canTransitionPassportStatus,
   canTransitionVerifiedProofStatus,
+  canUnpublishPassport,
   getFeaturedVerifiedProofs,
   getPublishability,
   isCanonicalPublicSlug,
@@ -35,6 +42,7 @@ const now = '2026-06-23T18:00:00.000Z';
 function parentAuth(provider = PARENT_AUTH_PROVIDER_IDS.GOOGLE) {
   return {
     authenticated: true,
+    ownerId: 'owner_1',
     provider,
     email: 'owner@example.com',
     accessToken: 'parent-secret-token',
@@ -379,6 +387,133 @@ describe('Gaming Passport canonical slug contract', () => {
 
   it('rejects reserved slugs', () => {
     assert.equal(isCanonicalPublicSlug('account'), false);
+  });
+});
+
+describe('Gaming Passport publish runtime command domain', () => {
+  it('normalizes slug command input and rejects reserved slugs', () => {
+    const draft = passport({ status: PASSPORT_STATUSES.DRAFT_PRIVATE, slug: null, publicationConsent: false });
+
+    assert.deepEqual(canClaimSlug({
+      passport: draft,
+      parentAuth: parentAuth(),
+      slug: ' Player One!! ',
+    }), {
+      ok: true,
+      errors: [],
+      normalizedSlug: 'player-one',
+    });
+
+    const reserved = canClaimSlug({
+      passport: draft,
+      parentAuth: parentAuth(),
+      slug: 'account',
+    });
+
+    assert.equal(reserved.ok, false);
+    assert.ok(reserved.errors.includes('canonical_slug'));
+  });
+
+  it('requires Parent Auth ownership before mutating publish state', () => {
+    const draft = passport({ status: PASSPORT_STATUSES.DRAFT_PRIVATE, slug: null });
+
+    assert.equal(canSetPublicationConsent({
+      passport: draft,
+      parentAuth: { authenticated: true, ownerId: 'someone_else' },
+      consent: true,
+    }).ok, false);
+
+    assert.equal(canClaimSlug({
+      passport: draft,
+      parentAuth: { authenticated: false, ownerId: 'owner_1' },
+      slug: 'player-one',
+    }).ok, false);
+  });
+
+  it('requires consent, canonical slug, and verified linked provider before publish', () => {
+    const draft = passport({
+      status: PASSPORT_STATUSES.DRAFT_PRIVATE,
+      slug: null,
+      publicationConsent: false,
+      publishedAt: null,
+    });
+    const readiness = buildPublishReadiness({
+      passport: draft,
+      parentAuth: parentAuth(),
+      linkedProviderAccounts: [],
+    });
+
+    assert.equal(readiness.publishable, false);
+    assert.ok(readiness.missing.includes('publication_consent'));
+    assert.ok(readiness.missing.includes('canonical_slug'));
+    assert.ok(readiness.missing.includes('verified_linked_provider'));
+    assert.equal(canPublishPassport({
+      passport: draft,
+      parentAuth: parentAuth(),
+      linkedProviderAccounts: [],
+    }).ok, false);
+  });
+
+  it('does not treat stale or revoked providers as publishable verification', () => {
+    for (const status of [LINKED_PROVIDER_STATUSES.STALE, LINKED_PROVIDER_STATUSES.REVOKED]) {
+      const result = buildPublishCommandResult({
+        passport: passport({ status: PASSPORT_STATUSES.UNPUBLISHED }),
+        parentAuth: parentAuth(),
+        linkedProviderAccounts: [linkedProvider({ status })],
+      });
+
+      assert.equal(result.ok, false);
+      assert.ok(result.missing.includes('verified_linked_provider'));
+    }
+  });
+
+  it('blocks suspended Passports from publish commands', () => {
+    const result = buildPublishCommandResult({
+      passport: passport({ status: PASSPORT_STATUSES.SUSPENDED, suspendedAt: now }),
+      parentAuth: parentAuth(),
+      linkedProviderAccounts: [linkedProvider()],
+    });
+
+    assert.equal(result.ok, false);
+    assert.ok(result.missing.includes('not_suspended'));
+    assert.equal(canSetPublicationConsent({
+      passport: passport({ status: PASSPORT_STATUSES.SUSPENDED, suspendedAt: now }),
+      parentAuth: parentAuth(),
+      consent: true,
+    }).ok, false);
+  });
+
+  it('allows publish only when policy requirements are satisfied with a mock verified provider', () => {
+    const result = buildPublishCommandResult({
+      passport: passport({ status: PASSPORT_STATUSES.UNPUBLISHED }),
+      parentAuth: parentAuth(),
+      linkedProviderAccounts: [linkedProvider()],
+    });
+
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.missing, []);
+    assert.equal(result.normalizedSlug, 'player-one');
+  });
+
+  it('supports unpublish from published and safe no-op states', () => {
+    assert.deepEqual(buildUnpublishCommandResult({
+      passport: passport({ status: PASSPORT_STATUSES.PUBLISHED }),
+      parentAuth: parentAuth(),
+    }), {
+      ok: true,
+      command: 'unpublish',
+      blocked: false,
+      noop: false,
+      missing: [],
+    });
+
+    const unpublished = canUnpublishPassport({
+      passport: passport({ status: PASSPORT_STATUSES.UNPUBLISHED }),
+      parentAuth: parentAuth(),
+    });
+
+    assert.equal(unpublished.ok, true);
+    assert.equal(unpublished.noop, true);
   });
 });
 

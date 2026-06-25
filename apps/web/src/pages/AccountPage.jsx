@@ -6,6 +6,7 @@ import { useAuth } from '@/core/hooks/useAuth.js';
 import { getSupabaseRuntime } from '@/lib/supabase/client.js';
 import SeoHead from '@/seo/SeoHead.jsx';
 import PrivatePassportEditor from '@/gaming-passport/components/PrivatePassportEditor.jsx';
+import PassportPublishControls from '@/gaming-passport/components/PassportPublishControls.jsx';
 import {
   DEFAULT_SCENE_CONFIG,
   getOrCreatePrivateDraft,
@@ -154,6 +155,13 @@ export default function AccountPage() {
             savedNames={savedNames}
             savedNamesStorageMode={savedNamesStorageMode}
             savedNamesSyncError={savedNamesSyncError}
+          />
+
+          <PassportPublishControls
+            passport={passport}
+            session={auth.session}
+            isLoading={isDraftLoading}
+            onPassportChange={setPassport}
           />
 
           <AccountHuntingGuide />
@@ -411,7 +419,7 @@ function FutureConnections() {
         ))}
       </div>
       <p className="mt-4 text-xs leading-5 text-slate-500 dark:text-slate-400">
-        No Riot OAuth or Discord OAuth button is exposed in this dashboard.
+        No Riot or Discord sign-in button is exposed in this dashboard.
       </p>
     </section>
   );

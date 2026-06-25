@@ -30,7 +30,7 @@ describe('Gaming Passport Riot review landing', () => {
     assert.match(pageSource, /No in-game recommendations/);
     assert.match(pageSource, /No alternative ranking system/);
     assert.match(pageSource, /No hidden player data/);
-    assert.match(pageSource, /does\s+not claim Riot OAuth\s+is live today/);
+    assert.match(pageSource, /does\s+not claim Riot account linking\s+is live today/);
     assert.match(pageSource, /does not claim a\s+production Riot key/);
     assert.doesNotMatch(pageSource, /Riot OAuth is live in production/i);
     assert.doesNotMatch(pageSource, /Riot OAuth is now live/i);

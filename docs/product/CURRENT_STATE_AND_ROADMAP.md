@@ -1,18 +1,18 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status After PR13
+## Current Status After PR14
 
-This document reflects the PR13 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, and PR13, `feat(account): improve private passport editor`.
+This document reflects the PR14 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, and PR14, `feat(passport): add publish runtime commands`.
 
-TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, and Private Gaming Passport Editor V2 for owner-only draft editing.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, and owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish.
 
 Riot integration is not live. Discord integration is not live. No public Riot data is live. No public Gaming Passport profile route is implemented. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime.
 
 Gaming Passport remains a private-first, verifiable, shareable gaming resume. It is not a tracker, OP.GG alternative, custom MMR/ELO product, match-history dump, live-game advantage tool, hidden-player de-anonymization surface, or alternative ranking system.
 
-## PR History Through PR12
+## PR History Through PR14
 
-The repo history is summarized through PR12.
+The repo history is summarized through PR14.
 
 | PR | Title | Status | Outcome | Runtime impact | Non-goals |
 | --- | --- | --- | --- | --- | --- |
@@ -37,7 +37,8 @@ The repo history is summarized through PR12.
 | PR11.1 | `feat(account): add dashboard v2 and unify saved names` | Merged | Added Account Dashboard V2, favorite-first saved-name UX, Account Hunting Guide, and removed legacy lineup/copy-pack public UX. | `/account` is more useful and public generators use star/favorite as canonical save UX. | No providers, migrations, publish runtime, or public profiles. |
 | PR11.0 | `docs(product): reconcile roadmap after account dashboard merge` | Merged | Reconciled roadmap docs with actual state after PR10.8 and PR11.1. | Documentation/tests only. | No runtime work, migrations, providers, routes, or RLS changes. |
 | PR12 | `feat(account): persist saved names` | Merged | Added Supabase `saved_names`, owner-only RLS, saved-name repository, local-to-account sync, and docs/tests. | Authenticated users can persist saved names under Parent Auth while signed-out users keep local fallback. | No providers, Riot/Discord OAuth, publish commands, public profiles, remote Supabase, Vercel, secrets, migrations outside local files, or RLS outside this table. |
-| PR13 | `feat(account): improve private passport editor` | In progress | Adds Private Gaming Passport Editor V2, private preview, completion checklist, save-state clarity, and private Saved Names highlights through `scene_config.featuredSavedNames`. | Owners can shape a private draft more clearly inside `/account` without publishing or linking providers. | No publish commands, slug claim, public `/id/:slug`, Riot/Discord OAuth, providers, token storage, or remote service config. |
+| PR13 | `feat(account): improve private passport editor` | Merged | Adds Private Gaming Passport Editor V2, private preview, completion checklist, save-state clarity, and private Saved Names highlights through `scene_config.featuredSavedNames`. | Owners can shape a private draft more clearly inside `/account` without publishing or linking providers. | No publish commands, slug claim, public `/id/:slug`, Riot/Discord OAuth, providers, token storage, or remote service config. |
+| PR14 | `feat(passport): add publish runtime commands` | In progress | Adds owner-controlled publication consent, slug claim/update, publish attempt, unpublish, command repository, private `/account` controls, and SQL RPC command functions. | Publish Runtime Commands exist and enforce the existing publication policy. Publish remains blocked until a verified linked provider exists. | No public `/id/:slug`, public profile route/API, provider runtime, Riot/Discord OAuth, provider token storage, secrets, or remote Supabase changes. |
 
 ## Live Surfaces
 
@@ -50,7 +51,7 @@ The repo history is summarized through PR12.
 - `/privacy-policy` and `/terms-of-service` - public legal surfaces.
 - `/sitemap.xml` - public sitemap.
 
-`/id/:slug` does not exist yet.
+No public `/id/:slug` route exists after PR14.
 
 ## Implemented
 
@@ -67,6 +68,8 @@ The repo history is summarized through PR12.
 - Private preview V2 exists.
 - Private completion checklist exists.
 - Private Saved Names highlights exist through `scene_config.featuredSavedNames`.
+- Publish Runtime Commands exist for consent, slug claim/update, publish attempt, and unpublish.
+- Private `/account` publish controls show policy requirements and do not link to public profiles.
 - Account Hunting Guide exists inside the account experience.
 - Favorite/star is the canonical saved-name UX.
 - Saved Names Supabase persistence exists through `public.saved_names`.
@@ -82,18 +85,16 @@ The repo history is summarized through PR12.
 ## Partially Implemented
 
 - PocketBase favorite storage remains only as legacy compatibility fallback. Parent Auth/Supabase `saved_names` is now the canonical authenticated path.
-- Private Gaming Passport Editor V2 is implemented as an owner-only draft editing surface. Publish runtime and public profile serving remain separate pending slices.
+- Private Gaming Passport Editor V2 is implemented as an owner-only draft editing surface.
+- Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands. Public profile serving remains a separate pending slice.
 - Provider-neutral domain/schema is partial. Constants, statuses, local tables, and schema docs exist, but provider runtime does not.
 - Linked Provider domain is partial-contract and Linked Provider schema is partial-schema. Runtime link/unlink/revoke/sync is pending.
 - Verified Proof domain is partial-contract and Verified Proof schema is partial-schema. Sync runtime is pending.
-- Publish Policy is partial-contract. No publish/unpublish command runtime exists.
+- Publish Policy is implemented as a domain contract and enforced by PR14 command runtime.
 - Public Projection is partial-contract. No public serving route/API exists.
 
 ## Not Implemented
 
-- Publish command runtime.
-- Slug claim command.
-- Consent command.
 - Public `/id/:slug`.
 - Public profile route/API.
 - Riot OAuth / Riot Sign On.
