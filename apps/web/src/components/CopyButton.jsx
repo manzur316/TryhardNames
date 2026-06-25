@@ -6,10 +6,18 @@ import { trackEvent } from '@/utils/analytics.js';
 import { copyTextToClipboard } from '@/utils/clipboard.js';
 import { INTERACTION_TIMING, useAsyncLock, useTransientFlag } from '@/utils/interactionState.js';
 
-const CopyButton = ({ textToCopy, className = '', analytics, onCopied }) => {
+const CopyButton = ({ textToCopy, className = '', analytics, onCopied, variant = 'default' }) => {
   const { value: copied, setOn: flashCopied, setOff: clearCopied } = useTransientFlag({ durationMs: INTERACTION_TIMING.feedbackMs });
   const { value: failed, setOn: flashFailed, setOff: clearFailed } = useTransientFlag({ durationMs: INTERACTION_TIMING.feedbackMs });
   const { locked: busy, run } = useAsyncLock();
+  const isCompact = variant === 'card' || variant === 'drawer';
+  const buttonSizeClass =
+    variant === 'card'
+      ? 'min-h-10 rounded-lg px-3 py-2 text-[12px] sm:text-[13px] font-black tracking-[0.08em] uppercase'
+      : variant === 'drawer'
+        ? 'min-h-10 sm:min-h-8 rounded-full px-2.5 py-1.5 text-[10px] font-black tracking-[0.12em] uppercase'
+        : 'min-h-[50px] rounded-xl px-6 py-3.5 text-base font-semibold';
+  const iconClass = isCompact ? 'w-3.5 h-3.5 mr-1.5' : 'w-5 h-5 mr-2';
 
   const handleCopy = async (e) => {
     if (e?.preventDefault) e.preventDefault();
@@ -47,12 +55,13 @@ const CopyButton = ({ textToCopy, className = '', analytics, onCopied }) => {
         type="button"
         onClick={handleCopy}
         className={cn(
-          'inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 text-base relative overflow-hidden transition-all duration-300 font-semibold rounded-xl min-h-[50px] disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#040912]',
+          'inline-flex w-full items-center justify-center gap-2 relative overflow-hidden transition-all duration-300 disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#040912]',
+          buttonSizeClass,
           copied
             ? 'bg-emerald-500/20 text-emerald-100 border border-emerald-500/45 shadow-none'
             : failed
               ? 'bg-red-500/15 text-red-100 border border-red-500/35 shadow-none'
-              : 'border-0 bg-gradient-to-br from-violet-600 via-violet-600 to-indigo-700 text-white shadow-[0_14px_44px_-14px_rgba(109,40,217,0.55)] hover:brightness-110 hover:shadow-[0_18px_48px_-12px_rgba(109,40,217,0.62)] active:scale-[0.99]',
+              : 'border-0 bg-gradient-to-br from-violet-600 via-violet-600 to-indigo-700 text-white shadow-[0_10px_28px_-16px_rgba(109,40,217,0.58)] hover:brightness-110 hover:shadow-[0_14px_34px_-16px_rgba(109,40,217,0.62)] active:scale-[0.99]',
           className
         )}
         disabled={!textToCopy || busy}
@@ -60,17 +69,17 @@ const CopyButton = ({ textToCopy, className = '', analytics, onCopied }) => {
       >
         {copied ? (
           <span className="flex items-center font-bold">
-            <Check className="w-5 h-5 mr-2 animate-in zoom-in duration-200" />
+            <Check className={cn(iconClass, 'animate-in zoom-in duration-200')} />
             Copied
           </span>
         ) : failed ? (
           <span className="flex items-center font-bold">
-            <Copy className="w-5 h-5 mr-2" />
+            <Copy className={iconClass} />
             Copy failed
           </span>
         ) : (
           <span className="flex items-center">
-            <Copy className="w-5 h-5 mr-2" />
+            <Copy className={iconClass} />
             Copy Name
           </span>
         )}

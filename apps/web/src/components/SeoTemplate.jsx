@@ -686,9 +686,8 @@ const SeoTemplate = ({ pageData }) => {
   const activeCyanSoftFilterClass =
     'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-500/15 dark:text-cyan-200 dark:border-cyan-500/40';
   const nameCardClass =
-    'group relative bg-white/90 border border-slate-200/90 rounded-2xl p-4 overflow-hidden transition-[border-color,box-shadow] duration-200 ease-out hover:border-cyan-300/70 hover:shadow-[0_10px_32px_-16px_rgba(15,23,42,0.22)] dark:bg-dark-900 dark:border-dark-700/90 dark:hover:border-accent-cyan/22 dark:hover:shadow-[0_10px_32px_-12px_rgba(34,211,238,0.07)]';
-  const smallGhostButtonClass =
-    'px-2.5 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-transparent border border-transparent text-slate-500 hover:text-violet-700 hover:border-violet-200 transition-colors dark:text-dark-400 dark:hover:text-accent-purple dark:hover:border-accent-purple/35';
+    'group relative flex min-h-[188px] bg-white/92 border border-slate-200/90 rounded-2xl p-4 sm:p-5 overflow-hidden transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-cyan-300/70 hover:shadow-[0_14px_34px_-22px_rgba(15,23,42,0.25)] dark:bg-dark-900/96 dark:border-dark-700/90 dark:hover:border-accent-cyan/24 dark:hover:shadow-[0_14px_34px_-18px_rgba(34,211,238,0.08)]';
+  const smallGhostButtonClass = 'th-name-card-tertiary';
 
   return (
     <>
@@ -1057,7 +1056,7 @@ const SeoTemplate = ({ pageData }) => {
                       key={`${s}-${i}`}
                       className={
                         isLolKoreanLane && krStyles
-                          ? `group relative border rounded-2xl overflow-hidden transition-[border-color,box-shadow] duration-200 ease-out hover:border-accent-cyan/35 hover:shadow-[0_6px_22px_rgba(0,0,0,0.22)] ${krStyles.pad} ${krStyles.wrap}`
+                          ? `group relative flex min-h-[188px] border rounded-2xl overflow-hidden transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-accent-cyan/35 hover:shadow-[0_6px_22px_rgba(0,0,0,0.22)] ${krStyles.pad} ${krStyles.wrap}`
                           : `${nameCardClass} ${i === 0 ? 'ring-1 ring-inset ring-cyan-200/60 dark:ring-white/[0.08]' : ''}`
                       }
                     >
@@ -1066,30 +1065,9 @@ const SeoTemplate = ({ pageData }) => {
                         <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-accent-purple/[0.06] blur-2xl" />
                       </div>
 
-                      <div className="flex items-start justify-between gap-3 relative">
-                        <div
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => {
-                            copyTextToClipboard(s, { preventRepeatMs: 450, vibrateMs: 12 }).then((res) => {
-                              if (!res.ok) return;
-                              pushRecentName(s);
-                              trackEvent('COPY_NAME', { pageSlug: pageData.slug, category, keyword, name: s, source: 'card' });
-                            });
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              copyTextToClipboard(s, { preventRepeatMs: 450, vibrateMs: 12 }).then((res) => {
-                                if (!res.ok) return;
-                                pushRecentName(s);
-                                trackEvent('COPY_NAME', { pageSlug: pageData.slug, category, keyword, name: s, source: 'card_kb' });
-                              });
-                            }
-                          }}
-                          className="min-w-0 flex-1 cursor-pointer select-none outline-none"
-                          aria-label={`Copy ${s}`}
-                        >
-                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <div className="relative flex min-h-0 w-full flex-col gap-3">
+                        <div className="flex min-h-[26px] flex-wrap items-center gap-1.5">
+                          <div className="flex flex-wrap items-center gap-1.5">
                             {formatHint && (
                               <span className={`px-2 py-1 rounded-md text-[10px] font-semibold tracking-wide border ${formatHintClass}`}>
                                 {formatHint}
@@ -1101,8 +1079,12 @@ const SeoTemplate = ({ pageData }) => {
                               </span>
                             )}
                           </div>
+                        </div>
+
+                        <div className="min-w-0 flex-1">
                           <span
-                            className={`block group-hover:text-cyan-700 dark:group-hover:text-accent-cyan/95 transition-colors duration-200 break-words leading-snug ${krStyles?.name ?? 'text-xl font-black text-slate-950 dark:text-dark-50 tracking-tight'}`}
+                            className={`th-name-card-title block group-hover:text-cyan-700 dark:group-hover:text-accent-cyan/95 transition-colors duration-200 leading-snug ${krStyles?.name ?? 'text-[1.15rem] sm:text-xl font-black text-slate-950 dark:text-dark-50 tracking-tight'}`}
+                            title={s}
                           >
                             {s}
                           </span>
@@ -1114,23 +1096,25 @@ const SeoTemplate = ({ pageData }) => {
                               : `${len} chars${hasSymbols ? ' • symbols' : ''}`}
                           </span>
                           {contextKey && i < 3 && !isLolKoreanLane && (
-                            <span className="block text-[11px] text-slate-600 dark:text-dark-300 mt-2">
+                            <span className="block text-[11px] text-slate-600 dark:text-dark-300 mt-2 leading-snug">
                               {pickWhyThisWorks({ contextKey })}
                             </span>
                           )}
                         </div>
 
-                        <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-                          <div className="flex flex-col items-end gap-2">
+                        <div className="mt-auto flex flex-col gap-2">
+                          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                             <CopyButton
                               textToCopy={s}
                               analytics={{ pageSlug: pageData.slug, category, keyword, source: 'card_copy_button' }}
-                              className="w-auto opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+                              onCopied={pushRecentName}
+                              variant="card"
+                              className="shadow-[0_10px_24px_-18px_rgba(109,40,217,0.62)]"
                             />
                             <button
                               type="button"
                               onClick={() => toggleFavorite(s)}
-                              className={`px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase border transition-colors ${
+                              className={`min-h-10 rounded-lg px-3 text-[11px] font-black tracking-[0.13em] uppercase border transition-colors ${
                                 favorites.has(s)
                                   ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-200 dark:border-yellow-500/40'
                                   : 'bg-white/90 text-slate-700 border-slate-200 hover:border-amber-300 hover:text-amber-700 dark:bg-dark-900 dark:text-dark-200 dark:border-dark-700 dark:hover:border-yellow-500/40 dark:hover:text-yellow-200'
@@ -1140,17 +1124,17 @@ const SeoTemplate = ({ pageData }) => {
                                 ? laneUi.savedLabel || 'Saved'
                                 : laneUi.saveLabel || 'Save'}
                             </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                trackEvent('NAME_EVOLUTION_USED', { pageSlug: pageData.slug, category, keyword, name: s });
-                                evolveName(s);
-                              }}
-                              className={smallGhostButtonClass}
-                            >
-                              {laneUi.evolveLabel || 'Similar reads'}
-                            </button>
                           </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              trackEvent('NAME_EVOLUTION_USED', { pageSlug: pageData.slug, category, keyword, name: s });
+                              evolveName(s);
+                            }}
+                            className={`${smallGhostButtonClass} self-start`}
+                          >
+                            {laneUi.evolveLabel || 'Similar reads'}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -1360,17 +1344,22 @@ const SeoTemplate = ({ pageData }) => {
 
       {/* Floating lineup shelf — primary surface for saves, recents, and similar reads */}
       <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
-        <div className="pointer-events-auto mx-auto max-w-5xl px-3 pb-3 sm:pb-4">
-          <div className="rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-xl shadow-[0_-20px_60px_-24px_rgba(15,23,42,0.28)] ring-1 ring-slate-900/[0.05] overflow-hidden dark:border-white/[0.09] dark:bg-dark-950/95 dark:shadow-[0_-20px_60px_-16px_rgba(0,0,0,0.75)] dark:ring-white/[0.05]">
-            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-slate-200/80 bg-slate-50/70 dark:border-white/[0.06] dark:bg-dark-900/40">
+        <div className="pointer-events-auto mx-auto max-w-4xl px-2.5 pb-2.5 sm:px-3 sm:pb-3">
+          <div
+            className={cn(
+              'rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-xl shadow-[0_-16px_44px_-28px_rgba(15,23,42,0.32)] ring-1 ring-slate-900/[0.05] overflow-hidden transition-[max-height,box-shadow] duration-300 dark:border-white/[0.09] dark:bg-dark-950/95 dark:shadow-[0_-16px_44px_-24px_rgba(0,0,0,0.72)] dark:ring-white/[0.05]',
+              drawerOpen || activeEvolution ? 'max-h-[60vh] md:max-h-[55vh]' : 'max-h-[18vh] md:max-h-[14vh]'
+            )}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-b border-slate-200/70 bg-slate-50/75 dark:border-white/[0.06] dark:bg-dark-900/40">
               <button
                 type="button"
                 onClick={() => setDrawerOpen((v) => !v)}
-                className="flex items-center gap-2.5 text-sm font-black text-slate-900 dark:text-dark-50 min-w-0"
+                className="flex min-h-10 min-w-0 items-center gap-2 text-sm font-black text-slate-900 dark:text-dark-50"
               >
                 <span
                   className={cn(
-                    'px-3.5 py-2 rounded-full text-xs font-black tracking-[0.18em] uppercase border transition-all duration-200',
+                    'px-3 py-1.5 rounded-full text-[11px] font-black tracking-[0.16em] uppercase border transition-all duration-200',
                     drawerOpen || activeEvolution
                       ? 'border-cyan-300 bg-cyan-50 text-cyan-700 shadow-[0_0_24px_-16px_rgba(8,145,178,0.35)] dark:border-cyan-400/50 dark:bg-cyan-500/[0.18] dark:text-cyan-50 dark:shadow-[0_0_24px_-10px_rgba(34,211,238,0.45)]'
                       : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-dark-600 dark:bg-dark-800 dark:text-dark-100 dark:hover:border-dark-500'
@@ -1379,14 +1368,14 @@ const SeoTemplate = ({ pageData }) => {
                   Lineup
                 </span>
                 <span className="text-slate-800 dark:text-dark-100 font-bold tabular-nums">{favorites.size}</span>
-                <span className="text-slate-500 dark:text-dark-400 text-[11px] font-bold tracking-widest uppercase shrink-0">
+                <span className="text-slate-500 dark:text-dark-400 text-[10px] font-bold tracking-widest uppercase shrink-0">
                   {drawerOpen ? 'Hide' : 'Open'}
                 </span>
               </button>
 
               <div className="flex flex-wrap items-center justify-end gap-2">
                 {!hasSavedFavorites && (
-                  <span className={cn('text-xs font-semibold', bodyClass)}>Save a name to build a pack.</span>
+                  <span className={cn('hidden text-xs font-semibold sm:inline', bodyClass)}>Save a name to build a pack.</span>
                 )}
                 {lineupFeedback && (
                   <span className="text-xs font-bold text-amber-700 dark:text-amber-200" aria-live="polite">
@@ -1398,7 +1387,7 @@ const SeoTemplate = ({ pageData }) => {
                     <button
                       type="button"
                       onClick={exportDiscordPack}
-                      className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100 hover:border-violet-300 hover:shadow-[0_0_18px_-12px_rgba(124,58,237,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-violet-500/35 dark:text-violet-100 dark:hover:bg-violet-500/15 dark:hover:border-violet-400/55 dark:hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)]"
+                      className="min-h-10 px-3 py-1.5 rounded-full text-[10px] font-black tracking-[0.12em] uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100 hover:border-violet-300 hover:shadow-[0_0_18px_-12px_rgba(124,58,237,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-violet-500/35 dark:text-violet-100 dark:hover:bg-violet-500/15 dark:hover:border-violet-400/55 dark:hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)]"
                     >
                       Export Discord Pack
                     </button>
@@ -1406,7 +1395,7 @@ const SeoTemplate = ({ pageData }) => {
                       type="button"
                       onClick={copySharePack}
                       className={cn(
-                        'px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase border transition-all duration-200',
+                        'min-h-10 px-3 py-1.5 rounded-full text-[10px] font-black tracking-[0.12em] uppercase border transition-all duration-200',
                         packCopied
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-[0_0_16px_-10px_rgba(16,185,129,0.32)] dark:bg-emerald-500/20 dark:text-emerald-100 dark:border-emerald-400/45 dark:shadow-[0_0_16px_-8px_rgba(52,211,153,0.4)]'
                           : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:shadow-[0_0_18px_-12px_rgba(16,185,129,0.28)] dark:bg-dark-800/90 dark:border-emerald-500/25 dark:text-emerald-100/95 dark:hover:border-emerald-400/45 dark:hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.35)]'
@@ -1419,7 +1408,7 @@ const SeoTemplate = ({ pageData }) => {
                 <button
                   type="button"
                   onClick={sharePage}
-                  className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-cyan-50 border border-cyan-200 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-[0_0_18px_-12px_rgba(8,145,178,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-cyan-500/35 dark:text-cyan-50 dark:hover:bg-cyan-500/15 dark:hover:border-cyan-400/50 dark:hover:shadow-[0_0_18px_-8px_rgba(34,211,238,0.4)]"
+                  className="min-h-10 px-3 py-1.5 rounded-full text-[10px] font-black tracking-[0.12em] uppercase bg-cyan-50 border border-cyan-200 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-[0_0_18px_-12px_rgba(8,145,178,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-cyan-500/35 dark:text-cyan-50 dark:hover:bg-cyan-500/15 dark:hover:border-cyan-400/50 dark:hover:shadow-[0_0_18px_-8px_rgba(34,211,238,0.4)]"
                 >
                   {pageShareCopied ? 'Shared' : 'Share page'}
                 </button>
@@ -1429,53 +1418,54 @@ const SeoTemplate = ({ pageData }) => {
             <div
               className={cn(
                 'transition-all duration-300 overflow-hidden',
-                drawerOpen ? 'max-h-[75vh] opacity-100' : 'max-h-0 opacity-0'
+                drawerOpen ? 'max-h-[calc(60vh-52px)] md:max-h-[calc(55vh-52px)] opacity-100' : 'max-h-0 opacity-0'
               )}
             >
-              <div className="px-4 pb-4 pt-4 space-y-4">
+              <div className="th-lineup-drawer-scroll max-h-[calc(60vh-52px)] md:max-h-[calc(55vh-52px)] overflow-y-auto px-3 pb-3 pt-3 space-y-3">
                 {activeEvolution && (
                   <section
-                    className="rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:border-cyan-500/25 dark:from-cyan-950/55 dark:via-dark-900 dark:to-dark-950 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+                    className="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:border-cyan-500/25 dark:from-cyan-950/55 dark:via-dark-900 dark:to-dark-950 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
                     aria-label="Similar reads"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div className="flex flex-col gap-2.5 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-200/90">Similar reads</p>
-                        <p className="text-sm text-slate-700 dark:text-dark-200 mt-1.5">
+                        <p className="mt-1 text-sm text-slate-700 dark:text-dark-200">
                           From <span className="font-semibold text-slate-950 dark:text-dark-50">{activeEvolution.base}</span>
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-dark-400 mt-1 leading-relaxed max-w-md">
+                        <p className="mt-1 max-w-md text-xs leading-relaxed text-slate-500 dark:text-dark-400">
                           Steps stay here with your lineup — scroll sideways on small screens.
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => setActiveEvolution(null)}
-                        className="shrink-0 self-start px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wide border border-slate-200 text-slate-700 hover:border-slate-300 hover:text-slate-950 transition-colors dark:border-dark-600 dark:text-dark-200 dark:hover:border-dark-500 dark:hover:text-dark-50"
+                        className="min-h-10 shrink-0 self-start rounded-full border border-slate-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-950 sm:min-h-8 dark:border-dark-600 dark:text-dark-200 dark:hover:border-dark-500 dark:hover:text-dark-50"
                       >
                         Dismiss
                       </button>
                     </div>
-                    <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
+                    <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
                       {activeEvolution.variants.map((v, vi) => (
                         <div
                           key={`${vi}-${v}`}
-                          className="flex-shrink-0 flex items-center gap-2 rounded-xl border border-slate-200 bg-white/85 px-3 py-2.5 shadow-sm dark:border-dark-600/90 dark:bg-dark-950/80"
+                          className="flex-shrink-0 flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white/85 px-2.5 py-2 shadow-sm dark:border-dark-600/90 dark:bg-dark-950/80"
                         >
-                          <span className="text-sm font-semibold text-slate-950 dark:text-dark-50 max-w-[min(160px,44vw)] truncate" title={v}>
+                          <span className="max-w-[min(150px,42vw)] truncate text-sm font-semibold text-slate-950 dark:text-dark-50" title={v}>
                             {v}
                           </span>
                           <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 shrink-0">
                             <CopyButton
                               textToCopy={v}
                               analytics={{ pageSlug: pageData.slug, category, keyword, source: 'evolution_variant' }}
-                              className="w-auto [&_button]:min-h-8 [&_button]:px-2.5 [&_button]:text-[10px]"
+                              variant="drawer"
+                              className="w-auto shrink-0"
                             />
                             <button
                               type="button"
                               onClick={() => toggleFavorite(v)}
                               className={cn(
-                                'text-[10px] font-black tracking-widest uppercase px-2.5 py-1.5 rounded-full border transition-colors',
+                                'min-h-10 rounded-full border px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors sm:min-h-8',
                                 favorites.has(v)
                                   ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-500/15 dark:text-amber-100 dark:border-amber-400/45'
                                   : 'border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 dark:border-dark-600 dark:text-dark-300 dark:hover:border-amber-400/35 dark:hover:text-amber-100'
@@ -1490,15 +1480,15 @@ const SeoTemplate = ({ pageData }) => {
                   </section>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <section className="bg-white/85 border border-slate-200/90 rounded-2xl p-4 shadow-sm dark:bg-dark-800 dark:border-dark-700">
-                    <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <section className="rounded-xl border border-slate-200/90 bg-white/85 p-3 shadow-sm dark:bg-dark-800 dark:border-dark-700">
+                    <div className="mb-2.5 flex items-center justify-between gap-2">
                       <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Saved</h3>
                       {hasSavedFavorites && (
                         <button
                           type="button"
                           onClick={() => setFavorites(new Set())}
-                          className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-red-300 hover:text-red-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-red-400/40 dark:hover:text-red-200"
+                          className="min-h-10 rounded-full border border-slate-200 bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-700 transition-colors hover:border-red-300 hover:text-red-700 sm:min-h-8 dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-red-400/40 dark:hover:text-red-200"
                         >
                           Clear all
                         </button>
@@ -1512,24 +1502,26 @@ const SeoTemplate = ({ pageData }) => {
                         {[...favorites].slice(0, 24).map((f) => (
                           <div
                             key={f}
-                            className="bg-white/90 border border-slate-200 rounded-full px-3 py-2 flex items-center gap-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
+                            className="flex max-w-full items-center gap-1.5 rounded-xl border border-slate-200 bg-white/90 px-2.5 py-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
                           >
                             <button
                               type="button"
                               onClick={() => navigator.clipboard?.writeText?.(f)}
-                              className="text-xs font-bold text-slate-950 hover:text-cyan-700 transition-colors dark:text-dark-50 dark:hover:text-accent-cyan"
+                              className="min-w-0 max-w-[11rem] truncate text-left text-xs font-bold text-slate-950 transition-colors hover:text-cyan-700 dark:text-dark-50 dark:hover:text-accent-cyan"
+                              title={f}
                             >
                               {f}
                             </button>
                             <CopyButton
                               textToCopy={f}
                               analytics={{ pageSlug: pageData.slug, category, keyword, source: 'favorites_drawer' }}
-                              className="w-auto"
+                              variant="drawer"
+                              className="w-auto shrink-0"
                             />
                             <button
                               type="button"
                               onClick={() => toggleFavorite(f)}
-                              className="text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-full border border-slate-200 text-slate-600 hover:text-red-700 hover:border-red-300 transition-colors dark:border-dark-700 dark:text-dark-300 dark:hover:text-red-200 dark:hover:border-red-400/40"
+                              className="min-h-10 shrink-0 rounded-full border border-slate-200 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-600 transition-colors hover:text-red-700 hover:border-red-300 sm:min-h-8 dark:border-dark-700 dark:text-dark-300 dark:hover:text-red-200 dark:hover:border-red-400/40"
                             >
                               Remove
                             </button>
@@ -1539,13 +1531,13 @@ const SeoTemplate = ({ pageData }) => {
                     )}
                   </section>
 
-                  <section className="bg-white/85 border border-slate-200/90 rounded-2xl p-4 shadow-sm dark:bg-dark-800 dark:border-dark-700">
-                    <div className="flex items-center justify-between gap-2 mb-3">
+                  <section className="rounded-xl border border-slate-200/90 bg-white/85 p-3 shadow-sm dark:bg-dark-800 dark:border-dark-700">
+                    <div className="mb-2.5 flex items-center justify-between gap-2">
                       <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Recent picks</h3>
                       <button
                         type="button"
                         onClick={() => setRecentState((p) => ({ ...p, recentNames: [] }))}
-                        className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-slate-300 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-dark-500"
+                        className="min-h-10 rounded-full border border-slate-200 bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-700 transition-colors hover:border-slate-300 sm:min-h-8 dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-dark-500"
                       >
                         Clear
                       </button>
@@ -1555,24 +1547,26 @@ const SeoTemplate = ({ pageData }) => {
                       {(recentState.recentNames || []).slice(0, 12).map((n) => (
                         <div
                           key={n}
-                          className="bg-white/90 border border-slate-200 rounded-full px-3 py-2 flex items-center gap-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
+                          className="flex max-w-full items-center gap-1.5 rounded-xl border border-slate-200 bg-white/90 px-2.5 py-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
                         >
                           <button
                             type="button"
                             onClick={() => navigator.clipboard?.writeText?.(n)}
-                            className="text-xs font-bold text-slate-950 hover:text-cyan-700 transition-colors dark:text-dark-50 dark:hover:text-accent-cyan"
+                            className="min-w-0 max-w-[11rem] truncate text-left text-xs font-bold text-slate-950 transition-colors hover:text-cyan-700 dark:text-dark-50 dark:hover:text-accent-cyan"
+                            title={n}
                           >
                             {n}
                           </button>
                           <CopyButton
                             textToCopy={n}
                             analytics={{ pageSlug: pageData.slug, category, keyword, source: 'recent_name' }}
-                            className="w-auto"
+                            variant="drawer"
+                            className="w-auto shrink-0"
                           />
                           <button
                             type="button"
                             onClick={() => toggleFavorite(n)}
-                            className={`text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-full border transition-colors ${
+                            className={`min-h-10 shrink-0 rounded-full border px-2 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors sm:min-h-8 ${
                               favorites.has(n)
                                 ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-200 dark:border-yellow-500/40'
                                 : 'border-slate-200 text-slate-600 hover:text-amber-700 hover:border-amber-300 dark:border-dark-700 dark:text-dark-300 dark:hover:text-yellow-200 dark:hover:border-yellow-500/40'

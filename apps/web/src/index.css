@@ -129,6 +129,40 @@
       0 1px 3px rgba(0, 0, 0, 0.12);
   }
 
+  .th-name-card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    line-break: strict;
+  }
+
+  .th-name-card-title--compact {
+    -webkit-line-clamp: 1;
+  }
+
+  .th-name-card-tertiary {
+    @apply inline-flex min-h-8 items-center justify-center rounded-full border border-transparent bg-transparent px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-slate-500 transition-colors hover:border-violet-200 hover:text-violet-700 dark:text-dark-400 dark:hover:border-accent-purple/35 dark:hover:text-accent-purple;
+  }
+
+  .th-lineup-drawer-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.55) transparent;
+  }
+
+  .th-lineup-drawer-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .th-lineup-drawer-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(100, 116, 139, 0.42);
+  }
+
   /**
    * Atmospheric depth — controlled prestige (no RGB spam).
    * Rollback: remove these classes from components + delete this block.
