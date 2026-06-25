@@ -152,6 +152,16 @@ Affected pages likely share templates. The current primary follow-up is `Dynamic
 
 PR10.4 should fix shared templates, not individual URLs one by one.
 
+## PR10.4 Dynamic Template Implementation
+
+PR10.4 aligns the shared dynamic generator route templates with the theme contract.
+
+- `DynamicPage` still renders `SeoTemplate`.
+- `SeoTemplate` uses a theme-aware route shell and paired light/dark classes for primary dynamic surfaces.
+- `.th-atmosphere-shell` is light-aware by default and preserves its dark atmospheric treatment under `.dark`.
+- `InternalLinkGrid` uses paired light/dark cards, links, borders, and text.
+- Route logic, SEO data, copy, generated names, and provider/auth behavior remain unchanged.
+
 ## Recommended Fix Order
 
 1. PR10.1 Account/Auth. Completed before this PR.

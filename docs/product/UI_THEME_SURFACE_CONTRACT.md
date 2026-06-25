@@ -74,7 +74,7 @@ Evidence:
 | `/terms-of-service` | Should be theme-aware. |
 | `/roblox-names/*` | Must be theme-aware through shared generator templates. |
 | `/gamer-names/*` | Must be theme-aware through shared generator templates. |
-| `/:category/:keyword` | Must be theme-aware through the dynamic route template unless explicitly marked `INTENTIONAL_DARK`. |
+| `/:category/:keyword` | Must be theme-aware through the dynamic route template unless explicitly marked `INTENTIONAL_DARK`; PR10.4 aligns `SeoTemplate`. |
 | future `/id/:slug` | Must be theme-aware shell; Passport scene may be visual/themed. |
 
 ## PR10.1 Implementation Plan
@@ -119,3 +119,29 @@ Acceptance criteria:
 - Landing copy remains Riot-safe.
 - Legal notice remains visible.
 - No Riot assets/logos added.
+
+## PR10.4 Implementation Plan
+
+PR10.4 fixes shared dynamic generator templates:
+
+- `SeoTemplate`
+- `.th-atmosphere-shell`
+- `InternalLinkGrid`
+
+PR10.4 does not:
+
+- Change route logic.
+- Change SEO metadata semantics.
+- Change generated name data.
+- Change page copy.
+- Change auth logic.
+- Implement provider runtime, Riot OAuth, or Discord OAuth.
+
+Acceptance criteria:
+
+- Dynamic route shell changes between light and dark mode.
+- Main content cards are readable in light and dark mode.
+- Generated-name cards are readable in light and dark mode.
+- Filter/action controls are readable in light and dark mode.
+- Internal link cards are readable in light and dark mode.
+- Representative dynamic routes pass visual smoke.
