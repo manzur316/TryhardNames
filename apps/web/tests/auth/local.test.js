@@ -43,6 +43,7 @@ test('local Supabase Parent Auth creates and edits a private Passport draft', as
       layout: 'classic',
       accent: 'cyan',
       density: 'comfortable',
+      featuredSavedNames: ['Local Highlight'],
     },
   });
 
@@ -59,6 +60,7 @@ test('local Supabase Parent Auth creates and edits a private Passport draft', as
       layout: 'compact',
       accent: 'emerald',
       density: 'dense',
+      featuredSavedNames: [' Local Ace ', 'local   ace', 'Local Anchor'],
       ignored: true,
     },
   });
@@ -71,6 +73,7 @@ test('local Supabase Parent Auth creates and edits a private Passport draft', as
     layout: 'compact',
     accent: 'emerald',
     density: 'dense',
+    featuredSavedNames: ['Local Ace', 'Local Anchor'],
   });
 
   const signedOut = await supabase.auth.signOut();

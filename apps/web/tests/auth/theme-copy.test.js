@@ -5,6 +5,17 @@ import { describe, it } from 'node:test';
 const readSource = (path) => readFileSync(new URL(`../../src/${path}`, import.meta.url), 'utf8');
 
 const accountPage = readSource('pages/AccountPage.jsx');
+const privatePassportEditor = readSource('gaming-passport/components/PrivatePassportEditor.jsx');
+const privatePassportPreview = readSource('gaming-passport/components/PrivatePassportPreview.jsx');
+const passportCompletionChecklist = readSource('gaming-passport/components/PassportCompletionChecklist.jsx');
+const savedNameHighlightsPicker = readSource('gaming-passport/components/SavedNameHighlightsPicker.jsx');
+const accountSurface = [
+  accountPage,
+  privatePassportEditor,
+  privatePassportPreview,
+  passportCompletionChecklist,
+  savedNameHighlightsPicker,
+].join('\n');
 const signInPage = readSource('pages/auth/SignInPage.jsx');
 const signUpPage = readSource('pages/auth/SignUpPage.jsx');
 const authCallbackPage = readSource('pages/auth/AuthCallbackPage.jsx');
@@ -13,12 +24,12 @@ const accountAndAuthPages = [accountPage, signInPage, signUpPage, authCallbackPa
 
 describe('Account/Auth theme copy contract', () => {
   it('keeps Account functional surfaces paired for light and dark modes', () => {
-    assert.match(accountPage, /border-slate-200\/80 bg-white\/80[\s\S]*dark:border-white\/10 dark:bg-white\/\[0\.04\]/);
-    assert.match(accountPage, /text-slate-950 dark:text-white/);
-    assert.match(accountPage, /text-slate-700 dark:text-slate-200/);
-    assert.match(accountPage, /border-slate-300 bg-white px-3 py-2 text-slate-900[\s\S]*dark:border-white\/10 dark:bg-black\/30 dark:text-white/);
-    assert.match(accountPage, /border-red-300 bg-red-50[\s\S]*text-red-700[\s\S]*dark:border-red-400\/30 dark:bg-red-500\/10 dark:text-red-100/);
-    assert.match(accountPage, /border-emerald-300 bg-emerald-50[\s\S]*text-emerald-700[\s\S]*dark:border-emerald-400\/30 dark:bg-emerald-500\/10 dark:text-emerald-100/);
+    assert.match(accountSurface, /border-slate-200\/80 bg-white\/80[\s\S]*dark:border-white\/10 dark:bg-white\/\[0\.04\]/);
+    assert.match(accountSurface, /text-slate-950 dark:text-white/);
+    assert.match(accountSurface, /text-slate-700 dark:text-slate-200/);
+    assert.match(accountSurface, /border-slate-300 bg-white px-3 py-2 text-slate-900[\s\S]*dark:border-white\/10 dark:bg-black\/30 dark:text-white/);
+    assert.match(accountSurface, /border-red-300 bg-red-50[\s\S]*text-red-700[\s\S]*dark:border-red-400\/30 dark:bg-red-500\/10 dark:text-red-100/);
+    assert.match(accountSurface, /border-emerald-300 bg-emerald-50[\s\S]*text-emerald-700[\s\S]*dark:border-emerald-400\/30 dark:bg-emerald-500\/10 dark:text-emerald-100/);
   });
 
   it('keeps SignIn form surfaces paired for light and dark modes', () => {

@@ -1,6 +1,6 @@
 # Roadmap Status Matrix
 
-This matrix reflects `main` after PR10.8 and PR11.1.
+This matrix reflects the PR13 branch after PR10.8, PR11.1, PR12, and PR13.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -10,8 +10,8 @@ This matrix reflects `main` after PR10.8 and PR11.1.
 | Dynamic NameCard + Lineup visual redesign | done | `NAMECARD_LINEUP_VISUAL_REDESIGN.md` | Dynamic card clamp, hierarchy, drawer coverage work | Legacy internal cleanup only if needed | PR23 | Favorite/star is now the canonical save model. |
 | Feature generator visual alignment | done | `FEATURE_GENERATOR_CARD_VISUAL_ALIGNMENT.md` | GamerNames and RobloxNames card alignment | Account/editor depth | PR13 | No further visual patching unless critical. |
 | Parent Auth | done | `/sign-in`, `/sign-up`, `/auth/callback`, `/account` guard | TryhardNames account login and saved-name ownership | Editor depth and future account state | PR13 | Google is Parent Auth only, not public proof. |
-| Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js` | Owner-only private draft create/read/update | Editor V2 depth | PR13 | Draft stays private by default. |
-| Account Dashboard V2 | done | PR11.1, `AccountPage.jsx` | Dashboard sections, favorite-first saved-name guidance, Account Hunting Guide | Deeper Passport editor | PR13 | Dashboard V2 is implemented. |
+| Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js`, `PrivatePassportEditor.jsx` | Owner-only private draft create/read/update, Editor V2, private preview, completion checklist, private Saved Names highlights | Publish runtime commands | PR14 | Draft stays private by default. |
+| Account Dashboard V2 | done | PR11.1, `AccountPage.jsx`, PR13 components | Dashboard sections, favorite-first saved-name guidance, Account Hunting Guide, embedded Private Passport Editor V2 | Publish runtime commands | PR14 | Dashboard V2 is implemented. |
 | Saved Names local SoT | done | `FavoritesContext.jsx`, `favoritesSoT.js`, `localFavoritesBridge.js`, `FavoriteStarButton.jsx`, `MinimalFavoritesPeek.jsx` | Local fallback, compatibility bridge, account mirror | Future cleanup of PocketBase legacy fallback if safe | PR13 | Favorite/star is the canonical saved-name UX. |
 | Saved Names Persistence | done | `savedNamesRepository.js`, `20260625170000_saved_names.sql`, `saved_names_test.sql` | Supabase `saved_names`, owner RLS, local-to-account sync, account-to-local mirror | Future richer account-state analytics if needed | PR13 | Saved Names Supabase persistence is implemented with local fallback. |
 | Linked Provider domain | partial-contract | `constants.js`, architecture docs | Provider IDs and statuses | Runtime commands and provider service layer | PR16 | Linked providers are not Parent Auth. |
@@ -36,6 +36,7 @@ This matrix reflects `main` after PR10.8 and PR11.1.
 ## Summary
 
 - Account Dashboard V2 is implemented.
+- Private Gaming Passport Editor V2 is implemented as owner-only draft editing.
 - Publish Policy and Public Projection already exist as contracts.
 - Publish Runtime Commands are pending.
 - Public Profile `/id/:slug` is pending.
