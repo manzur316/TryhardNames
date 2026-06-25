@@ -63,7 +63,7 @@ Evidence:
 | Route | Expectation |
 | --- | --- |
 | `/` | Theme-aware. |
-| `/gaming-passport` | Decision required: dark-branded landing or theme-aware landing. |
+| `/gaming-passport` | Theme-aware after PR10.2; dark mode may keep the premium dark-branded treatment. |
 | `/account` | Must be theme-aware. |
 | `/sign-in` | Must be theme-aware. |
 | `/sign-up` | Must be theme-aware. |
@@ -104,11 +104,9 @@ Acceptance criteria:
 
 ## PR10.2 Implementation Plan
 
-PR10.2 decides `GamingPassportPage`.
+PR10.2 chooses Option B for `GamingPassportPage`: theme-aware landing with light and dark variants.
 
-Option A: dark-branded landing, with documented exception and no broken toggle expectations.
-
-Option B: theme-aware landing with light and dark variants.
+The dark-branded premium look stays in dark mode. Light mode uses a readable soft white/slate surface so the theme toggle changes the full page container, not only the global navigation.
 
 Acceptance criteria:
 

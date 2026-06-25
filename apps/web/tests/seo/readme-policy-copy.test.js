@@ -59,8 +59,9 @@ describe('README and public policy copy', () => {
 
   it('documents theme gates and current theme audit findings', () => {
     assert.match(themeContract, /\| `\/account` \| Must be theme-aware\. \|/);
-    assert.match(themeAudit, /### `\/account`[\s\S]*Severity: High\./);
-    assert.match(themeAudit, /Needs a dark-branded vs theme-aware decision before visual fixes\./);
+    assert.match(themeAudit, /### `\/account`[\s\S]*Severity before PR10\.1: High\./);
+    assert.match(themeAudit, /### `\/gaming-passport`[\s\S]*Status: THEME_AWARE after this PR\./);
+    assert.match(themeContract, /\| `\/gaming-passport` \| Theme-aware after PR10\.2/);
   });
 
   it('keeps roadmap dependency gates explicit', () => {

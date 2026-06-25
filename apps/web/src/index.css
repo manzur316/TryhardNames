@@ -8,24 +8,24 @@
    * .dark below preserves existing stage depth; stratified routes may still use explicit slate/dark utilities.
    */
   :root {
-    --background: 222 22% 96%;
+    --background: 210 40% 98%;
     --foreground: 222 47% 11%;
-    --card: 222 18% 97%;
+    --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
-    --popover: 222 18% 97%;
+    --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
     --primary: 189 94% 43%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 271 91% 65%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 214 20% 92%;
-    --muted-foreground: 215 18% 38%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 42%;
     --accent: 330 81% 60%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214 18% 84%;
-    --input: 214 18% 84%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 189 94% 43%;
     --radius: 0.5rem;
   }
@@ -64,7 +64,7 @@
   }
 
   html:not(.dark) body {
-    background: linear-gradient(165deg, hsl(222 26% 96%) 0%, hsl(222 22% 93.5%) 48%, hsl(215 24% 91%) 100%);
+    background: linear-gradient(165deg, hsl(210 40% 98%) 0%, hsl(210 35% 97%) 48%, hsl(214 32% 95%) 100%);
     background-attachment: fixed;
   }
 
