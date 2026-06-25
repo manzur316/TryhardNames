@@ -22,3 +22,5 @@ apps/pocketbase/pocketbase
 
 supabase/.temp/
 supabase/.branches/
+
+artifacts/tool-container-audit/

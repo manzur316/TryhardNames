@@ -8,10 +8,11 @@
     "dev": "vite --host :: --port 3000",
     "build": "node scripts/generate-sitemap.js && node tools/generate-llms.js && vite build",
     "start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
+    "audit:tool-containers": "node ../../scripts/audit-tool-containers.mjs",
     "lint": "eslint . --quiet",
     "lint:warn": "eslint .",
-    "test": "node --test tests/seo/sitemap.test.js tests/seo/gaming-passport-landing.test.js tests/seo/readme-policy-copy.test.js tests/seo/theme-baseline.test.js tests/seo/theme-surface-audit.test.js tests/seo/dynamic-theme-surface.test.js tests/seo/dynamic-generator-ux.test.js",
-    "test:seo": "node --test tests/seo/sitemap.test.js tests/seo/gaming-passport-landing.test.js tests/seo/readme-policy-copy.test.js tests/seo/theme-baseline.test.js tests/seo/theme-surface-audit.test.js tests/seo/dynamic-theme-surface.test.js tests/seo/dynamic-generator-ux.test.js",
+    "test": "node --test tests/seo/sitemap.test.js tests/seo/gaming-passport-landing.test.js tests/seo/readme-policy-copy.test.js tests/seo/theme-baseline.test.js tests/seo/theme-surface-audit.test.js tests/seo/dynamic-theme-surface.test.js tests/seo/dynamic-generator-ux.test.js tests/seo/tool-container-audit.test.js",
+    "test:seo": "node --test tests/seo/sitemap.test.js tests/seo/gaming-passport-landing.test.js tests/seo/readme-policy-copy.test.js tests/seo/theme-baseline.test.js tests/seo/theme-surface-audit.test.js tests/seo/dynamic-theme-surface.test.js tests/seo/dynamic-generator-ux.test.js tests/seo/tool-container-audit.test.js",
     "test:passport": "node --test tests/gaming-passport/domain.test.js",
     "test:auth": "node --test tests/auth/unit.test.js tests/auth/theme-copy.test.js",
     "test:auth:local": "node --test tests/auth/local.test.js"
