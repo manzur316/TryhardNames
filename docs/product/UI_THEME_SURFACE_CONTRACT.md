@@ -40,6 +40,8 @@ Evidence:
 - Dark-branded marketing sections are allowed only if declared.
 - A Passport visual scene may be dark-branded if isolated from functional controls.
 - The navbar may remain dark-integrated if documented, but should not imply the whole app is dark-only.
+- Generator and programmatic route templates must be theme-aware.
+- Dynamic route pages must not use dark-only root shells unless marked `INTENTIONAL_DARK` in the route audit.
 
 ## Allowed Patterns
 
@@ -70,6 +72,9 @@ Evidence:
 | `/auth/callback` | Must be theme-aware. |
 | `/privacy-policy` | Should be theme-aware. |
 | `/terms-of-service` | Should be theme-aware. |
+| `/roblox-names/*` | Must be theme-aware through shared generator templates. |
+| `/gamer-names/*` | Must be theme-aware through shared generator templates. |
+| `/:category/:keyword` | Must be theme-aware through the dynamic route template unless explicitly marked `INTENTIONAL_DARK`. |
 | future `/id/:slug` | Must be theme-aware shell; Passport scene may be visual/themed. |
 
 ## PR10.1 Implementation Plan

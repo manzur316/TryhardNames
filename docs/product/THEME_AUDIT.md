@@ -144,12 +144,22 @@ Findings:
 
 Severity: Low if documented.
 
+## PR10.3 Route Audit Follow-up
+
+PR10.3 audits legacy generator and dynamic route surfaces after PR10.1 and PR10.2.
+
+Affected pages likely share templates. The current primary follow-up is `DynamicPage` -> `SeoTemplate`, not dozens of independent URL implementations.
+
+PR10.4 should fix shared templates, not individual URLs one by one.
+
 ## Recommended Fix Order
 
 1. PR10.1 Account/Auth. Completed before this PR.
 2. PR10.2 light baseline and Gaming Passport landing. This PR.
-3. PR10.3 Legal/docs theme pass.
-4. Future public profile uses theme contract from day one.
+3. PR10.3 legacy generator and dynamic route surface audit.
+4. PR10.4 shared generator/dynamic template theme fix.
+5. Legal/docs theme pass if the dark legal/docs presentation is not accepted.
+6. Future public profile uses theme contract from day one.
 
 ## Non-Goals
 
