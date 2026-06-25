@@ -71,6 +71,8 @@ describe('dynamic generator UX priority pass', () => {
     assert.ok(cardCopy > -1);
     assert.ok(save > cardCopy);
     assert.ok(similar > save);
+    assert.match(seoTemplateSource, /Use .Similar reads. to start building recents\./);
+    assert.doesNotMatch(seoTemplateSource, /Use .More like this. to start building recents\./);
   });
 
   it('adds reroll guardrails for noisy generated variants', () => {
@@ -81,7 +83,10 @@ describe('dynamic generator UX priority pass', () => {
     assert.match(seoTemplateSource, /countStrongToken\(compact, token\) > 1/);
     assert.match(seoTemplateSource, /tokens\.length > 4/);
     assert.match(seoTemplateSource, /sanitizeRerollCandidates\(evolveContextualName/);
-    assert.match(seoTemplateSource, /return \['GhostVCT'\]\.map\(normalizeRerolledNameCandidate\)\.filter\(Boolean\)/);
+    assert.doesNotMatch(seoTemplateSource, /return \['GhostVCT'\]/);
+    assert.doesNotMatch(seoTemplateSource, /fallback.*GhostVCT/i);
+    assert.match(seoTemplateSource, /fallbackName = 'TryhardTag'|initialNames\[0\]|baseName/);
+    assert.match(seoTemplateSource, /const neutral = normalizeRerolledNameCandidate\(fallbackName\);[\s\S]*return neutral \? \[neutral\] : \[\];/);
   });
 
   it('does not add provider auth/runtime copy', () => {

@@ -91,7 +91,7 @@ function normalizeRerolledNameCandidate(candidate) {
   return normalized && !isNoisyRerollCandidate(normalized) ? normalized : null;
 }
 
-function sanitizeRerollCandidates(candidates, fallbackCandidates = []) {
+function sanitizeRerollCandidates(candidates, fallbackCandidates = [], fallbackName = 'TryhardTag') {
   const out = [];
   const push = (candidate) => {
     const clean = normalizeRerolledNameCandidate(candidate);
@@ -102,7 +102,8 @@ function sanitizeRerollCandidates(candidates, fallbackCandidates = []) {
   fallbackCandidates.forEach(push);
 
   if (out.length) return out;
-  return ['GhostVCT'].map(normalizeRerolledNameCandidate).filter(Boolean);
+  const neutral = normalizeRerolledNameCandidate(fallbackName);
+  return neutral ? [neutral] : [];
 }
 
 const SeoTemplate = ({ pageData }) => {
@@ -1582,7 +1583,7 @@ const SeoTemplate = ({ pageData }) => {
                         </div>
                       ))}
                       {(recentState.recentNames || []).length === 0 && (
-                        <p className={cn('text-sm', bodyClass)}>Use “More like this” to start building recents.</p>
+                        <p className={cn('text-sm', bodyClass)}>Use “Similar reads” to start building recents.</p>
                       )}
                     </div>
 
