@@ -1,0 +1,43 @@
+# Roadmap Status Matrix
+
+This matrix reflects `main` after PR10.8 and PR11.1.
+
+| Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
+| --- | --- | --- | --- | --- | --- | --- |
+| Public generators | done | Public routes, dynamic pages, feature generators | Free name/text/symbol/generator surfaces | Account-linked generator persistence | PR12 | Public generators stay public. |
+| Theme / visual surfaces | done | `UI_THEME_SURFACE_CONTRACT.md`, `THEME_AUDIT.md`, PR10.x docs | Theme contract and route audit follow-ups | Only critical visual fixes | PR23 | PR10.x visual/tooling line is closed. |
+| Tool container audit | done | `scripts/audit-tool-containers.mjs`, `TOOL_CONTAINER_VISUAL_AUDIT.md` | Chrome audit, JSON/Markdown/screenshot output | CI enforcement, if desired | PR23 | Audit is local tooling, not runtime. |
+| Dynamic NameCard + Lineup visual redesign | done | `NAMECARD_LINEUP_VISUAL_REDESIGN.md` | Dynamic card clamp, hierarchy, drawer coverage work | Legacy internal cleanup only if needed | PR23 | Favorite/star is now the canonical save model. |
+| Feature generator visual alignment | done | `FEATURE_GENERATOR_CARD_VISUAL_ALIGNMENT.md` | GamerNames and RobloxNames card alignment | Account-linked persistence | PR12 | No further visual patching unless critical. |
+| Parent Auth | done | `/sign-in`, `/sign-up`, `/auth/callback`, `/account` guard | TryhardNames account login | Account-state persistence expansion | PR12 | Google is Parent Auth only, not public proof. |
+| Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js` | Owner-only private draft create/read/update | Editor V2 depth | PR13 | Draft stays private by default. |
+| Account Dashboard V2 | done | PR11.1, `AccountPage.jsx` | Dashboard sections, favorite-first saved-name guidance, Account Hunting Guide | Deeper Passport editor | PR13 | Dashboard V2 is implemented. |
+| Saved Names local SoT | partial-runtime | `FavoritesContext.jsx`, `favoritesSoT.js`, `localFavoritesBridge.js`, `FavoriteStarButton.jsx`, `MinimalFavoritesPeek.jsx` | Local/legacy favorites bridge and peek | Supabase account sync | PR12 | Favorite/star is the canonical saved-name UX. |
+| Saved Names Persistence | pending | No Supabase saved names runtime | Local saved names only | Supabase saved_names, owner RLS, account sync | PR12 | Saved Names Supabase persistence is pending. |
+| Linked Provider domain | partial-contract | `constants.js`, architecture docs | Provider IDs and statuses | Runtime commands and provider service layer | PR16 | Linked providers are not Parent Auth. |
+| Linked Provider schema | partial-schema | Local schema runbook and migration foundation | `linked_provider_accounts` local table | Token storage, remote rollout, sync metadata | PR16 | No remote Supabase changes in docs-only work. |
+| Linked Provider runtime | pending | No OAuth/link runtime | None | Link, callback, unlink, revoke, state, sync | PR16 | No Discord/Riot OAuth live. |
+| Verified Proof domain | partial-contract | `constants.js`, data model docs | Proof types, visibility constants | Provider-backed proof creation | PR16 | Proofs must be source-backed. |
+| Verified Proof schema | partial-schema | Local schema foundation | `verified_proofs`, featured proofs, visibility settings | Remote rollout, migrations for runtime needs | PR16 | Schema is local foundation only. |
+| Verified Proof sync runtime | pending | No sync jobs or provider adapters | None | Sync jobs, stale/revoked states, audit | PR16 | No fake proof data. |
+| Publish Policy | partial-contract | `publicationPolicy.js` | `getPublishability`, `isPassportPublishable`, `canServePublishedPassport` | Publish/unpublish runtime commands | PR14 | Publish Policy already exists as a contract. |
+| Publish Runtime Commands | pending | No command runtime | None | Consent, slug claim, publish, unpublish, status transitions | PR14 | Runtime must enforce policy contract. |
+| Public Projection | partial-contract | `publicProjection.js` | `buildPublicPassportProjection`, allowlisted DTO | Public route/API serving projection | PR15 | Public Projection already exists as a contract. |
+| Public Profile `/id/:slug` | pending | `App.jsx` has no `/id/:slug` route | None | Route, API, SEO/share metadata, 404/privacy behavior | PR15 | `/id/:slug` is pending, not implemented. |
+| Provider Runtime Foundation | pending | Roadmap docs only | Domain/schema pieces | Token storage, link/unlink/revoke, sync, audit, rate limits | PR16 | Provider runtime foundation must precede OAuth launch. |
+| Provider token storage | pending | Data model defers provider tokens | None | Secure server-side token store and retention policy | PR16 | No secrets or env vars in repo. |
+| Discord runtime | pending | Constants/docs only | Provider ID planned | OAuth, callbacks, tokens, unlink/revoke, sync | PR18 | Discord OAuth is not live. |
+| Riot runtime | gated | Riot review docs, verification file | Site verification and safe copy | Approval, RSO, callbacks, tokens, RiotProvider | PR19 | Riot runtime remains gated by Riot approval. |
+| League of Legends adapter | pending | Roadmap docs only | Conceptual GameAdapter placement | Riot-backed LoL proof normalization | PR20 | No tracker, OP.GG clone, live-game advice, or hidden-player inference. |
+| Cosmetics | pending | Roadmap docs only | Product direction | Cosmetic schema/runtime/storefront rules | PR21 | No Riot data/assets monetization. |
+| Trust/Safety | pending | Roadmap docs only | Policy boundaries | Reports, takedown, suspensions, abuse controls | PR22 | Required before broad public profiles. |
+| Launch readiness | pending | Roadmap docs only | Validation command habit | Production smoke, observability, rollback, privacy final review | PR23 | No launch until gates are satisfied. |
+
+## Summary
+
+- Account Dashboard V2 is implemented.
+- Publish Policy and Public Projection already exist as contracts.
+- Publish Runtime Commands are pending.
+- Public Profile `/id/:slug` is pending.
+- Provider-neutral domain/schema is partial, but Provider Runtime Foundation is pending.
+- Saved Names local SoT exists, but Saved Names Supabase persistence is pending.
