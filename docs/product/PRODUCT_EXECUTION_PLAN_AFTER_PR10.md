@@ -15,15 +15,17 @@ This is the living execution plan after PR10.8 and PR11.1.
 
 PR10.x visual/tooling line is closed. Do not keep patching visual surfaces unless the issue is a critical bug, a comprehension blocker, a conversion blocker, or an evident accessibility problem.
 
-## Completed Account Step
+## Completed Account Steps
 
 PR11.1 added Account Dashboard V2 and made favorite/star the canonical saved-name UX. It did not add Supabase saved-name persistence, provider runtime, publish commands, or public profiles.
+
+PR12 adds Supabase-backed saved names, owner-only RLS, local-to-account sync, account-to-local mirror, and account fallback behavior. It does not add providers, publish commands, or public profiles.
 
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Saved Names Persistence -> Private Passport Editor V2 -> Publish Runtime Commands -> Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
+Private Passport Editor V2 -> Publish Runtime Commands -> Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
 
 ## Corrected Roadmap
 
@@ -41,7 +43,8 @@ Saved Names Persistence -> Private Passport Editor V2 -> Publish Runtime Command
 - Goal: Persist saved names under the Parent Auth account.
 - Why now: PR11.1 defines the UX and makes the state worth saving.
 - Already exists: Local/legacy favorites bridge and favorite-first UI.
-- Missing: Supabase saved_names, owner RLS, sync strategy, migration from local state, tests.
+- Implemented by PR12: Supabase `saved_names`, owner RLS, sync strategy, local fallback, repository, docs, and tests.
+- Missing: Optional future cleanup of PocketBase legacy fallback if no remaining surface needs it.
 - Non-goals: No provider OAuth, public profiles, or proof sync.
 - Exit criteria: Authenticated users can keep saved names across sessions/devices with owner-only access.
 

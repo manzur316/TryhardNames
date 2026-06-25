@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Compass, Copy, ExternalLink, Gamepad2, LogOut, Save, ShieldCheck, Star, Trash2, UserRound } from 'lucide-react';
+import { FavoritesContext } from '@/contexts/FavoritesContext.jsx';
 import { useAuth } from '@/core/hooks/useAuth.js';
 import { getSupabaseRuntime } from '@/lib/supabase/client.js';
 import SeoHead from '@/seo/SeoHead.jsx';
@@ -14,12 +15,11 @@ import {
   validatePresentationInput,
 } from '@/gaming-passport/data/passportRepository.js';
 import { copyTextToClipboard } from '@/utils/clipboard.js';
-import { readUnifiedFavoriteNames, writeUnifiedFavoriteNames } from '@/utils/favoritesSoT.js';
-import { subscribeFavorites } from '@/utils/localFavoritesBridge.js';
 import AuthUnavailable from './auth/AuthUnavailable.jsx';
 
 export default function AccountPage() {
   const auth = useAuth();
+  const favoritesContext = useContext(FavoritesContext);
   const [passport, setPassport] = useState(null);
   const [form, setForm] = useState({
     alias: '',
@@ -27,7 +27,6 @@ export default function AccountPage() {
     bioShort: '',
     sceneConfig: DEFAULT_SCENE_CONFIG,
   });
-  const [savedNames, setSavedNames] = useState(() => []);
   const [copiedName, setCopiedName] = useState('');
   const [isDraftLoading, setIsDraftLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -36,15 +35,11 @@ export default function AccountPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const ownerId = auth.user?.id || null;
-
-  const refreshSavedNames = useCallback(() => {
-    setSavedNames(readUnifiedFavoriteNames());
-  }, []);
-
-  useEffect(() => {
-    refreshSavedNames();
-    return subscribeFavorites(refreshSavedNames);
-  }, [refreshSavedNames]);
+  const savedNames = useMemo(() => {
+    return [...new Set((favoritesContext?.favorites || []).map((fav) => fav?.name).filter(Boolean))];
+  }, [favoritesContext?.favorites]);
+  const savedNamesStorageMode = favoritesContext?.storageMode || 'local';
+  const savedNamesSyncError = favoritesContext?.syncError || '';
 
   useEffect(() => {
     let isMounted = true;
@@ -131,12 +126,10 @@ export default function AccountPage() {
     }
   }
 
-  function removeSavedName(name) {
+  async function removeSavedName(name) {
     const key = String(name || '').trim();
     if (!key) return;
-    const next = readUnifiedFavoriteNames().filter((item) => item !== key);
-    writeUnifiedFavoriteNames(next);
-    setSavedNames(next);
+    await favoritesContext?.removeFavorite?.(key);
   }
 
   return (
@@ -188,6 +181,8 @@ export default function AccountPage() {
         <aside className="space-y-6">
           <SavedNamesPanel
             savedNames={savedNames}
+            storageMode={savedNamesStorageMode}
+            syncError={savedNamesSyncError}
             copiedName={copiedName}
             copySavedName={copySavedName}
             removeSavedName={removeSavedName}
@@ -352,19 +347,29 @@ function PassportDraftForm({
   );
 }
 
-function SavedNamesPanel({ savedNames, copiedName, copySavedName, removeSavedName }) {
+function SavedNamesPanel({ savedNames, storageMode, syncError, copiedName, copySavedName, removeSavedName }) {
+  const isAccountBacked = storageMode === 'account';
   return (
     <section id="saved-names" className="rounded-lg border border-slate-200/80 bg-white/80 p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/20">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-200">Favorite-first model</p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-950 dark:text-white">Saved Names</h2>
+          <p className="mt-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+            {isAccountBacked ? 'Synced to this account.' : 'Saved locally on this device.'}
+          </p>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:border-amber-400/30 dark:bg-amber-500/10 dark:text-amber-100">
           <Star className="h-3.5 w-3.5 fill-amber-400/45" aria-hidden="true" />
           {savedNames.length}
         </span>
       </div>
+
+      {syncError && (
+        <p className="mt-3 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800 dark:border-amber-400/30 dark:bg-amber-500/10 dark:text-amber-100">
+          {syncError}
+        </p>
+      )}
 
       {savedNames.length === 0 ? (
         <div className="mt-4 rounded-md border border-dashed border-slate-300 bg-white/70 px-4 py-8 text-center dark:border-white/15 dark:bg-black/20">
