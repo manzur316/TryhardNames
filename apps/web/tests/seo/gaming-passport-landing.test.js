@@ -49,6 +49,15 @@ describe('Gaming Passport Riot review landing', () => {
     assert.match(pageSource, /dark:border-white\/15 dark:bg-white\/\[0\.04\] dark:text-slate-100/);
   });
 
+  it('keeps light-mode accent icons legible with pastel chips', () => {
+    assert.match(pageSource, /bg-cyan-50/);
+    assert.match(pageSource, /dark:bg-cyan-300\/10/);
+    assert.match(pageSource, /bg-emerald-50/);
+    assert.match(pageSource, /dark:bg-emerald-300\/10/);
+    assert.match(pageSource, /bg-violet-50/);
+    assert.match(pageSource, /dark:bg-violet-300\/10/);
+  });
+
   it('keeps Parent Auth and future linked providers separate', () => {
     assert.match(pageSource, /Parent Auth/);
     assert.match(pageSource, /Riot and Discord will be linked accounts after sign-in/);

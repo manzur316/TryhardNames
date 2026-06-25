@@ -38,6 +38,15 @@ const reviewPoints = [
   'Future monetization is limited to TryhardNames-owned cosmetics, themes, borders, and animations.',
 ];
 
+const iconChip = {
+  emerald:
+    'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-emerald-200/80 bg-emerald-50 text-emerald-600 dark:border-emerald-300/20 dark:bg-emerald-300/10 dark:text-emerald-300',
+  cyan:
+    'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-200/80 bg-cyan-50 text-cyan-600 dark:border-cyan-300/20 dark:bg-cyan-300/10 dark:text-cyan-300',
+  violet:
+    'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-violet-200/80 bg-violet-50 text-violet-600 dark:border-violet-300/20 dark:bg-violet-300/10 dark:text-violet-300',
+};
+
 const GamingPassportPage = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
@@ -81,15 +90,21 @@ const GamingPassportPage = () => {
             </div>
             <div className="mt-8 grid max-w-2xl grid-cols-1 gap-3 text-sm text-slate-700 dark:text-slate-300 sm:grid-cols-3">
               <div className="rounded-xl border border-slate-200/80 bg-white/80 p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-black/20">
-                <Lock className="mb-3 h-5 w-5 text-emerald-300" aria-hidden="true" />
+                <span className={`${iconChip.emerald} mb-3`}>
+                  <Lock className="h-5 w-5" aria-hidden="true" />
+                </span>
                 Private draft first
               </div>
               <div className="rounded-xl border border-slate-200/80 bg-white/80 p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-black/20">
-                <ShieldCheck className="mb-3 h-5 w-5 text-cyan-300" aria-hidden="true" />
+                <span className={`${iconChip.cyan} mb-3`}>
+                  <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+                </span>
                 Verified proofs only
               </div>
               <div className="rounded-xl border border-slate-200/80 bg-white/80 p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-black/20">
-                <EyeOff className="mb-3 h-5 w-5 text-violet-300" aria-hidden="true" />
+                <span className={`${iconChip.violet} mb-3`}>
+                  <EyeOff className="h-5 w-5" aria-hidden="true" />
+                </span>
                 User-controlled visibility
               </div>
             </div>
@@ -150,7 +165,9 @@ const GamingPassportPage = () => {
               'Each proof is shown only when it is verified and the player chooses to publish it.',
             ].map((item) => (
               <div key={item} className="rounded-xl border border-slate-200/80 bg-white/80 p-5 text-sm leading-6 text-slate-700 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:text-slate-300 dark:shadow-black/20">
-                <CheckCircle2 className="mb-3 h-5 w-5 text-emerald-300" aria-hidden="true" />
+                <span className={`${iconChip.emerald} mb-3`}>
+                  <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+                </span>
                 {item}
               </div>
             ))}
@@ -173,7 +190,9 @@ const GamingPassportPage = () => {
             <div className="grid gap-3">
               {plannedProofs.map((proof) => (
                 <div key={proof} className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white/80 p-4 dark:border-white/10 dark:bg-slate-950/65">
-                  <Trophy className="h-5 w-5 shrink-0 text-cyan-300" aria-hidden="true" />
+                  <span className={iconChip.cyan}>
+                    <Trophy className="h-5 w-5" aria-hidden="true" />
+                  </span>
                   <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{proof}</span>
                 </div>
               ))}
@@ -228,7 +247,9 @@ const GamingPassportPage = () => {
             <div className="grid gap-3">
               {reviewPoints.map((point) => (
                 <div key={point} className="flex gap-3 rounded-xl border border-slate-200/80 bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:border-white/10 dark:bg-white/[0.035] dark:text-slate-300">
-                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" aria-hidden="true" />
+                  <span className={`${iconChip.cyan} mt-0.5`}>
+                    <Sparkles className="h-4 w-4" aria-hidden="true" />
+                  </span>
                   {point}
                 </div>
               ))}
