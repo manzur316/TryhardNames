@@ -33,6 +33,79 @@ import { bumpKrEcologyDraw, readKrEcologySession } from '@/seo/leagueOfLegends/k
 import { cn } from '@/lib/utils.js';
 import AdSlot from '@/components/ads/AdSlot.jsx';
 
+const REROLL_STRONG_TOKENS = ['VCT', 'RR', 'IGL', 'ACE', 'FPS', 'TTV', 'YT', 'LIVE', 'GG', 'OG', 'PRO'];
+const REROLL_MAX_NAME_LENGTH = 18;
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function countStrongToken(candidate, token) {
+  const matches = String(candidate).match(new RegExp(escapeRegExp(token), 'gi'));
+  return matches ? matches.length : 0;
+}
+
+function dedupeAdjacentTokens(candidate) {
+  let out = String(candidate || '');
+  for (const token of REROLL_STRONG_TOKENS) {
+    let seen = false;
+    out = out.replace(new RegExp(escapeRegExp(token), 'gi'), (match) => {
+      if (seen) return '';
+      seen = true;
+      return match.toUpperCase() === match ? token : match;
+    });
+  }
+  return out;
+}
+
+function splitNameTokens(candidate) {
+  return String(candidate || '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean);
+}
+
+function isNoisyRerollCandidate(candidate) {
+  const compact = String(candidate || '').trim().replace(/\s+/g, '');
+  if (compact.length < 3) return true;
+  if (REROLL_STRONG_TOKENS.some((token) => countStrongToken(compact, token) > 1)) return true;
+
+  const hasSeparator = /[._-]/.test(compact);
+  const tokens = splitNameTokens(compact);
+  if (!hasSeparator && tokens.length > 4) return true;
+  if (!hasSeparator && compact.length > REROLL_MAX_NAME_LENGTH) return true;
+  const lastToken = tokens[tokens.length - 1] || '';
+  if (!hasSeparator && tokens.length >= 4 && lastToken.length <= 3 && !REROLL_STRONG_TOKENS.includes(lastToken.toUpperCase())) {
+    return true;
+  }
+  return false;
+}
+
+function normalizeRerolledNameCandidate(candidate) {
+  const clean = String(candidate || '')
+    .trim()
+    .replace(/\s+/g, '')
+    .replace(/[^\p{L}\p{N}_\-.]/gu, '');
+  const normalized = dedupeAdjacentTokens(clean).replace(/([._-]){2,}/g, '$1').replace(/^[._-]+|[._-]+$/g, '');
+  return normalized && !isNoisyRerollCandidate(normalized) ? normalized : null;
+}
+
+function sanitizeRerollCandidates(candidates, fallbackCandidates = [], fallbackName = 'TryhardTag') {
+  const out = [];
+  const push = (candidate) => {
+    const clean = normalizeRerolledNameCandidate(candidate);
+    if (clean && !out.includes(clean)) out.push(clean);
+  };
+
+  candidates.forEach(push);
+  fallbackCandidates.forEach(push);
+
+  if (out.length) return out;
+  const neutral = normalizeRerolledNameCandidate(fallbackName);
+  return neutral ? [neutral] : [];
+}
+
 const SeoTemplate = ({ pageData }) => {
   const path = `/${pageData.slug}`;
   const [category, keyword] = useMemo(() => {
@@ -62,7 +135,10 @@ const SeoTemplate = ({ pageData }) => {
     streamSafe: false,
     updatedAt: null,
   }));
-  const [shareCopied, setShareCopied] = useState(false);
+  const [packCopied, setPackCopied] = useState(false);
+  const [pageShareCopied, setPageShareCopied] = useState(false);
+  const [lineupFeedback, setLineupFeedback] = useState('');
+  const hasSavedFavorites = favorites.size > 0;
 
   const filteredNames = useMemo(() => {
     const base = names.length ? names : initialNames;
@@ -181,19 +257,39 @@ const SeoTemplate = ({ pageData }) => {
     });
   };
 
-  const buildShareText = () => {
+  const buildPageUrl = () => {
     const origin =
       typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://tryhardnames.com';
-    const pageUrl = `${origin}/${String(pageData.slug || '').replace(/^\/+/, '')}`;
+    return `${origin}/${String(pageData.slug || '').replace(/^\/+/, '')}`;
+  };
+
+  const showLineupBlockedFeedback = () => {
+    setLineupFeedback('Save a name first.');
+    setTimeout(() => setLineupFeedback(''), 1600);
+  };
+
+  const buildLineupPack = () => {
+    const pageUrl = buildPageUrl();
     const fav = [...favorites];
+    if (!fav.length) return '';
+    const lines = [
+      'TryhardNames lineup',
+      `Category: ${category}/${keyword}`,
+      `URL: ${pageUrl}`,
+      `Favorites: ${fav.length}`,
+      '',
+      ...fav.slice(0, 24).map((x, index) => `${index + 1}. ${x}`),
+    ];
+    return lines.join('\n');
+  };
+
+  const buildPageShareText = () => {
+    const pageUrl = buildPageUrl();
     const recent = (recentState.recentNames || []).slice(0, 8);
     const lines = [
-      `TryhardNames lineup (${category}/${keyword})`,
+      pageData.h1 || 'TryhardNames',
       pageUrl,
       '',
-      fav.length ? `Favorites (${fav.length}):` : null,
-      ...fav.slice(0, 24).map((x) => `- ${x}`),
-      fav.length ? '' : null,
       recent.length ? 'Recent picks:' : null,
       ...recent.map((x) => `- ${x}`),
     ].filter(Boolean);
@@ -203,19 +299,18 @@ const SeoTemplate = ({ pageData }) => {
   const buildDiscordPack = () => {
     const title = pageData.h1 || 'Tryhard Name Pack';
     const safeTitle = String(title).trim();
-    const origin =
-      typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://tryhardnames.com';
-    const pageUrl = `${origin}/${String(pageData.slug || '').replace(/^\/+/, '')}`;
+    const pageUrl = buildPageUrl();
     const fav = [...favorites];
-    const recent = (recentState.recentNames || []).slice(0, 12);
-    const list = fav.length ? fav.slice(0, 24) : recent.slice(0, 12);
-    const body = list.join('\n');
+    if (!fav.length) return '';
+    const body = fav.slice(0, 24).join('\n');
 
     return [
-      `## ${safeTitle}`,
+      `## TryhardNames lineup - ${safeTitle}`,
+      `Category: ${category}/${keyword}`,
+      `Favorites: ${fav.length}`,
       '',
       '```yaml',
-      body || 'GhostVCT',
+      body,
       '```',
       '',
       `Saved from TryhardNames`,
@@ -224,6 +319,10 @@ const SeoTemplate = ({ pageData }) => {
   };
 
   const exportDiscordPack = async () => {
+    if (!favorites.size) {
+      showLineupBlockedFeedback();
+      return;
+    }
     const text = buildDiscordPack();
     const res = await copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 14 });
     if (res.ok) {
@@ -231,42 +330,54 @@ const SeoTemplate = ({ pageData }) => {
         pageSlug: pageData.slug,
         category,
         keyword,
-        source: favorites.size ? 'favorites' : 'recent',
+        source: 'favorites',
       });
-      setShareCopied(true);
-      setTimeout(() => setShareCopied(false), 1200);
+      setPackCopied(true);
+      setTimeout(() => setPackCopied(false), 1200);
     } else {
-      setShareCopied(false);
+      setPackCopied(false);
     }
   };
 
   const copySharePack = async () => {
-    const text = buildShareText();
+    if (!favorites.size) {
+      showLineupBlockedFeedback();
+      return;
+    }
+    const text = buildLineupPack();
     const res = await copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 14 });
     if (res.ok) {
       trackEvent('SHARE_PACK', { pageSlug: pageData.slug, category, keyword, method: 'clipboard_pack' });
-      setShareCopied(true);
-      setTimeout(() => setShareCopied(false), 1200);
+      setPackCopied(true);
+      setTimeout(() => setPackCopied(false), 1200);
     } else {
-      setShareCopied(false);
+      setPackCopied(false);
     }
   };
 
-  const shareLineup = async () => {
-    const text = buildShareText();
+  const sharePage = async () => {
+    const text = buildPageShareText();
+    const pageUrl = buildPageUrl();
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'TryhardNames lineup',
+          title: pageData.h1 || 'TryhardNames',
           text,
-          url: typeof window !== 'undefined' ? window.location.href : undefined,
+          url: typeof window !== 'undefined' ? window.location.href : pageUrl,
         });
-        trackEvent('SHARE_PACK', { pageSlug: pageData.slug, category, keyword, method: 'navigator_share' });
+        trackEvent('SHARE_PAGE', { pageSlug: pageData.slug, category, keyword, method: 'navigator_share' });
       } catch {
         // ignore
       }
     } else {
-      await copySharePack();
+      const res = await copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 14 });
+      if (res.ok) {
+        trackEvent('SHARE_PAGE', { pageSlug: pageData.slug, category, keyword, method: 'clipboard_page' });
+        setPageShareCopied(true);
+        setTimeout(() => setPageShareCopied(false), 1200);
+      } else {
+        setPageShareCopied(false);
+      }
     }
   };
 
@@ -334,7 +445,7 @@ const SeoTemplate = ({ pageData }) => {
     }
 
     setLastMode(mode);
-    setNames(shuffle(uniq([...variants, ...base])));
+    setNames(shuffle(sanitizeRerollCandidates(uniq([...variants, ...base]), base)));
   };
 
   const remixNames = () => {
@@ -351,7 +462,7 @@ const SeoTemplate = ({ pageData }) => {
       remixed.push(`${clean}${suf}`);
       if (clean.length >= 4) remixed.push(`${clean.slice(0, 4)}${sep}${clean.slice(4)}`.replace(/\.$/, ''));
     }
-    setNames(shuffle([...remixed, ...base]));
+    setNames(shuffle(sanitizeRerollCandidates([...remixed, ...base], base)));
     trackEvent('QUICK_MODE_USED', { pageSlug: pageData.slug, category, keyword, mode: 'remix' });
   };
 
@@ -365,7 +476,7 @@ const SeoTemplate = ({ pageData }) => {
     }
 
     if (contextKey) {
-      const variants = evolveContextualName({ contextKey, baseName }).slice(0, 10);
+      const variants = sanitizeRerollCandidates(evolveContextualName({ contextKey, baseName }), [baseName]).slice(0, 10);
       pushRecentName(baseName);
       setActiveEvolution({ base: baseName, variants });
       setDrawerOpen(true);
@@ -447,6 +558,12 @@ const SeoTemplate = ({ pageData }) => {
       // ignore
     }
   }, [favorites, storageKey]);
+
+  useEffect(() => {
+    if (favorites.size > 0 && lineupFeedback) {
+      setLineupFeedback('');
+    }
+  }, [favorites.size, lineupFeedback]);
 
   useEffect(() => {
     setRecentState((prev) => ({ ...prev, lengthFilter, asciiOnly, riotSafe, streamSafe }));
@@ -571,7 +688,7 @@ const SeoTemplate = ({ pageData }) => {
   const nameCardClass =
     'group relative bg-white/90 border border-slate-200/90 rounded-2xl p-4 overflow-hidden transition-[border-color,box-shadow] duration-200 ease-out hover:border-cyan-300/70 hover:shadow-[0_10px_32px_-16px_rgba(15,23,42,0.22)] dark:bg-dark-900 dark:border-dark-700/90 dark:hover:border-accent-cyan/22 dark:hover:shadow-[0_10px_32px_-12px_rgba(34,211,238,0.07)]';
   const smallGhostButtonClass =
-    'px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-violet-300 hover:text-violet-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:text-accent-purple dark:hover:border-accent-purple/50';
+    'px-2.5 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-transparent border border-transparent text-slate-500 hover:text-violet-700 hover:border-violet-200 transition-colors dark:text-dark-400 dark:hover:text-accent-purple dark:hover:border-accent-purple/35';
 
   return (
     <>
@@ -583,16 +700,16 @@ const SeoTemplate = ({ pageData }) => {
         jsonLd={pageData.jsonLd || []}
       />
 
-      <div className="th-atmosphere-shell text-slate-700 dark:text-dark-300 min-h-screen py-20 px-4 flex-grow flex flex-col">
+      <div className="th-atmosphere-shell text-slate-700 dark:text-dark-300 min-h-screen py-12 sm:py-16 px-4 flex-grow flex flex-col">
         <div className="container relative z-10 mx-auto max-w-5xl">
           
           {/* Hero Section */}
           {isLolKoreanLane && pageData.laneHero ? (
-            <div className={cn('mb-16 sm:mb-20 max-w-3xl mx-auto space-y-6 text-left border-b pb-14', dividerClass)}>
+            <div className={cn('mb-10 sm:mb-12 max-w-3xl mx-auto space-y-5 text-left border-b pb-8 sm:pb-10', dividerClass)}>
               <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500 dark:text-dark-500">
                 {pageData.laneHero.eyebrow}
               </p>
-              <h1 className={cn('text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] leading-[1.12] text-balance', headingClass)}>
+              <h1 className={cn('text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-[1.12] text-balance', headingClass)}>
                 {pageData.laneHero.title}
               </h1>
               <p className={cn('text-base md:text-lg leading-relaxed', bodyClass)}>{pageData.laneHero.subtitle}</p>
@@ -626,12 +743,12 @@ const SeoTemplate = ({ pageData }) => {
               </div>
             </div>
           ) : (
-            <div className="text-center mb-16 sm:mb-20 space-y-7 sm:space-y-8">
-              <h1 className={cn('text-4xl md:text-6xl font-bold tracking-tight md:tracking-tighter leading-[1.06] md:leading-[1.02] max-w-4xl mx-auto text-balance', headingClass)}>
+            <div className="text-center mb-10 sm:mb-12 space-y-5 sm:space-y-6">
+              <h1 className={cn('text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.08] max-w-4xl mx-auto text-balance', headingClass)}>
                 {restH1 ? `${restH1} ` : ''}
                 <span className="text-cyan-600 dark:text-cyan-300">{lastWord}</span>
               </h1>
-              <p className={cn('text-lg md:text-xl max-w-3xl mx-auto leading-relaxed md:leading-[1.65]', bodyClass)}>
+              <p className={cn('text-base md:text-lg max-w-3xl mx-auto leading-relaxed', bodyClass)}>
                 {pageData.description}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
@@ -671,55 +788,17 @@ const SeoTemplate = ({ pageData }) => {
             </div>
           )}
 
-          {/* Content Sections */}
-          <div className="space-y-12 mb-16">
-            {pageData.sections.map((sec, i) => (
-              <section 
-                key={i} 
-                className={cardClass}
-              >
-                <h2 className={cn('text-2xl md:text-3xl font-bold mb-6', headingClass)}>{sec.title}</h2>
-                {Array.isArray(sec.content) ? (
-                  <ul className="space-y-4 list-disc pl-6">
-                    {sec.content.map((p, j) => (
-                      <li key={j} className="text-lg leading-relaxed">{p}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-lg leading-relaxed">{sec.content}</p>
-                )}
-              </section>
-            ))}
-          </div>
-
-          <EditorialSection
-            blocks={editorialBlocks}
-            category={category}
-            keyword={keyword}
-            pageSlug={pageData.slug}
-            onLinkClick={(l) =>
-              trackEvent('INTERNAL_LINK_CLICK', {
-                pageSlug: pageData.slug,
-                category,
-                keyword,
-                targetSlug: String(l.to).replace(/^\//, ''),
-                targetTitle: l.label,
-                placement: 'editorial_micro_guides',
-              })
-            }
-          />
-
-          {/* Names Grid */}
+          {/* Tool-first generated names surface */}
           {pageData.names && pageData.names.length > 0 && (
-            <div className="mb-20">
-              <div className="text-center mb-8 sm:mb-10 space-y-4">
+            <div className="mb-14 sm:mb-16 flex flex-col">
+              <div className="text-center mb-7 sm:mb-8 space-y-4">
                 <h2 className={cn('text-3xl sm:text-4xl font-bold tracking-tight leading-[1.08] text-balance', headingClass)}>
                   {namesGridTitle}
                 </h2>
                 <p className={cn('text-sm max-w-2xl mx-auto leading-relaxed', bodyClass)}>{namesGridLead}</p>
               </div>
 
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+              <div className="order-3 mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div className="flex flex-wrap gap-2">
                   {isLolKoreanLane ? (
                     <>
@@ -943,7 +1022,7 @@ const SeoTemplate = ({ pageData }) => {
                 </div>
               </div>
 
-              <div className="mb-6 flex justify-center">
+              <div className="order-2 mt-5 flex justify-center">
                 <LiveActivityStrip presetId={category === 'gta-rp' ? 'gta-rp' : category} category={category} pageSlug={pageData.slug} />
               </div>
 
@@ -951,8 +1030,8 @@ const SeoTemplate = ({ pageData }) => {
                 id="names"
                 className={
                   isLolKoreanLane
-                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6'
-                    : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'
+                    ? 'order-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6'
+                    : 'order-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'
                 }
               >
                 {filteredNames.map((name, i) => {
@@ -1050,16 +1129,6 @@ const SeoTemplate = ({ pageData }) => {
                             />
                             <button
                               type="button"
-                              onClick={() => {
-                                trackEvent('NAME_EVOLUTION_USED', { pageSlug: pageData.slug, category, keyword, name: s });
-                                evolveName(s);
-                              }}
-                              className={smallGhostButtonClass}
-                            >
-                              {laneUi.evolveLabel || 'Similar reads'}
-                            </button>
-                            <button
-                              type="button"
                               onClick={() => toggleFavorite(s)}
                               className={`px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase border transition-colors ${
                                 favorites.has(s)
@@ -1071,6 +1140,16 @@ const SeoTemplate = ({ pageData }) => {
                                 ? laneUi.savedLabel || 'Saved'
                                 : laneUi.saveLabel || 'Save'}
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                trackEvent('NAME_EVOLUTION_USED', { pageSlug: pageData.slug, category, keyword, name: s });
+                                evolveName(s);
+                              }}
+                              className={smallGhostButtonClass}
+                            >
+                              {laneUi.evolveLabel || 'Similar reads'}
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1081,6 +1160,121 @@ const SeoTemplate = ({ pageData }) => {
 
             </div>
           )}
+
+          {/* Lineup state follows the tool; empty actions stay non-dominant. */}
+          <section className="mb-16 rounded-2xl border border-slate-200/90 bg-white/85 p-5 sm:p-6 shadow-sm dark:border-dark-700 dark:bg-dark-800">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className={cn('text-xs font-black tracking-widest uppercase', subtleClass)}>
+                  Lineup <span className="tabular-nums">{favorites.size}</span>
+                </p>
+                {hasSavedFavorites ? (
+                  <p className={cn('mt-1 text-sm leading-relaxed', bodyClass)}>
+                    Saved names are ready for a Discord pack or quick clipboard export.
+                  </p>
+                ) : (
+                  <p className={cn('mt-1 text-sm leading-relaxed', bodyClass)}>Save a name to build a pack.</p>
+                )}
+                {lineupFeedback && (
+                  <p className="mt-2 text-sm font-semibold text-amber-700 dark:text-amber-200" aria-live="polite">
+                    {lineupFeedback}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {hasSavedFavorites ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={copySharePack}
+                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-emerald-50 border border-emerald-200 text-emerald-700 hover:border-emerald-300 transition-colors dark:bg-emerald-500/15 dark:border-emerald-500/35 dark:text-emerald-100"
+                    >
+                      {packCopied ? 'Copied' : 'Copy pack'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={exportDiscordPack}
+                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:border-violet-300 transition-colors dark:bg-violet-500/15 dark:border-violet-500/35 dark:text-violet-100"
+                    >
+                      Export Discord Pack
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={copySharePack}
+                      disabled
+                      aria-describedby="empty-lineup-message"
+                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed dark:bg-dark-900 dark:border-dark-700 dark:text-dark-500"
+                    >
+                      Copy pack
+                    </button>
+                    <button
+                      type="button"
+                      onClick={exportDiscordPack}
+                      disabled
+                      aria-describedby="empty-lineup-message"
+                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed dark:bg-dark-900 dark:border-dark-700 dark:text-dark-500"
+                    >
+                      Export Discord Pack
+                    </button>
+                  </>
+                )}
+                <button
+                  type="button"
+                  onClick={sharePage}
+                  className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-cyan-300 hover:text-cyan-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:text-accent-cyan"
+                >
+                  {pageShareCopied ? 'Shared' : 'Share page'}
+                </button>
+              </div>
+            </div>
+            {!hasSavedFavorites && (
+              <p id="empty-lineup-message" className="sr-only">
+                Save a name first.
+              </p>
+            )}
+          </section>
+
+          {/* Editorial SEO content remains indexable below the utility surface. */}
+          <div className="space-y-12 mb-16">
+            {pageData.sections.map((sec, i) => (
+              <section
+                key={i}
+                className={cardClass}
+              >
+                <h2 className={cn('text-2xl md:text-3xl font-bold mb-6', headingClass)}>{sec.title}</h2>
+                {Array.isArray(sec.content) ? (
+                  <ul className="space-y-4 list-disc pl-6">
+                    {sec.content.map((p, j) => (
+                      <li key={j} className="text-lg leading-relaxed">{p}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-lg leading-relaxed">{sec.content}</p>
+                )}
+              </section>
+            ))}
+          </div>
+
+          <EditorialSection
+            blocks={editorialBlocks}
+            category={category}
+            keyword={keyword}
+            pageSlug={pageData.slug}
+            onLinkClick={(l) =>
+              trackEvent('INTERNAL_LINK_CLICK', {
+                pageSlug: pageData.slug,
+                category,
+                keyword,
+                targetSlug: String(l.to).replace(/^\//, ''),
+                targetTitle: l.label,
+                placement: 'editorial_micro_guides',
+              })
+            }
+          />
 
           {/* Popular this week (local + curated, lightweight) */}
           <div className="mb-16">
@@ -1191,31 +1385,43 @@ const SeoTemplate = ({ pageData }) => {
               </button>
 
               <div className="flex flex-wrap items-center justify-end gap-2">
+                {!hasSavedFavorites && (
+                  <span className={cn('text-xs font-semibold', bodyClass)}>Save a name to build a pack.</span>
+                )}
+                {lineupFeedback && (
+                  <span className="text-xs font-bold text-amber-700 dark:text-amber-200" aria-live="polite">
+                    {lineupFeedback}
+                  </span>
+                )}
+                {hasSavedFavorites && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={exportDiscordPack}
+                      className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100 hover:border-violet-300 hover:shadow-[0_0_18px_-12px_rgba(124,58,237,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-violet-500/35 dark:text-violet-100 dark:hover:bg-violet-500/15 dark:hover:border-violet-400/55 dark:hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)]"
+                    >
+                      Export Discord Pack
+                    </button>
+                    <button
+                      type="button"
+                      onClick={copySharePack}
+                      className={cn(
+                        'px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase border transition-all duration-200',
+                        packCopied
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-[0_0_16px_-10px_rgba(16,185,129,0.32)] dark:bg-emerald-500/20 dark:text-emerald-100 dark:border-emerald-400/45 dark:shadow-[0_0_16px_-8px_rgba(52,211,153,0.4)]'
+                          : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:shadow-[0_0_18px_-12px_rgba(16,185,129,0.28)] dark:bg-dark-800/90 dark:border-emerald-500/25 dark:text-emerald-100/95 dark:hover:border-emerald-400/45 dark:hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.35)]'
+                      )}
+                    >
+                      {packCopied ? 'Copied' : 'Copy pack'}
+                    </button>
+                  </>
+                )}
                 <button
                   type="button"
-                  onClick={exportDiscordPack}
-                  className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100 hover:border-violet-300 hover:shadow-[0_0_18px_-12px_rgba(124,58,237,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-violet-500/35 dark:text-violet-100 dark:hover:bg-violet-500/15 dark:hover:border-violet-400/55 dark:hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)]"
-                >
-                  Export Discord Pack
-                </button>
-                <button
-                  type="button"
-                  onClick={copySharePack}
-                  className={cn(
-                    'px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase border transition-all duration-200',
-                    shareCopied
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-[0_0_16px_-10px_rgba(16,185,129,0.32)] dark:bg-emerald-500/20 dark:text-emerald-100 dark:border-emerald-400/45 dark:shadow-[0_0_16px_-8px_rgba(52,211,153,0.4)]'
-                      : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:shadow-[0_0_18px_-12px_rgba(16,185,129,0.28)] dark:bg-dark-800/90 dark:border-emerald-500/25 dark:text-emerald-100/95 dark:hover:border-emerald-400/45 dark:hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.35)]'
-                  )}
-                >
-                  {shareCopied ? 'Copied' : 'Copy pack'}
-                </button>
-                <button
-                  type="button"
-                  onClick={shareLineup}
+                  onClick={sharePage}
                   className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-cyan-50 border border-cyan-200 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-[0_0_18px_-12px_rgba(8,145,178,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-cyan-500/35 dark:text-cyan-50 dark:hover:bg-cyan-500/15 dark:hover:border-cyan-400/50 dark:hover:shadow-[0_0_18px_-8px_rgba(34,211,238,0.4)]"
                 >
-                  Share
+                  {pageShareCopied ? 'Shared' : 'Share page'}
                 </button>
               </div>
             </div>
@@ -1288,17 +1494,19 @@ const SeoTemplate = ({ pageData }) => {
                   <section className="bg-white/85 border border-slate-200/90 rounded-2xl p-4 shadow-sm dark:bg-dark-800 dark:border-dark-700">
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Saved</h3>
-                      <button
-                        type="button"
-                        onClick={() => setFavorites(new Set())}
-                        className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-red-300 hover:text-red-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-red-400/40 dark:hover:text-red-200"
-                      >
-                        Clear all
-                      </button>
+                      {hasSavedFavorites && (
+                        <button
+                          type="button"
+                          onClick={() => setFavorites(new Set())}
+                          className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-red-300 hover:text-red-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-red-400/40 dark:hover:text-red-200"
+                        >
+                          Clear all
+                        </button>
+                      )}
                     </div>
 
                     {favorites.size === 0 ? (
-                      <p className={cn('text-sm', bodyClass)}>Save a few names to build a lineup.</p>
+                      <p className={cn('text-sm', bodyClass)}>Save a name to build a pack.</p>
                     ) : (
                       <div className="flex flex-wrap gap-2">
                         {[...favorites].slice(0, 24).map((f) => (
@@ -1375,7 +1583,7 @@ const SeoTemplate = ({ pageData }) => {
                         </div>
                       ))}
                       {(recentState.recentNames || []).length === 0 && (
-                        <p className={cn('text-sm', bodyClass)}>Use “More like this” to start building recents.</p>
+                        <p className={cn('text-sm', bodyClass)}>Use “Similar reads” to start building recents.</p>
                       )}
                     </div>
 
