@@ -78,6 +78,10 @@ PR10.2 decides whether `/gaming-passport` remains a documented dark-branded land
 
 PR10.5 improves dynamic generator UX priority without changing SEO data or provider runtime.
 
+PR10.6 adds the Chrome tool-container visual audit for dynamic generator cards, CopyButton, Save, Similar Reads, Lineup, drawer, and related surfaces.
+
+PR10.7 improves dynamic generator card and lineup visual hierarchy using the Chrome audit tool.
+
 ## Next Recommended PRs
 
 Numbering may change.

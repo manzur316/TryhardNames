@@ -64,7 +64,7 @@ describe('dynamic generator UX priority pass', () => {
   });
 
   it('keeps Similar Reads de-emphasized relative to Copy Name and Save', () => {
-    assert.match(seoTemplateSource, /const smallGhostButtonClass =[\s\S]*text-\[10px\][\s\S]*bg-transparent/);
+    assert.match(seoTemplateSource, /const smallGhostButtonClass = 'th-name-card-tertiary'/);
     const cardCopy = seoTemplateSource.indexOf("source: 'card_copy_button'");
     const save = seoTemplateSource.indexOf("laneUi.saveLabel || 'Save'", cardCopy);
     const similar = seoTemplateSource.indexOf("laneUi.evolveLabel || 'Similar reads'", save);

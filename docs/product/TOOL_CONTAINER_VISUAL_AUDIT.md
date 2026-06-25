@@ -123,6 +123,14 @@ For each detected control it also stores text, tag or role, bounding box, visibi
 - Trending cards: compare copy controls and card proportions against NameCard.
 - Internal links: confirm editorial and related links remain below the tool hierarchy.
 
-## Next PR
+## PR10.7 Redesign Follow-up
 
-A future visual redesign PR should use this audit output to adjust NameCard min width and min height, name typography and wrap rules, CopyButton hierarchy, Similar Reads placement, Lineup shelf and drawer max height, and mobile spacing. That future PR should make runtime visual changes; this PR only adds measurement tooling and documentation.
+PR10.7 uses this audit to refine the dynamic generator NameCard and Lineup surfaces. The follow-up focuses on name wrapping, CopyButton hierarchy, Save and Similar Reads prominence, Lineup shelf coverage, drawer max height, and denser Saved/Recent controls.
+
+This follow-up is a runtime visual redesign for the shared generator surface. It keeps routes, SEO data, generated-name data, provider code, auth, Supabase, Vercel config, Riot integration, secrets, migrations, and RLS out of scope.
+
+The first PR10.7 after-audit reduced global awkward wraps from 756 to 2, dynamic `SeoTemplate` awkward wraps to 0, and global `firstCopyNameYMax` from 5992 to 1835. Manual smoke measured the closed shelf at 6.6% worst coverage and the open shelf at 56.9% worst coverage. The remaining `lineupDrawerHeight` value in `audit.json` is a detector limitation: the script can still select a large ancestor container instead of the internal drawer scroll node.
+
+## Future Visual Work
+
+Future visual iterations should continue using this audit output before adjusting trending cards, feature-specific generators, or any broader responsive layout. PR10.6 added measurement tooling; PR10.7 applies the first focused runtime visual pass to NameCard and Lineup.

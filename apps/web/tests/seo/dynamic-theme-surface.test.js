@@ -39,9 +39,9 @@ describe('dynamic generator theme surface', () => {
 
   it('keeps generated-name cards readable in light and dark mode', () => {
     assert.match(seoTemplateSource, /nameCardClass/);
-    assert.match(seoTemplateSource, /bg-white\/90 border border-slate-200\/90 rounded-2xl/);
-    assert.match(seoTemplateSource, /dark:bg-dark-900 dark:border-dark-700\/90/);
-    assert.match(seoTemplateSource, /text-xl font-black text-slate-950 dark:text-dark-50/);
+    assert.match(seoTemplateSource, /bg-white\/92 border border-slate-200\/90 rounded-2xl/);
+    assert.match(seoTemplateSource, /dark:bg-dark-900\/96 dark:border-dark-700\/90/);
+    assert.match(seoTemplateSource, /text-\[1\.15rem\] sm:text-xl font-black text-slate-950 dark:text-dark-50/);
     assert.match(seoTemplateSource, /text-slate-500 dark:text-dark-400\/90/);
   });
 
