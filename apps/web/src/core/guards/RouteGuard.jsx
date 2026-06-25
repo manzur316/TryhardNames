@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { isLegacyRoute, sanitizePathname } from '../utils/routeValidator.js';
 import { isValidSlug } from '../../utils/pageLoader.js';
-import { isAppRegisteredStaticRoute } from '../routing/routeCatalog.js';
+import { isAppRegisteredDynamicRoute, isAppRegisteredStaticRoute } from '../routing/routeCatalog.js';
 
 export const RouteGuard = ({ children }) => {
   const location = useLocation();
@@ -17,6 +17,10 @@ export const RouteGuard = ({ children }) => {
     }
 
     if (isAppRegisteredStaticRoute(path)) {
+      return;
+    }
+
+    if (isAppRegisteredDynamicRoute(path)) {
       return;
     }
 

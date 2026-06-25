@@ -11,13 +11,14 @@ The site currently combines public name/text/symbol tools with a Gaming Passport
 - `/` - home page and public generator entry points.
 - Public generators - free name, text, symbol, and identity utilities.
 - `/gaming-passport` - public Gaming Passport landing page for users and Riot review.
+- `/id/:slug` - public Gaming Passport MVP for published, policy-compliant Passports.
 - `/sign-in` - Parent Auth sign-in for the TryhardNames account.
 - `/account` - protected Account Dashboard V2 with private Gaming Passport draft and saved-name guidance.
 - `/privacy-policy` - public Privacy Policy.
 - `/terms-of-service` - public Terms of Service.
 - `/sitemap.xml` - public sitemap.
 
-Public generators are free and usable without an account. `/gaming-passport` is public. `/account` requires Parent Auth and manages private account state. `/id/:slug` public Gaming Passport profiles are not implemented yet.
+Public generators are free and usable without an account. `/gaming-passport` is public. `/account` requires Parent Auth and manages private account state. `/id/:slug` serves only allowlisted public projection data for published, policy-compliant Passports.
 
 ## Gaming Passport
 
@@ -29,7 +30,7 @@ Gaming Passport is a visual, verifiable, shareable gaming resume.
 - Riot and Discord are future linked provider accounts.
 - League of Legends is a GameAdapter inside RiotProvider.
 - No Riot data is live.
-- No public profile route is live.
+- Public profile serving is limited to the `/id/:slug` allowlisted projection and does not activate providers.
 
 Parent Auth lets a user enter TryhardNames and own a draft. It is never a public proof, badge, or gaming provider.
 
@@ -76,6 +77,7 @@ Current support docs:
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
+- `docs/product/PUBLIC_GAMING_PASSPORT_MVP.md`
 - `docs/product/DECISION_LOG.md`
 - `docs/product/UI_THEME_SURFACE_CONTRACT.md`
 - `docs/product/THEME_AUDIT.md`
@@ -156,6 +158,7 @@ Completed:
 - Saved Names Supabase persistence.
 - Private Gaming Passport Editor V2.
 - Publish Runtime Commands.
+- Public Gaming Passport MVP `/id/:slug`.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -168,12 +171,10 @@ Completed:
 Waiting:
 
 - Riot confirmation/review.
-- Public `/id/:slug`.
 - Provider runtime foundation.
 
 Next product blocks:
 
-- PR15 Public Gaming Passport MVP `/id/:slug`.
 - PR16 Provider Runtime Foundation.
 
 After provider foundation and approvals:

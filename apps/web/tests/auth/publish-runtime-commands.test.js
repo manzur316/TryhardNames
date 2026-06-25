@@ -67,27 +67,27 @@ describe('Publish Runtime Commands', () => {
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/PassportPublishControls.jsx', import.meta.url)), true);
     assert.match(accountPageSource, /PassportPublishControls/);
     assert.match(controlsSource, /Private publish controls/);
-    assert.match(controlsSource, /No public profile route exists yet/);
-    assert.match(controlsSource, /public <code>\/id\/:slug<\/code> comes in a later PR/);
+    assert.match(controlsSource, /Public <code>\/id\/:slug<\/code> serving exists/);
+    assert.match(controlsSource, /publish policy requirements are satisfied/);
     assert.match(controlsSource, /Provider verification is required before public serving/);
     assert.match(controlsSource, /No Riot or Discord connection is live/);
     assert.match(controlsSource, /Run publish command/);
     assert.match(controlsSource, /Unpublish/);
   });
 
-  it('does not add public profile routes, provider runtime, or token storage', () => {
-    assert.doesNotMatch(appSource, /path="\/id\/:slug"/);
+  it('keeps provider runtime and token storage out of PR14 command code', () => {
+    assert.match(appSource, /path="\/id\/:slug"/);
     assert.doesNotMatch(combinedRuntimeSource, /Continue with Riot|Continue with Discord|provider_token|providerToken|refreshToken|clientSecret/i);
     assert.doesNotMatch(combinedRuntimeSource, /Riot OAuth|Discord OAuth/i);
     assert.doesNotMatch(combinedRuntimeSource, /rawPayload|accessToken/i);
   });
 
   it('updates roadmap docs and auth test wiring', () => {
-    assert.match(currentRoadmap, /Current Status After PR14/);
+    assert.match(currentRoadmap, /Current Status After PR15/);
     assert.match(currentRoadmap, /Publish Runtime Commands exist/);
-    assert.match(currentRoadmap, /No public `\/id\/:slug` route exists after PR14/);
+    assert.match(currentRoadmap, /Public Gaming Passport MVP `\/id\/:slug` exists/);
     assert.match(executionPlan, /PR14 Publish Runtime Commands[\s\S]*Implemented by PR14/);
-    assert.match(executionPlan, /PR15 Public Gaming Passport MVP `\/id\/:slug`[\s\S]*next/);
+    assert.match(executionPlan, /PR15 Public Gaming Passport MVP `\/id\/:slug`[\s\S]*Implemented by PR15/);
     assert.match(packageJson.scripts['test:auth'], /publish-runtime-commands\.test\.js/);
   });
 });

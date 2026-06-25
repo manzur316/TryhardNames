@@ -4,9 +4,9 @@ This document defines target surfaces only. It does not implement routes, React 
 
 ## Current Implementation Note
 
-This document began as a target UI contract. Since PR4 and PR6, `/account` and `/gaming-passport` have been implemented. `/account` is currently a protected Parent Auth private-draft surface, and `/gaming-passport` is a public review landing page. `/id/:slug` remains future/not implemented, and the public profile contract below still applies to that future route.
+This document began as a target UI contract. Since PR4 and PR6, `/account` and `/gaming-passport` have been implemented. `/account` is currently a protected Parent Auth private-draft surface, and `/gaming-passport` is a public review landing page. PR15 implements `/id/:slug` as an MVP public projection route; the public profile contract below applies to that route.
 
-Riot OAuth, Discord OAuth, linked provider management, provider proof sync, publishing, and public profile serving are still not implemented.
+Riot OAuth, Discord OAuth, linked provider management, and provider proof sync are still not implemented. Publishing commands and MVP public profile serving are implemented, but provider runtime remains pending.
 
 ## Surfaces
 
@@ -51,7 +51,7 @@ Owner Dashboard must not claim that unverified data is verified. It must not sho
 
 ## Public Gaming Passport
 
-Target route, not implemented in this PR:
+Implemented MVP route:
 
 - `/id/:slug`
 
@@ -192,7 +192,7 @@ Documented target routes:
 
 - `/gaming-passport` -> implemented public landing;
 - `/account` -> implemented protected private draft dashboard;
-- `/id/:slug` -> future public Passport;
+- `/id/:slug` -> implemented MVP public Passport projection;
 - `/identity-kit` -> existing editor during migration.
 
 The original contract PR did not implement or register these routes. Current implementation status is tracked in `docs/product/CURRENT_STATE_AND_ROADMAP.md`.

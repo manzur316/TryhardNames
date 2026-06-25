@@ -24,11 +24,12 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
   it('moves current roadmap beyond the stale PR9 state', () => {
     assert.doesNotMatch(currentRoadmap, /reflects `main` after PR9/i);
     assert.doesNotMatch(currentRoadmap, /Current State After PR9/i);
-    assert.match(currentRoadmap, /Current Status After PR14/);
+    assert.match(currentRoadmap, /Current Status After PR15/);
     assert.match(currentRoadmap, /PR11\.1/);
     assert.match(currentRoadmap, /PR12/);
     assert.match(currentRoadmap, /PR13/);
     assert.match(currentRoadmap, /PR14/);
+    assert.match(currentRoadmap, /PR15/);
     assert.match(currentRoadmap, /fix\(generator\): align feature generator cards/);
     assert.match(currentRoadmap, /feat\(account\): add dashboard v2 and unify saved names/);
   });
@@ -37,7 +38,7 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
     assert.match(masterRoadmap, /Publish Policy contract/i);
     assert.match(masterRoadmap, /Publish Runtime Commands are implemented/i);
     assert.match(masterRoadmap, /Public Projection contract/i);
-    assert.match(masterRoadmap, /Public Profile is the future `\/id\/:slug` surface and is not implemented/i);
+    assert.match(masterRoadmap, /Public Profile `\/id\/:slug` is implemented as an MVP allowlisted projection surface/i);
     assert.match(combinedDocs, /Publish Policy and Public Projection already exist as contracts/i);
   });
 
@@ -81,11 +82,11 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
     assert.match(combinedDocs, /favorite\/star is the canonical saved-name UX/i);
   });
 
-  it('does not claim provider OAuth or public profiles are live', () => {
+  it('does not claim provider OAuth is live and describes public profiles as allowlisted MVP', () => {
     assert.doesNotMatch(combinedDocs, /Riot OAuth is live/i);
     assert.doesNotMatch(combinedDocs, /Discord OAuth is live/i);
-    assert.doesNotMatch(combinedDocs, /\/id\/:slug[^.\n]*(is live|is implemented|already implemented|exists as a route)/i);
-    assert.match(combinedDocs, /\/id\/:slug[^.\n]*(not implemented|does not exist|pending)/i);
+    assert.doesNotMatch(combinedDocs, /\/id\/:slug[^.\n]*(exposes private|exposes owner|exposes tokens)/i);
+    assert.match(combinedDocs, /\/id\/:slug[^.\n]*(MVP|allowlisted|projection)/i);
   });
 
   it('keeps Riot runtime gated by approval', () => {
@@ -99,7 +100,7 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
     assert.match(combinedDocs, /Account Dashboard V2 is implemented/i);
     assert.match(combinedDocs, /Private Gaming Passport Editor V2 is implemented/i);
     assert.match(combinedDocs, /Publish Runtime Commands[\s\S]*(implemented|done)/i);
-    assert.match(combinedDocs, /Public Profile `\/id\/:slug`[\s\S]*pending/i);
+    assert.match(combinedDocs, /Public Profile `\/id\/:slug`[\s\S]*(implemented|done|MVP)/i);
     assert.match(combinedDocs, /PR10\.x visual\/tooling line is closed/i);
   });
 

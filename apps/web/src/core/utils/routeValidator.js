@@ -1,5 +1,6 @@
 import {
   APP_REGISTERED_STATIC_PATHS,
+  isAppRegisteredDynamicRoute,
   isAppRegisteredStaticRoute,
   META_OR_EDGE_PATHS,
 } from '../routing/routeCatalog.js';
@@ -61,6 +62,7 @@ export const isLegacyRoute = (pathname) => {
 export const isValidRoute = (pathname) => {
   const sanitized = sanitizePathname(pathname);
   if (isAppRegisteredStaticRoute(sanitized)) return true;
+  if (isAppRegisteredDynamicRoute(sanitized)) return true;
   if (META_OR_EDGE_PATHS.includes(sanitized)) return true;
   return isValidSlug(sanitized);
 };

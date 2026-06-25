@@ -6,7 +6,7 @@ It is not a tracker, an OP.GG alternative, a parallel ranking, a custom MMR/ELO 
 
 ## Current Implementation Note
 
-This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, and PR3 added a local-only schema foundation. `/id/:slug` public profiles, linked provider runtime, proof sync, publishing commands, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
+This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, PR3 added a local-only schema foundation, PR14 implemented publish runtime commands, and PR15 implemented the public `/id/:slug` MVP with allowlisted projection data. Linked provider runtime, proof sync, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
 
 Google is Parent Auth only. Riot and Discord remain future linked provider accounts. League of Legends remains a GameAdapter inside RiotProvider, not a standalone provider.
 
