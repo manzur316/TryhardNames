@@ -149,6 +149,155 @@
     @apply inline-flex min-h-8 items-center justify-center rounded-full border border-transparent bg-transparent px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-slate-500 transition-colors hover:border-violet-200 hover:text-violet-700 dark:text-dark-400 dark:hover:border-accent-purple/35 dark:hover:text-accent-purple;
   }
 
+  .th-feature-name-card {
+    position: relative;
+    display: flex;
+    min-height: 158px;
+    min-width: 0;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background: rgba(255, 255, 255, 0.92);
+    padding: 1rem;
+    box-shadow: 0 14px 34px -24px rgba(15, 23, 42, 0.24);
+    transition:
+      border-color 200ms ease-out,
+      box-shadow 200ms ease-out,
+      transform 200ms ease-out;
+  }
+
+  .th-feature-name-card:hover {
+    transform: translateY(-0.125rem);
+    border-color: rgba(103, 232, 249, 0.7);
+    box-shadow: 0 16px 38px -24px rgba(15, 23, 42, 0.28);
+  }
+
+  .dark .th-feature-name-card {
+    border-color: rgba(30, 41, 59, 0.9);
+    background: rgba(15, 23, 42, 0.96);
+  }
+
+  .dark .th-feature-name-card:hover {
+    border-color: rgba(34, 211, 238, 0.24);
+    box-shadow: 0 14px 34px -20px rgba(34, 211, 238, 0.08);
+  }
+
+  .th-feature-name-title {
+    font-size: 1.1rem;
+    font-weight: 900;
+    line-height: 1.375;
+    letter-spacing: 0;
+    color: rgb(2, 6, 23);
+    transition: color 200ms ease-out;
+  }
+
+  .group:hover .th-feature-name-title {
+    color: rgb(14, 116, 144);
+  }
+
+  .dark .th-feature-name-title {
+    color: rgb(248, 250, 252);
+  }
+
+  .dark .group:hover .th-feature-name-title {
+    color: rgba(34, 211, 238, 0.95);
+  }
+
+  @media (min-width: 640px) {
+    .th-feature-name-title {
+      font-size: 1.25rem;
+    }
+  }
+
+  .th-feature-card-actions {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+  }
+
+  .th-feature-card-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .th-feature-card-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .th-feature-card-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .th-feature-trending-panel {
+    margin-bottom: 3rem;
+    border-radius: 1rem;
+    border: 1px solid rgb(219, 234, 254);
+    background: linear-gradient(135deg, rgb(239, 246, 255), rgb(250, 245, 255));
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  }
+
+  @media (min-width: 640px) {
+    .th-feature-trending-panel {
+      padding: 1.5rem;
+    }
+  }
+
+  .dark .th-feature-trending-panel {
+    border-color: rgba(30, 64, 175, 0.5);
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.2), rgba(88, 28, 135, 0.2));
+  }
+
+  .th-feature-generator-widget {
+    position: relative;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    background: rgb(255, 255, 255);
+    padding: 1.25rem;
+    box-shadow: 0 22px 50px -32px rgba(15, 23, 42, 0.35);
+    outline: 1px solid rgba(15, 23, 42, 0.04);
+    outline-offset: -1px;
+  }
+
+  @media (min-width: 640px) {
+    .th-feature-generator-widget {
+      padding: 1.5rem;
+    }
+  }
+
+  .dark .th-feature-generator-widget {
+    border-color: rgba(71, 85, 105, 0.9);
+    background: rgb(15, 23, 42);
+    box-shadow: 0 26px 60px -34px rgba(0, 0, 0, 0.65);
+    outline-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .th-feature-generator-shell {
+    background: rgb(248, 250, 252);
+  }
+
+  .dark .th-feature-generator-shell {
+    background: rgb(2, 6, 23);
+  }
+
+  .th-feature-generator-shell article > section {
+    padding-top: 1.25rem;
+  }
+
+  .th-feature-generator-shell article > section > div:first-child {
+    margin-bottom: 1.5rem;
+  }
+
   .th-lineup-drawer-scroll {
     scrollbar-width: thin;
     scrollbar-color: rgba(100, 116, 139, 0.55) transparent;

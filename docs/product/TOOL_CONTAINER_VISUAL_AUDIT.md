@@ -131,6 +131,14 @@ This follow-up is a runtime visual redesign for the shared generator surface. It
 
 The first PR10.7 after-audit reduced global awkward wraps from 756 to 2, dynamic `SeoTemplate` awkward wraps to 0, and global `firstCopyNameYMax` from 5992 to 1835. Manual smoke measured the closed shelf at 6.6% worst coverage and the open shelf at 56.9% worst coverage. The remaining `lineupDrawerHeight` value in `audit.json` is a detector limitation: the script can still select a large ancestor container instead of the internal drawer scroll node.
 
+## PR10.8 Feature Generator Follow-up
+
+PR10.8 aligns the GamerNames and RobloxNames feature generator cards with the dynamic NameCard visual standard from PR10.7. It focuses on `/gamer-names/pro`, `/gamer-names/cool`, `/roblox-names/cool`, and `/roblox-names/tryhard`, where the PR10.7 after-audit still showed feature-card awkward wraps and dense action hierarchy.
+
+The PR10.8 after-audit reports PASS for all feature-generator route, viewport, and theme combinations in that subset. Feature metrics moved from `firstCopyNameYMax=1835`, `maxNameLines=2`, `cardsWithAwkwardWrap=2`, and `cardsWithTooManyActions=8` to `firstCopyNameYMax=1777`, `maxNameLines=1`, `cardsWithAwkwardWrap=0`, and `cardsWithTooManyActions=0`.
+
+This follow-up keeps dynamic `SeoTemplate`, routes, SEO data, generated-name data, auth, providers, Supabase, Vercel config, Riot integration, secrets, migrations, and RLS out of scope.
+
 ## Future Visual Work
 
 Future visual iterations should continue using this audit output before adjusting trending cards, feature-specific generators, or any broader responsive layout. PR10.6 added measurement tooling; PR10.7 applies the first focused runtime visual pass to NameCard and Lineup.

@@ -2,7 +2,7 @@ import React from 'react';
 import { CopyButton } from './CopyButton.jsx';
 import { CopyAllButton } from './CopyAllButton.jsx';
 
-export const NamesGrid = ({ title, names = [] }) => {
+export const NamesGrid = ({ title, names = [], gridId }) => {
   const validNames = (names || []).filter(n => n && n.trim() !== '');
   
   if (validNames.length === 0) return null;
@@ -14,17 +14,28 @@ export const NamesGrid = ({ title, names = [] }) => {
         <CopyAllButton texts={validNames} />
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div id={gridId} className="th-feature-card-list">
         {validNames.map((name, idx) => (
           <div 
             key={`${name}-${idx}`} 
-            className="flex items-center justify-between p-3 bg-slate-100 dark:bg-dark-800 rounded-xl border border-slate-200 dark:border-dark-700 hover:border-blue-500/50 dark:hover:border-blue-400/50 hover:shadow-md transition-all duration-200 group"
+            className="th-feature-name-card group"
           >
-            <span className="font-medium text-slate-900 dark:text-dark-50 truncate mr-2 text-lg">{name}</span>
-            <CopyButton 
-              text={name} 
-              className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-opacity shadow-sm" 
-            />
+            <span
+              className="th-name-card-title th-feature-name-title"
+              title={name}
+            >
+              {name}
+            </span>
+            <span className="mt-2 block text-[11px] font-medium tracking-wide text-slate-500 dark:text-dark-400/90">
+              {String(name).length} chars
+            </span>
+            <div className="th-feature-card-actions">
+              <CopyButton
+                text={name}
+                variant="card"
+                className="shadow-[0_10px_24px_-18px_rgba(109,40,217,0.62)]"
+              />
+            </div>
           </div>
         ))}
       </div>

@@ -35,9 +35,9 @@ export const GamerNamesLayout = ({
   return (
     <>
       <SeoHead title={pageTitle} description={pageDesc} path={pathname} jsonLd={jsonLd} />
-      <div className="min-h-screen transition-colors duration-300 bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-dark-50">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pt-8">
-        <div className="relative mb-14 md:mb-16 overflow-hidden rounded-[2rem] border border-slate-200/95 dark:border-dark-700/90 bg-gradient-to-b from-white via-slate-50 to-slate-100/90 dark:from-dark-900 dark:via-dark-950 dark:to-[#07080c] px-5 py-10 sm:px-10 sm:py-12 md:py-14 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.35)] dark:shadow-[0_32px_80px_-36px_rgba(0,0,0,0.75)] ring-1 ring-slate-900/[0.05] dark:ring-white/[0.06]">
+      <div className="th-feature-generator-shell min-h-screen transition-colors duration-300 text-slate-900 dark:text-dark-50">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-10 sm:pt-6">
+        <div className="relative mb-7 md:mb-9 overflow-hidden rounded-[2rem] border border-slate-200/95 dark:border-dark-700/90 bg-gradient-to-b from-white via-slate-50 to-slate-100/90 dark:from-dark-900 dark:via-dark-950 dark:to-[#07080c] px-5 py-7 sm:px-8 sm:py-9 md:py-10 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.35)] dark:shadow-[0_32px_80px_-36px_rgba(0,0,0,0.75)] ring-1 ring-slate-900/[0.05] dark:ring-white/[0.06]">
           <div
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_-25%,rgba(147,51,234,0.09),transparent_58%)] dark:bg-[radial-gradient(ellipse_72%_52%_at_50%_-22%,rgba(167,139,250,0.11),transparent_58%)]"
             aria-hidden
@@ -45,10 +45,10 @@ export const GamerNamesLayout = ({
           <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/30 to-transparent dark:via-violet-400/22" aria-hidden />
 
           <header className="relative text-center max-w-4xl mx-auto">
-            <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.32em] text-violet-700/90 dark:text-violet-400/95 mb-5">
+            <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.32em] text-violet-700/90 dark:text-violet-400/95 mb-4">
               Gamertag hub
             </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] font-black tracking-[-0.035em] leading-[1.08] mb-6 text-balance text-slate-950 dark:text-dark-50">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] font-black tracking-[-0.035em] leading-[1.08] mb-4 text-balance text-slate-950 dark:text-dark-50">
               {title}
             </h1>
             {description && (
@@ -58,7 +58,7 @@ export const GamerNamesLayout = ({
             )}
           </header>
 
-          <div className="relative flex flex-wrap justify-center gap-3 mt-10 pt-2">
+          <div className="relative flex flex-wrap justify-center gap-3 mt-7 pt-2">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
             if (link.isParent) {
@@ -95,7 +95,7 @@ export const GamerNamesLayout = ({
           </div>
         </div>
 
-        <article className="space-y-24">
+        <article className="space-y-20">
           {children}
         </article>
 
