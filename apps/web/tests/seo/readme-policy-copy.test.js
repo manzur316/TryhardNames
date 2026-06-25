@@ -52,6 +52,9 @@ describe('README and public policy copy', () => {
     assert.match(readme, /docs\/product\/MASTER_PRODUCT_ROADMAP\.md/);
     assert.match(readme, /docs\/product\/UI_THEME_SURFACE_CONTRACT\.md/);
     assert.match(readme, /docs\/product\/THEME_AUDIT\.md/);
+    assert.match(readme, /docs\/product\/ROADMAP_STATUS_MATRIX\.md/);
+    assert.match(readme, /docs\/product\/PRODUCT_EXECUTION_PLAN_AFTER_PR10\.md/);
+    assert.match(readme, /docs\/product\/DECISION_LOG\.md/);
     assert.equal(existsSync(masterRoadmapUrl), true);
     assert.equal(existsSync(themeContractUrl), true);
     assert.equal(existsSync(themeAuditUrl), true);
@@ -65,13 +68,13 @@ describe('README and public policy copy', () => {
   });
 
   it('keeps roadmap dependency gates explicit', () => {
-    assert.match(masterRoadmap, /Provider-neutral foundation before Discord\/Riot OAuth/);
-    assert.match(masterRoadmap, /Riot approval before Riot runtime/);
-    assert.match(currentRoadmap, /PR10\.1 is the next implementation slice after PR10/);
+    assert.match(masterRoadmap, /Provider-neutral runtime foundation[\s\S]*Discord or Riot OAuth/);
+    assert.match(masterRoadmap, /Riot approval[\s\S]*Riot runtime/);
+    assert.match(currentRoadmap, /Current Status After PR10\.8/);
+    assert.match(currentRoadmap, /Corrected Roadmap Order/);
   });
 
-  it('does not claim PR10.1 or unavailable Riot runtime work is complete', () => {
-    assert.doesNotMatch(planningDocs, /PR10\.1 (is|was|has been) (complete|completed|done|implemented)/i);
+  it('does not claim unavailable Riot runtime work is complete', () => {
     assert.doesNotMatch(planningDocs, /Riot OAuth is live\b/i);
     assert.doesNotMatch(planningDocs, /real Riot data is live\b/i);
     assert.doesNotMatch(
