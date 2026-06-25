@@ -1,6 +1,7 @@
 import React from 'react';
 import { CopyButton } from './CopyButton.jsx';
 import { TrendingUp } from 'lucide-react';
+import FavoriteStarButton from '@/components/FavoriteStarButton.jsx';
 
 export const TrendingNames = ({ title = "Trending Now", names = [], startIndex = 0, maxItems = 6 }) => {
   const validNames = [...new Set((names || []).filter(n => n && n.trim() !== ''))];
@@ -34,6 +35,12 @@ export const TrendingNames = ({ title = "Trending Now", names = [], startIndex =
                 text={name}
                 variant="card"
                 className="shadow-[0_10px_24px_-18px_rgba(109,40,217,0.62)]"
+              />
+              <FavoriteStarButton
+                name={name}
+                source="feature_trending_card"
+                compact
+                className="shadow-[0_10px_24px_-18px_rgba(245,158,11,0.45)]"
               />
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 ## Current Status
 
-This document reflects `main` after PR9 and includes PR10 planning updates.
+This document reflects `main` after PR9 and includes PR10 and PR11 planning updates.
 
 TryhardNames currently has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, and a protected `/account` route that manages a private Gaming Passport draft. Riot project registration has been submitted in Riot Developer Portal and is awaiting Riot confirmation/review.
 
@@ -84,6 +84,8 @@ PR10.7 improves dynamic generator card and lineup visual hierarchy using the Chr
 
 PR10.8 aligns feature generator cards with the dynamic NameCard visual standard.
 
+PR11 introduces Account Dashboard V2 and standardizes saved names around favorites. It retires the public legacy save/lineup flow in favor of `Copy Name` plus star/favorite actions.
+
 ## Next Recommended PRs
 
 Numbering may change.
@@ -94,8 +96,9 @@ Numbering may change.
 | PR10.1 | `fix(auth): align account and auth surfaces with light-dark theme contract` | Fixes Account/Auth light-dark consistency without changing auth logic or provider runtime. |
 | PR10.2 | `fix(passport): decide and normalize Gaming Passport landing theme` | Chooses dark-branded or theme-aware `/gaming-passport` behavior while keeping Riot-safe copy. |
 | PR10.3 | `fix(legal): align legal/docs surfaces with theme contract if needed` | Handles privacy/terms visual theme only if the dark-only legal/docs decision is not accepted. |
-| PR11 | `docs(passport): add Riot review response playbook and screenshot checklist` | Reviewer-response copy, screenshots, smoke script, and portal follow-up checklist if Riot asks for more context. |
-| PR12 | `chore(passport): plan Riot provider runtime contracts after approval` | Only after Riot approval/next steps are clear. |
+| PR11 | `feat(account): add dashboard v2 and unify saved names` | Account Dashboard V2, favorite-first saved names, and account hunting guide. |
+| PR12 | `docs(passport): add Riot review response playbook and screenshot checklist` | Reviewer-response copy, screenshots, smoke script, and portal follow-up checklist if Riot asks for more context. |
+| PR13 | `chore(passport): plan Riot provider runtime contracts after approval` | Only after Riot approval/next steps are clear. |
 
 ## Do-Not-Build-Yet List
 

@@ -22,14 +22,12 @@ describe('dynamic generator UX priority pass', () => {
   it('puts the generated names tool before long editorial content and internal links', () => {
     const toolMarker = seoTemplateSource.indexOf('Tool-first generated names surface');
     const namesGrid = seoTemplateSource.indexOf('id="names"');
-    const lineupState = seoTemplateSource.indexOf('Lineup state follows the tool');
     const editorialMarker = seoTemplateSource.indexOf('Editorial SEO content remains indexable below the utility surface');
     const internalLinks = seoTemplateSource.indexOf('<InternalLinkGrid');
 
     assert.ok(toolMarker > -1);
     assert.ok(namesGrid > toolMarker);
-    assert.ok(lineupState > namesGrid);
-    assert.ok(editorialMarker > lineupState);
+    assert.ok(editorialMarker > namesGrid);
     assert.ok(internalLinks > editorialMarker);
   });
 
@@ -39,39 +37,41 @@ describe('dynamic generator UX priority pass', () => {
     assert.match(seoTemplateSource, /order-2 mt-5 flex justify-center/);
   });
 
-  it('renders an empty lineup state and prevents empty pack actions from looking active', () => {
-    assert.match(seoTemplateSource, /Save a name to build a pack\./);
-    assert.match(seoTemplateSource, /Save a name first\./);
-    assert.match(seoTemplateSource, /aria-describedby="empty-lineup-message"/);
-    assert.match(seoTemplateSource, /disabled[\s\S]*Copy pack/);
-    assert.match(seoTemplateSource, /disabled[\s\S]*Export Discord Pack/);
-    assert.match(seoTemplateSource, /hasSavedFavorites && \([\s\S]*Clear all/);
+  it('removes the legacy lineup and pack UI from dynamic generators', () => {
+    assert.doesNotMatch(seoTemplateSource, /Lineup/);
+    assert.doesNotMatch(seoTemplateSource, /Copy pack/);
+    assert.doesNotMatch(seoTemplateSource, /Export Discord Pack/);
+    assert.doesNotMatch(seoTemplateSource, /Recent picks/);
+    assert.doesNotMatch(seoTemplateSource, /Save a name to build a pack\./);
+    assert.doesNotMatch(seoTemplateSource, /Save a name first\./);
   });
 
-  it('guards Copy Pack and Discord export when no favorites exist', () => {
-    assert.match(seoTemplateSource, /const copySharePack = async \(\) => \{[\s\S]*if \(!favorites\.size\) \{[\s\S]*showLineupBlockedFeedback\(\)/);
-    assert.match(seoTemplateSource, /const exportDiscordPack = async \(\) => \{[\s\S]*if \(!favorites\.size\) \{[\s\S]*showLineupBlockedFeedback\(\)/);
-    assert.match(seoTemplateSource, /const buildLineupPack = \(\) => \{[\s\S]*TryhardNames lineup[\s\S]*Category: \$\{category\}\/\$\{keyword\}[\s\S]*URL: \$\{pageUrl\}[\s\S]*Favorites: \$\{fav\.length\}/);
-    assert.doesNotMatch(seoTemplateSource, /body \|\| 'GhostVCT'/);
+  it('uses the unified favorite star model instead of legacy Save buttons', () => {
+    assert.match(seoTemplateSource, /import FavoriteStarButton/);
+    assert.match(seoTemplateSource, /readUnifiedFavoriteNames/);
+    assert.match(seoTemplateSource, /writeUnifiedFavoriteNames/);
+    assert.match(seoTemplateSource, /source="dynamic_name_card"/);
+    assert.doesNotMatch(seoTemplateSource, /laneUi\.saveLabel/);
+    assert.doesNotMatch(seoTemplateSource, />\s*Save\s*</);
+    assert.doesNotMatch(seoTemplateSource, />\s*Saved\s*</);
   });
 
-  it('keeps Copy Name, Save, and reroll/refinement controls available', () => {
+  it('keeps Copy Name, favorite star, and reroll/refinement controls available', () => {
     assert.match(copyButtonSource, /Copy Name/);
-    assert.match(seoTemplateSource, /laneUi\.saveLabel \|\| 'Save'/);
+    assert.match(seoTemplateSource, /<FavoriteStarButton[\s\S]*source="dynamic_name_card"/);
     assert.match(seoTemplateSource, /Another mix/);
     assert.match(seoTemplateSource, /Adjacent styles/);
     assert.match(seoTemplateSource, /Cleaner read/);
   });
 
-  it('keeps Similar Reads de-emphasized relative to Copy Name and Save', () => {
+  it('keeps Similar Reads de-emphasized relative to Copy Name and favorite star', () => {
     assert.match(seoTemplateSource, /const smallGhostButtonClass = 'th-name-card-tertiary'/);
     const cardCopy = seoTemplateSource.indexOf("source: 'card_copy_button'");
-    const save = seoTemplateSource.indexOf("laneUi.saveLabel || 'Save'", cardCopy);
-    const similar = seoTemplateSource.indexOf("laneUi.evolveLabel || 'Similar reads'", save);
+    const favorite = seoTemplateSource.indexOf('source="dynamic_name_card"', cardCopy);
+    const similar = seoTemplateSource.indexOf("laneUi.evolveLabel || 'Similar reads'", favorite);
     assert.ok(cardCopy > -1);
-    assert.ok(save > cardCopy);
-    assert.ok(similar > save);
-    assert.match(seoTemplateSource, /Use .Similar reads. to start building recents\./);
+    assert.ok(favorite > cardCopy);
+    assert.ok(similar > favorite);
     assert.doesNotMatch(seoTemplateSource, /Use .More like this. to start building recents\./);
   });
 

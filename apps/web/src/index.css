@@ -298,20 +298,6 @@
     margin-bottom: 1.5rem;
   }
 
-  .th-lineup-drawer-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(100, 116, 139, 0.55) transparent;
-  }
-
-  .th-lineup-drawer-scroll::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .th-lineup-drawer-scroll::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background: rgba(100, 116, 139, 0.42);
-  }
-
   /**
    * Atmospheric depth — controlled prestige (no RGB spam).
    * Rollback: remove these classes from components + delete this block.

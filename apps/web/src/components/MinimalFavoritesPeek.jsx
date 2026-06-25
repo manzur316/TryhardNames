@@ -97,7 +97,7 @@ const MinimalFavoritesPeek = () => {
         <div className="max-h-[min(40vh,280px)] overflow-y-auto overscroll-contain px-2 py-2">
           {count === 0 ? (
             <p className="px-2 py-6 text-center text-[11px] leading-relaxed text-muted-foreground">
-              Tap save on a name — it lands here quietly.
+              Star names while browsing to keep them here.
             </p>
           ) : (
             <ul className="space-y-1">
