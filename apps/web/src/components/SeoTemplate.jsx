@@ -100,31 +100,31 @@ const SeoTemplate = ({ pageData }) => {
 
   const vibeBadges = useMemo(() => {
     const map = {
-      sweaty: { label: 'Ranked read', className: 'bg-red-500/10 text-red-300 border-red-500/30' },
-      tryhard: { label: 'Competitive lane', className: 'bg-red-500/10 text-red-300 border-red-500/30' },
-      pro: { label: 'Pro read', className: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' },
-      edgy: { label: 'Dark', className: 'bg-purple-500/10 text-purple-200 border-purple-500/30' },
-      aesthetic: { label: 'Aesthetic', className: 'bg-pink-500/10 text-pink-200 border-pink-500/30' },
-      cute: { label: 'Cute', className: 'bg-pink-500/10 text-pink-200 border-pink-500/30' },
-      soft: { label: 'Soft', className: 'bg-pink-500/10 text-pink-200 border-pink-500/30' },
-      tiktok: { label: 'TikTok', className: 'bg-cyan-500/10 text-cyan-200 border-cyan-500/30' },
-      avatar: { label: 'Avatar', className: 'bg-cyan-500/10 text-cyan-200 border-cyan-500/30' },
-      og: { label: 'OG', className: 'bg-yellow-500/10 text-yellow-200 border-yellow-500/30' },
-      'one-word': { label: 'One‑Word', className: 'bg-yellow-500/10 text-yellow-200 border-yellow-500/30' },
-      '3-letter': { label: '3‑Letter', className: 'bg-yellow-500/10 text-yellow-200 border-yellow-500/30' },
-      korean: { label: 'KR minimal', className: 'bg-zinc-500/10 text-zinc-200 border-zinc-500/35' },
-      movement: { label: 'Movement', className: 'bg-cyan-500/10 text-cyan-200 border-cyan-500/30' },
-      predator: { label: 'Pred', className: 'bg-red-500/10 text-red-300 border-red-500/30' },
-      realistic: { label: 'Realistic', className: 'bg-slate-500/10 text-slate-200 border-slate-500/30' },
-      mafia: { label: 'Mafia', className: 'bg-slate-500/10 text-slate-200 border-slate-500/30' },
-      cartel: { label: 'Cartel', className: 'bg-slate-500/10 text-slate-200 border-slate-500/30' },
-      luxury: { label: 'Luxury', className: 'bg-yellow-500/10 text-yellow-200 border-yellow-500/30' },
-      gang: { label: 'Crew', className: 'bg-slate-500/10 text-slate-200 border-slate-500/30' },
-      street: { label: 'Street', className: 'bg-slate-500/10 text-slate-200 border-slate-500/30' },
-      smp: { label: 'SMP', className: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' },
-      pvp: { label: 'PvP', className: 'bg-red-500/10 text-red-300 border-red-500/30' },
-      bedwars: { label: 'Bedwars', className: 'bg-red-500/10 text-red-300 border-red-500/30' },
-      medieval: { label: 'Medieval', className: 'bg-yellow-500/10 text-yellow-200 border-yellow-500/30' },
+      sweaty: { label: 'Ranked read', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/30' },
+      tryhard: { label: 'Competitive lane', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/30' },
+      pro: { label: 'Pro read', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30' },
+      edgy: { label: 'Dark', className: 'bg-violet-50 text-violet-700 border-violet-200 dark:bg-purple-500/10 dark:text-purple-200 dark:border-purple-500/30' },
+      aesthetic: { label: 'Aesthetic', className: 'bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-500/10 dark:text-pink-200 dark:border-pink-500/30' },
+      cute: { label: 'Cute', className: 'bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-500/10 dark:text-pink-200 dark:border-pink-500/30' },
+      soft: { label: 'Soft', className: 'bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-500/10 dark:text-pink-200 dark:border-pink-500/30' },
+      tiktok: { label: 'TikTok', className: 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-200 dark:border-cyan-500/30' },
+      avatar: { label: 'Avatar', className: 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-200 dark:border-cyan-500/30' },
+      og: { label: 'OG', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/10 dark:text-yellow-200 dark:border-yellow-500/30' },
+      'one-word': { label: 'One‑Word', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/10 dark:text-yellow-200 dark:border-yellow-500/30' },
+      '3-letter': { label: '3‑Letter', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/10 dark:text-yellow-200 dark:border-yellow-500/30' },
+      korean: { label: 'KR minimal', className: 'bg-zinc-50 text-zinc-700 border-zinc-200 dark:bg-zinc-500/10 dark:text-zinc-200 dark:border-zinc-500/35' },
+      movement: { label: 'Movement', className: 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-200 dark:border-cyan-500/30' },
+      predator: { label: 'Pred', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/30' },
+      realistic: { label: 'Realistic', className: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-200 dark:border-slate-500/30' },
+      mafia: { label: 'Mafia', className: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-200 dark:border-slate-500/30' },
+      cartel: { label: 'Cartel', className: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-200 dark:border-slate-500/30' },
+      luxury: { label: 'Luxury', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/10 dark:text-yellow-200 dark:border-yellow-500/30' },
+      gang: { label: 'Crew', className: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-200 dark:border-slate-500/30' },
+      street: { label: 'Street', className: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-200 dark:border-slate-500/30' },
+      smp: { label: 'SMP', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30' },
+      pvp: { label: 'PvP', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/30' },
+      bedwars: { label: 'Bedwars', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/30' },
+      medieval: { label: 'Medieval', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/10 dark:text-yellow-200 dark:border-yellow-500/30' },
     };
     return map[keyword] || null;
   }, [keyword]);
@@ -544,6 +544,35 @@ const SeoTemplate = ({ pageData }) => {
     pageData.namesSectionLead ||
     'Tap to copy. Try adjacent styles or filters to tune how your tag reads—length and ASCII toggles refine the list.';
 
+  const dividerClass = 'border-slate-200/90 dark:border-dark-700';
+  const headingClass = 'text-slate-950 dark:text-dark-50';
+  const bodyClass = 'text-slate-700 dark:text-dark-300';
+  const subtleClass = 'text-slate-500 dark:text-dark-400';
+  const chipClass =
+    'bg-white/85 border border-slate-200/90 text-slate-700 shadow-sm dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200';
+  const chipLinkClass =
+    'bg-white/85 border border-slate-200/90 text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700 dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:text-accent-cyan dark:hover:border-accent-cyan/50';
+  const cardClass =
+    'bg-white/85 border border-slate-200/90 rounded-2xl p-8 md:p-10 text-slate-700 shadow-sm ring-1 ring-inset ring-slate-900/[0.03] hover:border-slate-300 hover:shadow-[0_22px_56px_-30px_rgba(15,23,42,0.18)] transition-all duration-300 dark:bg-dark-800 dark:border-dark-700/90 dark:text-dark-300 dark:ring-white/[0.04] dark:hover:border-dark-600 dark:hover:shadow-[0_22px_56px_-28px_rgba(0,0,0,0.55)]';
+  const actionButtonClass =
+    'px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700 hover:bg-cyan-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:text-accent-cyan dark:hover:border-accent-cyan/50';
+  const secondaryActionButtonClass =
+    'px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-dark-500';
+  const inactiveFilterClass =
+    'bg-white/90 text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:bg-dark-900 dark:text-dark-50 dark:border-dark-700 dark:hover:border-dark-500';
+  const activeCyanFilterClass =
+    'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-accent-cyan/15 dark:text-accent-cyan dark:border-accent-cyan/40';
+  const activePurpleFilterClass =
+    'bg-violet-50 text-violet-700 border-violet-200 dark:bg-accent-purple/15 dark:text-accent-purple dark:border-accent-purple/40';
+  const activeEmeraldFilterClass =
+    'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-200 dark:border-emerald-500/40';
+  const activeCyanSoftFilterClass =
+    'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-500/15 dark:text-cyan-200 dark:border-cyan-500/40';
+  const nameCardClass =
+    'group relative bg-white/90 border border-slate-200/90 rounded-2xl p-4 overflow-hidden transition-[border-color,box-shadow] duration-200 ease-out hover:border-cyan-300/70 hover:shadow-[0_10px_32px_-16px_rgba(15,23,42,0.22)] dark:bg-dark-900 dark:border-dark-700/90 dark:hover:border-accent-cyan/22 dark:hover:shadow-[0_10px_32px_-12px_rgba(34,211,238,0.07)]';
+  const smallGhostButtonClass =
+    'px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-violet-300 hover:text-violet-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:text-accent-purple dark:hover:border-accent-purple/50';
+
   return (
     <>
       <SeoHead
@@ -554,21 +583,21 @@ const SeoTemplate = ({ pageData }) => {
         jsonLd={pageData.jsonLd || []}
       />
 
-      <div className="th-atmosphere-shell text-dark-300 min-h-screen py-20 px-4 flex-grow flex flex-col">
+      <div className="th-atmosphere-shell text-slate-700 dark:text-dark-300 min-h-screen py-20 px-4 flex-grow flex flex-col">
         <div className="container relative z-10 mx-auto max-w-5xl">
           
           {/* Hero Section */}
           {isLolKoreanLane && pageData.laneHero ? (
-            <div className="mb-16 sm:mb-20 max-w-3xl mx-auto space-y-6 text-left border-b border-dark-700/80 pb-14">
-              <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.32em] text-dark-500">
+            <div className={cn('mb-16 sm:mb-20 max-w-3xl mx-auto space-y-6 text-left border-b pb-14', dividerClass)}>
+              <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500 dark:text-dark-500">
                 {pageData.laneHero.eyebrow}
               </p>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-dark-50 tracking-[-0.03em] leading-[1.12] text-balance">
+              <h1 className={cn('text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] leading-[1.12] text-balance', headingClass)}>
                 {pageData.laneHero.title}
               </h1>
-              <p className="text-base md:text-lg text-dark-300 leading-relaxed">{pageData.laneHero.subtitle}</p>
+              <p className={cn('text-base md:text-lg leading-relaxed', bodyClass)}>{pageData.laneHero.subtitle}</p>
               {pageData.laneHero.note ? (
-                <p className="text-sm text-dark-500 leading-relaxed border-l border-dark-600 pl-4">{pageData.laneHero.note}</p>
+                <p className="text-sm text-slate-500 dark:text-dark-500 leading-relaxed border-l border-slate-300 dark:border-dark-600 pl-4">{pageData.laneHero.note}</p>
               ) : null}
               <div className="flex flex-wrap items-center gap-2 pt-2">
                 {vibeBadges && (
@@ -590,7 +619,7 @@ const SeoTemplate = ({ pageData }) => {
                       placement: 'lol_korean_hero',
                     })
                   }
-                  className="px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase bg-dark-900 border border-dark-600 text-dark-200 hover:border-dark-500 transition-colors"
+                  className="px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase bg-white/85 border border-slate-200/90 text-slate-700 shadow-sm hover:border-slate-300 transition-colors dark:bg-dark-900 dark:border-dark-600 dark:text-dark-200 dark:hover:border-dark-500"
                 >
                   All League lanes
                 </Link>
@@ -598,15 +627,15 @@ const SeoTemplate = ({ pageData }) => {
             </div>
           ) : (
             <div className="text-center mb-16 sm:mb-20 space-y-7 sm:space-y-8">
-              <h1 className="text-4xl md:text-6xl font-bold text-dark-50 tracking-tight md:tracking-tighter leading-[1.06] md:leading-[1.02] max-w-4xl mx-auto text-balance">
+              <h1 className={cn('text-4xl md:text-6xl font-bold tracking-tight md:tracking-tighter leading-[1.06] md:leading-[1.02] max-w-4xl mx-auto text-balance', headingClass)}>
                 {restH1 ? `${restH1} ` : ''}
-                <span className="text-cyan-400 dark:text-cyan-300">{lastWord}</span>
+                <span className="text-cyan-600 dark:text-cyan-300">{lastWord}</span>
               </h1>
-              <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed text-dark-300/95 md:leading-[1.65]">
+              <p className={cn('text-lg md:text-xl max-w-3xl mx-auto leading-relaxed md:leading-[1.65]', bodyClass)}>
                 {pageData.description}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-                <span className="px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200">
+                <span className={cn('px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase', chipClass)}>
                   {category}/{keyword}
                 </span>
                 {vibeBadges && (
@@ -617,7 +646,7 @@ const SeoTemplate = ({ pageData }) => {
                   </span>
                 )}
                 {contextLabel && (
-                  <span className="px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200 hover:border-accent-cyan/40 transition-colors">
+                  <span className={cn('px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase transition-colors', chipLinkClass)}>
                     {contextLabel}
                   </span>
                 )}
@@ -633,7 +662,7 @@ const SeoTemplate = ({ pageData }) => {
                         hubSlug: pageData.topicHub.slug,
                       })
                     }
-                    className="px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200 hover:text-accent-cyan hover:border-accent-cyan/50 transition-colors"
+                    className={cn('px-3 py-2 rounded-full text-xs font-bold tracking-widest uppercase transition-colors', chipLinkClass)}
                   >
                     Topic hub
                   </Link>
@@ -647,9 +676,9 @@ const SeoTemplate = ({ pageData }) => {
             {pageData.sections.map((sec, i) => (
               <section 
                 key={i} 
-                className="bg-dark-800/98 border border-dark-700/90 rounded-2xl p-8 md:p-10 hover:border-dark-600 hover:shadow-[0_22px_56px_-28px_rgba(0,0,0,0.55)] transition-all duration-300 shadow-refined ring-1 ring-inset ring-white/[0.04]"
+                className={cardClass}
               >
-                <h2 className="text-2xl md:text-3xl font-bold text-dark-50 mb-6">{sec.title}</h2>
+                <h2 className={cn('text-2xl md:text-3xl font-bold mb-6', headingClass)}>{sec.title}</h2>
                 {Array.isArray(sec.content) ? (
                   <ul className="space-y-4 list-disc pl-6">
                     {sec.content.map((p, j) => (
@@ -684,10 +713,10 @@ const SeoTemplate = ({ pageData }) => {
           {pageData.names && pageData.names.length > 0 && (
             <div className="mb-20">
               <div className="text-center mb-8 sm:mb-10 space-y-4">
-                <h2 className="text-3xl sm:text-4xl font-bold text-dark-50 tracking-tight leading-[1.08] text-balance">
+                <h2 className={cn('text-3xl sm:text-4xl font-bold tracking-tight leading-[1.08] text-balance', headingClass)}>
                   {namesGridTitle}
                 </h2>
-                <p className="text-sm text-dark-300/90 max-w-2xl mx-auto leading-relaxed">{namesGridLead}</p>
+                <p className={cn('text-sm max-w-2xl mx-auto leading-relaxed', bodyClass)}>{namesGridLead}</p>
               </div>
 
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
@@ -697,7 +726,7 @@ const SeoTemplate = ({ pageData }) => {
                       <button
                         type="button"
                         onClick={() => applyKrEcologyNewDraw()}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:text-accent-cyan hover:border-accent-cyan/50 transition-colors"
+                        className={actionButtonClass}
                       >
                         {laneUi.shuffleLabel || 'New draw'}
                       </button>
@@ -706,7 +735,7 @@ const SeoTemplate = ({ pageData }) => {
                           key={m.id}
                           type="button"
                           onClick={() => applyKrQuickMode(m.id)}
-                          className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-600 text-dark-200 hover:border-zinc-500 hover:text-dark-50 transition-colors"
+                          className={secondaryActionButtonClass}
                         >
                           {m.label}
                         </button>
@@ -721,7 +750,7 @@ const SeoTemplate = ({ pageData }) => {
                           setRiotSafe(false);
                           setStreamSafe(false);
                         }}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-dark-500 transition-colors"
+                        className={secondaryActionButtonClass}
                       >
                         {laneUi.resetLabel || 'Reset'}
                       </button>
@@ -731,70 +760,70 @@ const SeoTemplate = ({ pageData }) => {
                       <button
                         type="button"
                         onClick={() => setNames(shuffle(initialNames))}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:text-accent-cyan hover:border-accent-cyan/50 transition-colors"
+                        className={actionButtonClass}
                       >
                         Another mix
                       </button>
                       <button
                         type="button"
                         onClick={remixNames}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:text-accent-purple hover:border-accent-purple/50 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-violet-300 hover:text-violet-700 hover:bg-violet-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:text-accent-purple dark:hover:border-accent-purple/50"
                       >
                         Adjacent styles
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('cleaner')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-emerald-400/40 hover:text-emerald-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-emerald-400/40 dark:hover:text-emerald-200"
                       >
                         Cleaner read
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('sweaty')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-red-400/40 hover:text-red-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-red-300 hover:text-red-700 hover:bg-red-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-red-400/40 dark:hover:text-red-200"
                       >
                         Ranked tone
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('shorter')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-yellow-400/40 hover:text-yellow-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-yellow-400/40 dark:hover:text-yellow-200"
                       >
                         Shorter tag
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('og')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-yellow-400/40 hover:text-yellow-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-yellow-400/40 dark:hover:text-yellow-200"
                       >
                         OG tilt
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('streamer')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-cyan-400/40 hover:text-cyan-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700 hover:bg-cyan-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200"
                       >
                         Stream-friendly
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('esports')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-emerald-400/40 hover:text-emerald-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-emerald-400/40 dark:hover:text-emerald-200"
                       >
                         Esports-clean
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('darker')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-purple-400/40 hover:text-purple-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-violet-300 hover:text-violet-700 hover:bg-violet-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-purple-400/40 dark:hover:text-purple-200"
                       >
                         Darker tone
                       </button>
                       <button
                         type="button"
                         onClick={() => applyMode('aesthetic')}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-pink-400/40 hover:text-pink-200 transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-bold bg-white/90 border border-slate-200 text-slate-700 shadow-sm hover:border-pink-300 hover:text-pink-700 hover:bg-pink-50/50 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:border-pink-400/40 dark:hover:text-pink-200"
                       >
                         Aesthetic lane
                       </button>
@@ -807,7 +836,7 @@ const SeoTemplate = ({ pageData }) => {
                           setRiotSafe(false);
                           setStreamSafe(false);
                         }}
-                        className="px-4 py-2 rounded-full text-sm font-bold bg-dark-900 border border-dark-700 text-dark-50 hover:border-dark-500 transition-colors"
+                        className={secondaryActionButtonClass}
                       >
                         Reset
                       </button>
@@ -824,8 +853,8 @@ const SeoTemplate = ({ pageData }) => {
                     }}
                     className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${
                       lengthFilter === 'all'
-                        ? 'bg-accent-cyan/15 text-accent-cyan border-accent-cyan/40'
-                        : 'bg-dark-900 text-dark-50 border-dark-700 hover:border-dark-500'
+                        ? activeCyanFilterClass
+                        : inactiveFilterClass
                     }`}
                   >
                     {laneUi.filterAll || 'All'}
@@ -838,8 +867,8 @@ const SeoTemplate = ({ pageData }) => {
                     }}
                     className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${
                       lengthFilter === 'short'
-                        ? 'bg-accent-cyan/15 text-accent-cyan border-accent-cyan/40'
-                        : 'bg-dark-900 text-dark-50 border-dark-700 hover:border-dark-500'
+                        ? activeCyanFilterClass
+                        : inactiveFilterClass
                     }`}
                   >
                     {laneUi.filterShort || 'Short'}
@@ -852,8 +881,8 @@ const SeoTemplate = ({ pageData }) => {
                     }}
                     className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${
                       lengthFilter === 'medium'
-                        ? 'bg-accent-cyan/15 text-accent-cyan border-accent-cyan/40'
-                        : 'bg-dark-900 text-dark-50 border-dark-700 hover:border-dark-500'
+                        ? activeCyanFilterClass
+                        : inactiveFilterClass
                     }`}
                   >
                     {laneUi.filterMedium || 'Medium'}
@@ -869,8 +898,8 @@ const SeoTemplate = ({ pageData }) => {
                     }}
                     className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${
                       asciiOnly
-                        ? 'bg-accent-purple/15 text-accent-purple border-accent-purple/40'
-                        : 'bg-dark-900 text-dark-50 border-dark-700 hover:border-dark-500'
+                        ? activePurpleFilterClass
+                        : inactiveFilterClass
                     }`}
                   >
                     {laneUi.filterAsciiLabel || 'ASCII only'}
@@ -886,8 +915,8 @@ const SeoTemplate = ({ pageData }) => {
                     }}
                     className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${
                       riotSafe
-                        ? 'bg-emerald-500/15 text-emerald-200 border-emerald-500/40'
-                        : 'bg-dark-900 text-dark-50 border-dark-700 hover:border-dark-500'
+                        ? activeEmeraldFilterClass
+                        : inactiveFilterClass
                     }`}
                   >
                     {laneUi.filterRiotLabel || 'Riot-safe'}
@@ -904,8 +933,8 @@ const SeoTemplate = ({ pageData }) => {
                       }}
                       className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${
                         streamSafe
-                          ? 'bg-cyan-500/15 text-cyan-200 border-cyan-500/40'
-                          : 'bg-dark-900 text-dark-50 border-dark-700 hover:border-dark-500'
+                          ? activeCyanSoftFilterClass
+                          : inactiveFilterClass
                       }`}
                     >
                       Stream-safe
@@ -934,10 +963,10 @@ const SeoTemplate = ({ pageData }) => {
                     isLolKoreanLane ? null : len <= 4 ? 'Compact' : len <= 6 ? 'Short' : hasSymbols ? 'Styled' : null;
                   const formatHintClass =
                     formatHint === 'Compact'
-                      ? 'bg-zinc-500/10 text-zinc-300 border-zinc-500/25'
+                      ? 'bg-zinc-50 text-zinc-700 border-zinc-200 dark:bg-zinc-500/10 dark:text-zinc-300 dark:border-zinc-500/25'
                       : formatHint === 'Short'
-                        ? 'bg-zinc-500/10 text-zinc-300 border-zinc-500/25'
-                        : 'bg-slate-600/15 text-slate-300 border-slate-500/25';
+                        ? 'bg-zinc-50 text-zinc-700 border-zinc-200 dark:bg-zinc-500/10 dark:text-zinc-300 dark:border-zinc-500/25'
+                        : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-600/15 dark:text-slate-300 dark:border-slate-500/25';
 
                   const krTier =
                     isLolKoreanLane &&
@@ -950,7 +979,7 @@ const SeoTemplate = ({ pageData }) => {
                       className={
                         isLolKoreanLane && krStyles
                           ? `group relative border rounded-2xl overflow-hidden transition-[border-color,box-shadow] duration-200 ease-out hover:border-accent-cyan/35 hover:shadow-[0_6px_22px_rgba(0,0,0,0.22)] ${krStyles.pad} ${krStyles.wrap}`
-                          : `group relative bg-dark-900 border border-dark-700/90 rounded-2xl p-4 overflow-hidden transition-[border-color,box-shadow] duration-200 ease-out hover:border-accent-cyan/22 hover:shadow-[0_10px_32px_-12px_rgba(34,211,238,0.07)] ${i === 0 ? 'ring-1 ring-inset ring-white/[0.08]' : ''}`
+                          : `${nameCardClass} ${i === 0 ? 'ring-1 ring-inset ring-cyan-200/60 dark:ring-white/[0.08]' : ''}`
                       }
                     >
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
@@ -994,19 +1023,19 @@ const SeoTemplate = ({ pageData }) => {
                             )}
                           </div>
                           <span
-                            className={`block group-hover:text-accent-cyan/95 transition-colors duration-200 break-words leading-snug ${krStyles?.name ?? 'text-xl font-black text-dark-50 tracking-tight'}`}
+                            className={`block group-hover:text-cyan-700 dark:group-hover:text-accent-cyan/95 transition-colors duration-200 break-words leading-snug ${krStyles?.name ?? 'text-xl font-black text-slate-950 dark:text-dark-50 tracking-tight'}`}
                           >
                             {s}
                           </span>
                           <span
-                            className={`block text-[11px] mt-2.5 font-medium tracking-wide ${krStyles?.meta ?? 'text-dark-400/90'}`}
+                            className={`block text-[11px] mt-2.5 font-medium tracking-wide ${krStyles?.meta ?? 'text-slate-500 dark:text-dark-400/90'}`}
                           >
                             {isLolKoreanLane
                               ? `${len} letters`
                               : `${len} chars${hasSymbols ? ' • symbols' : ''}`}
                           </span>
                           {contextKey && i < 3 && !isLolKoreanLane && (
-                            <span className="block text-[11px] text-dark-300 mt-2">
+                            <span className="block text-[11px] text-slate-600 dark:text-dark-300 mt-2">
                               {pickWhyThisWorks({ contextKey })}
                             </span>
                           )}
@@ -1025,7 +1054,7 @@ const SeoTemplate = ({ pageData }) => {
                                 trackEvent('NAME_EVOLUTION_USED', { pageSlug: pageData.slug, category, keyword, name: s });
                                 evolveName(s);
                               }}
-                              className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200 hover:text-accent-purple hover:border-accent-purple/50 transition-colors"
+                              className={smallGhostButtonClass}
                             >
                               {laneUi.evolveLabel || 'Similar reads'}
                             </button>
@@ -1034,8 +1063,8 @@ const SeoTemplate = ({ pageData }) => {
                               onClick={() => toggleFavorite(s)}
                               className={`px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase border transition-colors ${
                                 favorites.has(s)
-                                  ? 'bg-yellow-500/15 text-yellow-200 border-yellow-500/40'
-                                  : 'bg-dark-900 text-dark-200 border-dark-700 hover:border-yellow-500/40 hover:text-yellow-200'
+                                  ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-200 dark:border-yellow-500/40'
+                                  : 'bg-white/90 text-slate-700 border-slate-200 hover:border-amber-300 hover:text-amber-700 dark:bg-dark-900 dark:text-dark-200 dark:border-dark-700 dark:hover:border-yellow-500/40 dark:hover:text-yellow-200'
                               }`}
                             >
                               {favorites.has(s)
@@ -1070,11 +1099,11 @@ const SeoTemplate = ({ pageData }) => {
           {/* Topic Hub recommendation (one per page, contextual) */}
           {pageData.topicHub && !isLolKoreanLane && (
             <div className="mb-10 -mt-6">
-              <div className="max-w-4xl mx-auto bg-dark-800 border border-dark-700 rounded-2xl p-5 md:p-6 shadow-refined flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="max-w-4xl mx-auto bg-white/85 border border-slate-200/90 rounded-2xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4 dark:bg-dark-800 dark:border-dark-700 dark:shadow-refined">
                 <div>
-                  <p className="text-xs font-bold tracking-widest uppercase text-dark-400">Topic hub</p>
-                  <p className="text-lg font-bold text-dark-50 mt-1">{pageData.topicHub.title}</p>
-                  <p className="text-sm text-dark-300 mt-1 leading-relaxed">{pageData.topicHub.desc}</p>
+                  <p className={cn('text-xs font-bold tracking-widest uppercase', subtleClass)}>Topic hub</p>
+                  <p className={cn('text-lg font-bold mt-1', headingClass)}>{pageData.topicHub.title}</p>
+                  <p className={cn('text-sm mt-1 leading-relaxed', bodyClass)}>{pageData.topicHub.desc}</p>
                 </div>
                 <Link
                   to={pageData.topicHub.path || `/${pageData.topicHub.slug}`}
@@ -1088,7 +1117,7 @@ const SeoTemplate = ({ pageData }) => {
                       placement: 'recommendation_card',
                     })
                   }
-                  className="inline-flex items-center justify-center bg-dark-900 border border-dark-700 px-5 py-3 rounded-full text-dark-50 text-sm font-bold hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300 shadow-sm whitespace-nowrap"
+                  className="inline-flex items-center justify-center bg-white/90 border border-slate-200 px-5 py-3 rounded-full text-slate-800 text-sm font-bold hover:text-cyan-700 hover:border-cyan-300 transition-all duration-300 shadow-sm whitespace-nowrap dark:bg-dark-900 dark:border-dark-700 dark:text-dark-50 dark:hover:text-accent-cyan dark:hover:border-accent-cyan/50"
                 >
                   {pageData.topicHub.cta}
                 </Link>
@@ -1114,18 +1143,18 @@ const SeoTemplate = ({ pageData }) => {
 
           {/* FAQs (Indexable content + JSON-LD in head) */}
           {pageData.faqs && pageData.faqs.length > 0 && (
-            <div className="border-t border-dark-700 pt-16">
-              <h2 className="text-3xl font-bold text-dark-50 mb-8 text-center">Frequently Asked Questions</h2>
+            <div className={cn('border-t pt-16', dividerClass)}>
+              <h2 className={cn('text-3xl font-bold mb-8 text-center', headingClass)}>Frequently Asked Questions</h2>
               <div className="space-y-4 max-w-4xl mx-auto">
                 {pageData.faqs.map((faq, i) => (
                   <details
                     key={i}
-                    className="bg-dark-800 border border-dark-700 rounded-xl p-6 hover:border-accent-cyan/40 transition-colors"
+                    className="bg-white/85 border border-slate-200/90 rounded-xl p-6 hover:border-cyan-300 transition-colors shadow-sm dark:bg-dark-800 dark:border-dark-700 dark:hover:border-accent-cyan/40"
                   >
-                    <summary className="cursor-pointer select-none font-bold text-dark-50 text-lg">
+                    <summary className={cn('cursor-pointer select-none font-bold text-lg', headingClass)}>
                       {faq.question}
                     </summary>
-                    <div className="mt-3 text-dark-300 leading-relaxed">{faq.answer}</div>
+                    <div className={cn('mt-3 leading-relaxed', bodyClass)}>{faq.answer}</div>
                   </details>
                 ))}
               </div>
@@ -1138,25 +1167,25 @@ const SeoTemplate = ({ pageData }) => {
       {/* Floating lineup shelf — primary surface for saves, recents, and similar reads */}
       <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
         <div className="pointer-events-auto mx-auto max-w-5xl px-3 pb-3 sm:pb-4">
-          <div className="rounded-2xl border border-white/[0.09] bg-dark-950/95 backdrop-blur-xl shadow-[0_-20px_60px_-16px_rgba(0,0,0,0.75)] ring-1 ring-white/[0.05] overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-white/[0.06] bg-dark-900/40">
+          <div className="rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-xl shadow-[0_-20px_60px_-24px_rgba(15,23,42,0.28)] ring-1 ring-slate-900/[0.05] overflow-hidden dark:border-white/[0.09] dark:bg-dark-950/95 dark:shadow-[0_-20px_60px_-16px_rgba(0,0,0,0.75)] dark:ring-white/[0.05]">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-slate-200/80 bg-slate-50/70 dark:border-white/[0.06] dark:bg-dark-900/40">
               <button
                 type="button"
                 onClick={() => setDrawerOpen((v) => !v)}
-                className="flex items-center gap-2.5 text-sm font-black text-dark-50 min-w-0"
+                className="flex items-center gap-2.5 text-sm font-black text-slate-900 dark:text-dark-50 min-w-0"
               >
                 <span
                   className={cn(
                     'px-3.5 py-2 rounded-full text-xs font-black tracking-[0.18em] uppercase border transition-all duration-200',
                     drawerOpen || activeEvolution
-                      ? 'border-cyan-400/50 bg-cyan-500/[0.18] text-cyan-50 shadow-[0_0_24px_-10px_rgba(34,211,238,0.45)]'
-                      : 'border-dark-600 bg-dark-800 text-dark-100 hover:border-dark-500'
+                      ? 'border-cyan-300 bg-cyan-50 text-cyan-700 shadow-[0_0_24px_-16px_rgba(8,145,178,0.35)] dark:border-cyan-400/50 dark:bg-cyan-500/[0.18] dark:text-cyan-50 dark:shadow-[0_0_24px_-10px_rgba(34,211,238,0.45)]'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-dark-600 dark:bg-dark-800 dark:text-dark-100 dark:hover:border-dark-500'
                   )}
                 >
                   Lineup
                 </span>
-                <span className="text-dark-100 font-bold tabular-nums">{favorites.size}</span>
-                <span className="text-dark-400 text-[11px] font-bold tracking-widest uppercase shrink-0">
+                <span className="text-slate-800 dark:text-dark-100 font-bold tabular-nums">{favorites.size}</span>
+                <span className="text-slate-500 dark:text-dark-400 text-[11px] font-bold tracking-widest uppercase shrink-0">
                   {drawerOpen ? 'Hide' : 'Open'}
                 </span>
               </button>
@@ -1165,7 +1194,7 @@ const SeoTemplate = ({ pageData }) => {
                 <button
                   type="button"
                   onClick={exportDiscordPack}
-                  className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-dark-800/90 border border-violet-500/35 text-violet-100 hover:bg-violet-500/15 hover:border-violet-400/55 hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)] transition-all duration-200"
+                  className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100 hover:border-violet-300 hover:shadow-[0_0_18px_-12px_rgba(124,58,237,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-violet-500/35 dark:text-violet-100 dark:hover:bg-violet-500/15 dark:hover:border-violet-400/55 dark:hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)]"
                 >
                   Export Discord Pack
                 </button>
@@ -1175,8 +1204,8 @@ const SeoTemplate = ({ pageData }) => {
                   className={cn(
                     'px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase border transition-all duration-200',
                     shareCopied
-                      ? 'bg-emerald-500/20 text-emerald-100 border-emerald-400/45 shadow-[0_0_16px_-8px_rgba(52,211,153,0.4)]'
-                      : 'bg-dark-800/90 border-emerald-500/25 text-emerald-100/95 hover:border-emerald-400/45 hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.35)]'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-[0_0_16px_-10px_rgba(16,185,129,0.32)] dark:bg-emerald-500/20 dark:text-emerald-100 dark:border-emerald-400/45 dark:shadow-[0_0_16px_-8px_rgba(52,211,153,0.4)]'
+                      : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:shadow-[0_0_18px_-12px_rgba(16,185,129,0.28)] dark:bg-dark-800/90 dark:border-emerald-500/25 dark:text-emerald-100/95 dark:hover:border-emerald-400/45 dark:hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.35)]'
                   )}
                 >
                   {shareCopied ? 'Copied' : 'Copy pack'}
@@ -1184,7 +1213,7 @@ const SeoTemplate = ({ pageData }) => {
                 <button
                   type="button"
                   onClick={shareLineup}
-                  className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-dark-800/90 border border-cyan-500/35 text-cyan-50 hover:bg-cyan-500/15 hover:border-cyan-400/50 hover:shadow-[0_0_18px_-8px_rgba(34,211,238,0.4)] transition-all duration-200"
+                  className="px-3.5 py-2 rounded-full text-[11px] font-black tracking-[0.14em] uppercase bg-cyan-50 border border-cyan-200 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-[0_0_18px_-12px_rgba(8,145,178,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-cyan-500/35 dark:text-cyan-50 dark:hover:bg-cyan-500/15 dark:hover:border-cyan-400/50 dark:hover:shadow-[0_0_18px_-8px_rgba(34,211,238,0.4)]"
                 >
                   Share
                 </button>
@@ -1200,23 +1229,23 @@ const SeoTemplate = ({ pageData }) => {
               <div className="px-4 pb-4 pt-4 space-y-4">
                 {activeEvolution && (
                   <section
-                    className="rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-950/55 via-dark-900 to-dark-950 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+                    className="rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:border-cyan-500/25 dark:from-cyan-950/55 dark:via-dark-900 dark:to-dark-950 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
                     aria-label="Similar reads"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-200/90">Similar reads</p>
-                        <p className="text-sm text-dark-200 mt-1.5">
-                          From <span className="font-semibold text-dark-50">{activeEvolution.base}</span>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-200/90">Similar reads</p>
+                        <p className="text-sm text-slate-700 dark:text-dark-200 mt-1.5">
+                          From <span className="font-semibold text-slate-950 dark:text-dark-50">{activeEvolution.base}</span>
                         </p>
-                        <p className="text-xs text-dark-400 mt-1 leading-relaxed max-w-md">
+                        <p className="text-xs text-slate-500 dark:text-dark-400 mt-1 leading-relaxed max-w-md">
                           Steps stay here with your lineup — scroll sideways on small screens.
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => setActiveEvolution(null)}
-                        className="shrink-0 self-start px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wide border border-dark-600 text-dark-200 hover:border-dark-500 hover:text-dark-50 transition-colors"
+                        className="shrink-0 self-start px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wide border border-slate-200 text-slate-700 hover:border-slate-300 hover:text-slate-950 transition-colors dark:border-dark-600 dark:text-dark-200 dark:hover:border-dark-500 dark:hover:text-dark-50"
                       >
                         Dismiss
                       </button>
@@ -1225,9 +1254,9 @@ const SeoTemplate = ({ pageData }) => {
                       {activeEvolution.variants.map((v, vi) => (
                         <div
                           key={`${vi}-${v}`}
-                          className="flex-shrink-0 flex items-center gap-2 rounded-xl border border-dark-600/90 bg-dark-950/80 px-3 py-2.5 shadow-sm"
+                          className="flex-shrink-0 flex items-center gap-2 rounded-xl border border-slate-200 bg-white/85 px-3 py-2.5 shadow-sm dark:border-dark-600/90 dark:bg-dark-950/80"
                         >
-                          <span className="text-sm font-semibold text-dark-50 max-w-[min(160px,44vw)] truncate" title={v}>
+                          <span className="text-sm font-semibold text-slate-950 dark:text-dark-50 max-w-[min(160px,44vw)] truncate" title={v}>
                             {v}
                           </span>
                           <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 shrink-0">
@@ -1242,8 +1271,8 @@ const SeoTemplate = ({ pageData }) => {
                               className={cn(
                                 'text-[10px] font-black tracking-widest uppercase px-2.5 py-1.5 rounded-full border transition-colors',
                                 favorites.has(v)
-                                  ? 'bg-amber-500/15 text-amber-100 border-amber-400/45'
-                                  : 'border-dark-600 text-dark-300 hover:border-amber-400/35 hover:text-amber-100'
+                                  ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-500/15 dark:text-amber-100 dark:border-amber-400/45'
+                                  : 'border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 dark:border-dark-600 dark:text-dark-300 dark:hover:border-amber-400/35 dark:hover:text-amber-100'
                               )}
                             >
                               {favorites.has(v) ? 'Saved' : 'Save'}
@@ -1256,31 +1285,31 @@ const SeoTemplate = ({ pageData }) => {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <section className="bg-dark-800 border border-dark-700 rounded-2xl p-4">
+                  <section className="bg-white/85 border border-slate-200/90 rounded-2xl p-4 shadow-sm dark:bg-dark-800 dark:border-dark-700">
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <h3 className="text-sm font-black tracking-widest uppercase text-dark-200">Saved</h3>
+                      <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Saved</h3>
                       <button
                         type="button"
                         onClick={() => setFavorites(new Set())}
-                        className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200 hover:border-red-400/40 hover:text-red-200 transition-colors"
+                        className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-red-300 hover:text-red-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-red-400/40 dark:hover:text-red-200"
                       >
                         Clear all
                       </button>
                     </div>
 
                     {favorites.size === 0 ? (
-                      <p className="text-sm text-dark-300">Save a few names to build a lineup.</p>
+                      <p className={cn('text-sm', bodyClass)}>Save a few names to build a lineup.</p>
                     ) : (
                       <div className="flex flex-wrap gap-2">
                         {[...favorites].slice(0, 24).map((f) => (
                           <div
                             key={f}
-                            className="bg-dark-900 border border-dark-700 rounded-full px-3 py-2 flex items-center gap-2"
+                            className="bg-white/90 border border-slate-200 rounded-full px-3 py-2 flex items-center gap-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
                           >
                             <button
                               type="button"
                               onClick={() => navigator.clipboard?.writeText?.(f)}
-                              className="text-xs font-bold text-dark-50 hover:text-accent-cyan transition-colors"
+                              className="text-xs font-bold text-slate-950 hover:text-cyan-700 transition-colors dark:text-dark-50 dark:hover:text-accent-cyan"
                             >
                               {f}
                             </button>
@@ -1292,7 +1321,7 @@ const SeoTemplate = ({ pageData }) => {
                             <button
                               type="button"
                               onClick={() => toggleFavorite(f)}
-                              className="text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-full border border-dark-700 text-dark-300 hover:text-red-200 hover:border-red-400/40 transition-colors"
+                              className="text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-full border border-slate-200 text-slate-600 hover:text-red-700 hover:border-red-300 transition-colors dark:border-dark-700 dark:text-dark-300 dark:hover:text-red-200 dark:hover:border-red-400/40"
                             >
                               Remove
                             </button>
@@ -1302,13 +1331,13 @@ const SeoTemplate = ({ pageData }) => {
                     )}
                   </section>
 
-                  <section className="bg-dark-800 border border-dark-700 rounded-2xl p-4">
+                  <section className="bg-white/85 border border-slate-200/90 rounded-2xl p-4 shadow-sm dark:bg-dark-800 dark:border-dark-700">
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <h3 className="text-sm font-black tracking-widest uppercase text-dark-200">Recent picks</h3>
+                      <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Recent picks</h3>
                       <button
                         type="button"
                         onClick={() => setRecentState((p) => ({ ...p, recentNames: [] }))}
-                        className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200 hover:border-dark-500 transition-colors"
+                        className="px-3 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-slate-300 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-dark-500"
                       >
                         Clear
                       </button>
@@ -1318,12 +1347,12 @@ const SeoTemplate = ({ pageData }) => {
                       {(recentState.recentNames || []).slice(0, 12).map((n) => (
                         <div
                           key={n}
-                          className="bg-dark-900 border border-dark-700 rounded-full px-3 py-2 flex items-center gap-2"
+                          className="bg-white/90 border border-slate-200 rounded-full px-3 py-2 flex items-center gap-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
                         >
                           <button
                             type="button"
                             onClick={() => navigator.clipboard?.writeText?.(n)}
-                            className="text-xs font-bold text-dark-50 hover:text-accent-cyan transition-colors"
+                            className="text-xs font-bold text-slate-950 hover:text-cyan-700 transition-colors dark:text-dark-50 dark:hover:text-accent-cyan"
                           >
                             {n}
                           </button>
@@ -1337,8 +1366,8 @@ const SeoTemplate = ({ pageData }) => {
                             onClick={() => toggleFavorite(n)}
                             className={`text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-full border transition-colors ${
                               favorites.has(n)
-                                ? 'bg-yellow-500/15 text-yellow-200 border-yellow-500/40'
-                                : 'border-dark-700 text-dark-300 hover:text-yellow-200 hover:border-yellow-500/40'
+                                ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-200 dark:border-yellow-500/40'
+                                : 'border-slate-200 text-slate-600 hover:text-amber-700 hover:border-amber-300 dark:border-dark-700 dark:text-dark-300 dark:hover:text-yellow-200 dark:hover:border-yellow-500/40'
                             }`}
                           >
                             {favorites.has(n) ? 'Saved' : 'Save'}
@@ -1346,33 +1375,33 @@ const SeoTemplate = ({ pageData }) => {
                         </div>
                       ))}
                       {(recentState.recentNames || []).length === 0 && (
-                        <p className="text-sm text-dark-300">Use “More like this” to start building recents.</p>
+                        <p className={cn('text-sm', bodyClass)}>Use “More like this” to start building recents.</p>
                       )}
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-dark-700">
-                      <p className="text-xs font-black tracking-widest uppercase text-dark-400 mb-2">Last settings</p>
+                    <div className={cn('mt-4 pt-4 border-t', dividerClass)}>
+                      <p className={cn('text-xs font-black tracking-widest uppercase mb-2', subtleClass)}>Last settings</p>
                       <div className="flex flex-wrap gap-2">
                         {recentState.lastMode && (
-                          <span className="px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200">
+                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
                             Mode: {recentState.lastMode}
                           </span>
                         )}
-                        <span className="px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200">
+                        <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
                           Length: {lengthFilter}
                         </span>
                         {asciiOnly && (
-                          <span className="px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200">
+                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
                             ASCII
                           </span>
                         )}
                         {riotSafe && (
-                          <span className="px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200">
+                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
                             Riot-safe
                           </span>
                         )}
                         {streamSafe && (
-                          <span className="px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase bg-dark-900 border border-dark-700 text-dark-200">
+                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
                             Stream-safe
                           </span>
                         )}

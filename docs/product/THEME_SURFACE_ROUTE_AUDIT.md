@@ -39,14 +39,14 @@ This audit is not a completion claim.
 | `/gamer-names/pro` | `GamerNamesLayout` | Feature generator surface | WORKS | Low | Shared Gamer Names template is theme-aware. |
 | `/gamer-names/edgy` | `GamerNamesLayout` | Feature generator surface | WORKS | Low | Shared Gamer Names template is theme-aware. |
 | `/league-of-legends` | `LeagueOfLegendsHubPage` | Public hub surface | WORKS | Low | Visual smoke confirms the route container changes with the toggle. |
-| `/general/best` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Root stays `th-atmosphere-shell` dark in light mode. |
-| `/general/cool` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
-| `/valorant/sweaty` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
-| `/valorant/aesthetic` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
-| `/fortnite/tryhard` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
-| `/fortnite/og` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
-| `/cod/sweaty` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
-| `/cod/funny` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | BROKEN | High | Same shared dynamic template issue. |
+| `/general/best` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | PR10.4 makes the shared dynamic route shell and primary surfaces theme-aware. |
+| `/general/cool` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
+| `/valorant/sweaty` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
+| `/valorant/aesthetic` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
+| `/fortnite/tryhard` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
+| `/fortnite/og` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
+| `/cod/sweaty` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
+| `/cod/funny` | `DynamicPage` -> `SeoTemplate` | Dynamic generator route | WORKS AFTER PR10.4 | Medium | Same shared dynamic template fix. |
 | `/stylish-text-generator` | `StylishTextGeneratorPage` | Generator tool surface | NOT_VISUALLY_TESTED | Low | Source scan suggests theme-aware root classes. |
 | `/nickname-symbols` | `NicknameSymbolsPage` | Generator tool surface | NOT_VISUALLY_TESTED | Low | Source scan suggests theme-driven rendering. |
 | `/gamer-bio-generator` | `GamerBioGeneratorPage` | Generator tool surface | NOT_VISUALLY_TESTED | Medium | Source scan flags `bg-gradient-dark`; likely needs later classification. |
@@ -68,20 +68,33 @@ Visual smoke confirmed the main post-PR10.1/PR10.2 surfaces work:
 
 The broken dynamic routes show `html` and the global app shell changing, but the route container remains dark because `SeoTemplate` uses `th-atmosphere-shell`.
 
+PR10.4 updates this shared surface. Visual smoke should confirm production behavior after merge.
+
+## PR10.4 Implementation Status
+
+PR10.4 fixes `DynamicPage` -> `SeoTemplate` shared theme surface behavior.
+
+- `SeoTemplate` is now theme-aware.
+- `.th-atmosphere-shell` is light-aware by default and keeps the premium dark atmospheric treatment under `.dark`.
+- `InternalLinkGrid` is now theme-aware.
+- Previously BROKEN dynamic routes are expected to be WORKS AFTER PR10.4.
+- Legal/docs remain a separate follow-up if their dark-only presentation is not accepted.
+- Visual smoke should confirm production behavior after merge.
+
 ## Source Scan Findings
 
-### Broken Route Surface
+### Dynamic Route Surface
 
 - `apps/web/src/pages/DynamicPage.jsx` renders `SeoTemplate`.
-- `apps/web/src/components/SeoTemplate.jsx` uses `th-atmosphere-shell text-dark-300` as the route shell.
-- `apps/web/src/index.css` defines `.th-atmosphere-shell` with a hardcoded dark background.
-- This means the theme toggle changes navigation/global shell state, but the dynamic page itself remains visually dark.
+- Before PR10.4, `apps/web/src/components/SeoTemplate.jsx` used `th-atmosphere-shell text-dark-300` as the route shell.
+- Before PR10.4, `apps/web/src/index.css` defined `.th-atmosphere-shell` with a hardcoded dark background.
+- PR10.4 makes this shared shell light-aware by default while keeping the dark premium treatment under `.dark`.
 
 ### Risky Functional Surface Inside Dynamic Template
 
-- `apps/web/src/components/SeoTemplate.jsx` contains repeated `bg-dark-*`, `text-dark-*`, `border-dark-*`, and dark-only control/card patterns.
-- `apps/web/src/components/editorial/InternalLinkGrid.jsx` uses dark-only card and text styles inside dynamic/editorial content.
-- These should be fixed at the shared template/component level in PR10.4.
+- Before PR10.4, `apps/web/src/components/SeoTemplate.jsx` contained repeated `bg-dark-*`, `text-dark-*`, `border-dark-*`, and dark-only control/card patterns.
+- Before PR10.4, `apps/web/src/components/editorial/InternalLinkGrid.jsx` used dark-only card and text styles inside dynamic/editorial content.
+- PR10.4 pairs the shared root, cards, headings, chips, controls, name cards, topic hub, FAQ, floating lineup shelf, and internal link grid surfaces.
 
 ### Feature Generator Templates
 
@@ -116,7 +129,7 @@ The dynamic/programmatic generator system currently exposes 86 slugs through sha
 | `league-of-legends` | 13 |
 | `general` | 7 |
 
-Fixing `SeoTemplate` and its nested editorial components should address most dynamic route failures at once.
+Fixing `SeoTemplate` and its nested editorial components addresses most dynamic route failures at once.
 
 ## Affected Templates
 
@@ -125,13 +138,13 @@ Fixing `SeoTemplate` and its nested editorial components should address most dyn
 - `apps/web/src/index.css` via `.th-atmosphere-shell`
 - `apps/web/src/components/editorial/InternalLinkGrid.jsx`
 
-## Recommended PR10.4 Scope
+## PR10.4 Scope
 
-PR10.4 should fix shared generator/dynamic templates, not individual URLs one by one.
+PR10.4 fixes shared generator/dynamic templates, not individual URLs one by one.
 
-Recommended scope:
+Implemented scope:
 
-- Replace or theme-scope `th-atmosphere-shell` for dynamic route surfaces.
+- Theme-scope `th-atmosphere-shell` for dynamic route surfaces.
 - Convert `SeoTemplate` root, cards, headings, badges, filters, CTA rows, name cards, and floating sections to paired light/dark classes.
 - Convert `InternalLinkGrid` to paired light/dark card and text classes.
 - Preserve intentionally dark visual scenes only when they are isolated and documented.

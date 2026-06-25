@@ -43,11 +43,13 @@ describe('theme surface route audit', () => {
     assert.match(audit, /InternalLinkGrid/);
   });
 
-  it('defines PR10.4 as the shared template implementation follow-up', () => {
+  it('defines PR10.4 as the shared template implementation slice', () => {
     assert.match(audit, /PR10\.4/);
-    assert.match(audit, /fix shared generator\/dynamic templates, not individual URLs one by one/);
+    assert.match(audit, /PR10\.4 fixes shared generator\/dynamic templates, not individual URLs one by one/);
+    assert.match(audit, /WORKS AFTER PR10\.4/);
     assert.match(themeAudit, /PR10\.3 Route Audit Follow-up/);
     assert.match(themeAudit, /PR10\.4 should fix shared templates, not individual URLs one by one/);
+    assert.match(themeAudit, /PR10\.4 Dynamic Template Implementation/);
   });
 
   it('extends the theme contract for generator and dynamic route templates', () => {
