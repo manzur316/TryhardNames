@@ -82,6 +82,8 @@ PR10.6 adds the Chrome tool-container visual audit for dynamic generator cards, 
 
 PR10.7 improves dynamic generator card and lineup visual hierarchy using the Chrome audit tool.
 
+PR10.8 aligns feature generator cards with the dynamic NameCard visual standard.
+
 ## Next Recommended PRs
 
 Numbering may change.

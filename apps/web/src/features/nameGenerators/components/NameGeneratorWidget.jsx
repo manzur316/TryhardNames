@@ -27,11 +27,11 @@ export const NameGeneratorWidget = ({
   };
 
   return (
-    <div className="relative bg-white dark:bg-dark-900 border border-slate-200/95 dark:border-dark-600/90 rounded-[1.75rem] p-6 sm:p-8 shadow-[0_22px_50px_-32px_rgba(15,23,42,0.35)] dark:shadow-[0_26px_60px_-34px_rgba(0,0,0,0.65)] mb-12 overflow-hidden ring-1 ring-slate-900/[0.04] dark:ring-white/[0.05]">
+    <div className="th-feature-generator-widget">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-400/35 to-transparent dark:via-white/12" aria-hidden />
-      <div className="flex flex-col items-center text-center mb-10">
+      <div className="flex flex-col items-center text-center mb-7">
         {title && (
-          <h2 className="text-2xl sm:text-3xl md:text-[2rem] font-bold tracking-[-0.03em] text-slate-950 dark:text-dark-50 mb-6 max-w-2xl leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-[2rem] font-bold tracking-[-0.03em] text-slate-950 dark:text-dark-50 mb-4 max-w-2xl leading-tight">
             {title}
           </h2>
         )}
@@ -53,6 +53,7 @@ export const NameGeneratorWidget = ({
       
       <NamesGrid 
         names={generatedNames} 
+        gridId="names"
         emptyMessage="Use the button above to pull a fresh set of names." 
       />
     </div>
