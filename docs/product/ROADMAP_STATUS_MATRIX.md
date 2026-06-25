@@ -4,16 +4,16 @@ This matrix reflects `main` after PR10.8 and PR11.1.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
-| Public generators | done | Public routes, dynamic pages, feature generators | Free name/text/symbol/generator surfaces | Account-linked generator persistence | PR12 | Public generators stay public. |
+| Public generators | done | Public routes, dynamic pages, feature generators | Free name/text/symbol/generator surfaces with favorite/star save UX | Provider/runtime proof surfaces | PR13 | Public generators stay public. |
 | Theme / visual surfaces | done | `UI_THEME_SURFACE_CONTRACT.md`, `THEME_AUDIT.md`, PR10.x docs | Theme contract and route audit follow-ups | Only critical visual fixes | PR23 | PR10.x visual/tooling line is closed. |
 | Tool container audit | done | `scripts/audit-tool-containers.mjs`, `TOOL_CONTAINER_VISUAL_AUDIT.md` | Chrome audit, JSON/Markdown/screenshot output | CI enforcement, if desired | PR23 | Audit is local tooling, not runtime. |
 | Dynamic NameCard + Lineup visual redesign | done | `NAMECARD_LINEUP_VISUAL_REDESIGN.md` | Dynamic card clamp, hierarchy, drawer coverage work | Legacy internal cleanup only if needed | PR23 | Favorite/star is now the canonical save model. |
-| Feature generator visual alignment | done | `FEATURE_GENERATOR_CARD_VISUAL_ALIGNMENT.md` | GamerNames and RobloxNames card alignment | Account-linked persistence | PR12 | No further visual patching unless critical. |
-| Parent Auth | done | `/sign-in`, `/sign-up`, `/auth/callback`, `/account` guard | TryhardNames account login | Account-state persistence expansion | PR12 | Google is Parent Auth only, not public proof. |
+| Feature generator visual alignment | done | `FEATURE_GENERATOR_CARD_VISUAL_ALIGNMENT.md` | GamerNames and RobloxNames card alignment | Account/editor depth | PR13 | No further visual patching unless critical. |
+| Parent Auth | done | `/sign-in`, `/sign-up`, `/auth/callback`, `/account` guard | TryhardNames account login and saved-name ownership | Editor depth and future account state | PR13 | Google is Parent Auth only, not public proof. |
 | Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js` | Owner-only private draft create/read/update | Editor V2 depth | PR13 | Draft stays private by default. |
 | Account Dashboard V2 | done | PR11.1, `AccountPage.jsx` | Dashboard sections, favorite-first saved-name guidance, Account Hunting Guide | Deeper Passport editor | PR13 | Dashboard V2 is implemented. |
-| Saved Names local SoT | partial-runtime | `FavoritesContext.jsx`, `favoritesSoT.js`, `localFavoritesBridge.js`, `FavoriteStarButton.jsx`, `MinimalFavoritesPeek.jsx` | Local/legacy favorites bridge and peek | Supabase account sync | PR12 | Favorite/star is the canonical saved-name UX. |
-| Saved Names Persistence | pending | No Supabase saved names runtime | Local saved names only | Supabase saved_names, owner RLS, account sync | PR12 | Saved Names Supabase persistence is pending. |
+| Saved Names local SoT | done | `FavoritesContext.jsx`, `favoritesSoT.js`, `localFavoritesBridge.js`, `FavoriteStarButton.jsx`, `MinimalFavoritesPeek.jsx` | Local fallback, compatibility bridge, account mirror | Future cleanup of PocketBase legacy fallback if safe | PR13 | Favorite/star is the canonical saved-name UX. |
+| Saved Names Persistence | done | `savedNamesRepository.js`, `20260625170000_saved_names.sql`, `saved_names_test.sql` | Supabase `saved_names`, owner RLS, local-to-account sync, account-to-local mirror | Future richer account-state analytics if needed | PR13 | Saved Names Supabase persistence is implemented with local fallback. |
 | Linked Provider domain | partial-contract | `constants.js`, architecture docs | Provider IDs and statuses | Runtime commands and provider service layer | PR16 | Linked providers are not Parent Auth. |
 | Linked Provider schema | partial-schema | Local schema runbook and migration foundation | `linked_provider_accounts` local table | Token storage, remote rollout, sync metadata | PR16 | No remote Supabase changes in docs-only work. |
 | Linked Provider runtime | pending | No OAuth/link runtime | None | Link, callback, unlink, revoke, state, sync | PR16 | No Discord/Riot OAuth live. |
@@ -40,4 +40,4 @@ This matrix reflects `main` after PR10.8 and PR11.1.
 - Publish Runtime Commands are pending.
 - Public Profile `/id/:slug` is pending.
 - Provider-neutral domain/schema is partial, but Provider Runtime Foundation is pending.
-- Saved Names local SoT exists, but Saved Names Supabase persistence is pending.
+- Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.

@@ -26,10 +26,11 @@ describe('Account Dashboard V2 and favorite-first saved names', () => {
   });
 
   it('sources saved names from the unified favorite model', () => {
-    assert.match(accountPageSource, /readUnifiedFavoriteNames/);
-    assert.match(accountPageSource, /writeUnifiedFavoriteNames/);
-    assert.match(accountPageSource, /subscribeFavorites/);
+    assert.match(accountPageSource, /FavoritesContext/);
+    assert.match(accountPageSource, /favoritesContext\?\.favorites/);
+    assert.match(accountPageSource, /favoritesContext\?\.removeFavorite/);
     assert.match(accountPageSource, /Star names while browsing to keep them here\./);
+    assert.match(favoriteStarSource, /FavoritesContext/);
     assert.match(favoriteStarSource, /tryhardnames:favorites:v1|writeUnifiedFavoriteNames/);
   });
 

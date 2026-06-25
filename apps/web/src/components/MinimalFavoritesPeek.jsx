@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Star, Copy, X } from 'lucide-react';
+import { FavoritesContext } from '@/contexts/FavoritesContext.jsx';
 import { copyTextToClipboard } from '@/utils/clipboard.js';
 import { trackEvent } from '@/utils/analytics.js';
 import { INTERACTION_TIMING, useTransientKey } from '@/utils/interactionState.js';
@@ -13,6 +14,7 @@ import {
  * Tiny global access to saved names: micro trigger + anchored peek (not a modal).
  */
 const MinimalFavoritesPeek = () => {
+  const favoritesContext = useContext(FavoritesContext);
   const rootRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState(() => readFavoritesArray());
@@ -23,6 +25,11 @@ const MinimalFavoritesPeek = () => {
   }, []);
 
   useEffect(() => subscribeFavorites(refresh), [refresh]);
+
+  useEffect(() => {
+    if (!Array.isArray(favoritesContext?.favorites)) return;
+    setItems([...new Set(favoritesContext.favorites.map((fav) => fav?.name).filter(Boolean))]);
+  }, [favoritesContext?.favorites]);
 
   useEffect(() => {
     if (!open) return;
@@ -66,7 +73,7 @@ const MinimalFavoritesPeek = () => {
     }
   };
 
-  const onRemove = (name) => {
+  const onRemove = async (name) => {
     const n = String(name || '').trim();
     if (!n) return;
     trackEvent('REMOVE_FAVORITE', {
@@ -74,7 +81,11 @@ const MinimalFavoritesPeek = () => {
       name: n,
       source: 'minimal_favorites_peek',
     });
-    removeFavoriteName(n);
+    if (favoritesContext?.removeFavorite) {
+      await favoritesContext.removeFavorite(n);
+    } else {
+      removeFavoriteName(n);
+    }
   };
 
   return (

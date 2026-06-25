@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
+import { FavoritesContext } from '@/contexts/FavoritesContext.jsx';
 import { trackEvent } from '@/utils/analytics.js';
 import { readUnifiedFavoriteNames, writeUnifiedFavoriteNames } from '@/utils/favoritesSoT.js';
 import { subscribeFavorites } from '@/utils/localFavoritesBridge.js';
@@ -27,26 +28,43 @@ export default function FavoriteStarButton({
   onChange,
 }) {
   const key = normalizeName(name);
+  const favoritesContext = useContext(FavoritesContext);
   const [saved, setSaved] = useState(() => isNameSaved(key));
 
   const refresh = useCallback(() => {
-    setSaved(isNameSaved(key));
-  }, [key]);
+    const contextSaved = favoritesContext?.isFavorite?.(key);
+    setSaved(typeof contextSaved === 'boolean' ? contextSaved : isNameSaved(key));
+  }, [favoritesContext, key]);
 
   useEffect(() => {
     refresh();
     return subscribeFavorites(refresh);
   }, [refresh]);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = async () => {
     if (!key) return;
-    const current = readUnifiedFavoriteNames();
-    const exists = current.includes(key);
-    const next = exists ? current.filter((item) => item !== key) : [key, ...current];
+    const contextSaved = favoritesContext?.isFavorite?.(key);
+    const exists = typeof contextSaved === 'boolean' ? contextSaved : isNameSaved(key);
 
-    writeUnifiedFavoriteNames(next);
     setSaved(!exists);
     onChange?.(!exists);
+
+    if (favoritesContext?.addFavorite && favoritesContext?.removeFavorite) {
+      if (exists) {
+        await favoritesContext.removeFavorite(key);
+      } else {
+        await favoritesContext.addFavorite(key, category || 'General', pageSlug || 'General', 'Neutral', {
+          sourcePath: pageSlug,
+          sourceLabel: source,
+          keyword,
+        });
+      }
+    } else {
+      const current = readUnifiedFavoriteNames();
+      const next = exists ? current.filter((item) => item !== key) : [key, ...current];
+      writeUnifiedFavoriteNames(next);
+    }
+
     trackEvent(exists ? 'REMOVE_FAVORITE' : 'SAVE_FAVORITE', {
       pageSlug,
       category,
