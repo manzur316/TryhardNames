@@ -1,16 +1,18 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status
+## Current Status After PR10.8 and PR11.1
 
-This document reflects `main` after PR9 and includes PR10 and PR11 planning updates.
+This document reflects `main` after PR10.8, `fix(generator): align feature generator cards`, and PR11.1, `feat(account): add dashboard v2 and unify saved names`.
 
-TryhardNames currently has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, and a protected `/account` route that manages a private Gaming Passport draft. Riot project registration has been submitted in Riot Developer Portal and is awaiting Riot confirmation/review.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2 for private Gaming Passport draft management, local saved-name/favorites state, and the PR10.x visual/tooling line completed through dynamic and feature generator card polish.
 
 Riot integration is not live. Discord integration is not live. No public Riot data is live. No public Gaming Passport profile route is implemented. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime.
 
-Gaming Passport is a visual, verifiable, shareable gaming resume. It is not a tracker, OP.GG alternative, custom MMR/ELO product, match-history dump, live-game advantage tool, or alternative ranking system.
+Gaming Passport remains a private-first, verifiable, shareable gaming resume. It is not a tracker, OP.GG alternative, custom MMR/ELO product, match-history dump, live-game advantage tool, hidden-player de-anonymization surface, or alternative ranking system.
 
-## PR History
+## PR History Through PR11.1
+
+The repo history is summarized through PR11.1, which corresponds to GitHub PR #19. PR11.0 is this reconciliation PR and was reopened after PR11.1 merged first.
 
 | PR | Title | Status | Outcome | Runtime impact | Non-goals |
 | --- | --- | --- | --- | --- | --- |
@@ -23,89 +25,120 @@ Gaming Passport is a visual, verifiable, shareable gaming resume. It is not a tr
 | PR7 | `docs(passport): add Riot review submission pack` | Merged | Added Riot submission support packet with URLs, smoke results, and safe wording. | Documentation only. | No credentials, API calls, OAuth, production keys, or service config. |
 | PR8 | `docs(passport): audit Riot policy compliance` | Merged | Added compliance audit with `PASS WITH CONDITIONS` verdict. | Documentation only. | No runtime work, no secrets, no migrations, no RLS changes. |
 | PR9 | `docs(passport): document current state and policy alignment` | Merged | Added root README, public privacy/terms alignment, copy tests, and current roadmap. | Documentation and public policy copy only. | No runtime work, provider integration, secrets, migrations, RLS changes, or service config. |
+| PR10 | `docs(product): define roadmap and theme audit` | Merged | Added master roadmap, theme contract, and audit path. | Documentation only. | No runtime redesign. |
+| PR10.1 | `fix(auth): align account and auth surfaces with light-dark theme contract` | Merged | Normalized account/auth theme behavior. | Account/auth surfaces became theme-consistent. | No provider/OAuth changes. |
+| PR10.2 | `fix(passport): decide and normalize Gaming Passport landing theme` | Merged | Normalized Gaming Passport landing theme behavior. | Public landing remained review-safe. | No Riot runtime, no profile publishing. |
+| PR10.3 | `docs(product): audit theme surfaces by route` | Merged | Captured route-level theme audit and contract follow-up. | Documentation/tooling only. | No route or provider changes. |
+| PR10.4 | `fix(generator): align dynamic generator theme surfaces` | Merged | Brought dynamic generator pages into the theme surface contract. | Public generators kept working with improved theme consistency. | No SEO data, auth, or provider changes. |
+| PR10.5 | `fix(generator): prioritize dynamic name tools` | Merged | Prioritized dynamic generator tools over editorial content and removed the global `GhostVCT` fallback. | Tool surfaces became easier to reach. | No programmatic data, routes, or provider work. |
+| PR10.6 | `chore(audit): add tool container visual audit` | Merged | Added Chrome-based visual audit for cards, buttons, lineup, drawer, trending, and feature generator surfaces. | Local audit tooling only. | No runtime visual redesign. |
+| PR10.7 | `fix(generator): refine name cards and lineup visuals` | Merged | Refined dynamic name cards and lineup visuals using the audit. | Dynamic card hierarchy and lineup coverage improved. | No route, SEO data, provider, or auth changes. |
+| PR10.8 | `fix(generator): align feature generator cards` | Merged | Aligned GamerNames and RobloxNames feature generator cards with the dynamic NameCard standard. | Feature generator card wrapping and action hierarchy improved. | No dynamic `SeoTemplate` redesign or provider/runtime work. |
+| PR11.1 | `feat(account): add dashboard v2 and unify saved names` | Merged | Added Account Dashboard V2, favorite-first saved-name UX, Account Hunting Guide, and removed legacy lineup/copy-pack public UX. | `/account` is more useful and public generators use star/favorite as canonical save UX. | No providers, migrations, publish runtime, or public profiles. |
+| PR11.0 | `docs(product): reconcile roadmap after visual polish` | In progress | Reconciles roadmap docs with actual state after PR10.8 and PR11.1. | Documentation/tests only. | No runtime work, migrations, providers, routes, or RLS changes. |
 
 ## Live Surfaces
 
 - `/` - public home page and generator entry point.
+- Public dynamic generator routes such as `/valorant/sweaty`, `/general/best`, `/minecraft/pvp`, and related programmatic pages.
+- Public feature generator routes such as `/gamer-names/pro`, `/gamer-names/cool`, `/roblox-names/cool`, and `/roblox-names/tryhard`.
 - `/gaming-passport` - public Gaming Passport landing page for users and Riot review.
-- `/sign-in` - Parent Auth sign-in. Google Auth is Parent Auth only.
-- `/account` - protected private draft dashboard. Unauthenticated users redirect to `/sign-in`.
-- `/privacy-policy` - public privacy policy.
-- `/terms-of-service` - public terms.
-- `/sitemap.xml` - public sitemap including `/gaming-passport`.
+- `/sign-in`, `/sign-up`, `/auth/callback` - Parent Auth flow. Google Auth is Parent Auth only.
+- `/account` - protected Account Dashboard V2 with private draft and saved-name guidance.
+- `/privacy-policy` and `/terms-of-service` - public legal surfaces.
+- `/sitemap.xml` - public sitemap.
+
+`/id/:slug` does not exist yet.
 
 ## Implemented
 
-- Public generators remain public.
-- Parent Auth.
-- Private Gaming Passport draft.
-- `/account` protection.
-- Gaming Passport landing.
-- Gaming Passport domain model.
-- Local schema foundation.
-- RLS tests.
-- Riot verification file.
-- Riot review docs.
-- Riot policy compliance audit.
+- Public generators remain free and public.
+- PR10.x visual/tooling line is closed after PR10.8.
+- Theme and visual surface contract exists.
+- Tool container Chrome audit exists.
+- Dynamic NameCard and lineup visual redesign exists.
+- Feature generator card visual alignment exists.
+- Parent Auth exists.
+- Account Dashboard V2 exists.
+- Private Gaming Passport draft management exists.
+- Account Hunting Guide exists inside the account experience.
+- Favorite/star is the canonical saved-name UX.
+- Gaming Passport domain constants and pure contracts exist.
+- Local schema foundation and RLS tests exist.
+- Publish Policy already exists as a domain contract through `publicationPolicy.js`.
+- Public Projection already exists as a domain contract through `publicProjection.js`.
+- Saved names have local/legacy state via `FavoritesContext`, `favoritesSoT`, `localFavoritesBridge`, `FavoriteStarButton`, and `MinimalFavoritesPeek`.
+- Riot verification file, review docs, and compliance audit exist.
+
+## Partially Implemented
+
+- Saved names are local/PocketBase legacy/local SoT. Saved Names Supabase persistence is pending and does not exist as Parent Auth-backed account sync.
+- Private Gaming Passport Editor V2 is pending. `/account` has an improved dashboard, but deeper draft editor V2 remains a separate product slice.
+- Provider-neutral domain/schema is partial. Constants, statuses, local tables, and schema docs exist, but provider runtime does not.
+- Linked Provider domain is partial-contract and Linked Provider schema is partial-schema. Runtime link/unlink/revoke/sync is pending.
+- Verified Proof domain is partial-contract and Verified Proof schema is partial-schema. Sync runtime is pending.
+- Publish Policy is partial-contract. No publish/unpublish command runtime exists.
+- Public Projection is partial-contract. No public serving route/API exists.
 
 ## Not Implemented
 
+- Saved Names Supabase persistence.
+- Private Gaming Passport Editor V2.
+- Publish command runtime.
+- Slug claim command.
+- Consent command.
+- Public `/id/:slug`.
+- Public profile route/API.
 - Riot OAuth / Riot Sign On.
 - Discord OAuth.
 - Riot API calls.
+- Discord API calls.
 - Provider token storage.
-- Unlink/revoke.
-- Proof sync.
-- Public `/id/:slug`.
-- Publish command.
-- Public profiles.
-- Monetized cosmetics.
-- Riot data display.
+- Provider unlink/revoke runtime.
+- Provider sync jobs.
+- League of Legends adapter runtime.
+- Cosmetics.
+- Trust/safety moderation controls.
+- Launch readiness checklist execution.
 
-## Pending External Dependency
+## Gated
 
-Riot Developer Portal confirmation/review is pending.
+- Riot runtime remains gated by Riot Developer Portal approval and next steps.
+- Provider runtime foundation is gated by token storage, unlink/revoke, sync, rate-limit, audit, and privacy contracts.
+- Public profiles are gated by publish commands, consent, slug policy, and public projection serving.
+- Cosmetics are gated by product review and Riot/data monetization boundaries.
+- Broad launch is gated by trust/safety, privacy review, observability, and rollback readiness.
 
-No Riot runtime work should start until approval and next steps are clear. Do not assume production Riot credentials, RSO access, callback requirements, scopes, or approved data surfaces before Riot responds.
-
-## PR10 Planning Addendum
-
-PR10 defines the master roadmap and theme audit. It also defines the UI theme surface contract for future work.
-
-PR10.1 is the next implementation slice after PR10. PR10.1 fixes Account/Auth light-dark consistency for `/account`, `/sign-in`, `/sign-up`, `/auth/callback`, and `AuthUnavailable`.
-
-PR10.2 decides whether `/gaming-passport` remains a documented dark-branded landing or becomes a theme-aware landing.
-
-PR10.5 improves dynamic generator UX priority without changing SEO data or provider runtime.
-
-PR10.6 adds the Chrome tool-container visual audit for dynamic generator cards, CopyButton, Save, Similar Reads, Lineup, drawer, and related surfaces.
-
-PR10.7 improves dynamic generator card and lineup visual hierarchy using the Chrome audit tool.
-
-PR10.8 aligns feature generator cards with the dynamic NameCard visual standard.
-
-PR11 introduces Account Dashboard V2 and standardizes saved names around favorites. It retires the public legacy save/lineup flow in favor of `Copy Name` plus star/favorite actions.
-
-## Next Recommended PRs
-
-Numbering may change.
+## Corrected Roadmap Order
 
 | Proposed PR | Scope | Notes |
 | --- | --- | --- |
-| PR10 | `docs(product): define roadmap and theme audit` | Defines master roadmap, dependency gates, anti-patch rules, theme contract, route-level theme audit, and PR10.1/PR10.2 slices. |
-| PR10.1 | `fix(auth): align account and auth surfaces with light-dark theme contract` | Fixes Account/Auth light-dark consistency without changing auth logic or provider runtime. |
-| PR10.2 | `fix(passport): decide and normalize Gaming Passport landing theme` | Chooses dark-branded or theme-aware `/gaming-passport` behavior while keeping Riot-safe copy. |
-| PR10.3 | `fix(legal): align legal/docs surfaces with theme contract if needed` | Handles privacy/terms visual theme only if the dark-only legal/docs decision is not accepted. |
-| PR11 | `feat(account): add dashboard v2 and unify saved names` | Account Dashboard V2, favorite-first saved names, and account hunting guide. |
-| PR12 | `docs(passport): add Riot review response playbook and screenshot checklist` | Reviewer-response copy, screenshots, smoke script, and portal follow-up checklist if Riot asks for more context. |
-| PR13 | `chore(passport): plan Riot provider runtime contracts after approval` | Only after Riot approval/next steps are clear. |
+| PR11.0 | Roadmap Reconciliation After PR10.8 and PR11.1 | Docs-only reconciliation of actual repo state, matrix, execution plan, and decision log. |
+| PR12 | Saved Names Persistence + Account State Contract | Adds Supabase-backed saved names and owner-account sync after the UI contract is clear. |
+| PR13 | Private Gaming Passport Editor V2 | Improves private draft editing without publishing or providers. |
+| PR14 | Publish Runtime Commands | Adds consent, slug, publish, unpublish, and status transitions. |
+| PR15 | Public Gaming Passport MVP `/id/:slug` | Serves allowlisted public projection only after publish commands exist. |
+| PR16 | Provider Runtime Foundation | Adds provider runtime contracts, token storage, unlink/revoke, sync scaffolding, and audit boundaries without activating a specific provider. |
+| PR17 | First Provider Decision + Readiness Pack | Chooses Discord pilot or Riot readiness based on approvals and risk. |
+| PR18 | Discord Pilot OR Riot Readiness | Executes the safer first provider path. Riot work remains gated if approval is not granted. |
+| PR19 | Riot Provider Runtime | Gated by Riot approval. Implements Riot OAuth/runtime only after explicit approval and provider foundation. |
+| PR20 | League of Legends Adapter | Normalizes LoL proofs under RiotProvider after Riot runtime is approved and implemented. |
+| PR21 | Cosmetics Foundation | Adds TryhardNames-owned visual upgrades without monetizing Riot data/assets. |
+| PR22 | Trust / Safety / Privacy Controls | Adds public identity abuse controls, takedown paths, and privacy controls. |
+| PR23 | Launch Readiness | Production smoke, observability, rollback, policy review, and launch checklist. |
+
+## Removed Stale Recommendations
+
+The previous recommendation to start a Riot review response playbook as PR11 and a Riot provider runtime planning PR as PR12 has been replaced. Riot follow-up docs remain useful only if Riot asks for more context, and Riot runtime should not begin before approval. The next cycle should move the real product forward in this order: saved-name persistence, private Passport editing, publish runtime, public profile, provider runtime, proofs, cosmetics, trust, and launch.
 
 ## Do-Not-Build-Yet List
 
 - Live Riot OAuth.
+- Live Discord OAuth.
 - Production Riot key assumptions.
 - Fake Riot data.
-- Riot profile publishing.
+- Riot profile publishing before explicit publish runtime.
+- Public `/id/:slug` without consent and allowlisted projection.
 - Alternative ranking.
 - MMR/ELO calculator.
 - Match history dump.
