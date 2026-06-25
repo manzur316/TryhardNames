@@ -43,6 +43,7 @@ PR12 adds `public.saved_names`.
 | `copy_count` | Non-negative local/account copy count field. |
 
 Uniqueness is `unique(owner_id, name_key)`, so the same user cannot duplicate one normalized name, while different users can save the same name.
+`name_key` is canonicalized by the repository and enforced by the database with `saved_names_name_key_canonical`; `name` is stored trimmed through `saved_names_name_trimmed`.
 
 ## RLS
 

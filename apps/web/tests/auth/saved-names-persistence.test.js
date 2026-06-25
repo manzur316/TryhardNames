@@ -23,6 +23,9 @@ describe('Saved Names Supabase persistence', () => {
     assert.match(migrationSource, /create table public\.saved_names/);
     assert.match(migrationSource, /owner_id uuid not null references auth\.users\(id\) on delete cascade/);
     assert.match(migrationSource, /constraint saved_names_owner_name_key_uid unique \(owner_id, name_key\)/);
+    assert.match(migrationSource, /constraint saved_names_name_key_canonical/);
+    assert.match(migrationSource, /regexp_replace\(btrim\(name_key\)/);
+    assert.match(migrationSource, /constraint saved_names_name_trimmed/);
     assert.match(migrationSource, /alter table public\.saved_names enable row level security/);
     assert.match(migrationSource, /create policy "saved_names_select_own"/);
     assert.match(migrationSource, /create policy "saved_names_insert_own"/);

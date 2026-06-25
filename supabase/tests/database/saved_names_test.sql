@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(27);
+select plan(31);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -257,6 +257,15 @@ select is(
 select is(
   pg_temp.test_sqlstate($$
     insert into public.saved_names (owner_id, name, name_key)
+    values ('00000000-0000-0000-0000-000000000101', ' Trimmed Name ', 'trimmed name')
+  $$),
+  '23514',
+  'name with surrounding spaces is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.saved_names (owner_id, name, name_key)
     values (
       '00000000-0000-0000-0000-000000000101',
       repeat('A', 81),
@@ -278,6 +287,33 @@ select is(
   $$),
   '23514',
   'oversized name_key is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.saved_names (owner_id, name, name_key)
+    values ('00000000-0000-0000-0000-000000000101', 'Upper key', 'Upper Key')
+  $$),
+  '23514',
+  'name_key with uppercase letters is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.saved_names (owner_id, name, name_key)
+    values ('00000000-0000-0000-0000-000000000101', 'Outer key spaces', ' outer key spaces ')
+  $$),
+  '23514',
+  'name_key with surrounding spaces is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.saved_names (owner_id, name, name_key)
+    values ('00000000-0000-0000-0000-000000000101', 'Inner key spaces', 'inner   key spaces')
+  $$),
+  '23514',
+  'name_key with multiple internal spaces is rejected'
 );
 
 select is(

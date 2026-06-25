@@ -13,7 +13,11 @@ create table public.saved_names (
   copy_count integer not null default 0,
   constraint saved_names_owner_name_key_uid unique (owner_id, name_key),
   constraint saved_names_name_length check (char_length(btrim(name)) between 1 and 80),
+  constraint saved_names_name_trimmed check (name = btrim(name)),
   constraint saved_names_name_key_length check (char_length(btrim(name_key)) between 1 and 96),
+  constraint saved_names_name_key_canonical check (
+    name_key = lower(regexp_replace(btrim(name_key), '\s+', ' ', 'g'))
+  ),
   constraint saved_names_source_path_length check (
     source_path is null or char_length(source_path) <= 256
   ),
