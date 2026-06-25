@@ -1,10 +1,10 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status After PR12
+## Current Status After PR13
 
-This document reflects the PR12 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, and PR12, `feat(account): persist saved names`.
+This document reflects the PR13 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, and PR13, `feat(account): improve private passport editor`.
 
-TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2 for private Gaming Passport draft management, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, and the PR10.x visual/tooling line completed through dynamic and feature generator card polish.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, and Private Gaming Passport Editor V2 for owner-only draft editing.
 
 Riot integration is not live. Discord integration is not live. No public Riot data is live. No public Gaming Passport profile route is implemented. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime.
 
@@ -36,7 +36,8 @@ The repo history is summarized through PR12.
 | PR10.8 | `fix(generator): align feature generator cards` | Merged | Aligned GamerNames and RobloxNames feature generator cards with the dynamic NameCard standard. | Feature generator card wrapping and action hierarchy improved. | No dynamic `SeoTemplate` redesign or provider/runtime work. |
 | PR11.1 | `feat(account): add dashboard v2 and unify saved names` | Merged | Added Account Dashboard V2, favorite-first saved-name UX, Account Hunting Guide, and removed legacy lineup/copy-pack public UX. | `/account` is more useful and public generators use star/favorite as canonical save UX. | No providers, migrations, publish runtime, or public profiles. |
 | PR11.0 | `docs(product): reconcile roadmap after account dashboard merge` | Merged | Reconciled roadmap docs with actual state after PR10.8 and PR11.1. | Documentation/tests only. | No runtime work, migrations, providers, routes, or RLS changes. |
-| PR12 | `feat(account): persist saved names` | In progress | Adds Supabase `saved_names`, owner-only RLS, saved-name repository, local-to-account sync, and docs/tests. | Authenticated users can persist saved names under Parent Auth while signed-out users keep local fallback. | No providers, Riot/Discord OAuth, publish commands, public profiles, remote Supabase, Vercel, secrets, migrations outside local files, or RLS outside this table. |
+| PR12 | `feat(account): persist saved names` | Merged | Added Supabase `saved_names`, owner-only RLS, saved-name repository, local-to-account sync, and docs/tests. | Authenticated users can persist saved names under Parent Auth while signed-out users keep local fallback. | No providers, Riot/Discord OAuth, publish commands, public profiles, remote Supabase, Vercel, secrets, migrations outside local files, or RLS outside this table. |
+| PR13 | `feat(account): improve private passport editor` | In progress | Adds Private Gaming Passport Editor V2, private preview, completion checklist, save-state clarity, and private Saved Names highlights through `scene_config.featuredSavedNames`. | Owners can shape a private draft more clearly inside `/account` without publishing or linking providers. | No publish commands, slug claim, public `/id/:slug`, Riot/Discord OAuth, providers, token storage, or remote service config. |
 
 ## Live Surfaces
 
@@ -62,6 +63,10 @@ The repo history is summarized through PR12.
 - Parent Auth exists.
 - Account Dashboard V2 exists.
 - Private Gaming Passport draft management exists.
+- Private Gaming Passport Editor V2 exists.
+- Private preview V2 exists.
+- Private completion checklist exists.
+- Private Saved Names highlights exist through `scene_config.featuredSavedNames`.
 - Account Hunting Guide exists inside the account experience.
 - Favorite/star is the canonical saved-name UX.
 - Saved Names Supabase persistence exists through `public.saved_names`.
@@ -77,7 +82,7 @@ The repo history is summarized through PR12.
 ## Partially Implemented
 
 - PocketBase favorite storage remains only as legacy compatibility fallback. Parent Auth/Supabase `saved_names` is now the canonical authenticated path.
-- Private Gaming Passport Editor V2 is pending. `/account` has an improved dashboard, but deeper draft editor V2 remains a separate product slice.
+- Private Gaming Passport Editor V2 is implemented as an owner-only draft editing surface. Publish runtime and public profile serving remain separate pending slices.
 - Provider-neutral domain/schema is partial. Constants, statuses, local tables, and schema docs exist, but provider runtime does not.
 - Linked Provider domain is partial-contract and Linked Provider schema is partial-schema. Runtime link/unlink/revoke/sync is pending.
 - Verified Proof domain is partial-contract and Verified Proof schema is partial-schema. Sync runtime is pending.
@@ -86,7 +91,6 @@ The repo history is summarized through PR12.
 
 ## Not Implemented
 
-- Private Gaming Passport Editor V2.
 - Publish command runtime.
 - Slug claim command.
 - Consent command.
@@ -117,7 +121,6 @@ The repo history is summarized through PR12.
 | Proposed PR | Scope | Notes |
 | --- | --- | --- |
 | PR11.0 | Roadmap Reconciliation After PR10.8 and PR11.1 | Docs-only reconciliation of actual repo state, matrix, execution plan, and decision log. |
-| PR13 | Private Gaming Passport Editor V2 | Improves private draft editing without publishing or providers. |
 | PR14 | Publish Runtime Commands | Adds consent, slug, publish, unpublish, and status transitions. |
 | PR15 | Public Gaming Passport MVP `/id/:slug` | Serves allowlisted public projection only after publish commands exist. |
 | PR16 | Provider Runtime Foundation | Adds provider runtime contracts, token storage, unlink/revoke, sync scaffolding, and audit boundaries without activating a specific provider. |

@@ -70,7 +70,7 @@ describe('README and public policy copy', () => {
   it('keeps roadmap dependency gates explicit', () => {
     assert.match(masterRoadmap, /Provider-neutral runtime foundation[\s\S]*Discord or Riot OAuth/);
     assert.match(masterRoadmap, /Riot approval[\s\S]*Riot runtime/);
-    assert.match(currentRoadmap, /Current Status After PR12/);
+    assert.match(currentRoadmap, /Current Status After PR13/);
     assert.match(currentRoadmap, /Corrected Roadmap Order/);
   });
 

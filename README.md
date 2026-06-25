@@ -153,6 +153,8 @@ Completed:
 - Local schema foundation.
 - Parent Auth/private draft.
 - Account Dashboard V2 and favorite-first saved-name UI.
+- Saved Names Supabase persistence.
+- Private Gaming Passport Editor V2.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -165,17 +167,12 @@ Completed:
 Waiting:
 
 - Riot confirmation/review.
-- Saved Names Supabase persistence.
-- Private Gaming Passport Editor V2.
 - Publish runtime commands.
 - Public `/id/:slug`.
 - Provider runtime foundation.
 
 Next product blocks:
 
-- PR11.0 Roadmap Reconciliation after Account Dashboard V2.
-- PR12 Saved Names Persistence + Account State Contract.
-- PR13 Private Gaming Passport Editor V2.
 - PR14 Publish Runtime Commands.
 - PR15 Public Gaming Passport MVP `/id/:slug`.
 - PR16 Provider Runtime Foundation.

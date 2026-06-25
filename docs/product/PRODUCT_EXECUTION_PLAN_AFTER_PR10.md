@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8 and PR11.1.
+This is the living execution plan after PR10.8, PR11.1, PR12, and PR13.
 
 ## Closed Visual/Tooling Line
 
@@ -21,11 +21,13 @@ PR11.1 added Account Dashboard V2 and made favorite/star the canonical saved-nam
 
 PR12 adds Supabase-backed saved names, owner-only RLS, local-to-account sync, account-to-local mirror, and account fallback behavior. It does not add providers, publish commands, or public profiles.
 
+PR13 adds Private Gaming Passport Editor V2, private preview, completion checklist, save-state clarity, and private Saved Names highlights in `scene_config.featuredSavedNames`. It does not add publish commands, public profiles, providers, or provider tokens.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Private Passport Editor V2 -> Publish Runtime Commands -> Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
+Publish Runtime Commands -> Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
 
 ## Corrected Roadmap
 
@@ -53,7 +55,8 @@ Private Passport Editor V2 -> Publish Runtime Commands -> Public Profile -> Prov
 - Goal: Improve the private draft editor.
 - Why now: Account dashboard and saved names provide enough structure for better editing.
 - Already exists: Private draft repository and `/account` editing.
-- Missing: Better validation, preview, save states, publishability hints, and clearer draft privacy.
+- Implemented by PR13: Modular private editor, private preview, completion checklist, validation/save states, and private Saved Names highlights.
+- Missing: Publish commands, public profile serving, providers, and proof sync.
 - Non-goals: No publish commands, public routes, or providers.
 - Exit criteria: Owners can edit a private Passport draft with clear privacy and validation behavior.
 
@@ -62,6 +65,7 @@ Private Passport Editor V2 -> Publish Runtime Commands -> Public Profile -> Prov
 - Goal: Add the command flow that changes a Passport from private draft to publishable/public.
 - Why now: Public projection contract exists, but no runtime commands exist.
 - Already exists: `publicationPolicy.js` and `canServePublishedPassport`.
+- Status: pending.
 - Missing: Consent command, slug claim, publish, unpublish, revoke/stale handling, tests.
 - Non-goals: No public `/id/:slug` route yet, no providers.
 - Exit criteria: Server-side commands enforce publish policy and update owner-controlled status safely.

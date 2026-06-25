@@ -9,6 +9,7 @@ import {
   getOwnedPassport,
   mapPassportRow,
   mapPassportToPresentationForm,
+  sanitizeFeaturedSavedNames,
   sanitizeSceneConfig,
   shouldLoadDraftForOwner,
   updatePassportPresentation,
@@ -399,6 +400,7 @@ describe('Gaming Passport draft repository', () => {
       layout: 'compact',
       accent: 'emerald',
       density: 'dense',
+      featuredSavedNames: [],
     });
   });
 
@@ -493,19 +495,37 @@ describe('Gaming Passport draft repository', () => {
       accent: 'emerald',
       density: 'dense',
       rawPayload: 'nope',
+      featuredSavedNames: [' Clutch Star ', 'clutch   star', '', { name: 'raw' }, 'I'.repeat(81), 'Anchor'],
     }), {
       layout: 'compact',
       accent: 'emerald',
       density: 'dense',
+      featuredSavedNames: ['Clutch Star', 'Anchor'],
     });
 
     assert.deepEqual(buildPresentationPayload({
-      sceneConfig: { layout: 'script', accent: 'red', density: 'huge' },
+      sceneConfig: { layout: 'script', accent: 'red', density: 'huge', featuredSavedNames: 'Clutch' },
     }).scene_config, {
       layout: 'classic',
       accent: 'cyan',
       density: 'comfortable',
+      featuredSavedNames: [],
     });
+  });
+
+  it('sanitizes featured saved names as private scene_config strings', () => {
+    assert.deepEqual(sanitizeFeaturedSavedNames([
+      ' Phantom Ace ',
+      'phantom   ace',
+      'Orbit',
+      '',
+      null,
+      { name: 'unsafe' },
+      'Vortex',
+      'Nova',
+      'Echo',
+      'Overflow',
+    ]), ['Phantom Ace', 'Orbit', 'Vortex', 'Nova', 'Echo']);
   });
 
   it('does not reload a dirty draft for the same owner during session refresh', () => {
@@ -557,7 +577,7 @@ function samplePassportRow() {
     avatar_url: 'https://example.test/avatar.png',
     bio_short: 'Short bio',
     publication_consent: false,
-    scene_config: { layout: 'compact', accent: 'emerald', density: 'dense' },
+    scene_config: { layout: 'compact', accent: 'emerald', density: 'dense', featuredSavedNames: [] },
     created_at: '2026-06-23T00:00:00Z',
     updated_at: '2026-06-23T00:00:00Z',
     published_at: null,

@@ -24,7 +24,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public Profile is the future `/id/:slug` surface and is not implemented.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR11.1
+## Current State After PR13
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -32,6 +32,9 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Parent Auth and private draft management exist.
 - Account Dashboard V2 exists.
 - Favorite/star is the canonical saved-name UX.
+- Saved Names Supabase persistence exists with owner-only RLS and local fallback.
+- Private Gaming Passport Editor V2 exists inside `/account`.
+- Private Saved Names highlights exist as `scene_config.featuredSavedNames`.
 - Riot site verification exists.
 - `/gaming-passport` public landing exists.
 - Riot review submission pack and policy compliance audit exist.
@@ -39,7 +42,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Publish Policy contract is already implemented in domain code.
 - Public Projection contract is already implemented in domain code.
 - Provider-neutral domain/schema is partial, not runtime.
-- Saved names exist locally/legacy, not as Supabase Parent Auth persistence.
+- Publish Runtime Commands are pending.
 
 Riot integration is not live. Discord integration is not live. No Riot API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles are not implemented.
 

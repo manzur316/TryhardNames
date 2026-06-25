@@ -19,6 +19,7 @@ export const DEFAULT_SCENE_CONFIG = Object.freeze({
   layout: 'classic',
   accent: 'cyan',
   density: 'comfortable',
+  featuredSavedNames: Object.freeze([]),
 });
 
 export const SCENE_CONFIG_OPTIONS = Object.freeze({
@@ -26,6 +27,9 @@ export const SCENE_CONFIG_OPTIONS = Object.freeze({
   accent: Object.freeze(['cyan', 'violet', 'emerald', 'amber']),
   density: Object.freeze(['comfortable', 'dense']),
 });
+
+export const MAX_FEATURED_SAVED_NAMES = 5;
+export const MAX_FEATURED_SAVED_NAME_LENGTH = 80;
 
 export function mapPassportRow(row) {
   if (!row) return null;
@@ -176,7 +180,22 @@ export function sanitizeSceneConfig(sceneConfig = {}) {
     layout: pickOption(source.layout, SCENE_CONFIG_OPTIONS.layout, DEFAULT_SCENE_CONFIG.layout),
     accent: pickOption(source.accent, SCENE_CONFIG_OPTIONS.accent, DEFAULT_SCENE_CONFIG.accent),
     density: pickOption(source.density, SCENE_CONFIG_OPTIONS.density, DEFAULT_SCENE_CONFIG.density),
+    featuredSavedNames: sanitizeFeaturedSavedNames(source.featuredSavedNames),
   };
+}
+
+export function sanitizeFeaturedSavedNames(value = []) {
+  if (!Array.isArray(value)) return [];
+
+  const byKey = new Map();
+  for (const item of value) {
+    const name = cleanFeaturedSavedName(item);
+    const key = name.toLowerCase();
+    if (name && key && !byKey.has(key)) byKey.set(key, name);
+    if (byKey.size >= MAX_FEATURED_SAVED_NAMES) break;
+  }
+
+  return [...byKey.values()];
 }
 
 function getSessionOwnerId(session) {
@@ -193,6 +212,13 @@ function isUniqueOwnerConflict(error) {
 
 function cleanString(value) {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function cleanFeaturedSavedName(value) {
+  if (typeof value !== 'string') return '';
+  const clean = value.trim().replace(/\s+/g, ' ');
+  if (clean.length > MAX_FEATURED_SAVED_NAME_LENGTH) return '';
+  return clean;
 }
 
 function isHttpUrl(value) {
