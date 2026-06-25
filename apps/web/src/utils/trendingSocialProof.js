@@ -129,8 +129,7 @@ export function buildTrendingModel({ presetId, category, pageSlug } = {}) {
 
 export function buildCommunitySignal({ presetId, copyCount = 0, saveCount = 0 } = {}) {
   const preset = CURATED_BY_PRESET[presetId] || CURATED_BY_PRESET.valorant;
-  if (saveCount >= 3) return `Saved ${saveCount}×`;
+  if (saveCount >= 3) return `Favorited ${saveCount}×`;
   if (copyCount >= 3) return `Copied ${copyCount}×`;
   return preset.signals[Math.floor(Math.random() * preset.signals.length)];
 }
-

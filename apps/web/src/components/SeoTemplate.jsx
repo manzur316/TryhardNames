@@ -3,6 +3,7 @@ import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SeoHead from '@/seo/SeoHead.jsx';
 import CopyButton from '@/components/CopyButton.jsx';
+import FavoriteStarButton from '@/components/FavoriteStarButton.jsx';
 import AnalyticsDebugPanel from '@/components/AnalyticsDebugPanel.jsx';
 import { trackEvent } from '@/utils/analytics.js';
 import LiveActivityStrip from '@/components/LiveActivityStrip.jsx';
@@ -17,8 +18,8 @@ import {
   getContextLabel,
   pickWhyThisWorks,
 } from '@/utils/contextualNameEngine.js';
-import { copyTextToClipboard } from '@/utils/clipboard.js';
-import { notifyFavoritesChanged, subscribeFavorites } from '@/utils/localFavoritesBridge.js';
+import { subscribeFavorites } from '@/utils/localFavoritesBridge.js';
+import { readUnifiedFavoriteNames, writeUnifiedFavoriteNames } from '@/utils/favoritesSoT.js';
 import {
   applyLolKoreanQuickMode,
   buildLolKoreanSummonerNamesDetailed,
@@ -121,11 +122,10 @@ const SeoTemplate = ({ pageData }) => {
   const [riotSafe, setRiotSafe] = useState(false);
   const [streamSafe, setStreamSafe] = useState(false);
 
-  const storageKey = useMemo(() => `tryhardnames:favorites:v1`, []);
   const recentKey = useMemo(() => `tryhardnames:recent:v1:${pageData.slug || 'unknown'}`, [pageData.slug]);
   const [favorites, setFavorites] = useState(() => new Set());
+  const [favoritesHydrated, setFavoritesHydrated] = useState(false);
   const [activeEvolution, setActiveEvolution] = useState(null); // { base: string, variants: string[] }
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [recentState, setRecentState] = useState(() => ({
     recentNames: [],
     lastMode: null,
@@ -135,10 +135,6 @@ const SeoTemplate = ({ pageData }) => {
     streamSafe: false,
     updatedAt: null,
   }));
-  const [packCopied, setPackCopied] = useState(false);
-  const [pageShareCopied, setPageShareCopied] = useState(false);
-  const [lineupFeedback, setLineupFeedback] = useState('');
-  const hasSavedFavorites = favorites.size > 0;
 
   const filteredNames = useMemo(() => {
     const base = names.length ? names : initialNames;
@@ -257,130 +253,6 @@ const SeoTemplate = ({ pageData }) => {
     });
   };
 
-  const buildPageUrl = () => {
-    const origin =
-      typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://tryhardnames.com';
-    return `${origin}/${String(pageData.slug || '').replace(/^\/+/, '')}`;
-  };
-
-  const showLineupBlockedFeedback = () => {
-    setLineupFeedback('Save a name first.');
-    setTimeout(() => setLineupFeedback(''), 1600);
-  };
-
-  const buildLineupPack = () => {
-    const pageUrl = buildPageUrl();
-    const fav = [...favorites];
-    if (!fav.length) return '';
-    const lines = [
-      'TryhardNames lineup',
-      `Category: ${category}/${keyword}`,
-      `URL: ${pageUrl}`,
-      `Favorites: ${fav.length}`,
-      '',
-      ...fav.slice(0, 24).map((x, index) => `${index + 1}. ${x}`),
-    ];
-    return lines.join('\n');
-  };
-
-  const buildPageShareText = () => {
-    const pageUrl = buildPageUrl();
-    const recent = (recentState.recentNames || []).slice(0, 8);
-    const lines = [
-      pageData.h1 || 'TryhardNames',
-      pageUrl,
-      '',
-      recent.length ? 'Recent picks:' : null,
-      ...recent.map((x) => `- ${x}`),
-    ].filter(Boolean);
-    return lines.join('\n');
-  };
-
-  const buildDiscordPack = () => {
-    const title = pageData.h1 || 'Tryhard Name Pack';
-    const safeTitle = String(title).trim();
-    const pageUrl = buildPageUrl();
-    const fav = [...favorites];
-    if (!fav.length) return '';
-    const body = fav.slice(0, 24).join('\n');
-
-    return [
-      `## TryhardNames lineup - ${safeTitle}`,
-      `Category: ${category}/${keyword}`,
-      `Favorites: ${fav.length}`,
-      '',
-      '```yaml',
-      body,
-      '```',
-      '',
-      `Saved from TryhardNames`,
-      pageUrl,
-    ].join('\n');
-  };
-
-  const exportDiscordPack = async () => {
-    if (!favorites.size) {
-      showLineupBlockedFeedback();
-      return;
-    }
-    const text = buildDiscordPack();
-    const res = await copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 14 });
-    if (res.ok) {
-      trackEvent('EXPORT_DISCORD_PACK', {
-        pageSlug: pageData.slug,
-        category,
-        keyword,
-        source: 'favorites',
-      });
-      setPackCopied(true);
-      setTimeout(() => setPackCopied(false), 1200);
-    } else {
-      setPackCopied(false);
-    }
-  };
-
-  const copySharePack = async () => {
-    if (!favorites.size) {
-      showLineupBlockedFeedback();
-      return;
-    }
-    const text = buildLineupPack();
-    const res = await copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 14 });
-    if (res.ok) {
-      trackEvent('SHARE_PACK', { pageSlug: pageData.slug, category, keyword, method: 'clipboard_pack' });
-      setPackCopied(true);
-      setTimeout(() => setPackCopied(false), 1200);
-    } else {
-      setPackCopied(false);
-    }
-  };
-
-  const sharePage = async () => {
-    const text = buildPageShareText();
-    const pageUrl = buildPageUrl();
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: pageData.h1 || 'TryhardNames',
-          text,
-          url: typeof window !== 'undefined' ? window.location.href : pageUrl,
-        });
-        trackEvent('SHARE_PAGE', { pageSlug: pageData.slug, category, keyword, method: 'navigator_share' });
-      } catch {
-        // ignore
-      }
-    } else {
-      const res = await copyTextToClipboard(text, { preventRepeatMs: 650, vibrateMs: 14 });
-      if (res.ok) {
-        trackEvent('SHARE_PAGE', { pageSlug: pageData.slug, category, keyword, method: 'clipboard_page' });
-        setPageShareCopied(true);
-        setTimeout(() => setPageShareCopied(false), 1200);
-      } else {
-        setPageShareCopied(false);
-      }
-    }
-  };
-
   const applyMode = (mode) => {
     const contextualBase = contextKey ? generateContextualNames({ contextKey, count: 24 }) : [];
     const base = uniq([...(contextualBase || []), ...((initialNames.length ? initialNames : names).slice(0, 24).map(String) || [])]);
@@ -471,7 +343,6 @@ const SeoTemplate = ({ pageData }) => {
       const variants = evolveLolKoreanVariants(baseName).slice(0, 8);
       pushRecentName(baseName);
       setActiveEvolution({ base: baseName, variants });
-      setDrawerOpen(true);
       return;
     }
 
@@ -479,7 +350,6 @@ const SeoTemplate = ({ pageData }) => {
       const variants = sanitizeRerollCandidates(evolveContextualName({ contextKey, baseName }), [baseName]).slice(0, 10);
       pushRecentName(baseName);
       setActiveEvolution({ base: baseName, variants });
-      setDrawerOpen(true);
       return;
     }
 
@@ -497,31 +367,22 @@ const SeoTemplate = ({ pageData }) => {
     const variants = uniq([a, b, c, d, e, f, g]).slice(0, 10);
     pushRecentName(baseName);
     setActiveEvolution({ base: baseName, variants });
-    setDrawerOpen(true);
   };
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(storageKey);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) setFavorites(new Set(parsed.map(String)));
+      setFavorites(new Set(readUnifiedFavoriteNames()));
     } catch {
       // ignore
+    } finally {
+      setFavoritesHydrated(true);
     }
-  }, [storageKey]);
+  }, []);
 
   useEffect(() => {
     return subscribeFavorites(() => {
       try {
-        const raw = localStorage.getItem(storageKey);
-        if (!raw) {
-          setFavorites((prev) => (prev.size === 0 ? prev : new Set()));
-          return;
-        }
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) return;
-        const next = new Set(parsed.map(String));
+        const next = new Set(readUnifiedFavoriteNames());
         setFavorites((prev) => {
           if (prev.size === next.size && [...prev].every((x) => next.has(x))) return prev;
           return next;
@@ -530,7 +391,7 @@ const SeoTemplate = ({ pageData }) => {
         // ignore
       }
     });
-  }, [storageKey]);
+  }, []);
 
   useEffect(() => {
     try {
@@ -551,19 +412,13 @@ const SeoTemplate = ({ pageData }) => {
   }, [recentKey]);
 
   useEffect(() => {
+    if (!favoritesHydrated) return;
     try {
-      localStorage.setItem(storageKey, JSON.stringify([...favorites]));
-      notifyFavoritesChanged();
+      writeUnifiedFavoriteNames([...favorites]);
     } catch {
       // ignore
     }
-  }, [favorites, storageKey]);
-
-  useEffect(() => {
-    if (favorites.size > 0 && lineupFeedback) {
-      setLineupFeedback('');
-    }
-  }, [favorites.size, lineupFeedback]);
+  }, [favorites, favoritesHydrated]);
 
   useEffect(() => {
     setRecentState((prev) => ({ ...prev, lengthFilter, asciiOnly, riotSafe, streamSafe }));
@@ -1111,19 +966,14 @@ const SeoTemplate = ({ pageData }) => {
                               variant="card"
                               className="shadow-[0_10px_24px_-18px_rgba(109,40,217,0.62)]"
                             />
-                            <button
-                              type="button"
-                              onClick={() => toggleFavorite(s)}
-                              className={`min-h-10 rounded-lg px-3 text-[11px] font-black tracking-[0.13em] uppercase border transition-colors ${
-                                favorites.has(s)
-                                  ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-200 dark:border-yellow-500/40'
-                                  : 'bg-white/90 text-slate-700 border-slate-200 hover:border-amber-300 hover:text-amber-700 dark:bg-dark-900 dark:text-dark-200 dark:border-dark-700 dark:hover:border-yellow-500/40 dark:hover:text-yellow-200'
-                              }`}
-                            >
-                              {favorites.has(s)
-                                ? laneUi.savedLabel || 'Saved'
-                                : laneUi.saveLabel || 'Save'}
-                            </button>
+                            <FavoriteStarButton
+                              name={s}
+                              pageSlug={pageData.slug}
+                              category={category}
+                              keyword={keyword}
+                              source="dynamic_name_card"
+                              className="shadow-[0_10px_24px_-18px_rgba(245,158,11,0.45)]"
+                            />
                           </div>
                           <button
                             type="button"
@@ -1145,82 +995,56 @@ const SeoTemplate = ({ pageData }) => {
             </div>
           )}
 
-          {/* Lineup state follows the tool; empty actions stay non-dominant. */}
-          <section className="mb-16 rounded-2xl border border-slate-200/90 bg-white/85 p-5 sm:p-6 shadow-sm dark:border-dark-700 dark:bg-dark-800">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className={cn('text-xs font-black tracking-widest uppercase', subtleClass)}>
-                  Lineup <span className="tabular-nums">{favorites.size}</span>
-                </p>
-                {hasSavedFavorites ? (
-                  <p className={cn('mt-1 text-sm leading-relaxed', bodyClass)}>
-                    Saved names are ready for a Discord pack or quick clipboard export.
+          {activeEvolution && (
+            <section
+              className="mb-16 rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-4 shadow-sm dark:border-cyan-500/25 dark:from-cyan-950/45 dark:via-dark-900 dark:to-dark-950"
+              aria-label="Similar reads"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-200/90">Similar reads</p>
+                  <p className="mt-1 text-sm text-slate-700 dark:text-dark-200">
+                    From <span className="font-semibold text-slate-950 dark:text-dark-50">{activeEvolution.base}</span>
                   </p>
-                ) : (
-                  <p className={cn('mt-1 text-sm leading-relaxed', bodyClass)}>Save a name to build a pack.</p>
-                )}
-                {lineupFeedback && (
-                  <p className="mt-2 text-sm font-semibold text-amber-700 dark:text-amber-200" aria-live="polite">
-                    {lineupFeedback}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                {hasSavedFavorites ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={copySharePack}
-                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-emerald-50 border border-emerald-200 text-emerald-700 hover:border-emerald-300 transition-colors dark:bg-emerald-500/15 dark:border-emerald-500/35 dark:text-emerald-100"
-                    >
-                      {packCopied ? 'Copied' : 'Copy pack'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={exportDiscordPack}
-                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:border-violet-300 transition-colors dark:bg-violet-500/15 dark:border-violet-500/35 dark:text-violet-100"
-                    >
-                      Export Discord Pack
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      onClick={copySharePack}
-                      disabled
-                      aria-describedby="empty-lineup-message"
-                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed dark:bg-dark-900 dark:border-dark-700 dark:text-dark-500"
-                    >
-                      Copy pack
-                    </button>
-                    <button
-                      type="button"
-                      onClick={exportDiscordPack}
-                      disabled
-                      aria-describedby="empty-lineup-message"
-                      className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed dark:bg-dark-900 dark:border-dark-700 dark:text-dark-500"
-                    >
-                      Export Discord Pack
-                    </button>
-                  </>
-                )}
+                </div>
                 <button
                   type="button"
-                  onClick={sharePage}
-                  className="px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase bg-white/90 border border-slate-200 text-slate-700 hover:border-cyan-300 hover:text-cyan-700 transition-colors dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:text-accent-cyan"
+                  onClick={() => setActiveEvolution(null)}
+                  className="min-h-9 shrink-0 self-start rounded-full border border-slate-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-950 dark:border-dark-600 dark:text-dark-200 dark:hover:border-dark-500 dark:hover:text-dark-50"
                 >
-                  {pageShareCopied ? 'Shared' : 'Share page'}
+                  Dismiss
                 </button>
               </div>
-            </div>
-            {!hasSavedFavorites && (
-              <p id="empty-lineup-message" className="sr-only">
-                Save a name first.
-              </p>
-            )}
-          </section>
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
+                {activeEvolution.variants.map((v, vi) => (
+                  <div
+                    key={`${vi}-${v}`}
+                    className="flex-shrink-0 flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white/85 px-2.5 py-2 shadow-sm dark:border-dark-600/90 dark:bg-dark-950/80"
+                  >
+                    <span className="max-w-[min(150px,42vw)] truncate text-sm font-semibold text-slate-950 dark:text-dark-50" title={v}>
+                      {v}
+                    </span>
+                    <div onClick={(e) => e.stopPropagation()} className="flex shrink-0 items-center gap-1.5">
+                      <CopyButton
+                        textToCopy={v}
+                        analytics={{ pageSlug: pageData.slug, category, keyword, source: 'evolution_variant' }}
+                        variant="drawer"
+                        className="w-auto shrink-0"
+                      />
+                      <FavoriteStarButton
+                        name={v}
+                        pageSlug={pageData.slug}
+                        category={category}
+                        keyword={keyword}
+                        source="similar_reads_variant"
+                        compact
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Editorial SEO content remains indexable below the utility surface. */}
           <div className="space-y-12 mb-16">
@@ -1339,281 +1163,6 @@ const SeoTemplate = ({ pageData }) => {
             </div>
           )}
 
-        </div>
-      </div>
-
-      {/* Floating lineup shelf — primary surface for saves, recents, and similar reads */}
-      <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
-        <div className="pointer-events-auto mx-auto max-w-4xl px-2.5 pb-2.5 sm:px-3 sm:pb-3">
-          <div
-            className={cn(
-              'rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-xl shadow-[0_-16px_44px_-28px_rgba(15,23,42,0.32)] ring-1 ring-slate-900/[0.05] overflow-hidden transition-[max-height,box-shadow] duration-300 dark:border-white/[0.09] dark:bg-dark-950/95 dark:shadow-[0_-16px_44px_-24px_rgba(0,0,0,0.72)] dark:ring-white/[0.05]',
-              drawerOpen || activeEvolution ? 'max-h-[60vh] md:max-h-[55vh]' : 'max-h-[18vh] md:max-h-[14vh]'
-            )}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-b border-slate-200/70 bg-slate-50/75 dark:border-white/[0.06] dark:bg-dark-900/40">
-              <button
-                type="button"
-                onClick={() => setDrawerOpen((v) => !v)}
-                className="flex min-h-10 min-w-0 items-center gap-2 text-sm font-black text-slate-900 dark:text-dark-50"
-              >
-                <span
-                  className={cn(
-                    'px-3 py-1.5 rounded-full text-[11px] font-black tracking-[0.16em] uppercase border transition-all duration-200',
-                    drawerOpen || activeEvolution
-                      ? 'border-cyan-300 bg-cyan-50 text-cyan-700 shadow-[0_0_24px_-16px_rgba(8,145,178,0.35)] dark:border-cyan-400/50 dark:bg-cyan-500/[0.18] dark:text-cyan-50 dark:shadow-[0_0_24px_-10px_rgba(34,211,238,0.45)]'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-dark-600 dark:bg-dark-800 dark:text-dark-100 dark:hover:border-dark-500'
-                  )}
-                >
-                  Lineup
-                </span>
-                <span className="text-slate-800 dark:text-dark-100 font-bold tabular-nums">{favorites.size}</span>
-                <span className="text-slate-500 dark:text-dark-400 text-[10px] font-bold tracking-widest uppercase shrink-0">
-                  {drawerOpen ? 'Hide' : 'Open'}
-                </span>
-              </button>
-
-              <div className="flex flex-wrap items-center justify-end gap-2">
-                {!hasSavedFavorites && (
-                  <span className={cn('hidden text-xs font-semibold sm:inline', bodyClass)}>Save a name to build a pack.</span>
-                )}
-                {lineupFeedback && (
-                  <span className="text-xs font-bold text-amber-700 dark:text-amber-200" aria-live="polite">
-                    {lineupFeedback}
-                  </span>
-                )}
-                {hasSavedFavorites && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={exportDiscordPack}
-                      className="min-h-10 px-3 py-1.5 rounded-full text-[10px] font-black tracking-[0.12em] uppercase bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100 hover:border-violet-300 hover:shadow-[0_0_18px_-12px_rgba(124,58,237,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-violet-500/35 dark:text-violet-100 dark:hover:bg-violet-500/15 dark:hover:border-violet-400/55 dark:hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.45)]"
-                    >
-                      Export Discord Pack
-                    </button>
-                    <button
-                      type="button"
-                      onClick={copySharePack}
-                      className={cn(
-                        'min-h-10 px-3 py-1.5 rounded-full text-[10px] font-black tracking-[0.12em] uppercase border transition-all duration-200',
-                        packCopied
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-[0_0_16px_-10px_rgba(16,185,129,0.32)] dark:bg-emerald-500/20 dark:text-emerald-100 dark:border-emerald-400/45 dark:shadow-[0_0_16px_-8px_rgba(52,211,153,0.4)]'
-                          : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:shadow-[0_0_18px_-12px_rgba(16,185,129,0.28)] dark:bg-dark-800/90 dark:border-emerald-500/25 dark:text-emerald-100/95 dark:hover:border-emerald-400/45 dark:hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.35)]'
-                      )}
-                    >
-                      {packCopied ? 'Copied' : 'Copy pack'}
-                    </button>
-                  </>
-                )}
-                <button
-                  type="button"
-                  onClick={sharePage}
-                  className="min-h-10 px-3 py-1.5 rounded-full text-[10px] font-black tracking-[0.12em] uppercase bg-cyan-50 border border-cyan-200 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-[0_0_18px_-12px_rgba(8,145,178,0.32)] transition-all duration-200 dark:bg-dark-800/90 dark:border-cyan-500/35 dark:text-cyan-50 dark:hover:bg-cyan-500/15 dark:hover:border-cyan-400/50 dark:hover:shadow-[0_0_18px_-8px_rgba(34,211,238,0.4)]"
-                >
-                  {pageShareCopied ? 'Shared' : 'Share page'}
-                </button>
-              </div>
-            </div>
-
-            <div
-              className={cn(
-                'transition-all duration-300 overflow-hidden',
-                drawerOpen ? 'max-h-[calc(60vh-52px)] md:max-h-[calc(55vh-52px)] opacity-100' : 'max-h-0 opacity-0'
-              )}
-            >
-              <div className="th-lineup-drawer-scroll max-h-[calc(60vh-52px)] md:max-h-[calc(55vh-52px)] overflow-y-auto px-3 pb-3 pt-3 space-y-3">
-                {activeEvolution && (
-                  <section
-                    className="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:border-cyan-500/25 dark:from-cyan-950/55 dark:via-dark-900 dark:to-dark-950 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
-                    aria-label="Similar reads"
-                  >
-                    <div className="flex flex-col gap-2.5 sm:flex-row sm:items-start sm:justify-between">
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-200/90">Similar reads</p>
-                        <p className="mt-1 text-sm text-slate-700 dark:text-dark-200">
-                          From <span className="font-semibold text-slate-950 dark:text-dark-50">{activeEvolution.base}</span>
-                        </p>
-                        <p className="mt-1 max-w-md text-xs leading-relaxed text-slate-500 dark:text-dark-400">
-                          Steps stay here with your lineup — scroll sideways on small screens.
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveEvolution(null)}
-                        className="min-h-10 shrink-0 self-start rounded-full border border-slate-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-950 sm:min-h-8 dark:border-dark-600 dark:text-dark-200 dark:hover:border-dark-500 dark:hover:text-dark-50"
-                      >
-                        Dismiss
-                      </button>
-                    </div>
-                    <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
-                      {activeEvolution.variants.map((v, vi) => (
-                        <div
-                          key={`${vi}-${v}`}
-                          className="flex-shrink-0 flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white/85 px-2.5 py-2 shadow-sm dark:border-dark-600/90 dark:bg-dark-950/80"
-                        >
-                          <span className="max-w-[min(150px,42vw)] truncate text-sm font-semibold text-slate-950 dark:text-dark-50" title={v}>
-                            {v}
-                          </span>
-                          <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 shrink-0">
-                            <CopyButton
-                              textToCopy={v}
-                              analytics={{ pageSlug: pageData.slug, category, keyword, source: 'evolution_variant' }}
-                              variant="drawer"
-                              className="w-auto shrink-0"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => toggleFavorite(v)}
-                              className={cn(
-                                'min-h-10 rounded-full border px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors sm:min-h-8',
-                                favorites.has(v)
-                                  ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-500/15 dark:text-amber-100 dark:border-amber-400/45'
-                                  : 'border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 dark:border-dark-600 dark:text-dark-300 dark:hover:border-amber-400/35 dark:hover:text-amber-100'
-                              )}
-                            >
-                              {favorites.has(v) ? 'Saved' : 'Save'}
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                  <section className="rounded-xl border border-slate-200/90 bg-white/85 p-3 shadow-sm dark:bg-dark-800 dark:border-dark-700">
-                    <div className="mb-2.5 flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Saved</h3>
-                      {hasSavedFavorites && (
-                        <button
-                          type="button"
-                          onClick={() => setFavorites(new Set())}
-                          className="min-h-10 rounded-full border border-slate-200 bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-700 transition-colors hover:border-red-300 hover:text-red-700 sm:min-h-8 dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-red-400/40 dark:hover:text-red-200"
-                        >
-                          Clear all
-                        </button>
-                      )}
-                    </div>
-
-                    {favorites.size === 0 ? (
-                      <p className={cn('text-sm', bodyClass)}>Save a name to build a pack.</p>
-                    ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {[...favorites].slice(0, 24).map((f) => (
-                          <div
-                            key={f}
-                            className="flex max-w-full items-center gap-1.5 rounded-xl border border-slate-200 bg-white/90 px-2.5 py-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
-                          >
-                            <button
-                              type="button"
-                              onClick={() => navigator.clipboard?.writeText?.(f)}
-                              className="min-w-0 max-w-[11rem] truncate text-left text-xs font-bold text-slate-950 transition-colors hover:text-cyan-700 dark:text-dark-50 dark:hover:text-accent-cyan"
-                              title={f}
-                            >
-                              {f}
-                            </button>
-                            <CopyButton
-                              textToCopy={f}
-                              analytics={{ pageSlug: pageData.slug, category, keyword, source: 'favorites_drawer' }}
-                              variant="drawer"
-                              className="w-auto shrink-0"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => toggleFavorite(f)}
-                              className="min-h-10 shrink-0 rounded-full border border-slate-200 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-600 transition-colors hover:text-red-700 hover:border-red-300 sm:min-h-8 dark:border-dark-700 dark:text-dark-300 dark:hover:text-red-200 dark:hover:border-red-400/40"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </section>
-
-                  <section className="rounded-xl border border-slate-200/90 bg-white/85 p-3 shadow-sm dark:bg-dark-800 dark:border-dark-700">
-                    <div className="mb-2.5 flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-black tracking-widest uppercase text-slate-700 dark:text-dark-200">Recent picks</h3>
-                      <button
-                        type="button"
-                        onClick={() => setRecentState((p) => ({ ...p, recentNames: [] }))}
-                        className="min-h-10 rounded-full border border-slate-200 bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-700 transition-colors hover:border-slate-300 sm:min-h-8 dark:bg-dark-900 dark:border-dark-700 dark:text-dark-200 dark:hover:border-dark-500"
-                      >
-                        Clear
-                      </button>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {(recentState.recentNames || []).slice(0, 12).map((n) => (
-                        <div
-                          key={n}
-                          className="flex max-w-full items-center gap-1.5 rounded-xl border border-slate-200 bg-white/90 px-2.5 py-2 shadow-sm dark:bg-dark-900 dark:border-dark-700"
-                        >
-                          <button
-                            type="button"
-                            onClick={() => navigator.clipboard?.writeText?.(n)}
-                            className="min-w-0 max-w-[11rem] truncate text-left text-xs font-bold text-slate-950 transition-colors hover:text-cyan-700 dark:text-dark-50 dark:hover:text-accent-cyan"
-                            title={n}
-                          >
-                            {n}
-                          </button>
-                          <CopyButton
-                            textToCopy={n}
-                            analytics={{ pageSlug: pageData.slug, category, keyword, source: 'recent_name' }}
-                            variant="drawer"
-                            className="w-auto shrink-0"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => toggleFavorite(n)}
-                            className={`min-h-10 shrink-0 rounded-full border px-2 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors sm:min-h-8 ${
-                              favorites.has(n)
-                                ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-200 dark:border-yellow-500/40'
-                                : 'border-slate-200 text-slate-600 hover:text-amber-700 hover:border-amber-300 dark:border-dark-700 dark:text-dark-300 dark:hover:text-yellow-200 dark:hover:border-yellow-500/40'
-                            }`}
-                          >
-                            {favorites.has(n) ? 'Saved' : 'Save'}
-                          </button>
-                        </div>
-                      ))}
-                      {(recentState.recentNames || []).length === 0 && (
-                        <p className={cn('text-sm', bodyClass)}>Use “Similar reads” to start building recents.</p>
-                      )}
-                    </div>
-
-                    <div className={cn('mt-4 pt-4 border-t', dividerClass)}>
-                      <p className={cn('text-xs font-black tracking-widest uppercase mb-2', subtleClass)}>Last settings</p>
-                      <div className="flex flex-wrap gap-2">
-                        {recentState.lastMode && (
-                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
-                            Mode: {recentState.lastMode}
-                          </span>
-                        )}
-                        <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
-                          Length: {lengthFilter}
-                        </span>
-                        {asciiOnly && (
-                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
-                            ASCII
-                          </span>
-                        )}
-                        {riotSafe && (
-                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
-                            Riot-safe
-                          </span>
-                        )}
-                        {streamSafe && (
-                          <span className={cn('px-3 py-2 rounded-full text-[10px] font-black tracking-widest uppercase', chipClass)}>
-                            Stream-safe
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </section>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

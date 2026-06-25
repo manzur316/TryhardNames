@@ -115,7 +115,7 @@ export default function TrendingNamesModule({
                       trackEvent('FILTER_USED', {
                         pageSlug: pageSlug || '/',
                         filter: 'trending_save',
-                        value: saved ? 'unsave' : 'save',
+                        value: saved ? 'unfavorite' : 'favorite',
                         name: displayName,
                       });
                     }}
@@ -125,7 +125,7 @@ export default function TrendingNamesModule({
                         ? 'border-violet-400/40 bg-violet-500/15 text-violet-200 shadow-[0_0_16px_-6px_rgba(139,92,246,0.45)]'
                         : 'border-slate-200/80 bg-white/80 text-slate-400 hover:border-violet-400/35 hover:text-violet-300 dark:border-dark-600 dark:bg-dark-800/80 dark:text-dark-400 dark:hover:border-violet-500/40 dark:hover:text-violet-200'
                     )}
-                    aria-label={saved ? 'Unsave' : 'Save'}
+                    aria-label={saved ? 'Unfavorite name' : 'Favorite name'}
                   >
                     ★
                   </button>
@@ -162,7 +162,7 @@ export default function TrendingNamesModule({
                       <span className="th-badge-meta dark:text-dark-300">Copied {it.copyCount}×</span>
                     )}
                     {it.saveCount >= 3 && (
-                      <span className="th-badge-meta dark:text-dark-300">Saved {it.saveCount}×</span>
+                      <span className="th-badge-meta dark:text-dark-300">Favorited {it.saveCount}×</span>
                     )}
                   </div>
                 )}

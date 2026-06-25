@@ -11,6 +11,7 @@ const robloxLayoutSource = readWeb('src/features/robloxNames/components/RobloxNa
 const namesGridSource = readWeb('src/core/components/NamesGrid.jsx');
 const trendingNamesSource = readWeb('src/core/components/TrendingNames.jsx');
 const copyButtonSource = readWeb('src/core/components/CopyButton.jsx');
+const favoriteStarSource = readWeb('src/components/FavoriteStarButton.jsx');
 const widgetSource = readWeb('src/features/nameGenerators/components/NameGeneratorWidget.jsx');
 const cssSource = readWeb('src/index.css');
 const packageJson = JSON.parse(readWeb('package.json'));
@@ -35,11 +36,14 @@ describe('feature generator card visual alignment', () => {
     assert.match(widgetSource, /gridId="names"/);
   });
 
-  it('keeps Copy Name present and uses compact card copy actions', () => {
+  it('keeps Copy Name present and uses favorite star as the secondary action', () => {
     assert.match(copyButtonSource, /variant === 'card'/);
     assert.match(copyButtonSource, /Copy Name/);
     assert.match(namesGridSource, /<CopyButton[\s\S]*variant="card"/);
     assert.match(trendingNamesSource, /<CopyButton[\s\S]*variant="card"/);
+    assert.match(namesGridSource, /<FavoriteStarButton[\s\S]*source="feature_name_card"/);
+    assert.match(trendingNamesSource, /<FavoriteStarButton[\s\S]*source="feature_trending_card"/);
+    assert.match(favoriteStarSource, /writeUnifiedFavoriteNames/);
     assert.match(widgetSource, /<NamesGrid/);
   });
 
