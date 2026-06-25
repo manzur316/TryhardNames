@@ -76,6 +76,8 @@ PR10.1 is the next implementation slice after PR10. PR10.1 fixes Account/Auth li
 
 PR10.2 decides whether `/gaming-passport` remains a documented dark-branded landing or becomes a theme-aware landing.
 
+PR10.5 improves dynamic generator UX priority without changing SEO data or provider runtime.
+
 ## Next Recommended PRs
 
 Numbering may change.
