@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(76);
+select plan(91);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -129,6 +129,38 @@ select ok(
   ),
   'authenticated cannot execute internal helper functions directly'
 );
+select ok(
+  has_function_privilege(
+    'authenticated',
+    'public.set_gaming_passport_publication_consent(uuid, boolean)',
+    'EXECUTE'
+  ),
+  'authenticated can execute the publication consent command'
+);
+select ok(
+  has_function_privilege(
+    'authenticated',
+    'public.claim_gaming_passport_slug(uuid, text)',
+    'EXECUTE'
+  ),
+  'authenticated can execute the slug claim command'
+);
+select ok(
+  has_function_privilege(
+    'authenticated',
+    'public.publish_gaming_passport(uuid)',
+    'EXECUTE'
+  ),
+  'authenticated can execute the publish command'
+);
+select ok(
+  has_function_privilege(
+    'authenticated',
+    'public.unpublish_gaming_passport(uuid)',
+    'EXECUTE'
+  ),
+  'authenticated can execute the unpublish command'
+);
 
 select ok(
   exists (
@@ -200,6 +232,26 @@ values (
   true,
   now()
 );
+
+insert into public.gaming_passports (
+  id,
+  owner_id,
+  status,
+  alias
+)
+values
+  (
+    '10000000-0000-0000-0000-000000000010',
+    '00000000-0000-0000-0000-000000000010',
+    'draft_private',
+    'Command Draft'
+  ),
+  (
+    '10000000-0000-0000-0000-000000000011',
+    '00000000-0000-0000-0000-000000000011',
+    'draft_private',
+    'Verified Command Draft'
+  );
 
 insert into public.passport_visibility_settings (passport_id, owner_id)
 values
@@ -354,6 +406,17 @@ values
     'riot',
     'RiotPUUID-2',
     'Riot Player Two',
+    'verified',
+    'public',
+    now()
+  ),
+  (
+    '20000000-0000-0000-0000-000000000011',
+    '10000000-0000-0000-0000-000000000011',
+    '00000000-0000-0000-0000-000000000011',
+    'discord',
+    'DiscordFuture-11',
+    'Future Discord Player',
     'verified',
     'public',
     now()
@@ -948,6 +1011,14 @@ select is(
   '42501',
   'anon cannot execute the updated_at trigger helper'
 );
+select is(
+  pg_temp.test_sqlstate($$
+    select *
+    from public.publish_gaming_passport('10000000-0000-0000-0000-000000000010')
+  $$),
+  '42501',
+  'anon cannot execute publish command'
+);
 
 set local role authenticated;
 set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
@@ -1227,6 +1298,129 @@ select is(
   $$),
   '42501',
   'authenticated cannot delete Passports directly'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000010';
+
+select is(
+  (
+    select publication_consent
+    from public.set_gaming_passport_publication_consent(
+      '10000000-0000-0000-0000-000000000010',
+      true
+    )
+    limit 1
+  ),
+  true,
+  'owner can save publication consent through command'
+);
+
+select is(
+  (
+    select slug
+    from public.claim_gaming_passport_slug(
+      '10000000-0000-0000-0000-000000000010',
+      ' Command Player!! '
+    )
+    limit 1
+  ),
+  'command-player',
+  'owner can claim a normalized canonical slug through command'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    select *
+    from public.publish_gaming_passport('10000000-0000-0000-0000-000000000010')
+  $$),
+  'P0001',
+  'publish command remains blocked without a verified linked provider'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000002';
+
+select is(
+  pg_temp.test_sqlstate($$
+    select *
+    from public.claim_gaming_passport_slug(
+      '10000000-0000-0000-0000-000000000010',
+      'stolen-command-player'
+    )
+  $$),
+  'P0001',
+  'owner cannot claim slug for another owner Passport'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000011';
+
+select is(
+  (
+    select publication_consent
+    from public.set_gaming_passport_publication_consent(
+      '10000000-0000-0000-0000-000000000011',
+      true
+    )
+    limit 1
+  ),
+  true,
+  'owner with future verified provider can save publication consent'
+);
+
+select is(
+  (
+    select slug
+    from public.claim_gaming_passport_slug(
+      '10000000-0000-0000-0000-000000000011',
+      'Verified Command Player'
+    )
+    limit 1
+  ),
+  'verified-command-player',
+  'owner with future verified provider can claim slug'
+);
+
+select is(
+  (
+    select status
+    from public.publish_gaming_passport('10000000-0000-0000-0000-000000000011')
+    limit 1
+  ),
+  'published',
+  'publish command can publish when policy requirements are satisfied'
+);
+
+select is(
+  (
+    select status
+    from public.unpublish_gaming_passport('10000000-0000-0000-0000-000000000011')
+    limit 1
+  ),
+  'unpublished',
+  'unpublish command moves published Passport to unpublished'
+);
+
+select is(
+  (
+    select publication_consent
+    from public.gaming_passports
+    where id = '10000000-0000-0000-0000-000000000011'
+  ),
+  false,
+  'unpublish command revokes publication consent'
+);
+
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
+
+select is(
+  pg_temp.test_sqlstate($$
+    select *
+    from public.claim_gaming_passport_slug(
+      '10000000-0000-0000-0000-000000000001',
+      'new-player-one'
+    )
+  $$),
+  'P0001',
+  'published slug changes are blocked until public serving exists'
 );
 
 select is(

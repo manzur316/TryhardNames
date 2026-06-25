@@ -183,7 +183,7 @@ const GamingPassportPage = () => {
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Pending Riot approval.</h2>
               <p className="mt-4 text-sm leading-6 text-slate-700 dark:text-slate-300">
                 Riot integration is pending Riot approval. After approval, players will explicitly link their Riot
-                account through Riot Sign On. TryhardNames does not claim Riot OAuth is live today, does not claim a
+                account through Riot Sign On. TryhardNames does not claim Riot account linking is live today, does not claim a
                 production Riot key, and does not show real Riot data in production yet.
               </p>
             </div>

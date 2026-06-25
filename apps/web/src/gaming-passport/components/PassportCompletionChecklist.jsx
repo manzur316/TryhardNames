@@ -14,7 +14,7 @@ export default function PassportCompletionChecklist({ form, validation, isDirty,
     { label: 'Visual style selected', done: hasCustomStyle },
     { label: 'Saved Names highlights selected', done: featuredSavedNames.length > 0 },
     { label: 'Draft saved', done: !isDraftLoading && !isSaving && !isDirty && validation.ok },
-    { label: 'Publish remains locked for a later PR', done: false, locked: true },
+    { label: 'Public profile remains locked for a later PR', done: false, locked: true },
   ];
   const completed = items.filter((item) => item.done).length;
 

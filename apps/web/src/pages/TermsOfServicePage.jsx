@@ -57,7 +57,7 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-2xl font-bold text-dark-50 mb-4">4. Riot and Third-Party Game Services</h2>
             <p className="text-dark-300 leading-relaxed mb-4">
-              Riot integration is pending Riot approval. Riot OAuth / Riot Sign On is not currently available through
+              Riot integration is pending Riot approval. Riot account linking / Riot Sign On is not currently available through
               TryhardNames, and TryhardNames does not display live Riot data in production.
             </p>
             <p className="text-dark-300 leading-relaxed mb-4">

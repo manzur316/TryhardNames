@@ -19,12 +19,12 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Linked Providers are external accounts connected after sign-in.
 - Verified Proofs are normalized, source-backed assertions from providers or game adapters.
 - Publish Policy contract decides if an owner can publish.
-- Publish Runtime Commands are still pending and must handle consent, status, slug, publish, and unpublish transitions.
+- Publish Runtime Commands are implemented and handle consent, status, slug, publish attempt, and unpublish transitions.
 - Public Projection contract exposes only allowlisted fields.
 - Public Profile is the future `/id/:slug` surface and is not implemented.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR13
+## Current State After PR14
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -42,7 +42,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Publish Policy contract is already implemented in domain code.
 - Public Projection contract is already implemented in domain code.
 - Provider-neutral domain/schema is partial, not runtime.
-- Publish Runtime Commands are pending.
+- Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
 
 Riot integration is not live. Discord integration is not live. No Riot API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles are not implemented.
 
@@ -72,9 +72,9 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 
 ### PR14 - Publish Runtime Commands
 
-- Implement publishability command flow.
-- Add consent, slug claim, publish, unpublish, and revoke/stale handling.
-- Enforce the existing Publish Policy contract at runtime.
+- Implemented by PR14: publishability command flow.
+- Implemented by PR14: consent, slug claim/update, publish attempt, unpublish, and policy-blocked handling.
+- Implemented by PR14: existing Publish Policy contract is enforced at runtime.
 - Do not serve public profiles yet.
 
 ### PR15 - Public Gaming Passport MVP `/id/:slug`

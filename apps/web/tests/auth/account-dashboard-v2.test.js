@@ -39,7 +39,7 @@ describe('Account Dashboard V2 and favorite-first saved names', () => {
     assert.match(accountPageSource, /Nothing publishes automatically/i);
     assert.match(accountPageSource, /Google Auth is Parent Auth/);
     assert.match(accountPageSource, /Riot and Discord are future linked providers, not live account integrations/);
-    assert.match(accountPageSource, /No Riot OAuth or Discord OAuth button is exposed/);
+    assert.match(accountPageSource, /No Riot or Discord sign-in button is exposed/);
     assert.doesNotMatch(accountPageSource, /Continue with Riot|Continue with Discord/);
     assert.doesNotMatch(accountPageSource, /Riot OAuth is live|Discord OAuth is live/i);
   });
