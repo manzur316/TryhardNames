@@ -82,7 +82,7 @@ describe('First Provider Decision and Readiness Pack', () => {
 
   it('updates roadmap docs for PR17 and selects PR18 Riot Readiness', () => {
     assert.match(readme, /First Provider Decision \+ Readiness Pack selecting PR18 as Riot Readiness/);
-    assert.match(currentRoadmap, /Current Status After PR21/);
+    assert.match(currentRoadmap, /Current Status After PR22/);
     assert.match(currentRoadmap, /Riot Readiness Pack exists/);
     assert.match(executionPlan, /PR17 adds the First Provider Decision \+ Readiness Pack/);
     assert.match(executionPlan, /PR18 Riot Readiness Pack/);

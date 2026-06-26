@@ -16,7 +16,10 @@ Prepare public identity surfaces for abuse and privacy cases before broader publ
 
 ## Expected scope
 
-- Report public profile intent.
+- Public profile report action on valid `/id/:slug` profiles.
+- Safe `submit_public_profile_report` RPC.
+- Private `public_profile_reports` table with no public/client read access.
+- Report category/domain policy.
 - Takedown/suspension behavior.
 - Cosmetic abuse policy.
 - Reserved/blocked terms for visual identity surfaces.
@@ -43,3 +46,11 @@ Prepare public identity surfaces for abuse and privacy cases before broader publ
 ## Exit criteria
 
 Public profile abuse and privacy paths are documented, testable, and do not weaken public projection safety.
+
+## Implemented by PR22
+
+- `apps/web/src/gaming-passport/trust-safety/*` defines report categories, detail sanitization, blocked visual identity terms, and cosmetic abuse policy.
+- `apps/web/src/gaming-passport/components/PublicProfileReportDialog.jsx` adds the public report intent.
+- `apps/web/src/gaming-passport/data/trustSafetyRepository.js` submits reports through the safe RPC wrapper.
+- `supabase/migrations/20260626100000_public_profile_reports.sql` adds private report storage and the report submission RPC.
+- `docs/product/TRUST_SAFETY_PRIVACY_CONTROLS.md` documents report, takedown, suspension, privacy, impersonation, and cosmetic abuse controls.

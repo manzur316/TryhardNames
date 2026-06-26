@@ -1,6 +1,6 @@
 # Roadmap Status Matrix
 
-This matrix reflects the PR21 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, and PR21.
+This matrix reflects the PR22 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, and PR22.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ This matrix reflects the PR21 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 | League of Legends adapter | pending | Roadmap docs only | Conceptual GameAdapter placement | Riot-backed LoL proof normalization | PR20 | No tracker, OP.GG clone, live-game advice, or hidden-player inference. |
 | Passport Cosmetics Foundation | done | `PASSPORT_COSMETICS_FOUNDATION.md`, cosmetic catalog/loadout/policy modules, `PassportCosmeticsPanel.jsx` | TryhardNames-owned local catalog, Obsidian Pulse free foundation preview, private equip/preview, safe public scene projection | Future `/cosmetics` showcase, entitlement hardening, optional inventory/payment review, pets/companions runtime | PR22+ | Cosmetics can style identity; cosmetics cannot manufacture proof. No store, payments, Riot assets, fake proofs, fake ranks, or proof boosts. |
 | Cosmetics monetization / inventory | pending | `PASSPORT_COSMETICS_FOUNDATION.md` | Explicit non-goals and future boundaries | Store/payment/inventory model, if ever approved | Future | No Stripe, MercadoPago, checkout, purchased inventory, loot boxes, gacha, or marketplace in PR21. |
-| Trust/Safety | pending | Roadmap docs only | Policy boundaries | Reports, takedown, suspensions, abuse controls | PR22 | Required before broad public profiles. |
+| Trust / Safety / Privacy Controls | done | `TRUST_SAFETY_PRIVACY_CONTROLS.md`, `reportPolicy.js`, `PublicProfileReportDialog.jsx`, `trustSafetyRepository.js`, `20260626100000_public_profile_reports.sql` | Public profile report intent, private report storage, safe report RPC, report category policy, cosmetic abuse policy, blocked visual identity terms, takedown/suspension/privacy docs, moderation runbook | Full moderation dashboard, report queue operations, rate limits, email notifications, operational takedown tooling | PR23 | Public identity requires report, takedown, and privacy controls before broad distribution. |
 | Launch readiness | pending | Roadmap docs only | Validation command habit | Production smoke, observability, rollback, privacy final review | PR23 | No launch until gates are satisfied. |
 
 ## Summary
@@ -46,4 +46,5 @@ This matrix reflects the PR21 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 - PR18 implements Riot Readiness because explicit Riot approval is not evidenced in the repo.
 - PR19 is the earliest possible Riot runtime PR, only if explicit approval exists.
 - PR21 implements Passport Cosmetics Foundation without store, payments, provider data, fake proofs, or fake ranks.
+- PR22 implements Trust / Safety / Privacy Controls Foundation without provider launch, store/payments, `/cosmetics`, report admin UI, or public report lists.
 - Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.

@@ -1,18 +1,18 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status After PR21
+## Current Status After PR22
 
-This document reflects the PR21 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, PR18, `docs(riot): add readiness pack`, and PR21, `feat(passport): add cosmetics foundation`.
+This document reflects the PR22 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, PR18, `docs(riot): add readiness pack`, PR21, `feat(passport): add cosmetics foundation`, and PR22, `feat(trust): add public profile safety controls`.
 
-TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, a first-provider decision record, a Riot Readiness Pack, and Passport Cosmetics Foundation.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, a first-provider decision record, a Riot Readiness Pack, Passport Cosmetics Foundation, and Trust / Safety / Privacy Controls Foundation.
 
 Riot integration is not live. Discord integration is not live. No public Riot data is live. The public `/id/:slug` route serves only policy-valid published Passports and does not activate provider runtime. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime. PR18 implements Riot readiness only. Riot Runtime remains blocked until explicit approval exists.
 
 Gaming Passport remains a private-first, verifiable, shareable gaming resume. It is not a tracker, OP.GG alternative, custom MMR/ELO product, match-history dump, live-game advantage tool, hidden-player de-anonymization surface, or alternative ranking system.
 
-## PR History Through PR21
+## PR History Through PR22
 
-The repo history is summarized through PR21.
+The repo history is summarized through PR22.
 
 | PR | Title | Status | Outcome | Runtime impact | Non-goals |
 | --- | --- | --- | --- | --- | --- |
@@ -43,7 +43,8 @@ The repo history is summarized through PR21.
 | PR16 | `feat(passport): add provider runtime foundation` | Merged | Added provider runtime contracts, connection intent/callback/sync/audit scaffolding, token vault placeholder, owner-only RLS, repository functions, and a private `/account` foundation panel. | Provider Runtime Foundation exists without activating any provider. | No Discord/Riot OAuth, provider API calls, provider-specific adapter runtime, real token storage usage, proof sync runtime, or public provider linking UI. |
 | PR17 | `docs(provider): add first provider decision readiness pack` | Merged | Adds the first-provider decision record, provider readiness checklist, and PR18 Riot Readiness scope. | Documentation/tests only. PR18 is selected as Riot Readiness because Riot approval is not evidenced. | No OAuth launch, provider runtime activation, API calls, secrets, env vars, routes, migrations, or UI changes. |
 | PR18 | `docs(riot): add readiness pack` | Merged | Adds Riot readiness pack, design-only RSO callback plan, token-retention requirements, adapter contract review, public projection review criteria, portal checklist, and source guards. | Documentation/tests only. Riot Runtime remains blocked. | No Riot OAuth, RSO redirect, callback route, Riot API calls, client secret, production key, env vars, provider activation, adapters, proof sync, public Riot data, routes, migrations, or remote service changes. |
-| PR21 | `feat(passport): add cosmetics foundation` | In progress | Adds Passport Cosmetics Foundation, local cosmetic catalog, visual-only policy, loadout sanitizer, private account panel, Obsidian Pulse foundation preview, and safe public scene rendering. | Owner drafts can equip TryhardNames-owned visual cosmetics through `scene_config`; public profiles render only allowlisted scene ids. | No store, payments, checkout, purchased inventory, `/cosmetics` route, pets/companions runtime, Riot assets, fake proofs, fake ranks, provider runtime, or Riot/Discord OAuth. |
+| PR21 | `feat(passport): add cosmetics foundation` | Merged | Adds Passport Cosmetics Foundation, local cosmetic catalog, visual-only policy, loadout sanitizer, private account panel, Obsidian Pulse foundation preview, and safe public scene rendering. | Owner drafts can equip TryhardNames-owned visual cosmetics through `scene_config`; public profiles render only allowlisted scene ids. | No store, payments, checkout, purchased inventory, `/cosmetics` route, pets/companions runtime, Riot assets, fake proofs, fake ranks, provider runtime, or Riot/Discord OAuth. |
+| PR22 | `feat(trust): add public profile safety controls` | In progress | Adds Trust / Safety / Privacy Controls Foundation, public profile report intent, safe report RPC, private report storage, cosmetic abuse policy, blocked visual identity terms, and moderation runbook. | Valid public `/id/:slug` profiles can be reported without exposing private report state or weakening public projection safety. | No Riot/Discord runtime, provider launch expansion, `/cosmetics`, store, payments, inventory purchases, pets/companions runtime, admin dashboard, public report list, or email notification service. |
 
 ## Live Surfaces
 
@@ -90,6 +91,10 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Obsidian Pulse is equipable as a free foundation preview.
 - Private account Passport Cosmetics panel exists.
 - Public `/id/:slug` scene projection allows only safe `themeId` and `equippedCosmeticIds`.
+- Trust / Safety / Privacy Controls Foundation exists.
+- Public profile report intent exists on valid `/id/:slug` profiles.
+- `public_profile_reports` and `submit_public_profile_report` exist for safe local report submission.
+- Cosmetic abuse, blocked visual identity terms, impersonation, takedown/suspension, and privacy request policy exists.
 - Account Hunting Guide exists inside the account experience.
 - Favorite/star is the canonical saved-name UX.
 - Saved Names Supabase persistence exists through `public.saved_names`.
@@ -126,7 +131,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - League of Legends adapter runtime.
 - Future `/cosmetics` showcase route.
 - Cosmetics store, payments, checkout, purchased inventory, and companions/3D runtime.
-- Trust/safety moderation controls.
+- Full moderation/admin dashboard and report queue tooling.
 - Launch readiness checklist execution.
 
 ## Gated
@@ -150,7 +155,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 | PR19 | Riot Provider Runtime | Gated by Riot approval. Implements Riot OAuth/runtime only after explicit approval and provider foundation. |
 | PR20 | League of Legends Adapter | Normalizes LoL proofs under RiotProvider after Riot runtime is approved and implemented. |
 | PR21 | Cosmetics Foundation | Implemented as Passport Cosmetics Foundation with free/core, earned-ready, reserved Founder/Legacy, seasonal-ready docs, premium-preview Obsidian Pulse, safe scene projection, and no store/payments. |
-| PR22 | Trust / Safety / Privacy Controls | Adds public identity abuse controls, takedown paths, and privacy controls. |
+| PR22 | Trust / Safety / Privacy Controls | Implemented as a foundation with public profile report intent, safe report RPC, private report storage, cosmetic abuse policy, takedown/suspension/privacy docs, and tests. |
 | PR23 | Launch Readiness | Production smoke, observability, rollback, policy review, and launch checklist. |
 
 ## Removed Stale Recommendations

@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, and PR21.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, and PR22.
 
 ## Closed Visual/Tooling Line
 
@@ -35,11 +35,13 @@ PR18 adds the Riot Readiness Pack. It documents Riot approval gates, design-only
 
 PR21 adds Passport Cosmetics Foundation. It creates a TryhardNames-owned local cosmetic catalog, visual-only policy, loadout sanitizer, private account equip/preview panel, Obsidian Pulse as a free foundation preview, and safe public scene rendering through `themeId` and `equippedCosmeticIds`. It does not add a store, payments, checkout, purchased inventory, `/cosmetics`, pets/companions runtime, Riot assets, fake proofs, fake ranks, proof boosts, providers, or Riot/Discord OAuth.
 
+PR22 adds Trust / Safety / Privacy Controls Foundation. It adds public profile report intent, safe report submission RPC, private report storage, report category policy, cosmetic abuse policy, blocked/reserved visual identity terms, takedown/suspension/privacy docs, and moderation runbook. It does not add provider launch expansion, `/cosmetics`, store, payments, pets/companions runtime, admin moderation dashboard, public report list, or email notifications.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> approved provider runtime -> Proofs -> Trust -> Launch.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> approved provider runtime -> Proofs -> Launch.
 
 ## Corrected Roadmap
 
@@ -154,10 +156,11 @@ Riot Readiness -> Cosmetics Foundation -> approved provider runtime -> Proofs ->
 
 - Goal: Prepare public identity surfaces for abuse and privacy cases.
 - Why now: Broad public profiles need operational controls.
-- Already exists: Privacy and Riot safety boundaries.
-- Missing: Reports, takedown, suspension, visibility controls, moderation runbook.
-- Non-goals: No provider launch expansion.
-- Exit criteria: Public profile abuse and privacy paths are documented and testable.
+- Already exists: Privacy and Riot safety boundaries, public `/id/:slug`, and Passport Cosmetics Foundation.
+- Implemented by PR22: public profile report action, `submit_public_profile_report`, private report storage, report category policy, cosmetic abuse policy, blocked visual identity terms, takedown/suspension/privacy docs, moderation runbook, source/domain/DB tests.
+- Missing: full moderation dashboard, report queue operations, email notifications, rate limiting, and operational takedown tooling.
+- Non-goals: No provider launch expansion, `/cosmetics`, store, payments, pets/companions runtime, admin dashboard, public report list, or email notification service.
+- Exit criteria: Public profile abuse and privacy paths are documented, testable, and do not weaken public projection safety.
 
 ### PR23 Launch Readiness
 

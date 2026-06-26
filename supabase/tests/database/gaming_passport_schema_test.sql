@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(156);
+select plan(176);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -42,6 +42,7 @@ select has_table('public', 'provider_callback_states', 'provider_callback_states
 select has_table('public', 'provider_token_vault', 'provider_token_vault table exists');
 select has_table('public', 'provider_sync_jobs', 'provider_sync_jobs table exists');
 select has_table('public', 'provider_audit_events', 'provider_audit_events table exists');
+select has_table('public', 'public_profile_reports', 'public_profile_reports table exists');
 
 select ok(
   (select relrowsecurity from pg_class where oid = 'public.gaming_passports'::regclass),
@@ -82,6 +83,10 @@ select ok(
 select ok(
   (select relrowsecurity from pg_class where oid = 'public.provider_audit_events'::regclass),
   'RLS is enabled for provider_audit_events'
+);
+select ok(
+  (select relrowsecurity from pg_class where oid = 'public.public_profile_reports'::regclass),
+  'RLS is enabled for public_profile_reports'
 );
 
 select ok(
@@ -201,6 +206,47 @@ select ok(
     'EXECUTE'
   ),
   'authenticated can execute the public Gaming Passport projection RPC'
+);
+select ok(
+  has_function_privilege(
+    'anon',
+    'public.submit_public_profile_report(text, text, text)',
+    'EXECUTE'
+  ),
+  'anon can execute the public profile report RPC'
+);
+select ok(
+  has_function_privilege(
+    'authenticated',
+    'public.submit_public_profile_report(text, text, text)',
+    'EXECUTE'
+  ),
+  'authenticated can execute the public profile report RPC'
+);
+
+select ok(
+  not has_table_privilege('anon', 'public.public_profile_reports', 'SELECT'),
+  'anon cannot select public profile reports'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.public_profile_reports', 'SELECT'),
+  'authenticated cannot select public profile reports'
+);
+select ok(
+  not has_table_privilege('anon', 'public.public_profile_reports', 'INSERT'),
+  'anon cannot insert public profile reports directly'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.public_profile_reports', 'INSERT'),
+  'authenticated cannot insert public profile reports directly'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.public_profile_reports', 'UPDATE'),
+  'authenticated cannot update public profile reports'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.public_profile_reports', 'DELETE'),
+  'authenticated cannot delete public profile reports'
 );
 
 select ok(
@@ -2130,6 +2176,122 @@ select ok(
   position('price_forbidden' in public.get_public_gaming_passport_projection('player-one')::text) = 0
     and position('priceId' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
   'public projection omits cosmetic pricing and private scene fields'
+);
+
+select is(
+  public.submit_public_profile_report(
+    'player-one',
+    'impersonation',
+    '  pretending   to be me  '
+  )->>'ok',
+  'true',
+  'anon can submit a valid public profile report'
+);
+
+reset role;
+
+select is(
+  (
+    select count(*)::integer
+    from public.public_profile_reports
+    where public_slug = 'player-one'
+      and category = 'impersonation'
+  ),
+  1,
+  'valid public profile report inserts one private report row'
+);
+
+select is(
+  (
+    select details
+    from public.public_profile_reports
+    where public_slug = 'player-one'
+      and category = 'impersonation'
+    limit 1
+  ),
+  'pretending to be me',
+  'public profile report details are trimmed and whitespace-normalized'
+);
+
+set local role anon;
+set local request.jwt.claim.sub = '';
+set local request.jwt.claim.role = 'anon';
+
+select ok(
+  not public.submit_public_profile_report(
+    'player-one',
+    'riot_oauth',
+    'invalid report category'
+  ) ? 'id',
+  'invalid report responses do not expose report ids'
+);
+
+select is(
+  public.submit_public_profile_report(
+    'player-one',
+    'riot_oauth',
+    'invalid report category'
+  )->>'ok',
+  'false',
+  'public profile report RPC rejects invalid categories safely'
+);
+
+select is(
+  public.submit_public_profile_report(
+    'player-one',
+    'other',
+    repeat('x', 801)
+  )->>'ok',
+  'false',
+  'public profile report RPC rejects oversized details safely'
+);
+
+select is(
+  public.submit_public_profile_report(
+    'admin',
+    'other',
+    'reserved slug'
+  )->>'ok',
+  'false',
+  'public profile report RPC rejects reserved slugs safely'
+);
+
+select ok(
+  position('owner_id' in public.submit_public_profile_report('player-one', 'privacy_request', 'privacy request')::text) = 0
+    and position('target_passport_id' in public.submit_public_profile_report('player-one', 'privacy_request', 'privacy request')::text) = 0
+    and position('reporter_owner_id' in public.submit_public_profile_report('player-one', 'privacy_request', 'privacy request')::text) = 0
+    and position('id' in public.submit_public_profile_report('player-one', 'privacy_request', 'privacy request')::text) = 0,
+  'report RPC response does not expose owner, Passport, reporter, or report ids'
+);
+
+set local role authenticated;
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
+set local request.jwt.claim.role = 'authenticated';
+
+select is(
+  public.submit_public_profile_report(
+    'player-one',
+    'privacy_request',
+    'privacy request from owner session'
+  )->>'ok',
+  'true',
+  'authenticated can submit a public profile report'
+);
+
+reset role;
+
+select is(
+  (
+    select reporter_owner_id::text
+    from public.public_profile_reports
+    where public_slug = 'player-one'
+      and category = 'privacy_request'
+      and details = 'privacy request from owner session'
+    order by created_at desc
+    limit 1
+  ),
+  '00000000-0000-0000-0000-000000000001',
+  'authenticated report stores reporter owner id internally only'
 );
 
 reset role;
