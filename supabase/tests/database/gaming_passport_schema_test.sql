@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(91);
+select plan(110);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -160,6 +160,22 @@ select ok(
     'EXECUTE'
   ),
   'authenticated can execute the unpublish command'
+);
+select ok(
+  has_function_privilege(
+    'anon',
+    'public.get_public_gaming_passport_projection(text)',
+    'EXECUTE'
+  ),
+  'anon can execute the public Gaming Passport projection RPC'
+);
+select ok(
+  has_function_privilege(
+    'authenticated',
+    'public.get_public_gaming_passport_projection(text)',
+    'EXECUTE'
+  ),
+  'authenticated can execute the public Gaming Passport projection RPC'
 );
 
 select ok(
@@ -354,6 +370,29 @@ select is(
   $$),
   '23514',
   'published Passport without slug is rejected'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.gaming_passports (
+      id,
+      owner_id,
+      slug,
+      status,
+      publication_consent,
+      published_at
+    )
+    values (
+      '10000000-0000-0000-0000-000000000013',
+      '00000000-0000-0000-0000-000000000006',
+      'no-consent-published',
+      'published',
+      false,
+      now()
+    )
+  $$),
+  '23514',
+  'published Passport without consent is rejected before public serving'
 );
 
 select is(
@@ -1494,6 +1533,252 @@ select is(
   $$),
   '23503',
   'owner cannot feature a proof from another Passport'
+);
+
+reset role;
+
+insert into public.gaming_passports (
+  id,
+  owner_id,
+  slug,
+  status,
+  alias,
+  publication_consent,
+  published_at,
+  unpublished_at,
+  suspended_at
+)
+values
+  (
+    '10000000-0000-0000-0000-000000000020',
+    '00000000-0000-0000-0000-000000000003',
+    'public-draft',
+    'draft_private',
+    'Draft Public Test',
+    false,
+    null,
+    null,
+    null
+  ),
+  (
+    '10000000-0000-0000-0000-000000000021',
+    '00000000-0000-0000-0000-000000000004',
+    'public-unpublished',
+    'unpublished',
+    'Unpublished Public Test',
+    false,
+    null,
+    now(),
+    null
+  ),
+  (
+    '10000000-0000-0000-0000-000000000022',
+    '00000000-0000-0000-0000-000000000005',
+    'public-suspended',
+    'suspended',
+    'Suspended Public Test',
+    false,
+    null,
+    null,
+    now()
+  ),
+  (
+    '10000000-0000-0000-0000-000000000023',
+    '00000000-0000-0000-0000-000000000006',
+    'public-no-provider',
+    'published',
+    'No Provider Public Test',
+    true,
+    now(),
+    null,
+    null
+  );
+
+insert into public.linked_provider_accounts (
+  id,
+  passport_id,
+  owner_id,
+  provider,
+  external_account_id,
+  display_name,
+  status,
+  visibility,
+  verified_at
+)
+values (
+  '20000000-0000-0000-0000-000000000020',
+  '10000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  'discord',
+  'PrivateDiscordPublicProjection',
+  'Hidden Discord',
+  'verified',
+  'private',
+  now()
+);
+
+insert into public.verified_proofs (
+  id,
+  passport_id,
+  owner_id,
+  linked_provider_account_id,
+  provider,
+  game,
+  proof_type,
+  source_key,
+  mode,
+  title,
+  display_value,
+  source,
+  verification_method,
+  status,
+  visibility,
+  normalizer_version,
+  verified_at
+)
+values (
+  '30000000-0000-0000-0000-000000000020',
+  '10000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  '20000000-0000-0000-0000-000000000001',
+  'riot',
+  'league_of_legends',
+  'competitive_rank',
+  'lol:private-public-projection',
+  'solo_duo',
+  'Private Proof',
+  'Hidden Value',
+  'game_adapter',
+  'game_api',
+  'current',
+  'private',
+  'lol-rank-v1',
+  now()
+);
+
+insert into public.passport_featured_proofs (
+  passport_id,
+  owner_id,
+  verified_proof_id,
+  sort_order
+)
+values (
+  '10000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  '30000000-0000-0000-0000-000000000001',
+  0
+);
+
+set local role anon;
+set local request.jwt.claim.sub = '';
+set local request.jwt.claim.role = 'anon';
+
+select is(
+  public.get_public_gaming_passport_projection('admin'),
+  null,
+  'public projection returns null for reserved slug'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('missing-player'),
+  null,
+  'public projection returns null for nonexistent slug'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('public-draft'),
+  null,
+  'public projection returns null for draft Passport'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('public-unpublished'),
+  null,
+  'public projection returns null for unpublished Passport'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('public-suspended'),
+  null,
+  'public projection returns null for suspended Passport'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('public-no-provider'),
+  null,
+  'public projection returns null for published Passport without verified provider'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('player-one')->>'slug',
+  'player-one',
+  'public projection returns a policy-valid published Passport'
+);
+
+select ok(
+  not public.get_public_gaming_passport_projection('player-one') ?| array[
+    'id',
+    'owner_id',
+    'ownerId',
+    'email',
+    'status',
+    'publicationConsent',
+    'bioShort',
+    'featuredSavedNames'
+  ],
+  'public projection omits private Passport fields'
+);
+
+select is(
+  jsonb_array_length(public.get_public_gaming_passport_projection('player-one')->'linkedProviders'),
+  1,
+  'public projection includes only public linked providers'
+);
+
+select ok(
+  position('Hidden Discord' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
+  'public projection omits private linked providers'
+);
+
+select is(
+  (
+    select count(*)::integer
+    from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'linkedProviders') provider
+    where provider ?| array['externalAccountId', 'external_account_id', 'metadata_safe', 'metadataSafe', 'owner_id', 'id']
+  ),
+  0,
+  'public linked provider projection omits internal provider fields'
+);
+
+select is(
+  jsonb_array_length(public.get_public_gaming_passport_projection('player-one')->'featuredProofs'),
+  1,
+  'public projection includes only displayable featured proofs'
+);
+
+select ok(
+  position('Private Proof' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('Hidden Value' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
+  'public projection omits private proofs'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('player-one')->'featuredProofs'->0->>'title',
+  'Solo/Duo Rank',
+  'public projection includes allowlisted proof title'
+);
+
+select ok(
+  position('RiotPUUID-1' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('metadata_safe' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('rawPayload' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('token' in lower(public.get_public_gaming_passport_projection('player-one')::text)) = 0,
+  'public projection omits external IDs, raw metadata, and tokens'
+);
+
+select ok(
+  not public.get_public_gaming_passport_projection('player-one')->'scene' ? 'featuredSavedNames',
+  'public projection omits private Saved Names highlights'
 );
 
 reset role;

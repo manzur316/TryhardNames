@@ -50,6 +50,7 @@ const AccountPage = lazy(() => import('@/pages/AccountPage.jsx'));
 const AuthCallbackPage = lazy(() => import('@/pages/auth/AuthCallbackPage.jsx'));
 const SignInPage = lazy(() => import('@/pages/auth/SignInPage.jsx'));
 const SignUpPage = lazy(() => import('@/pages/auth/SignUpPage.jsx'));
+const PublicGamingPassportPage = lazy(() => import('@/pages/PublicGamingPassportPage.jsx'));
 
 const PageLoader = () => (
   <div className="flex-1 flex items-center justify-center min-h-[50vh]">
@@ -87,6 +88,7 @@ function App() {
                             <Route path="/sign-up" element={<Suspense fallback={<PageLoader />}><SignUpPage /></Suspense>} />
                             <Route path="/auth/callback" element={<Suspense fallback={<PageLoader />}><AuthCallbackPage /></Suspense>} />
                             <Route path="/account" element={<Suspense fallback={<PageLoader />}><AccountPage /></Suspense>} />
+                            <Route path="/id/:slug" element={<Suspense fallback={<PageLoader />}><PublicGamingPassportPage /></Suspense>} />
 
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/contact" element={<ContactPage />} />

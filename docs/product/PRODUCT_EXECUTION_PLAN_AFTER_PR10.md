@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, and PR14.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, and PR15.
 
 ## Closed Visual/Tooling Line
 
@@ -25,11 +25,13 @@ PR13 adds Private Gaming Passport Editor V2, private preview, completion checkli
 
 PR14 adds owner-controlled Publish Runtime Commands for consent, slug claim/update, publish attempt, and unpublish. It enforces the existing publication policy and keeps publish blocked until a verified linked provider exists. It does not add public `/id/:slug`, public profile serving, providers, or provider tokens.
 
+PR15 adds the Public Gaming Passport MVP at `/id/:slug`. It serves only allowlisted public projection data for policy-valid published Passports and returns safe unavailable behavior for drafts, unpublished, suspended, missing-consent, missing-provider, or nonexistent profiles. It does not add provider runtime, Riot/Discord OAuth, proof sync, token storage, or real Riot data.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
+Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
 
 ## Corrected Roadmap
 
@@ -77,7 +79,8 @@ Public Profile -> Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust ->
 - Goal: Serve the public allowlisted Passport view.
 - Why now: It is next after explicit publish commands.
 - Already exists: `buildPublicPassportProjection` and public DTO allowlist.
-- Missing: Route/API, lookup by slug, SEO/share metadata, not-found/private behavior.
+- Implemented by PR15: Public `/id/:slug` route, public projection RPC, public repository, public profile page, SEO/share metadata, and not-found/private-safe behavior.
+- Missing: Provider runtime, verified proof sync runtime, trust/safety controls, and launch readiness.
 - Non-goals: No provider OAuth launch, no hidden private fields.
 - Exit criteria: A published Passport can be viewed at `/id/:slug` and only exposes allowlisted projection data.
 

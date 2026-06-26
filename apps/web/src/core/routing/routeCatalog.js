@@ -59,6 +59,11 @@ export function isAppRegisteredStaticRoute(pathname) {
   return APP_REGISTERED_STATIC_PATH_SET.has(pathname);
 }
 
+export function isAppRegisteredDynamicRoute(pathname) {
+  if (!pathname) return false;
+  return /^\/id\/[a-z0-9][a-z0-9-]{0,30}[a-z0-9]$/.test(pathname);
+}
+
 /**
  * Breadcrumb label for first URL segment when no dedicated hub row applies.
  * Topic hubs use TOPIC_HUB_ROUTES[].label in breadcrumbTrail.

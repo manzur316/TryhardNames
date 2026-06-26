@@ -162,6 +162,35 @@ describe('Gaming Passport publication and serving policies', () => {
     }
   });
 
+  it('does not serve published Passports without consent, canonical slug, or verified provider', () => {
+    assert.equal(
+      buildPublicPassportProjection({
+        passport: passport({ publicationConsent: false }),
+        linkedProviderAccounts: [linkedProvider()],
+        verifiedProofs: [verifiedProof()],
+      }),
+      null
+    );
+
+    assert.equal(
+      buildPublicPassportProjection({
+        passport: passport({ slug: 'Player One' }),
+        linkedProviderAccounts: [linkedProvider()],
+        verifiedProofs: [verifiedProof()],
+      }),
+      null
+    );
+
+    assert.equal(
+      buildPublicPassportProjection({
+        passport: passport(),
+        linkedProviderAccounts: [],
+        verifiedProofs: [verifiedProof()],
+      }),
+      null
+    );
+  });
+
   it('does not serve a published Passport whose only provider was revoked', () => {
     const revoked = linkedProvider({
       status: LINKED_PROVIDER_STATUSES.REVOKED,
@@ -192,6 +221,21 @@ describe('Gaming Passport public DTOs', () => {
     assert.deepEqual(Object.keys(projection), PUBLIC_PASSPORT_ALLOWED_KEYS);
     assert.deepEqual(Object.keys(projection.linkedProviders[0]), PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS);
     assert.deepEqual(Object.keys(projection.featuredProofs[0]), PUBLIC_PROOF_ALLOWED_KEYS);
+  });
+
+  it('does not expose private Saved Names highlights from scene_config', () => {
+    const projection = buildPublicPassportProjection({
+      passport: passport({
+        sceneConfig: {
+          featuredSavedNames: ['PrivateClutch'],
+        },
+      }),
+      linkedProviderAccounts: [linkedProvider()],
+      verifiedProofs: [verifiedProof()],
+    });
+
+    assert.equal(JSON.stringify(projection).includes('PrivateClutch'), false);
+    assert.equal(JSON.stringify(projection).includes('featuredSavedNames'), false);
   });
 
   it('excludes internal IDs, external account IDs, tokens, raw payloads, and arbitrary metadata', () => {
@@ -239,6 +283,27 @@ describe('Gaming Passport provider visibility', () => {
     assert.ok(projection);
     assert.deepEqual(projection.linkedProviders, []);
     assert.equal(projection.featuredProofs.length, 1);
+  });
+
+  it('filters private proofs out of the public projection', () => {
+    const projection = buildPublicPassportProjection({
+      passport: passport(),
+      linkedProviderAccounts: [linkedProvider()],
+      verifiedProofs: [
+        verifiedProof(),
+        verifiedProof({
+          id: 'proof_private',
+          sourceKey: 'lol:private',
+          title: 'Private Proof',
+          displayValue: 'Hidden',
+          visibility: PROOF_VISIBILITY.PRIVATE,
+        }),
+      ],
+    });
+
+    assert.equal(projection.featuredProofs.length, 1);
+    assert.equal(JSON.stringify(projection).includes('Private Proof'), false);
+    assert.equal(JSON.stringify(projection).includes('Hidden'), false);
   });
 
   it('never exposes a revoked provider', () => {

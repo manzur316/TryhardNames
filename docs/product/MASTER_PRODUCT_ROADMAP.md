@@ -21,10 +21,10 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Publish Policy contract decides if an owner can publish.
 - Publish Runtime Commands are implemented and handle consent, status, slug, publish attempt, and unpublish transitions.
 - Public Projection contract exposes only allowlisted fields.
-- Public Profile is the future `/id/:slug` surface and is not implemented.
+- Public Profile `/id/:slug` is implemented as an MVP allowlisted projection surface.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR14
+## Current State After PR15
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -43,8 +43,9 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public Projection contract is already implemented in domain code.
 - Provider-neutral domain/schema is partial, not runtime.
 - Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
+- Public `/id/:slug` profiles are implemented as an MVP allowlisted projection surface.
 
-Riot integration is not live. Discord integration is not live. No Riot API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles are not implemented.
+Riot integration is not live. Discord integration is not live. No Riot API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles do not activate provider runtime or expose private fields.
 
 ## Main Roadmap Blocks
 
@@ -79,9 +80,9 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 
 ### PR15 - Public Gaming Passport MVP `/id/:slug`
 
-- Serve the existing Public Projection contract through a public route/API.
-- Add share metadata and allowlisted public DTOs.
-- Respect owner consent, status, and visibility controls.
+- Implemented by PR15: serve the existing Public Projection contract through `/id/:slug`.
+- Implemented by PR15: add share metadata, public projection RPC, safe unavailable behavior, and allowlisted public DTOs.
+- Implemented by PR15: respect owner consent, status, publish policy, and provider/proof visibility controls.
 - Do not expose private draft data.
 
 ### PR16 - Provider Runtime Foundation

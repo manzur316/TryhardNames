@@ -126,7 +126,7 @@ export default function PassportPublishControls({ passport, session, isLoading =
         return;
       }
       onPassportChange?.(result.passport);
-      setMessage('Publish command completed. Public serving still waits for a later PR.');
+      setMessage('Publish command completed. Public serving uses the allowlisted /id/:slug projection.');
       await loadCommandState();
     } catch {
       setError('Publish command failed safely.');
@@ -163,7 +163,7 @@ export default function PassportPublishControls({ passport, session, isLoading =
           </p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-950 dark:text-white">Publish Runtime Commands</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700 dark:text-slate-200">
-            No public profile route exists yet. Publishing commands are being prepared; public <code>/id/:slug</code> comes in a later PR.
+            Public <code>/id/:slug</code> serving exists, but it only returns a profile after owner commands and publish policy requirements are satisfied.
           </p>
         </div>
         <span className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-white/15 dark:bg-black/30 dark:text-slate-200">

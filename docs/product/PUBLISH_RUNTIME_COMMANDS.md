@@ -48,9 +48,6 @@ Slug changes are blocked while a Passport is `published` until public serving an
 
 ## Non-Goals
 
-- No public `/id/:slug`.
-- No public profile route or API.
-- No public projection serving endpoint.
 - No Riot OAuth.
 - No Riot API calls.
 - No Discord OAuth.
@@ -61,4 +58,4 @@ Slug changes are blocked while a Passport is `published` until public serving an
 
 ## Next
 
-PR15 should add the public Gaming Passport MVP at `/id/:slug` using only the allowlisted public projection and only after explicit owner commands plus policy requirements are satisfied.
+PR15 adds the public Gaming Passport MVP at `/id/:slug` using only the allowlisted public projection and only after explicit owner commands plus policy requirements are satisfied. Provider runtime remains the next major product foundation.
