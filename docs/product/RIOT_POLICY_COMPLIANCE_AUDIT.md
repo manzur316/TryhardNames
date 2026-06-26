@@ -5,8 +5,7 @@ Reviewed on: June 24, 2026
 ## Scope
 
 This audit covers the current TryhardNames Gaming Passport surface before submitting a Riot Developer Portal request.
-It is documentation and analysis only. It does not implement Riot OAuth, Discord OAuth, Riot API calls, public
-profiles, provider sync, keys, secrets, migrations, RLS changes, or production configuration changes.
+It is documentation and analysis only. The repo now has a public `/id/:slug` MVP and provider-neutral PR16 foundation scaffolding, but it does not implement Riot OAuth, Discord OAuth, Riot API calls, provider activation, provider sync, keys, secrets, remote Supabase changes, or production configuration changes.
 
 The audited product scope is TryhardNames Gaming Passport:
 
@@ -157,15 +156,14 @@ This separation should be repeated in the Developer Portal wording.
 
 ### Public profile consent
 
-No public Passport profile route is implemented. `/id/:slug` exists only as a future documented target. The current
-account page shows a private draft and not-published state. This is aligned with explicit consent and privacy controls.
+The public `/id/:slug` MVP exists after PR15. It serves only allowlisted projection data for policy-valid published Passports and returns safe unavailable behavior for private, draft, unpublished, suspended, missing-provider, or nonexistent profiles. PR16 does not expand that public projection.
 
-Required before public profiles:
+Required before provider-backed public profile expansion:
 
-- implement a server-side publish command;
+- keep publish commands server-side and explicit;
 - require consent, slug, non-suspended status, and verified provider policy;
 - keep public projection allowlisted and minimal;
-- avoid indexing `/id/:slug` until the public profile policy is complete.
+- re-audit indexing, proof fields, and provider visibility before broad launch.
 
 ### SEO/indexing
 
@@ -222,7 +220,7 @@ hidden-player identification, match-history dumping, or public profiles without 
   nonfunctional until approved implementation work begins.
 - The legal notice is visible on `/gaming-passport`; future Riot-data public pages will need equivalent visibility.
 - The privacy policy should be updated before any Riot data is collected or displayed.
-- Provider token storage, unlink/revoke, data retention, and deletion workflows are planned but not implemented.
+- Provider-neutral foundation now includes local intent/callback/sync/audit scaffolding and a token vault placeholder, but provider-specific unlink/revoke execution, data retention, deletion workflows, and real token storage usage are still not live.
 - Future monetization must keep Riot data/assets out of paywalls and should be re-reviewed with Riot if unclear.
 
 ## Go / No-Go

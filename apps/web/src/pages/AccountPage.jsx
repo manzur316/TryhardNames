@@ -7,6 +7,7 @@ import { getSupabaseRuntime } from '@/lib/supabase/client.js';
 import SeoHead from '@/seo/SeoHead.jsx';
 import PrivatePassportEditor from '@/gaming-passport/components/PrivatePassportEditor.jsx';
 import PassportPublishControls from '@/gaming-passport/components/PassportPublishControls.jsx';
+import ProviderRuntimeFoundationPanel from '@/gaming-passport/components/ProviderRuntimeFoundationPanel.jsx';
 import {
   DEFAULT_SCENE_CONFIG,
   getOrCreatePrivateDraft,
@@ -163,6 +164,8 @@ export default function AccountPage() {
             isLoading={isDraftLoading}
             onPassportChange={setPassport}
           />
+
+          <ProviderRuntimeFoundationPanel />
 
           <AccountHuntingGuide />
         </main>

@@ -24,12 +24,13 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
   it('moves current roadmap beyond the stale PR9 state', () => {
     assert.doesNotMatch(currentRoadmap, /reflects `main` after PR9/i);
     assert.doesNotMatch(currentRoadmap, /Current State After PR9/i);
-    assert.match(currentRoadmap, /Current Status After PR15/);
+    assert.match(currentRoadmap, /Current Status After PR16/);
     assert.match(currentRoadmap, /PR11\.1/);
     assert.match(currentRoadmap, /PR12/);
     assert.match(currentRoadmap, /PR13/);
     assert.match(currentRoadmap, /PR14/);
     assert.match(currentRoadmap, /PR15/);
+    assert.match(currentRoadmap, /PR16/);
     assert.match(currentRoadmap, /fix\(generator\): align feature generator cards/);
     assert.match(currentRoadmap, /feat\(account\): add dashboard v2 and unify saved names/);
   });
@@ -40,6 +41,7 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
     assert.match(masterRoadmap, /Public Projection contract/i);
     assert.match(masterRoadmap, /Public Profile `\/id\/:slug` is implemented as an MVP allowlisted projection surface/i);
     assert.match(combinedDocs, /Publish Policy and Public Projection already exist as contracts/i);
+    assert.match(combinedDocs, /Provider Runtime Foundation is provider-neutral and not a provider launch/i);
   });
 
   it('adds the roadmap status matrix with required areas', () => {

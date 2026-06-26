@@ -83,11 +83,12 @@ describe('Publish Runtime Commands', () => {
   });
 
   it('updates roadmap docs and auth test wiring', () => {
-    assert.match(currentRoadmap, /Current Status After PR15/);
+    assert.match(currentRoadmap, /Current Status After PR16/);
     assert.match(currentRoadmap, /Publish Runtime Commands exist/);
     assert.match(currentRoadmap, /Public Gaming Passport MVP `\/id\/:slug` exists/);
     assert.match(executionPlan, /PR14 Publish Runtime Commands[\s\S]*Implemented by PR14/);
     assert.match(executionPlan, /PR15 Public Gaming Passport MVP `\/id\/:slug`[\s\S]*Implemented by PR15/);
+    assert.match(executionPlan, /PR16 Provider Runtime Foundation[\s\S]*Implemented by PR16/);
     assert.match(packageJson.scripts['test:auth'], /publish-runtime-commands\.test\.js/);
   });
 });

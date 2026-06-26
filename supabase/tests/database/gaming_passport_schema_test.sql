@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(110);
+select plan(152);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -37,6 +37,11 @@ select has_table('public', 'linked_provider_accounts', 'linked_provider_accounts
 select has_table('public', 'verified_proofs', 'verified_proofs table exists');
 select has_table('public', 'passport_featured_proofs', 'passport_featured_proofs table exists');
 select has_table('public', 'passport_visibility_settings', 'passport_visibility_settings table exists');
+select has_table('public', 'provider_connection_intents', 'provider_connection_intents table exists');
+select has_table('public', 'provider_callback_states', 'provider_callback_states table exists');
+select has_table('public', 'provider_token_vault', 'provider_token_vault table exists');
+select has_table('public', 'provider_sync_jobs', 'provider_sync_jobs table exists');
+select has_table('public', 'provider_audit_events', 'provider_audit_events table exists');
 
 select ok(
   (select relrowsecurity from pg_class where oid = 'public.gaming_passports'::regclass),
@@ -57,6 +62,26 @@ select ok(
 select ok(
   (select relrowsecurity from pg_class where oid = 'public.passport_visibility_settings'::regclass),
   'RLS is enabled for passport_visibility_settings'
+);
+select ok(
+  (select relrowsecurity from pg_class where oid = 'public.provider_connection_intents'::regclass),
+  'RLS is enabled for provider_connection_intents'
+);
+select ok(
+  (select relrowsecurity from pg_class where oid = 'public.provider_callback_states'::regclass),
+  'RLS is enabled for provider_callback_states'
+);
+select ok(
+  (select relrowsecurity from pg_class where oid = 'public.provider_token_vault'::regclass),
+  'RLS is enabled for provider_token_vault'
+);
+select ok(
+  (select relrowsecurity from pg_class where oid = 'public.provider_sync_jobs'::regclass),
+  'RLS is enabled for provider_sync_jobs'
+);
+select ok(
+  (select relrowsecurity from pg_class where oid = 'public.provider_audit_events'::regclass),
+  'RLS is enabled for provider_audit_events'
 );
 
 select ok(
@@ -179,6 +204,87 @@ select ok(
 );
 
 select ok(
+  has_table_privilege('authenticated', 'public.provider_connection_intents', 'SELECT'),
+  'authenticated can select owned provider connection intents through RLS'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_connection_intents', 'INSERT'),
+  'authenticated can create provider connection intent scaffolds'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_connection_intents', 'UPDATE'),
+  'authenticated can consume owned provider connection intent scaffolds'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_connection_intents', 'DELETE'),
+  'authenticated cannot delete provider connection intents'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_callback_states', 'SELECT'),
+  'authenticated can select owned provider callback states through RLS'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_callback_states', 'INSERT'),
+  'authenticated can create provider callback state scaffolds'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_callback_states', 'UPDATE'),
+  'authenticated can consume owned provider callback state scaffolds'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_callback_states', 'DELETE'),
+  'authenticated cannot delete provider callback states'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_token_vault', 'SELECT'),
+  'authenticated cannot select provider_token_vault directly'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_token_vault', 'INSERT'),
+  'authenticated cannot insert provider_token_vault rows directly'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_token_vault', 'UPDATE'),
+  'authenticated cannot update provider_token_vault rows directly'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_token_vault', 'DELETE'),
+  'authenticated cannot delete provider_token_vault rows directly'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_sync_jobs', 'SELECT'),
+  'authenticated can select owned provider sync job scaffolds through RLS'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_sync_jobs', 'INSERT'),
+  'authenticated can create provider sync job scaffolds'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_sync_jobs', 'UPDATE'),
+  'authenticated can update owned provider sync job scaffolds'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_sync_jobs', 'DELETE'),
+  'authenticated cannot delete provider sync jobs'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_audit_events', 'SELECT'),
+  'authenticated can select owned provider audit events through RLS'
+);
+select ok(
+  has_table_privilege('authenticated', 'public.provider_audit_events', 'INSERT'),
+  'authenticated can append provider audit events'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_audit_events', 'UPDATE'),
+  'authenticated cannot update provider audit events'
+);
+select ok(
+  not has_table_privilege('authenticated', 'public.provider_audit_events', 'DELETE'),
+  'authenticated cannot delete provider audit events'
+);
+
+select ok(
   exists (
     select 1
     from pg_constraint
@@ -273,6 +379,48 @@ insert into public.passport_visibility_settings (passport_id, owner_id)
 values
   ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
   ('10000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002');
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_connection_intents (
+      owner_id,
+      passport_id,
+      provider,
+      state_hash,
+      expires_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'steam',
+      'unsupported-provider-state',
+      now() + interval '10 minutes'
+    )
+  $$),
+  '23514',
+  'provider runtime foundation rejects unsupported provider ids'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_token_vault (
+      owner_id,
+      passport_id,
+      provider,
+      token_status,
+      token_ciphertext
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'riot',
+      'placeholder',
+      'ciphertext-not-allowed-in-pr16'
+    )
+  $$),
+  '23514',
+  'provider_token_vault cannot store token ciphertext in PR16'
+);
 
 select is(
   pg_temp.test_sqlstate($$
@@ -1098,6 +1246,16 @@ select is(
 select is(
   (
     select count(*)::integer
+    from public.provider_connection_intents
+    where passport_id = '10000000-0000-0000-0000-000000000001'
+  ),
+  0,
+  'owner B cannot read owner A provider connection intents'
+);
+
+select is(
+  (
+    select count(*)::integer
     from public.verified_proofs
     where passport_id = '10000000-0000-0000-0000-000000000001'
   ),
@@ -1128,6 +1286,15 @@ select is(
   'anon cannot read tables directly'
 );
 
+select is(
+  pg_temp.test_sqlstate($$
+    select count(*)::integer
+    from public.provider_connection_intents
+  $$),
+  '42501',
+  'anon cannot read provider runtime foundation tables directly'
+);
+
 set local role authenticated;
 set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
 set local request.jwt.claim.role = 'authenticated';
@@ -1140,6 +1307,146 @@ select is(
   ),
   1,
   'owner can read their provider accounts'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_connection_intents (
+      owner_id,
+      passport_id,
+      provider,
+      state_hash,
+      expires_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'riot',
+      'owner-a-provider-intent-state',
+      now() + interval '10 minutes'
+    )
+  $$),
+  '00000',
+  'owner can insert own provider connection intent scaffold'
+);
+
+select is(
+  pg_temp.test_row_count($$
+    update public.provider_connection_intents
+    set status = 'consumed',
+        consumed_at = now()
+    where owner_id = '00000000-0000-0000-0000-000000000001'
+      and passport_id = '10000000-0000-0000-0000-000000000001'
+      and state_hash = 'owner-a-provider-intent-state'
+  $$),
+  1,
+  'owner can consume own provider connection intent scaffold'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_callback_states (
+      owner_id,
+      passport_id,
+      provider,
+      state_hash,
+      expires_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'riot',
+      'owner-a-provider-callback-state',
+      now() + interval '10 minutes'
+    )
+  $$),
+  '00000',
+  'owner can insert own provider callback state scaffold'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_callback_states (
+      owner_id,
+      passport_id,
+      provider,
+      state_hash,
+      expires_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'riot',
+      'owner-a-provider-callback-state',
+      now() + interval '10 minutes'
+    )
+  $$),
+  '23505',
+  'provider callback state hash cannot be replayed'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_sync_jobs (
+      owner_id,
+      passport_id,
+      provider,
+      status,
+      reason
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'riot',
+      'blocked',
+      'provider_runtime_not_live'
+    )
+  $$),
+  '00000',
+  'owner can insert blocked provider sync job scaffold'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_audit_events (
+      owner_id,
+      passport_id,
+      provider,
+      event_type,
+      event_status,
+      metadata
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'riot',
+      'sync_job_created',
+      'recorded',
+      '{"reason":"provider_runtime_not_live"}'::jsonb
+    )
+  $$),
+  '00000',
+  'owner can append provider audit event'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    update public.provider_audit_events
+    set event_status = 'changed'
+    where owner_id = '00000000-0000-0000-0000-000000000001'
+      and passport_id = '10000000-0000-0000-0000-000000000001'
+  $$),
+  '42501',
+  'owner cannot update provider audit events'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    select count(*)::integer
+    from public.provider_token_vault
+  $$),
+  '42501',
+  'authenticated owner cannot select provider_token_vault directly'
 );
 
 select is(

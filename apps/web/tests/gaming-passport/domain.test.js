@@ -9,18 +9,33 @@ import {
   PROOF_SOURCES,
   PROOF_TYPES,
   PROOF_VISIBILITY,
+  PROVIDER_AUDIT_EVENT_TYPES,
+  PROVIDER_CALLBACK_STATE_STATUSES,
+  PROVIDER_CONNECTION_INTENT_STATUSES,
+  PROVIDER_RUNTIME_ERRORS,
+  PROVIDER_SYNC_JOB_STATUSES,
+  PROVIDER_TOKEN_STATUSES,
   PROVIDER_VISIBILITY,
   PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS,
   PUBLIC_PASSPORT_ALLOWED_KEYS,
   PUBLIC_PROOF_ALLOWED_KEYS,
   VERIFIED_PROOF_STATUSES,
   VERIFICATION_METHODS,
+  assertNoProviderRuntimeActivation,
+  buildProviderRuntimeAuditEvent,
+  buildProviderSyncJob,
+  buildProviderTokenVaultEnvelope,
+  buildRevokeCommandResult,
+  buildUnlinkCommandResult,
   buildPublicPassportProjection,
   buildPublishCommandResult,
   buildPublishReadiness,
   buildUnpublishCommandResult,
   canClaimSlug,
+  canCompleteProviderLink,
   canDisplayVerifiedProof,
+  canRevokeProvider,
+  canStartProviderLink,
   canPublishPassport,
   canServePublishedPassport,
   canSetPublicationConsent,
@@ -28,11 +43,17 @@ import {
   canTransitionPassportStatus,
   canTransitionVerifiedProofStatus,
   canUnpublishPassport,
+  canUnlinkProvider,
+  createProviderConnectionIntent,
   getFeaturedVerifiedProofs,
   getPublishability,
   isCanonicalPublicSlug,
   isPassportPublishable,
+  sanitizeProviderPrivateMetadata,
+  sanitizeProviderPublicMetadata,
   normalizePublicSlug,
+  validateProviderCallbackState,
+  validateProviderConnectionIntent,
   validateGlobalProviderOwnership,
   validateVerifiedProofContract,
 } from '../../src/gaming-passport/domain/index.js';
@@ -679,5 +700,219 @@ describe('Gaming Passport legacy proof expectations', () => {
     });
 
     assert.equal(featured.length, 6);
+  });
+});
+
+describe('Gaming Passport provider runtime foundation contracts', () => {
+  it('recognizes Discord and Riot as contract providers while keeping runtime inactive', () => {
+    for (const provider of [LINKED_PROVIDER_IDS.DISCORD, LINKED_PROVIDER_IDS.RIOT]) {
+      const result = canStartProviderLink({
+        passport: passport({ status: PASSPORT_STATUSES.UNPUBLISHED }),
+        parentAuth: parentAuth(),
+        provider,
+      });
+
+      assert.equal(result.ok, false);
+      assert.equal(result.active, false);
+      assert.equal(result.blocked, true);
+      assert.ok(result.errors.includes(PROVIDER_RUNTIME_ERRORS.PROVIDER_RUNTIME_NOT_LIVE));
+    }
+  });
+
+  it('rejects unsupported provider ids and requires owner-scoped Parent Auth context', () => {
+    const unsupported = createProviderConnectionIntent({
+      ownerId: 'owner_1',
+      passportId: 'gp_1',
+      provider: 'steam',
+      stateHash: 'provider-foundation-state-hash',
+      expiresAt: '2026-06-23T18:10:00.000Z',
+      now,
+    });
+
+    assert.equal(unsupported.ok, false);
+    assert.ok(unsupported.errors.includes(PROVIDER_RUNTIME_ERRORS.UNSUPPORTED_PROVIDER));
+
+    const missingOwner = canStartProviderLink({
+      passport: passport(),
+      parentAuth: { authenticated: true, ownerId: 'someone_else' },
+      provider: LINKED_PROVIDER_IDS.DISCORD,
+    });
+
+    assert.ok(missingOwner.errors.includes(PROVIDER_RUNTIME_ERRORS.OWNER));
+  });
+
+  it('validates connection intents and callback states against replay and expiry', () => {
+    const intent = createProviderConnectionIntent({
+      ownerId: 'owner_1',
+      passportId: 'gp_1',
+      provider: LINKED_PROVIDER_IDS.DISCORD,
+      stateHash: 'discord-foundation-state-hash',
+      createdAt: now,
+      expiresAt: '2026-06-23T18:10:00.000Z',
+      now,
+    });
+
+    assert.equal(intent.ok, true);
+    assert.equal(intent.intent.status, PROVIDER_CONNECTION_INTENT_STATUSES.PENDING);
+
+    const expired = validateProviderConnectionIntent({
+      ...intent.intent,
+      expiresAt: '2026-06-23T17:59:00.000Z',
+    }, { now });
+    assert.equal(expired.ok, false);
+    assert.ok(expired.errors.includes(PROVIDER_RUNTIME_ERRORS.STATE_EXPIRED));
+
+    const consumed = validateProviderCallbackState({
+      ownerId: 'owner_1',
+      passportId: 'gp_1',
+      provider: LINKED_PROVIDER_IDS.DISCORD,
+      status: PROVIDER_CALLBACK_STATE_STATUSES.CONSUMED,
+      stateHash: 'discord-foundation-callback-hash',
+      expiresAt: '2026-06-23T18:10:00.000Z',
+      consumedAt: now,
+    }, { now });
+
+    assert.equal(consumed.ok, false);
+    assert.ok(consumed.errors.includes(PROVIDER_RUNTIME_ERRORS.STATE_CONSUMED));
+  });
+
+  it('blocks callback completion because provider runtime is not live', () => {
+    const result = canCompleteProviderLink({
+      callbackState: {
+        ownerId: 'owner_1',
+        passportId: 'gp_1',
+        provider: LINKED_PROVIDER_IDS.RIOT,
+        status: PROVIDER_CALLBACK_STATE_STATUSES.PENDING,
+        stateHash: 'riot-foundation-callback-hash',
+        expiresAt: '2026-06-23T18:10:00.000Z',
+      },
+      now,
+    });
+
+    assert.equal(result.ok, false);
+    assert.equal(result.blocked, true);
+    assert.ok(result.errors.includes(PROVIDER_RUNTIME_ERRORS.PROVIDER_RUNTIME_NOT_LIVE));
+  });
+
+  it('models unlink and revoke as non-public-serving transitions', () => {
+    const account = linkedProvider({ status: LINKED_PROVIDER_STATUSES.VERIFIED });
+
+    assert.equal(canUnlinkProvider({
+      passport: passport(),
+      parentAuth: parentAuth(),
+      provider: account.provider,
+      account,
+    }).ok, true);
+
+    const revoke = buildRevokeCommandResult({
+      passport: passport(),
+      parentAuth: parentAuth(),
+      provider: account.provider,
+      account,
+    });
+
+    assert.equal(revoke.ok, true);
+    assert.equal(revoke.nextStatus, LINKED_PROVIDER_STATUSES.REVOKED);
+    assert.equal(revoke.publicServingAllowed, false);
+
+    const pendingFromVerified = canTransitionLinkedProviderStatus(
+      LINKED_PROVIDER_STATUSES.VERIFIED,
+      LINKED_PROVIDER_STATUSES.PENDING
+    );
+    assert.equal(pendingFromVerified, false);
+
+    assert.equal(canRevokeProvider({
+      passport: passport({ ownerId: 'owner_2' }),
+      parentAuth: parentAuth(),
+      provider: account.provider,
+      account,
+    }).ok, false);
+  });
+
+  it('builds token envelopes without exposing raw token fields', () => {
+    const envelope = buildProviderTokenVaultEnvelope({
+      ownerId: 'owner_1',
+      passportId: 'gp_1',
+      provider: LINKED_PROVIDER_IDS.RIOT,
+      tokenStatus: PROVIDER_TOKEN_STATUSES.PLACEHOLDER,
+      tokenVersion: 1,
+      rawToken: 'secret-token',
+      refreshToken: 'secret-refresh',
+      tokenCiphertext: 'ciphertext-placeholder',
+    });
+
+    assert.equal(envelope.tokenStatus, PROVIDER_TOKEN_STATUSES.PLACEHOLDER);
+    assert.equal(envelope.hasTokenCiphertext, true);
+    assert.equal(Object.hasOwn(envelope, 'rawToken'), false);
+    assert.equal(Object.hasOwn(envelope, 'refreshToken'), false);
+    assert.equal(Object.hasOwn(envelope, 'tokenCiphertext'), false);
+  });
+
+  it('sanitizes provider metadata and strips forbidden fields', () => {
+    const publicMetadata = sanitizeProviderPublicMetadata({
+      region: 'NA',
+      accessToken: 'secret',
+      externalAccountId: 'external',
+      nested: { safe: 'not allowed publicly' },
+    });
+
+    assert.deepEqual(publicMetadata, { region: 'NA' });
+
+    const privateMetadata = sanitizeProviderPrivateMetadata({
+      displayName: 'Future Player',
+      rawPayload: { hidden: true },
+      nested: {
+        refreshToken: 'secret',
+        safe: 'kept',
+      },
+    });
+
+    assert.equal(privateMetadata.displayName, 'Future Player');
+    assert.equal(privateMetadata.rawPayload, undefined);
+    assert.deepEqual(privateMetadata.nested, { safe: 'kept' });
+  });
+
+  it('builds audit events and sync jobs without external provider side effects', () => {
+    const audit = buildProviderRuntimeAuditEvent({
+      ownerId: 'owner_1',
+      passportId: 'gp_1',
+      provider: LINKED_PROVIDER_IDS.DISCORD,
+      eventType: PROVIDER_AUDIT_EVENT_TYPES.SYNC_JOB_CREATED,
+      metadata: { reason: 'foundation' },
+      createdAt: now,
+    });
+
+    assert.equal(audit.eventType, PROVIDER_AUDIT_EVENT_TYPES.SYNC_JOB_CREATED);
+    assert.equal(audit.metadata.reason, 'foundation');
+
+    const syncJob = buildProviderSyncJob({
+      ownerId: 'owner_1',
+      passportId: 'gp_1',
+      provider: LINKED_PROVIDER_IDS.DISCORD,
+      status: PROVIDER_SYNC_JOB_STATUSES.QUEUED,
+      scheduledFor: now,
+    });
+
+    assert.equal(syncJob.shouldCallProvider, false);
+    assert.equal(syncJob.status, PROVIDER_SYNC_JOB_STATUSES.QUEUED);
+  });
+
+  it('detects accidental provider runtime activation patterns', () => {
+    assert.equal(assertNoProviderRuntimeActivation({ label: 'Provider linking is not available' }).ok, true);
+
+    const activation = assertNoProviderRuntimeActivation({
+      action: 'Continue with Riot',
+      url: 'https://example.test/oauth/authorize',
+    });
+
+    assert.equal(activation.ok, false);
+    assert.ok(activation.errors.length >= 1);
+
+    assert.equal(buildUnlinkCommandResult({
+      passport: passport(),
+      parentAuth: parentAuth(),
+      provider: LINKED_PROVIDER_IDS.DISCORD,
+      account: linkedProvider({ provider: LINKED_PROVIDER_IDS.DISCORD }),
+    }).blocked, false);
   });
 });

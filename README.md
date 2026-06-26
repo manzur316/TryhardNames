@@ -77,6 +77,7 @@ Current support docs:
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
+- `docs/product/PROVIDER_RUNTIME_FOUNDATION.md`
 - `docs/product/PUBLIC_GAMING_PASSPORT_MVP.md`
 - `docs/product/DECISION_LOG.md`
 - `docs/product/UI_THEME_SURFACE_CONTRACT.md`
@@ -159,6 +160,7 @@ Completed:
 - Private Gaming Passport Editor V2.
 - Publish Runtime Commands.
 - Public Gaming Passport MVP `/id/:slug`.
+- Provider Runtime Foundation contracts, local schema, repository scaffolding, audit model, and private account status panel.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -171,11 +173,11 @@ Completed:
 Waiting:
 
 - Riot confirmation/review.
-- Provider runtime foundation.
+- First-provider decision and readiness pack.
 
 Next product blocks:
 
-- PR16 Provider Runtime Foundation.
+- PR17 First Provider Decision + Readiness Pack.
 
 After provider foundation and approvals:
 
