@@ -1,18 +1,18 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status After PR17
+## Current Status After PR18
 
-This document reflects the PR17 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, and PR17, `docs(provider): add first provider decision readiness pack`.
+This document reflects the PR18 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, and PR18, `docs(riot): add readiness pack`.
 
-TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, and a first-provider decision record.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, a first-provider decision record, and a Riot Readiness Pack.
 
-Riot integration is not live. Discord integration is not live. No public Riot data is live. The public `/id/:slug` route serves only policy-valid published Passports and does not activate provider runtime. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime. PR17 found no explicit Riot approval evidence in the repo, so PR18 is selected as Riot Readiness, not Riot Runtime.
+Riot integration is not live. Discord integration is not live. No public Riot data is live. The public `/id/:slug` route serves only policy-valid published Passports and does not activate provider runtime. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime. PR18 implements Riot readiness only. Riot Runtime remains blocked until explicit approval exists.
 
 Gaming Passport remains a private-first, verifiable, shareable gaming resume. It is not a tracker, OP.GG alternative, custom MMR/ELO product, match-history dump, live-game advantage tool, hidden-player de-anonymization surface, or alternative ranking system.
 
-## PR History Through PR17
+## PR History Through PR18
 
-The repo history is summarized through PR17.
+The repo history is summarized through PR18.
 
 | PR | Title | Status | Outcome | Runtime impact | Non-goals |
 | --- | --- | --- | --- | --- | --- |
@@ -41,7 +41,8 @@ The repo history is summarized through PR17.
 | PR14 | `feat(passport): add publish runtime commands` | Merged | Added owner-controlled publication consent, slug claim/update, publish attempt, unpublish, command repository, private `/account` controls, and SQL RPC command functions. | Publish Runtime Commands exist and enforce the existing publication policy. Publish remains blocked until a verified linked provider exists. | No public `/id/:slug`, public profile route/API, provider runtime, Riot/Discord OAuth, provider token storage, secrets, or remote Supabase changes. |
 | PR15 | `feat(passport): add public gaming passport profile` | Merged | Added public `/id/:slug`, public projection RPC, public profile UI, not-found/private-safe behavior, SEO/share metadata, tests, and docs. | Policy-valid published Passports can be served as allowlisted public projections. | No provider runtime, Riot/Discord OAuth, token storage, proof sync runtime, real Riot data, or private field exposure. |
 | PR16 | `feat(passport): add provider runtime foundation` | Merged | Added provider runtime contracts, connection intent/callback/sync/audit scaffolding, token vault placeholder, owner-only RLS, repository functions, and a private `/account` foundation panel. | Provider Runtime Foundation exists without activating any provider. | No Discord/Riot OAuth, provider API calls, provider-specific adapter runtime, real token storage usage, proof sync runtime, or public provider linking UI. |
-| PR17 | `docs(provider): add first provider decision readiness pack` | In progress | Adds the first-provider decision record, provider readiness checklist, and PR18 Riot Readiness scope. | Documentation/tests only. PR18 is selected as Riot Readiness because Riot approval is not evidenced. | No OAuth launch, provider runtime activation, API calls, secrets, env vars, routes, migrations, or UI changes. |
+| PR17 | `docs(provider): add first provider decision readiness pack` | Merged | Adds the first-provider decision record, provider readiness checklist, and PR18 Riot Readiness scope. | Documentation/tests only. PR18 is selected as Riot Readiness because Riot approval is not evidenced. | No OAuth launch, provider runtime activation, API calls, secrets, env vars, routes, migrations, or UI changes. |
+| PR18 | `docs(riot): add readiness pack` | In progress | Adds Riot readiness pack, design-only RSO callback plan, token-retention requirements, adapter contract review, public projection review criteria, portal checklist, and source guards. | Documentation/tests only. Riot Runtime remains blocked. | No Riot OAuth, RSO redirect, callback route, Riot API calls, client secret, production key, env vars, provider activation, adapters, proof sync, public Riot data, routes, migrations, or remote service changes. |
 
 ## Live Surfaces
 
@@ -80,7 +81,9 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Provider Runtime Foundation contracts and scaffolding exist.
 - Private `/account` Provider Runtime Foundation panel exists and is read-only.
 - First Provider Decision + Readiness Pack exists.
-- PR18 is selected as Riot Readiness.
+- Riot Readiness Pack exists.
+- RSO callback design exists as design-only documentation.
+- Riot provider adapter contract review exists as design-only documentation.
 - Account Hunting Guide exists inside the account experience.
 - Favorite/star is the canonical saved-name UX.
 - Saved Names Supabase persistence exists through `public.saved_names`.
@@ -122,6 +125,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 ## Gated
 
 - Riot runtime remains gated by Riot Developer Portal approval and next steps. PR17 found no explicit Riot approval evidence in the repo.
+- PR18 readiness does not change the approval gate. PR19 is the earliest possible Riot runtime PR, only if approval exists.
 - Provider activation is gated by first-provider decision, provider-specific implementation, secure token handling, unlink/revoke operations, sync runtime, rate limits, audit, and privacy controls.
 - Public profile expansion remains gated by provider runtime, verified proof sync, trust/safety, and privacy controls.
 - Cosmetics are gated by product review and Riot/data monetization boundaries.
@@ -135,7 +139,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 | PR14 | Publish Runtime Commands | Adds consent, slug, publish, unpublish, and status transitions. |
 | PR16 | Provider Runtime Foundation | Adds provider runtime contracts, token vault placeholder, unlink/revoke command contracts, sync scaffolding, and audit boundaries without activating a specific provider. |
 | PR17 | First Provider Decision + Readiness Pack | Selects PR18 as Riot Readiness based on repo evidence and risk. |
-| PR18 | Riot Readiness Pack | Prepares Riot approval-safe design and checklists without Riot OAuth, Riot API calls, RSO runtime, secrets, or provider activation. |
+| PR18 | Riot Readiness Pack | Implemented as readiness-only docs/tests. Prepares Riot approval-safe design and checklists without Riot OAuth, Riot API calls, RSO runtime, secrets, or provider activation. |
 | PR19 | Riot Provider Runtime | Gated by Riot approval. Implements Riot OAuth/runtime only after explicit approval and provider foundation. |
 | PR20 | League of Legends Adapter | Normalizes LoL proofs under RiotProvider after Riot runtime is approved and implemented. |
 | PR21 | Cosmetics Foundation | Adds TryhardNames-owned visual upgrades without monetizing Riot data/assets. |

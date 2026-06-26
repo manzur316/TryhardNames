@@ -24,7 +24,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public Profile `/id/:slug` is implemented as an MVP allowlisted projection surface.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR17
+## Current State After PR18
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -45,7 +45,8 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
 - Public `/id/:slug` profiles are implemented as an MVP allowlisted projection surface.
 - First Provider Decision + Readiness Pack is implemented.
-- PR18 is selected as Riot Readiness because explicit Riot approval is not evidenced in the repo.
+- Riot Readiness Pack is implemented as docs/tests-only readiness work.
+- Riot Runtime remains blocked because explicit Riot approval is not evidenced in the repo.
 
 Riot integration is not live. Discord integration is not live. No Riot API calls are active. No Discord API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles do not expose provider private fields, token fields, raw metadata, or owner identifiers.
 
@@ -104,14 +105,15 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 
 ### PR18 - Riot Readiness Pack
 
-- Execute the selected readiness path.
-- Prepare Riot compliance, RSO callback design, token retention plan, unlink/revoke UX design, provider adapter contract review, portal checklist, and smoke plan.
-- Do not add Riot OAuth, Riot API calls, RSO runtime, secrets, env vars, provider activation, or public Riot data.
+- Implemented by PR18: execute the selected readiness path.
+- Implemented by PR18: document Riot compliance gates, RSO callback design, token retention plan, unlink/revoke UX requirements, provider adapter contract review, portal checklist, public projection review, and smoke plan.
+- Implemented by PR18: source/docs guard tests block accidental OAuth/API/provider activation.
+- Do not add Riot OAuth, Riot API calls, RSO runtime, secrets, env vars, provider activation, adapters, callback routes, or public Riot data.
 - Discord Pilot remains an alternate future path only if product direction explicitly changes.
 
 ### PR19 - Riot Provider Runtime
 
-- Gated by Riot approval.
+- Pending and gated by Riot approval.
 - Implement Riot OAuth/runtime only after approved scopes, callbacks, products, and credentials are clear.
 - Add unlink/revoke and server-side token storage.
 - Do not use Riot as Parent Auth.

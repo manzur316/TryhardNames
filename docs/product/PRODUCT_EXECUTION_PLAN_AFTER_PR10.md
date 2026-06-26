@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, and PR17.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, and PR18.
 
 ## Closed Visual/Tooling Line
 
@@ -30,6 +30,8 @@ PR15 adds the Public Gaming Passport MVP at `/id/:slug`. It serves only allowlis
 PR16 adds provider-neutral runtime foundation: provider contracts, connection intents, callback state contracts, token vault placeholder, blocked sync jobs, audit events, owner-only RLS, repository scaffolding, and a private account status panel. It does not activate Discord, Riot, OAuth, provider APIs, proof sync, real token storage usage, or public provider linking.
 
 PR17 adds the First Provider Decision + Readiness Pack. It found no explicit Riot approval evidence in the repo and selects PR18 as Riot Readiness, not Riot Runtime. It does not activate OAuth, providers, APIs, secrets, routes, migrations, or runtime UI.
+
+PR18 adds the Riot Readiness Pack. It documents Riot approval gates, design-only RSO callback behavior, token-retention requirements, unlink/revoke UX requirements, Riot provider adapter contract review, public projection criteria, manual Riot Portal checklist, future smoke plan, and source guards. It does not activate Riot OAuth, Riot API calls, RSO runtime, callback routes, secrets, env vars, provider activation, routes, migrations, or public Riot data.
 
 ## Current Principle
 
@@ -106,14 +108,15 @@ Riot Readiness -> approved provider runtime -> Proofs -> Cosmetics -> Trust -> L
 - Implemented by PR17: approval-aware decision record, provider readiness checklist, PR18 Riot Readiness scope, smoke checklist, provider-specific risk review, and docs/source tests.
 - Missing: Explicit Riot approval and any provider runtime activation.
 - Non-goals: No OAuth launch.
-- Exit criteria: PR18 is selected as Riot Readiness because Riot approval is not evidenced in the repo.
+- Exit criteria: PR18 was selected as Riot Readiness because Riot approval is not evidenced in the repo.
 
 ### PR18 Riot Readiness Pack
 
 - Goal: Prepare Riot approval-safe readiness artifacts without runtime activation.
 - Why now: PR17 selected Riot Readiness because Riot runtime is still blocked by missing explicit approval evidence.
 - Already exists: Provider foundation from PR16 and decision from PR17.
-- Missing: Riot compliance refresh, RSO callback design, token retention plan, revoke/unlink UX design, adapter contract review, portal checklist, and smoke plan.
+- Implemented by PR18: Riot readiness pack, RSO callback design doc, token retention/encryption plan, revoke/unlink UX requirements, Riot adapter contract review, public projection review criteria, manual Riot Portal checklist, future smoke plan, and source/docs guard tests.
+- Missing: Explicit Riot approval and any provider runtime activation.
 - Non-goals: No Riot OAuth, Riot API calls, RSO redirect, callback route, secrets, env vars, provider activation, public Riot data, or proof sync.
 - Exit criteria: Riot readiness is complete while runtime remains blocked until approval.
 
@@ -121,7 +124,7 @@ Riot Readiness -> approved provider runtime -> Proofs -> Cosmetics -> Trust -> L
 
 - Goal: Implement Riot runtime after approval.
 - Why now: Riot remains gated until approval is explicit.
-- Already exists: Riot site verification and review docs.
+- Already exists: Riot site verification, review docs, Provider Runtime Foundation, First Provider Decision, and Riot Readiness Pack.
 - Missing: RSO, callback, server-side tokens, RiotProvider, unlink/revoke, privacy copy.
 - Non-goals: No Riot as Parent Auth, no Riot data paywall, no tracker behavior.
 - Exit criteria: Riot account linking works under approved scopes and can be revoked.

@@ -70,7 +70,7 @@ PR16 does not expand the public `/id/:slug` projection. Public profiles remain a
 ## Next Roadmap Blocks
 
 - PR17: First Provider Decision + Readiness Pack selects PR18 as Riot Readiness because explicit Riot approval is not evidenced in the repo.
-- PR18: Riot Readiness Pack, without Riot OAuth, Riot API calls, RSO runtime, secrets, or provider activation.
+- PR18: Riot Readiness Pack documents approval gates, design-only RSO callback behavior, token-retention requirements, unlink/revoke UX, adapter contract review, portal checklist, and smoke plan without Riot OAuth, Riot API calls, RSO runtime, secrets, env vars, routes, or provider activation.
 - PR19+: Riot runtime only if approved.
 
 ## Non-Goals

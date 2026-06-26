@@ -84,3 +84,13 @@ This checklist applies before any linked provider becomes live.
 ## Go / No-Go Gate
 
 Provider runtime can move forward only when each checklist section is either complete or has an explicitly accepted owner decision. If approval is missing, the only safe next step is readiness work.
+
+## PR18 Riot Readiness Application
+
+PR18 applies this checklist to Riot with readiness-only artifacts:
+
+- `RIOT_READINESS_PACK.md`;
+- `RIOT_RSO_CALLBACK_DESIGN.md`;
+- `RIOT_PROVIDER_ADAPTER_CONTRACT_REVIEW.md`.
+
+Riot Runtime remains blocked after PR18 until explicit approval, approved scopes, approved callback URLs, token storage acceptance, unlink/revoke acceptance, privacy copy acceptance, and public projection review are complete.

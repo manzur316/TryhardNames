@@ -24,7 +24,7 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
   it('moves current roadmap beyond the stale PR9 state', () => {
     assert.doesNotMatch(currentRoadmap, /reflects `main` after PR9/i);
     assert.doesNotMatch(currentRoadmap, /Current State After PR9/i);
-    assert.match(currentRoadmap, /Current Status After PR17/);
+    assert.match(currentRoadmap, /Current Status After PR18/);
     assert.match(currentRoadmap, /PR11\.1/);
     assert.match(currentRoadmap, /PR12/);
     assert.match(currentRoadmap, /PR13/);
@@ -32,6 +32,7 @@ describe('roadmap reconciliation after PR10.8 and PR11.1', () => {
     assert.match(currentRoadmap, /PR15/);
     assert.match(currentRoadmap, /PR16/);
     assert.match(currentRoadmap, /PR17/);
+    assert.match(currentRoadmap, /PR18/);
     assert.match(currentRoadmap, /fix\(generator\): align feature generator cards/);
     assert.match(currentRoadmap, /feat\(account\): add dashboard v2 and unify saved names/);
   });

@@ -4,6 +4,8 @@ PR17 selects PR18 as Riot Readiness because Riot approval is not evidenced in th
 
 PR18 is not Riot runtime.
 
+PR18 is now implemented as readiness-only docs/tests work. It does not change runtime, routes, migrations, provider activation, secrets, env vars, or remote services.
+
 ## Allowed In PR18
 
 - Riot readiness docs.
@@ -49,6 +51,14 @@ PR18 should leave the repo with:
 - privacy copy requirements;
 - public projection review criteria;
 - smoke checklist for a future approved runtime PR.
+
+Implemented PR18 outputs:
+
+- `RIOT_READINESS_PACK.md`;
+- `RIOT_RSO_CALLBACK_DESIGN.md`;
+- `RIOT_PROVIDER_ADAPTER_CONTRACT_REVIEW.md`;
+- roadmap and decision-log updates;
+- source/docs guard test coverage.
 
 ## Exit Criteria
 
