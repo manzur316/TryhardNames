@@ -245,3 +245,30 @@ Decision:
 - Discord Pilot remains an alternate future path, not the selected PR18 path.
 
 PR18 should remain readiness-only: compliance refresh, RSO callback design, token retention plan, revoke/unlink UX design, provider adapter contract review, portal checklist, and smoke plan. It must not add Riot OAuth, Riot API calls, RSO runtime, secrets, env vars, provider activation, or public Riot data.
+
+## PR18 Riot Readiness Update
+
+PR18 implements the readiness-only path selected by PR17.
+
+- Riot Runtime: blocked.
+- PR18 is not Riot runtime.
+- No OAuth launch.
+- No Riot API calls.
+- No secrets/env vars.
+- No callback route.
+- No RSO redirect.
+- No provider activation.
+- No public Riot data.
+
+PR18 adds:
+
+- Riot approval checklist.
+- Design-only RSO callback plan.
+- Token retention and encryption requirements.
+- Unlink/revoke UX requirements.
+- RiotProvider and LeagueOfLegendsAdapter contract review.
+- Public projection review criteria.
+- Manual Riot Portal checklist for a human owner.
+- PR19 preconditions.
+
+PR19 remains the earliest possible Riot runtime PR, only if explicit approval exists.

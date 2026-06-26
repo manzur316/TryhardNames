@@ -81,6 +81,9 @@ Current support docs:
 - `docs/product/FIRST_PROVIDER_DECISION_READINESS.md`
 - `docs/product/PROVIDER_READINESS_CHECKLIST.md`
 - `docs/product/PR18_RIOT_READINESS_SCOPE.md`
+- `docs/product/RIOT_READINESS_PACK.md`
+- `docs/product/RIOT_RSO_CALLBACK_DESIGN.md`
+- `docs/product/RIOT_PROVIDER_ADAPTER_CONTRACT_REVIEW.md`
 - `docs/product/PUBLIC_GAMING_PASSPORT_MVP.md`
 - `docs/product/DECISION_LOG.md`
 - `docs/product/UI_THEME_SURFACE_CONTRACT.md`
@@ -165,6 +168,7 @@ Completed:
 - Public Gaming Passport MVP `/id/:slug`.
 - Provider Runtime Foundation contracts, local schema, repository scaffolding, audit model, and private account status panel.
 - First Provider Decision + Readiness Pack selecting PR18 as Riot Readiness.
+- Riot Readiness Pack with approval gates, design-only RSO callback plan, token-retention requirements, and adapter contract review.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -177,17 +181,15 @@ Completed:
 Waiting:
 
 - Riot confirmation/review.
-- PR18 Riot Readiness Pack.
 
 Next product block:
 
-- PR18 Riot Readiness Pack, without Riot OAuth, Riot API calls, or RSO runtime.
+- PR19 Riot Provider Runtime, only if explicit Riot approval exists.
 
 After provider foundation and approvals:
 
-- Riot readiness, based on repo evidence that Riot approval is still pending.
+- Riot runtime only after explicit approval evidence exists.
 - Discord pilot remains an alternate future path only if product direction explicitly changes.
-- RSO design.
 - Server-side token storage.
 - Unlink/revoke.
 - RiotProvider runtime.

@@ -91,6 +91,18 @@ Allowed:
 - smoke test plan;
 - no-config source guard tests.
 
+## PR18 Readiness Output
+
+PR18 implements the selected readiness path as docs/tests-only work:
+
+- `RIOT_READINESS_PACK.md`;
+- `RIOT_RSO_CALLBACK_DESIGN.md`;
+- `RIOT_PROVIDER_ADAPTER_CONTRACT_REVIEW.md`;
+- roadmap and decision log updates;
+- source/docs guards that keep OAuth/API/provider activation out of runtime.
+
+Riot Runtime remains blocked after PR18. PR19 is the earliest possible Riot runtime PR, only if explicit approval exists.
+
 Forbidden:
 
 - Riot OAuth button;
