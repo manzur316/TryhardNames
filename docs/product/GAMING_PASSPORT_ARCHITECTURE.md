@@ -6,7 +6,7 @@ It is not a tracker, an OP.GG alternative, a parallel ranking, a custom MMR/ELO 
 
 ## Current Implementation Note
 
-This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, PR3 added a local-only schema foundation, PR14 implemented publish runtime commands, PR15 implemented the public `/id/:slug` MVP with allowlisted projection data, and PR16 added provider-neutral runtime foundation scaffolding. Provider activation, proof sync, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
+This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, PR3 added a local-only schema foundation, PR14 implemented publish runtime commands, PR15 implemented the public `/id/:slug` MVP with allowlisted projection data, PR16 added provider-neutral runtime foundation scaffolding, and PR21 added Passport Cosmetics Foundation. Provider activation, proof sync, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
 
 Google is Parent Auth only. Riot and Discord remain future linked provider accounts. League of Legends remains a GameAdapter inside RiotProvider, not a standalone provider.
 
@@ -424,6 +424,10 @@ Cosmetics belong to TryhardNames:
 - future 3D figures.
 
 Cosmetics do not monetize ranks, third-party data, or third-party assets.
+
+PR21 implements Passport Cosmetics Foundation with a local TryhardNames-owned catalog, visual-only policy, loadout sanitizer, private account equip/preview panel, Obsidian Pulse as a free foundation preview, and safe public scene projection through `themeId` and `equippedCosmeticIds`.
+
+PR21 does not implement a store, checkout, payments, purchased inventory, `/cosmetics`, pets/companions runtime, 3D animation runtime, Riot assets, fake proofs, fake ranks, proof boosts, or provider activation.
 
 Do not create a global Tryhard Score in this foundation. Future cosmetic unlock logic may consider depth in one game, multi-game diversity, proof count, and verified ownership as separate dimensions. Rules such as 3/5/10 are future configuration, not fixed domain constants.
 

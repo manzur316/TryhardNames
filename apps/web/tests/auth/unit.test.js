@@ -32,6 +32,17 @@ import {
 import { buildPublicPassportProjection } from '../../src/gaming-passport/domain/index.js';
 import { getAccountNavigationState } from '../../src/core/routing/accountNavigation.js';
 
+const DEFAULT_COSMETIC_LOADOUT = {
+  themeId: 'theme.clean-dark',
+  equippedCosmeticIds: [
+    'border.default-frame',
+    'background.soft-shadow',
+    'nameplate.minimal-tag',
+    'effect.none',
+    'badge.starter',
+  ],
+};
+
 describe('Parent Auth configuration', () => {
   it('keeps missing Supabase config from breaking imports or creating a client', () => {
     const config = readSupabaseConfig({});
@@ -361,12 +372,18 @@ describe('Gaming Passport draft repository', () => {
     assert.equal(passport.ownerId, row.owner_id);
     assert.equal(passport.avatarUrl, row.avatar_url);
     assert.equal(passport.bioShort, row.bio_short);
-    assert.deepEqual(passport.sceneConfig, row.scene_config);
+    assert.deepEqual(passport.sceneConfig, {
+      ...row.scene_config,
+      ...DEFAULT_COSMETIC_LOADOUT,
+    });
     assert.deepEqual(mapPassportToPresentationForm(passport), {
       alias: row.alias,
       avatarUrl: row.avatar_url,
       bioShort: row.bio_short,
-      sceneConfig: row.scene_config,
+      sceneConfig: {
+        ...row.scene_config,
+        ...DEFAULT_COSMETIC_LOADOUT,
+      },
     });
   });
 
@@ -400,6 +417,7 @@ describe('Gaming Passport draft repository', () => {
       layout: 'compact',
       accent: 'emerald',
       density: 'dense',
+      ...DEFAULT_COSMETIC_LOADOUT,
       featuredSavedNames: [],
     });
   });
@@ -500,6 +518,7 @@ describe('Gaming Passport draft repository', () => {
       layout: 'compact',
       accent: 'emerald',
       density: 'dense',
+      ...DEFAULT_COSMETIC_LOADOUT,
       featuredSavedNames: ['Clutch Star', 'Anchor'],
     });
 
@@ -509,6 +528,7 @@ describe('Gaming Passport draft repository', () => {
       layout: 'classic',
       accent: 'cyan',
       density: 'comfortable',
+      ...DEFAULT_COSMETIC_LOADOUT,
       featuredSavedNames: [],
     });
   });

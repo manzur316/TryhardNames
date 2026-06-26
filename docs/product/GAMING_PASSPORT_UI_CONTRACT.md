@@ -6,7 +6,7 @@ This document defines target surfaces only. It does not implement routes, React 
 
 This document began as a target UI contract. Since PR4 and PR6, `/account` and `/gaming-passport` have been implemented. `/account` is currently a protected Parent Auth private-draft surface, and `/gaming-passport` is a public review landing page. PR15 implements `/id/:slug` as an MVP public projection route; the public profile contract below applies to that route.
 
-Riot OAuth, Discord OAuth, linked provider management, and provider proof sync are still not implemented. Publishing commands and MVP public profile serving are implemented, but provider runtime remains pending.
+Riot OAuth, Discord OAuth, linked provider management, and provider proof sync are still not implemented. Publishing commands, MVP public profile serving, and Passport Cosmetics Foundation are implemented, but provider runtime remains pending.
 
 ## Surfaces
 
@@ -185,6 +185,10 @@ Cosmetic rules:
 - cosmetics do not imply rank;
 - cosmetics do not monetize third-party assets;
 - cosmetics do not invent achievements.
+
+PR21 adds the private Passport Cosmetics panel and safe public cosmetic rendering. The UI may render TryhardNames-owned visual cosmetics from `themeId` and `equippedCosmeticIds`, but it must not render inventory, prices, purchase history, locked entitlements, fake proof badges, fake rank frames, Riot assets, or provider-private data.
+
+The future cosmetics showcase route is `/cosmetics`, not `/store`, and it is not implemented in PR21.
 
 ## Route Contract
 

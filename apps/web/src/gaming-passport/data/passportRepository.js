@@ -1,3 +1,8 @@
+import {
+  buildDefaultCosmeticLoadout,
+  sanitizeCosmeticLoadout,
+} from '../cosmetics/cosmeticLoadout.js';
+
 export const PASSPORT_SELECT_COLUMNS = [
   'id',
   'owner_id',
@@ -19,6 +24,7 @@ export const DEFAULT_SCENE_CONFIG = Object.freeze({
   layout: 'classic',
   accent: 'cyan',
   density: 'comfortable',
+  ...buildDefaultCosmeticLoadout(),
   featuredSavedNames: Object.freeze([]),
 });
 
@@ -180,6 +186,7 @@ export function sanitizeSceneConfig(sceneConfig = {}) {
     layout: pickOption(source.layout, SCENE_CONFIG_OPTIONS.layout, DEFAULT_SCENE_CONFIG.layout),
     accent: pickOption(source.accent, SCENE_CONFIG_OPTIONS.accent, DEFAULT_SCENE_CONFIG.accent),
     density: pickOption(source.density, SCENE_CONFIG_OPTIONS.density, DEFAULT_SCENE_CONFIG.density),
+    ...sanitizeCosmeticLoadout(source),
     featuredSavedNames: sanitizeFeaturedSavedNames(source.featuredSavedNames),
   };
 }

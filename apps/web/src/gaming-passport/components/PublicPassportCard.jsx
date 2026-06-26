@@ -1,9 +1,11 @@
 import React from 'react';
 import { BadgeCheck, CalendarDays, Shield } from 'lucide-react';
+import { getCosmeticPresentationTokens } from '@/gaming-passport/cosmetics/index.js';
 
 export default function PublicPassportCard({ passport }) {
   const displayName = passport.alias || passport.slug;
   const initial = displayName.slice(0, 1).toUpperCase();
+  const cosmeticTokens = getCosmeticPresentationTokens(passport.scene);
 
   return (
     <section className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:px-8">
@@ -20,7 +22,7 @@ export default function PublicPassportCard({ passport }) {
           )}
         </div>
 
-        <div className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center">
+        <div className={`${cosmeticTokens.shellClassName} mt-6 flex flex-col gap-5 p-5 sm:flex-row sm:items-center`}>
           <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 text-4xl font-black text-slate-500 dark:border-white/10 dark:bg-white/10 dark:text-slate-300">
             {passport.avatarUrl ? (
               <img src={passport.avatarUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -29,10 +31,12 @@ export default function PublicPassportCard({ passport }) {
             )}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">tryhardnames.com/id/{passport.slug}</p>
-            <h1 className="mt-2 break-words text-4xl font-black tracking-normal text-slate-950 dark:text-white sm:text-5xl">
-              {displayName}
-            </h1>
+            <p className={`text-sm font-semibold ${cosmeticTokens.bodyClassName}`}>tryhardnames.com/id/{passport.slug}</p>
+            <div className={`mt-2 inline-flex ${cosmeticTokens.nameplateClassName}`}>
+              <h1 className={`break-words text-4xl font-black tracking-normal sm:text-5xl ${cosmeticTokens.headingClassName}`}>
+                {displayName}
+              </h1>
+            </div>
           </div>
         </div>
       </div>

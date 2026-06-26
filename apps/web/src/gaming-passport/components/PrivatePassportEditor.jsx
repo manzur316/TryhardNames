@@ -5,11 +5,14 @@ import {
   SCENE_CONFIG_OPTIONS,
   sanitizeFeaturedSavedNames,
 } from '@/gaming-passport/data/passportRepository.js';
+import { sanitizeCosmeticLoadout } from '@/gaming-passport/cosmetics/index.js';
 import PassportCompletionChecklist from './PassportCompletionChecklist.jsx';
+import PassportCosmeticsPanel from './PassportCosmeticsPanel.jsx';
 import PrivatePassportPreview from './PrivatePassportPreview.jsx';
 import SavedNameHighlightsPicker from './SavedNameHighlightsPicker.jsx';
 
 export default function PrivatePassportEditor({
+  passport,
   form,
   validation,
   isDraftLoading,
@@ -113,6 +116,18 @@ export default function PrivatePassportEditor({
           </div>
 
           <SceneConfigControls sceneConfig={sceneConfig} updateScene={updateScene} disabled={isDraftLoading || isSaving} />
+
+          <PassportCosmeticsPanel
+            sceneConfig={sceneConfig}
+            passport={{
+              ...passport,
+              alias: form.alias,
+              bioShort: form.bioShort,
+            }}
+            savedNames={savedNames}
+            disabled={isDraftLoading || isSaving}
+            onChange={(next) => updateScene(next)}
+          />
 
           <SavedNameHighlightsPicker
             savedNames={savedNames}
@@ -220,10 +235,13 @@ function SelectControl({ id, label, value, options, onChange, disabled }) {
 }
 
 function normalizeSceneForEditor(sceneConfig = {}) {
+  const cosmeticLoadout = sanitizeCosmeticLoadout(sceneConfig);
   return {
     layout: sceneConfig.layout || DEFAULT_SCENE_CONFIG.layout,
     accent: sceneConfig.accent || DEFAULT_SCENE_CONFIG.accent,
     density: sceneConfig.density || DEFAULT_SCENE_CONFIG.density,
+    themeId: cosmeticLoadout.themeId,
+    equippedCosmeticIds: cosmeticLoadout.equippedCosmeticIds,
     featuredSavedNames: sanitizeFeaturedSavedNames(sceneConfig.featuredSavedNames),
   };
 }

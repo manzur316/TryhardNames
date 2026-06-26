@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(152);
+select plan(156);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -1976,6 +1976,26 @@ values (
   0
 );
 
+update public.gaming_passports
+set scene_config = jsonb_build_object(
+  'themeId', 'theme.obsidian-pulse',
+  'equippedCosmeticIds', jsonb_build_array(
+    'border.pulse-frame',
+    'background.obsidian-aura',
+    'nameplate.pulse-nameplate',
+    'effect.soft-glow',
+    'badge.starter',
+    'badge.profile-complete',
+    'badge.saved-names-collector',
+    'badge.slug-claimed',
+    'unknown.cosmetic',
+    'badge.founder-reserved'
+  ),
+  'featuredSavedNames', jsonb_build_array('PrivateClutch'),
+  'priceId', 'price_forbidden'
+)
+where id = '10000000-0000-0000-0000-000000000001';
+
 set local role anon;
 set local request.jwt.claim.sub = '';
 set local request.jwt.claim.role = 'anon';
@@ -2020,6 +2040,24 @@ select is(
   public.get_public_gaming_passport_projection('player-one')->>'slug',
   'player-one',
   'public projection returns a policy-valid published Passport'
+);
+
+select is(
+  public.get_public_gaming_passport_projection('player-one')->'scene'->>'themeId',
+  'theme.obsidian-pulse',
+  'public projection returns allowlisted cosmetic theme id'
+);
+
+select is(
+  jsonb_array_length(public.get_public_gaming_passport_projection('player-one')->'scene'->'equippedCosmeticIds'),
+  7,
+  'public projection returns allowlisted equipped cosmetic ids with badge cap'
+);
+
+select ok(
+  position('unknown.cosmetic' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('badge.founder-reserved' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
+  'public projection strips unknown and reserved cosmetic ids'
 );
 
 select ok(
@@ -2086,6 +2124,12 @@ select ok(
 select ok(
   not public.get_public_gaming_passport_projection('player-one')->'scene' ? 'featuredSavedNames',
   'public projection omits private Saved Names highlights'
+);
+
+select ok(
+  position('price_forbidden' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('priceId' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
+  'public projection omits cosmetic pricing and private scene fields'
 );
 
 reset role;

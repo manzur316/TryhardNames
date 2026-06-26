@@ -144,6 +144,7 @@ export default function AccountPage() {
           <GamingPassportDraftSummary />
 
           <PrivatePassportEditor
+            passport={passport}
             form={form}
             validation={validation}
             isDraftLoading={isDraftLoading}

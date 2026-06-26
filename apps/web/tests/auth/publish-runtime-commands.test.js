@@ -83,7 +83,7 @@ describe('Publish Runtime Commands', () => {
   });
 
   it('updates roadmap docs and auth test wiring', () => {
-    assert.match(currentRoadmap, /Current Status After PR18/);
+    assert.match(currentRoadmap, /Current Status After PR21/);
     assert.match(currentRoadmap, /Publish Runtime Commands exist/);
     assert.match(currentRoadmap, /Public Gaming Passport MVP `\/id\/:slug` exists/);
     assert.match(executionPlan, /PR14 Publish Runtime Commands[\s\S]*Implemented by PR14/);

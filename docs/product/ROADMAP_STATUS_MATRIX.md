@@ -1,6 +1,6 @@
 # Roadmap Status Matrix
 
-This matrix reflects the PR18 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, and PR18.
+This matrix reflects the PR21 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, and PR21.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -30,7 +30,8 @@ This matrix reflects the PR18 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 | Riot readiness | done | `FIRST_PROVIDER_DECISION_READINESS.md`, `PR18_RIOT_READINESS_SCOPE.md`, `PROVIDER_READINESS_CHECKLIST.md`, `RIOT_READINESS_PACK.md`, `RIOT_RSO_CALLBACK_DESIGN.md`, `RIOT_PROVIDER_ADAPTER_CONTRACT_REVIEW.md` | Approval-aware decision, readiness gates, smoke checklist, PR18 scope, compliance gates, design-only RSO callback plan, token plan, unlink/revoke requirements, adapter review, portal checklist | Explicit Riot approval and runtime implementation | PR19+ | PR18 is not Riot runtime. No OAuth launch. No Riot API calls. No secrets/env vars. |
 | Riot runtime | gated | Riot review docs, verification file, PR17 decision, PR18 readiness pack | Site verification, safe copy, readiness decision, readiness pack | Explicit Riot approval, RSO, callbacks, tokens, RiotProvider | PR19+ | Riot runtime remains gated by Riot approval. PR19 is earliest possible runtime only if approval exists. |
 | League of Legends adapter | pending | Roadmap docs only | Conceptual GameAdapter placement | Riot-backed LoL proof normalization | PR20 | No tracker, OP.GG clone, live-game advice, or hidden-player inference. |
-| Cosmetics | pending | Roadmap docs only | Product direction | Cosmetic schema/runtime/storefront rules | PR21 | No Riot data/assets monetization. |
+| Passport Cosmetics Foundation | done | `PASSPORT_COSMETICS_FOUNDATION.md`, cosmetic catalog/loadout/policy modules, `PassportCosmeticsPanel.jsx` | TryhardNames-owned local catalog, Obsidian Pulse free foundation preview, private equip/preview, safe public scene projection | Future `/cosmetics` showcase, entitlement hardening, optional inventory/payment review, pets/companions runtime | PR22+ | Cosmetics can style identity; cosmetics cannot manufacture proof. No store, payments, Riot assets, fake proofs, fake ranks, or proof boosts. |
+| Cosmetics monetization / inventory | pending | `PASSPORT_COSMETICS_FOUNDATION.md` | Explicit non-goals and future boundaries | Store/payment/inventory model, if ever approved | Future | No Stripe, MercadoPago, checkout, purchased inventory, loot boxes, gacha, or marketplace in PR21. |
 | Trust/Safety | pending | Roadmap docs only | Policy boundaries | Reports, takedown, suspensions, abuse controls | PR22 | Required before broad public profiles. |
 | Launch readiness | pending | Roadmap docs only | Validation command habit | Production smoke, observability, rollback, privacy final review | PR23 | No launch until gates are satisfied. |
 
@@ -44,4 +45,5 @@ This matrix reflects the PR18 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 - Provider-neutral foundation is partial-runtime, but provider activation remains pending.
 - PR18 implements Riot Readiness because explicit Riot approval is not evidenced in the repo.
 - PR19 is the earliest possible Riot runtime PR, only if explicit approval exists.
+- PR21 implements Passport Cosmetics Foundation without store, payments, provider data, fake proofs, or fake ranks.
 - Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.

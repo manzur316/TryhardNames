@@ -75,7 +75,7 @@ describe('Private Gaming Passport Editor V2', () => {
   });
 
   it('updates roadmap docs and is wired into auth tests', () => {
-    assert.match(currentRoadmap, /Current Status After PR18/);
+    assert.match(currentRoadmap, /Current Status After PR21/);
     assert.match(currentRoadmap, /Private Gaming Passport Editor V2 exists/);
     assert.match(executionPlan, /PR13 Private Gaming Passport Editor V2[\s\S]*Implemented by PR13/);
     assert.match(executionPlan, /PR14 Publish Runtime Commands[\s\S]*Implemented by PR14/);

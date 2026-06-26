@@ -84,6 +84,7 @@ Current support docs:
 - `docs/product/RIOT_READINESS_PACK.md`
 - `docs/product/RIOT_RSO_CALLBACK_DESIGN.md`
 - `docs/product/RIOT_PROVIDER_ADAPTER_CONTRACT_REVIEW.md`
+- `docs/product/PASSPORT_COSMETICS_FOUNDATION.md`
 - `docs/product/PUBLIC_GAMING_PASSPORT_MVP.md`
 - `docs/product/DECISION_LOG.md`
 - `docs/product/UI_THEME_SURFACE_CONTRACT.md`
@@ -169,6 +170,7 @@ Completed:
 - Provider Runtime Foundation contracts, local schema, repository scaffolding, audit model, and private account status panel.
 - First Provider Decision + Readiness Pack selecting PR18 as Riot Readiness.
 - Riot Readiness Pack with approval gates, design-only RSO callback plan, token-retention requirements, and adapter contract review.
+- Passport Cosmetics Foundation with TryhardNames-owned visual-only cosmetics and Obsidian Pulse as a free foundation preview.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -195,6 +197,6 @@ After provider foundation and approvals:
 - RiotProvider runtime.
 - LeagueOfLegendsAdapter.
 - Proof sync.
-- Cosmetics, trust/safety, privacy controls, and launch readiness.
+- Trust/safety, privacy controls, future `/cosmetics` showcase, and launch readiness.
 
 No dates are promised. Riot runtime work should wait until approval and next steps are clear.

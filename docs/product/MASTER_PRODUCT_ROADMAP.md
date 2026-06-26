@@ -24,7 +24,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public Profile `/id/:slug` is implemented as an MVP allowlisted projection surface.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR18
+## Current State After PR21
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -46,6 +46,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public `/id/:slug` profiles are implemented as an MVP allowlisted projection surface.
 - First Provider Decision + Readiness Pack is implemented.
 - Riot Readiness Pack is implemented as docs/tests-only readiness work.
+- Passport Cosmetics Foundation is implemented with a local TryhardNames-owned catalog, private account equip flow, Obsidian Pulse free foundation preview, safe scene projection, and safe public visual rendering.
 - Riot Runtime remains blocked because explicit Riot approval is not evidenced in the repo.
 
 Riot integration is not live. Discord integration is not live. No Riot API calls are active. No Discord API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles do not expose provider private fields, token fields, raw metadata, or owner identifiers.
@@ -126,9 +127,12 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 
 ### PR21 - Cosmetics Foundation
 
-- Add TryhardNames-owned visual themes, borders, and animations.
-- Avoid Riot assets and Riot data monetization.
-- Keep cosmetics separate from proof truth.
+- Implemented by PR21: add a local TryhardNames-owned cosmetic catalog with core/free, earned-ready, founder/legacy-ready, seasonal-ready, and premium-preview categories.
+- Implemented by PR21: add Obsidian Pulse as a free equipable foundation preview.
+- Implemented by PR21: add private `/account` cosmetic selection and preview through `scene_config.themeId` and `scene_config.equippedCosmeticIds`.
+- Implemented by PR21: safely render allowlisted scene cosmetics on public `/id/:slug` profiles without exposing inventory, prices, purchases, locked cosmetics, private data, or proof truth mutations.
+- Future work: `/cosmetics` showcase route, inventory/entitlement hardening, monetization review, and pets/companions 3D. These are not implemented by PR21.
+- Avoid Riot assets, official rank-like cosmetics, Riot data monetization, fake proofs, fake ranks, proof boosts, stores, checkout, payments, loot boxes, and user-uploaded cosmetics.
 
 ### PR22 - Trust / Safety / Privacy Controls
 
