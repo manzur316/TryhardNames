@@ -232,3 +232,16 @@ public Gaming Passport landing, Parent Auth private draft, and planned Riot link
 
 No code/copy changes are required before submission based on this audit. Do not implement Riot OAuth, request live Riot
 data, or claim production Riot credentials until Riot approves the product and provides the appropriate next steps.
+
+## PR17 Provider Decision Update
+
+PR17 reviewed repo evidence and did not find explicit Riot approval, approved scopes, callback URLs, product credentials, production Riot keys, or a product-owner instruction to start Riot runtime.
+
+Decision:
+
+- Riot Runtime: blocked.
+- PR18 = Riot Readiness.
+- No OAuth launch.
+- Discord Pilot remains an alternate future path, not the selected PR18 path.
+
+PR18 should remain readiness-only: compliance refresh, RSO callback design, token retention plan, revoke/unlink UX design, provider adapter contract review, portal checklist, and smoke plan. It must not add Riot OAuth, Riot API calls, RSO runtime, secrets, env vars, provider activation, or public Riot data.

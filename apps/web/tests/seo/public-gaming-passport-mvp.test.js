@@ -100,7 +100,7 @@ describe('Public Gaming Passport MVP', () => {
   });
 
   it('updates roadmap docs for PR15 and keeps provider activation pending', () => {
-    assert.match(currentRoadmap, /Current Status After PR16/);
+    assert.match(currentRoadmap, /Current Status After PR17/);
     assert.match(currentRoadmap, /Public Gaming Passport MVP/);
     assert.match(executionPlan, /PR15 Public Gaming Passport MVP `\/id\/:slug`[\s\S]*Implemented by PR15/);
     assert.match(statusMatrix, /Public Profile `\/id\/:slug` \| done/);

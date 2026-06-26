@@ -1,6 +1,6 @@
 # Roadmap Status Matrix
 
-This matrix reflects the PR16 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, and PR16.
+This matrix reflects the PR17 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, and PR17.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,7 @@ This matrix reflects the PR16 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 | Saved Names Persistence | done | `savedNamesRepository.js`, `20260625170000_saved_names.sql`, `saved_names_test.sql` | Supabase `saved_names`, owner RLS, local-to-account sync, account-to-local mirror | Future richer account-state analytics if needed | PR13 | Saved Names Supabase persistence is implemented with local fallback. |
 | Linked Provider domain | partial-contract | `constants.js`, architecture docs | Provider IDs and statuses | Runtime commands and provider service layer | PR16 | Linked providers are not Parent Auth. |
 | Linked Provider schema | partial-schema | Local schema runbook and migration foundation | `linked_provider_accounts` local table | Token storage, remote rollout, sync metadata | PR16 | No remote Supabase changes in docs-only work. |
-| Linked Provider runtime | partial-runtime | `providerRuntime.js`, `providerRuntimeRepository.js`, provider foundation migration | Provider-neutral contracts, connection intents, callback state scaffolding, audit events, blocked sync job model | Provider-specific activation, OAuth, callbacks, real unlink/revoke execution, external sync | PR17 | No Discord/Riot OAuth live. |
+| Linked Provider runtime | partial-runtime | `providerRuntime.js`, `providerRuntimeRepository.js`, provider foundation migration, `FIRST_PROVIDER_DECISION_READINESS.md` | Provider-neutral contracts, connection intents, callback state scaffolding, audit events, blocked sync job model, first-provider decision | Provider-specific activation, OAuth, callbacks, real unlink/revoke execution, external sync | PR18 | No Discord/Riot OAuth live. |
 | Verified Proof domain | partial-contract | `constants.js`, data model docs | Proof types, visibility constants | Provider-backed proof creation | PR16 | Proofs must be source-backed. |
 | Verified Proof schema | partial-schema | Local schema foundation | `verified_proofs`, featured proofs, visibility settings | Remote rollout, migrations for runtime needs | PR16 | Schema is local foundation only. |
 | Verified Proof sync runtime | pending | Provider sync job scaffold only | Blocked provider-neutral sync job model | Provider adapters, real sync jobs, stale/revoked proof updates | PR18+ | No fake proof data. |
@@ -24,10 +24,11 @@ This matrix reflects the PR16 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 | Publish Runtime Commands | done | `publishCommands.js`, `passportPublishRepository.js`, `PassportPublishControls.jsx`, `20260625200000_publish_runtime_commands.sql` | Consent, slug claim/update, publish attempt, unpublish, owner-only SQL RPCs, policy-blocked state | Provider-backed publishability in real production data | PR16 | Publish remains blocked until verified linked provider exists. |
 | Public Projection | done | `publicProjection.js`, `publicPassportRepository.js`, `get_public_gaming_passport_projection` | `buildPublicPassportProjection`, allowlisted DTO, public projection RPC, defensive client allowlist | Provider-backed proof data population | PR16 | Public Projection is served without exposing private fields. |
 | Public Profile `/id/:slug` | done | `App.jsx`, `PublicGamingPassportPage.jsx` | Public route, safe unavailable behavior, SEO/share metadata, allowlisted profile view | Trust/safety controls, provider-backed production profiles | PR16 | `/id/:slug` is implemented as MVP public projection serving. |
-| Provider Runtime Foundation | partial-runtime | `providerRuntime.js`, `providerRuntimeRepository.js`, `20260625220000_provider_runtime_foundation.sql`, `ProviderRuntimeFoundationPanel.jsx` | Contracts, local schema/RLS, token vault placeholder, connection intents, callback state, blocked sync jobs, audit events, private account panel | First-provider decision, provider-specific runtime, real token encryption/retention, external sync | PR17 | Foundation exists, but no provider is live. |
+| Provider Runtime Foundation | partial-runtime | `providerRuntime.js`, `providerRuntimeRepository.js`, `20260625220000_provider_runtime_foundation.sql`, `ProviderRuntimeFoundationPanel.jsx`, `FIRST_PROVIDER_DECISION_READINESS.md` | Contracts, local schema/RLS, token vault placeholder, connection intents, callback state, blocked sync jobs, audit events, private account panel, provider decision readiness | Provider-specific runtime, real token encryption/retention, external sync | PR18 | Foundation exists, but no provider is live. |
 | Provider token storage | partial-schema | `provider_token_vault` local table | Placeholder table with `token_ciphertext` constrained to null and no authenticated client grants | Secure server-side encrypted token storage, retention, rotation, revocation | PR18+ | No secrets or env vars in repo; no real token storage usage. |
-| Discord runtime | pending | Constants/docs only | Provider ID planned | OAuth, callbacks, tokens, unlink/revoke, sync | PR18 | Discord OAuth is not live. |
-| Riot runtime | gated | Riot review docs, verification file | Site verification and safe copy | Approval, RSO, callbacks, tokens, RiotProvider | PR19 | Riot runtime remains gated by Riot approval. |
+| Discord runtime | pending | Constants/docs only, PR17 decision matrix | Provider ID planned | OAuth, callbacks, tokens, unlink/revoke, sync, explicit product-owner decision to choose Discord first | Future | Discord OAuth is not live. |
+| Riot readiness | selected | `FIRST_PROVIDER_DECISION_READINESS.md`, `PR18_RIOT_READINESS_SCOPE.md`, `PROVIDER_READINESS_CHECKLIST.md` | Approval-aware decision, readiness gates, smoke checklist, PR18 scope | Compliance refresh, RSO design, token plan, unlink/revoke UX design, adapter review | PR18 | PR18 is Riot Readiness, not Riot Runtime. |
+| Riot runtime | gated | Riot review docs, verification file, PR17 decision | Site verification, safe copy, readiness decision | Explicit Riot approval, RSO, callbacks, tokens, RiotProvider | PR19+ | Riot runtime remains gated by Riot approval. |
 | League of Legends adapter | pending | Roadmap docs only | Conceptual GameAdapter placement | Riot-backed LoL proof normalization | PR20 | No tracker, OP.GG clone, live-game advice, or hidden-player inference. |
 | Cosmetics | pending | Roadmap docs only | Product direction | Cosmetic schema/runtime/storefront rules | PR21 | No Riot data/assets monetization. |
 | Trust/Safety | pending | Roadmap docs only | Policy boundaries | Reports, takedown, suspensions, abuse controls | PR22 | Required before broad public profiles. |
@@ -41,4 +42,5 @@ This matrix reflects the PR16 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 - Publish Runtime Commands are implemented as private owner-controlled commands.
 - Public Profile `/id/:slug` is implemented as an MVP allowlisted public projection surface.
 - Provider-neutral foundation is partial-runtime, but provider activation remains pending.
+- PR18 is selected as Riot Readiness because explicit Riot approval is not evidenced in the repo.
 - Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.
