@@ -57,7 +57,7 @@ export default function PrivatePassportEditor({
         </span>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(300px,0.85fr)]">
+      <div className="grid gap-5">
         <form className="space-y-5" onSubmit={handleSave}>
           <EditorSaveState
             isDraftLoading={isDraftLoading}

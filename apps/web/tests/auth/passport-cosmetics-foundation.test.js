@@ -34,6 +34,8 @@ describe('Passport Cosmetics Foundation account integration', () => {
     assert.match(accountPageSource, /PrivatePassportEditor/);
     assert.match(privateEditorSource, /PassportCosmeticsPanel/);
     assert.match(privateEditorSource, /sanitizeCosmeticLoadout/);
+    assert.doesNotMatch(privateEditorSource, /xl:grid-cols-\[/);
+    assert.doesNotMatch(cosmeticsPanelSource, /xl:grid-cols-\[/);
   });
 
   it('keeps the UI copy visual-only and proof-safe', () => {
