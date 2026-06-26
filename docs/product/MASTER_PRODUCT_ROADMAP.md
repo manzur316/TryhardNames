@@ -24,7 +24,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public Profile `/id/:slug` is implemented as an MVP allowlisted projection surface.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR16
+## Current State After PR17
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -44,6 +44,8 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Provider-neutral runtime foundation is partial-runtime: contracts, local schema/RLS, repository scaffolding, audit events, blocked sync jobs, and token vault placeholder exist.
 - Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
 - Public `/id/:slug` profiles are implemented as an MVP allowlisted projection surface.
+- First Provider Decision + Readiness Pack is implemented.
+- PR18 is selected as Riot Readiness because explicit Riot approval is not evidenced in the repo.
 
 Riot integration is not live. Discord integration is not live. No Riot API calls are active. No Discord API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles do not expose provider private fields, token fields, raw metadata, or owner identifiers.
 
@@ -95,17 +97,17 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 
 ### PR17 - First Provider Decision + Readiness Pack
 
-- Decide whether Discord pilot or Riot readiness is safer.
-- Use Riot approval status and provider foundation readiness as gates.
-- Document provider-specific risks and test plan.
-- Do not bypass approval gates.
+- Implemented by PR17: decide whether Discord pilot or Riot readiness is safer.
+- Implemented by PR17: use Riot approval status and provider foundation readiness as gates.
+- Implemented by PR17: document provider-specific risks, readiness checklist, smoke checklist, and rollback plan.
+- Decision: PR18 = Riot Readiness. Riot Runtime is blocked without explicit approval.
 
-### PR18 - Discord Pilot OR Riot Readiness
+### PR18 - Riot Readiness Pack
 
-- Execute the selected first provider path.
-- Discord can pilot only after provider runtime foundation and policy review.
-- Riot remains readiness-only unless Riot approval is granted.
-- Do not claim live integrations before they are live.
+- Execute the selected readiness path.
+- Prepare Riot compliance, RSO callback design, token retention plan, unlink/revoke UX design, provider adapter contract review, portal checklist, and smoke plan.
+- Do not add Riot OAuth, Riot API calls, RSO runtime, secrets, env vars, provider activation, or public Riot data.
+- Discord Pilot remains an alternate future path only if product direction explicitly changes.
 
 ### PR19 - Riot Provider Runtime
 

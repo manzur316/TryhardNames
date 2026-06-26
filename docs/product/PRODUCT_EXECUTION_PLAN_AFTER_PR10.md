@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, and PR16.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, and PR17.
 
 ## Closed Visual/Tooling Line
 
@@ -29,11 +29,13 @@ PR15 adds the Public Gaming Passport MVP at `/id/:slug`. It serves only allowlis
 
 PR16 adds provider-neutral runtime foundation: provider contracts, connection intents, callback state contracts, token vault placeholder, blocked sync jobs, audit events, owner-only RLS, repository scaffolding, and a private account status panel. It does not activate Discord, Riot, OAuth, provider APIs, proof sync, real token storage usage, or public provider linking.
 
+PR17 adds the First Provider Decision + Readiness Pack. It found no explicit Riot approval evidence in the repo and selects PR18 as Riot Readiness, not Riot Runtime. It does not activate OAuth, providers, APIs, secrets, routes, migrations, or runtime UI.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
+Riot Readiness -> approved provider runtime -> Proofs -> Cosmetics -> Trust -> Launch.
 
 ## Corrected Roadmap
 
@@ -101,18 +103,19 @@ Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
 - Goal: Choose the first provider path based on approvals and risk.
 - Why now: Provider foundation must be paired with a deliberate launch decision.
 - Already exists: Riot review docs and provider-neutral planning.
-- Missing: Approval-aware decision record, smoke checklist, provider-specific risk review.
+- Implemented by PR17: approval-aware decision record, provider readiness checklist, PR18 Riot Readiness scope, smoke checklist, provider-specific risk review, and docs/source tests.
+- Missing: Explicit Riot approval and any provider runtime activation.
 - Non-goals: No OAuth launch.
-- Exit criteria: The repo has an approved first-provider plan.
+- Exit criteria: PR18 is selected as Riot Readiness because Riot approval is not evidenced in the repo.
 
-### PR18 Discord Pilot OR Riot Readiness
+### PR18 Riot Readiness Pack
 
-- Goal: Execute the safer first provider step.
-- Why now: It converts provider foundation into a controlled pilot/readiness slice.
+- Goal: Prepare Riot approval-safe readiness artifacts without runtime activation.
+- Why now: PR17 selected Riot Readiness because Riot runtime is still blocked by missing explicit approval evidence.
 - Already exists: Provider foundation from PR16 and decision from PR17.
-- Missing: Provider-specific implementation or readiness artifacts.
-- Non-goals: No Riot runtime without approval.
-- Exit criteria: Either Discord pilot is safely live, or Riot readiness is complete while waiting for approval.
+- Missing: Riot compliance refresh, RSO callback design, token retention plan, revoke/unlink UX design, adapter contract review, portal checklist, and smoke plan.
+- Non-goals: No Riot OAuth, Riot API calls, RSO redirect, callback route, secrets, env vars, provider activation, public Riot data, or proof sync.
+- Exit criteria: Riot readiness is complete while runtime remains blocked until approval.
 
 ### PR19 Riot Provider Runtime
 

@@ -69,8 +69,8 @@ PR16 does not expand the public `/id/:slug` projection. Public profiles remain a
 
 ## Next Roadmap Blocks
 
-- PR17: First Provider Decision + Readiness Pack.
-- PR18: Discord pilot or Riot readiness.
+- PR17: First Provider Decision + Readiness Pack selects PR18 as Riot Readiness because explicit Riot approval is not evidenced in the repo.
+- PR18: Riot Readiness Pack, without Riot OAuth, Riot API calls, RSO runtime, secrets, or provider activation.
 - PR19+: Riot runtime only if approved.
 
 ## Non-Goals
