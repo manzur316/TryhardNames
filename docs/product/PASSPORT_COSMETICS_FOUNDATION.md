@@ -171,6 +171,21 @@ Passport Cosmetics must not introduce:
 - hidden-player de-anonymization;
 - Riot data behind a paywall.
 
+## PR22 Trust/Safety Follow-up
+
+PR22 adds the trust/safety layer that broader cosmetic distribution needs before future `/cosmetics`, inventory, payments, or pets/companions work.
+
+PR22 defines:
+
+- public profile report intent;
+- cosmetic abuse policy;
+- blocked/reserved visual identity terms;
+- impersonation rules;
+- takedown/suspension/privacy runbook;
+- report storage that is private and not publicly readable.
+
+Cosmetic reports include `offensive_cosmetic` and `fake_proof_or_rank`. These report categories do not activate a store, `/cosmetics`, payments, inventory, pets/companions runtime, or provider runtime.
+
 ## PR21 Non-Goals
 
 PR21 does not implement:

@@ -294,3 +294,18 @@ Compliance boundaries:
 Obsidian Pulse is a free foundation preview. It is not sold, priced, checkout-backed, or linked to Riot data.
 
 Future `/cosmetics` and pets/companions/3D work remains out of runtime scope for PR21.
+
+## PR22 Trust / Safety / Privacy Update
+
+PR22 adds Trust / Safety / Privacy Controls Foundation without Riot runtime.
+
+Compliance boundaries:
+
+- public report submission is available for valid public `/id/:slug` profiles;
+- reports are private operational records and are not publicly readable;
+- report categories cover impersonation, offensive content, offensive cosmetics, fake proof/rank claims, privacy requests, harassment, and other;
+- cosmetic abuse policy blocks fake proof, fake rank, official/staff impersonation, Riot/League/Valorant/Discord lookalikes, and proof-state overrides;
+- suspended, unpublished, draft, and policy-blocked profiles continue to return safe unavailable behavior;
+- no Riot OAuth, Riot API calls, RSO redirect, callback route, secrets, env vars, provider activation, `/cosmetics`, store, checkout, payments, or purchased inventory are added.
+
+Riot Runtime remains blocked until explicit approval exists.

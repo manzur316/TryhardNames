@@ -4,6 +4,7 @@ import { AlertTriangle, Home, ShieldCheck } from 'lucide-react';
 import PublicLinkedProviders from '@/gaming-passport/components/PublicLinkedProviders.jsx';
 import PublicPassportCard from '@/gaming-passport/components/PublicPassportCard.jsx';
 import PublicPassportSafetyNotice from '@/gaming-passport/components/PublicPassportSafetyNotice.jsx';
+import PublicProfileReportDialog from '@/gaming-passport/components/PublicProfileReportDialog.jsx';
 import PublicProofCard from '@/gaming-passport/components/PublicProofCard.jsx';
 import { getPublicPassportBySlug } from '@/gaming-passport/data/publicPassportRepository.js';
 import { normalizePublicSlug } from '@/gaming-passport/domain/contracts.js';
@@ -133,7 +134,10 @@ function PublicPassportLoaded({ passport }) {
             )}
           </div>
 
-          <PublicLinkedProviders providers={passport.linkedProviders} />
+          <div className="space-y-6">
+            <PublicLinkedProviders providers={passport.linkedProviders} />
+            <PublicProfileReportDialog slug={passport.slug} />
+          </div>
         </section>
       </main>
     </>

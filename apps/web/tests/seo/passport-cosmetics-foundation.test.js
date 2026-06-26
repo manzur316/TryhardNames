@@ -54,7 +54,7 @@ describe('Passport Cosmetics Foundation docs and guards', () => {
     assert.match(cosmeticsDoc, /freemium (?:\/|and) earned-first/i);
     assert.match(cosmeticsDoc, /Obsidian Pulse/);
     assert.match(cosmeticsDoc, /free foundation preview/i);
-    assert.match(currentRoadmap, /Current Status After PR21/);
+    assert.match(currentRoadmap, /Current Status After PR22/);
     assert.match(currentRoadmap, /Passport Cosmetics Foundation/);
     assert.match(masterRoadmap, /Current State After PR21/);
     assert.match(executionPlan, /PR21/);
