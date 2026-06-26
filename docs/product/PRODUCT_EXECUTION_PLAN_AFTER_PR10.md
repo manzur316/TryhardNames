@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, and PR18.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, and PR21.
 
 ## Closed Visual/Tooling Line
 
@@ -33,11 +33,13 @@ PR17 adds the First Provider Decision + Readiness Pack. It found no explicit Rio
 
 PR18 adds the Riot Readiness Pack. It documents Riot approval gates, design-only RSO callback behavior, token-retention requirements, unlink/revoke UX requirements, Riot provider adapter contract review, public projection criteria, manual Riot Portal checklist, future smoke plan, and source guards. It does not activate Riot OAuth, Riot API calls, RSO runtime, callback routes, secrets, env vars, provider activation, routes, migrations, or public Riot data.
 
+PR21 adds Passport Cosmetics Foundation. It creates a TryhardNames-owned local cosmetic catalog, visual-only policy, loadout sanitizer, private account equip/preview panel, Obsidian Pulse as a free foundation preview, and safe public scene rendering through `themeId` and `equippedCosmeticIds`. It does not add a store, payments, checkout, purchased inventory, `/cosmetics`, pets/companions runtime, Riot assets, fake proofs, fake ranks, proof boosts, providers, or Riot/Discord OAuth.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> approved provider runtime -> Proofs -> Cosmetics -> Trust -> Launch.
+Riot Readiness -> Cosmetics Foundation -> approved provider runtime -> Proofs -> Trust -> Launch.
 
 ## Corrected Roadmap
 
@@ -143,9 +145,10 @@ Riot Readiness -> approved provider runtime -> Proofs -> Cosmetics -> Trust -> L
 - Goal: Add TryhardNames-owned visual identity upgrades.
 - Why now: Cosmetics become useful once private/public profile surfaces exist.
 - Already exists: Product boundary that cosmetics cannot monetize Riot data.
-- Missing: Cosmetic model, unlock/equip behavior, theme/border/animation rules.
-- Non-goals: No Riot assets, no Riot data behind a paywall.
-- Exit criteria: Cosmetics can be equipped without changing proof truth.
+- Implemented by PR21: local cosmetic catalog, cosmetic policy, loadout sanitizer, private account equip/preview panel, Obsidian Pulse free foundation preview, safe public scene projection, docs, and tests.
+- Missing: future `/cosmetics` showcase, hardened unlock entitlement system, optional inventory/payment model, pets/companions runtime, and trust/safety review for broader cosmetic distribution.
+- Non-goals: No store, checkout, payments, purchased inventory, Riot assets, Riot data behind a paywall, fake proofs, fake ranks, proof boosts, or provider runtime.
+- Exit criteria: Cosmetics can be equipped without changing proof truth, provider truth, or public projection safety.
 
 ### PR22 Trust / Safety / Privacy Controls
 

@@ -7,7 +7,9 @@ export default function PassportCompletionChecklist({ form, validation, isDirty,
   const featuredSavedNames = Array.isArray(scene.featuredSavedNames) ? scene.featuredSavedNames : [];
   const hasCustomStyle = scene.layout !== DEFAULT_SCENE_CONFIG.layout
     || scene.accent !== DEFAULT_SCENE_CONFIG.accent
-    || scene.density !== DEFAULT_SCENE_CONFIG.density;
+    || scene.density !== DEFAULT_SCENE_CONFIG.density
+    || scene.themeId !== DEFAULT_SCENE_CONFIG.themeId
+    || JSON.stringify(scene.equippedCosmeticIds || []) !== JSON.stringify(DEFAULT_SCENE_CONFIG.equippedCosmeticIds || []);
   const items = [
     { label: 'Alias added', done: Boolean(form.alias?.trim()) },
     { label: 'Short bio added', done: Boolean(form.bioShort?.trim()) },

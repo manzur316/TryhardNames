@@ -272,3 +272,25 @@ PR18 adds:
 - PR19 preconditions.
 
 PR19 remains the earliest possible Riot runtime PR, only if explicit approval exists.
+
+## PR21 Passport Cosmetics Update
+
+PR21 adds Passport Cosmetics Foundation without Riot runtime.
+
+Compliance boundaries:
+
+- cosmetics are TryhardNames-owned visual identity only;
+- no Riot assets;
+- no League of Legends or Valorant assets;
+- no Riot rank names as cosmetic rarity;
+- no fake proofs;
+- no fake verified badges;
+- no fake rank frames;
+- no proof boosts;
+- no Riot data behind a paywall;
+- no store, checkout, payments, or purchased inventory in PR21;
+- no Riot OAuth, Riot API calls, RSO redirect, callback route, secrets, env vars, or provider activation.
+
+Obsidian Pulse is a free foundation preview. It is not sold, priced, checkout-backed, or linked to Riot data.
+
+Future `/cosmetics` and pets/companions/3D work remains out of runtime scope for PR21.

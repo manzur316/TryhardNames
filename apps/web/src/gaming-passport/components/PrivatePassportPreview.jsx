@@ -1,10 +1,12 @@
 import React from 'react';
 import { Lock, ShieldCheck } from 'lucide-react';
 import { DEFAULT_SCENE_CONFIG } from '@/gaming-passport/data/passportRepository.js';
+import { getCosmeticPresentationTokens } from '@/gaming-passport/cosmetics/index.js';
 
 export default function PrivatePassportPreview({ form, isLoading }) {
   const scene = form.sceneConfig || DEFAULT_SCENE_CONFIG;
   const featuredSavedNames = Array.isArray(scene.featuredSavedNames) ? scene.featuredSavedNames : [];
+  const cosmeticTokens = getCosmeticPresentationTokens(scene);
   const accentClasses = {
     cyan: 'border-cyan-300 bg-cyan-50/80 dark:border-cyan-300/40 dark:bg-cyan-300/10',
     violet: 'border-violet-300 bg-violet-50/80 dark:border-violet-300/40 dark:bg-violet-300/10',
@@ -15,7 +17,7 @@ export default function PrivatePassportPreview({ form, isLoading }) {
   const layoutClass = scene.layout === 'compact' ? 'flex items-center gap-4' : 'space-y-4';
 
   return (
-    <section className={`flex flex-col rounded-lg border ${accentClasses[scene.accent] || accentClasses.cyan} ${densityClass}`}>
+    <section className={`flex flex-col ${accentClasses[scene.accent] || accentClasses.cyan} ${cosmeticTokens.shellClassName} ${densityClass}`}>
       <div className="flex flex-wrap items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white dark:bg-white/10">
           <Lock className="h-3.5 w-3.5" aria-hidden="true" />
@@ -33,12 +35,29 @@ export default function PrivatePassportPreview({ form, isLoading }) {
           <div className={layoutClass}>
             <AvatarPreview avatarUrl={form.avatarUrl} alias={form.alias} />
             <div>
-              <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">{form.alias || 'Unnamed player'}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-200">
+              <div className={`inline-flex ${cosmeticTokens.nameplateClassName}`}>
+                <h2 className={`text-2xl font-semibold ${cosmeticTokens.headingClassName}`}>{form.alias || 'Unnamed player'}</h2>
+              </div>
+              <p className={`mt-2 text-sm leading-6 ${cosmeticTokens.bodyClassName}`}>
                 {form.bioShort || 'Add a short private bio to preview your future Gaming Passport.'}
               </p>
             </div>
           </div>
+
+          {cosmeticTokens.activeCosmetics.length > 0 && (
+            <div className="rounded-lg border border-slate-200 bg-white/70 p-3 dark:border-white/10 dark:bg-black/20">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                Private cosmetic loadout
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {cosmeticTokens.activeCosmetics.map((item) => (
+                  <span key={item.id} className={`rounded-full border px-3 py-1 text-xs font-semibold ${cosmeticTokens.chipClassName}`}>
+                    {item.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="rounded-lg border border-slate-200 bg-white/70 p-3 dark:border-white/10 dark:bg-black/20">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">

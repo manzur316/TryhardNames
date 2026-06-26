@@ -5,6 +5,7 @@ import {
   isCanonicalPublicSlug,
   normalizePublicSlug,
 } from '@/gaming-passport/domain/index.js';
+import { sanitizeCosmeticLoadout } from '@/gaming-passport/cosmetics/index.js';
 
 const FORBIDDEN_PUBLIC_KEYS = new Set([
   'id',
@@ -27,6 +28,12 @@ const FORBIDDEN_PUBLIC_KEYS = new Set([
   'clientSecret',
   'externalAccountId',
   'external_account_id',
+  'inventory',
+  'price',
+  'priceId',
+  'price_id',
+  'purchase',
+  'purchaseHistory',
 ]);
 
 export async function getPublicPassportBySlug(client, slug) {
@@ -62,12 +69,10 @@ export function mapPublicPassportProjection(projection) {
   mapped.avatarUrl = cleanString(mapped.avatarUrl);
   mapped.publishedAt = cleanString(mapped.publishedAt);
   mapped.updatedAt = cleanString(mapped.updatedAt);
-  mapped.scene = {
+  mapped.scene = sanitizeCosmeticLoadout({
     themeId: cleanString(scene.themeId),
-    equippedCosmeticIds: Array.isArray(scene.equippedCosmeticIds)
-      ? scene.equippedCosmeticIds.map(String).filter(Boolean).slice(0, 24)
-      : [],
-  };
+    equippedCosmeticIds: scene.equippedCosmeticIds,
+  });
   mapped.linkedProviders = linkedProviders;
   mapped.featuredProofs = featuredProofs;
 
@@ -80,6 +85,8 @@ export function isPublicPassportProjectionSafe(projection) {
   if (!hasOnlyAllowedKeys(projection, PUBLIC_PASSPORT_ALLOWED_KEYS)) return false;
   if (!isCanonicalPublicSlug(projection.slug)) return false;
   if (!isPlainObject(projection.scene)) return false;
+  if (!hasOnlyAllowedKeys(projection.scene, ['themeId', 'equippedCosmeticIds'])) return false;
+  if (hasForbiddenPublicProjectionKeys(projection.scene)) return false;
   if (!Array.isArray(projection.linkedProviders)) return false;
   if (!Array.isArray(projection.featuredProofs)) return false;
 

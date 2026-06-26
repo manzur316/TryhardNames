@@ -80,7 +80,7 @@ describe('Riot Readiness Pack', () => {
   });
 
   it('keeps Riot readiness design-only and runtime blocked in roadmap docs', () => {
-    assert.match(currentRoadmap, /Current Status After PR18/);
+    assert.match(currentRoadmap, /Current Status After PR21/);
     assert.match(currentRoadmap, /Riot Runtime remains blocked until explicit approval exists/);
     assert.match(masterRoadmap, /Riot Readiness Pack is implemented as docs\/tests-only readiness work/);
     assert.match(executionPlan, /PR18 adds the Riot Readiness Pack/);

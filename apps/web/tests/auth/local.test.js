@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createClient } from '@supabase/supabase-js';
 import {
+  DEFAULT_SCENE_CONFIG,
   getOrCreatePrivateDraft,
   updatePassportPresentation,
 } from '../../src/gaming-passport/data/passportRepository.js';
@@ -73,6 +74,8 @@ test('local Supabase Parent Auth creates and edits a private Passport draft', as
     layout: 'compact',
     accent: 'emerald',
     density: 'dense',
+    themeId: DEFAULT_SCENE_CONFIG.themeId,
+    equippedCosmeticIds: DEFAULT_SCENE_CONFIG.equippedCosmeticIds,
     featuredSavedNames: ['Local Ace', 'Local Anchor'],
   });
 

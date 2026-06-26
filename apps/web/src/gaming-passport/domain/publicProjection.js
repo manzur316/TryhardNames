@@ -3,6 +3,7 @@ import {
   getPublicLinkedProviderAccounts,
   canServePublishedPassport,
 } from './publicationPolicy.js';
+import { sanitizeCosmeticLoadout } from '../cosmetics/cosmeticLoadout.js';
 
 function optionalString(value) {
   const text = String(value || '').trim();
@@ -44,6 +45,10 @@ export function buildPublicPassportProjection({
   if (!canServePublishedPassport({ passport, linkedProviderAccounts })) return null;
 
   const linkedProviders = getPublicLinkedProviderAccounts(linkedProviderAccounts).map(projectLinkedProvider);
+  const cosmeticLoadout = sanitizeCosmeticLoadout({
+    themeId: passport.themeId || passport.sceneConfig?.themeId,
+    equippedCosmeticIds: passport.equippedCosmeticIds || passport.sceneConfig?.equippedCosmeticIds,
+  });
   const featuredProofs = getFeaturedVerifiedProofs({
     proofs: verifiedProofs,
     featuredProofIds,
@@ -57,12 +62,7 @@ export function buildPublicPassportProjection({
     avatarUrl: optionalString(passport.avatarUrl),
     publishedAt: optionalString(passport.publishedAt),
     updatedAt: optionalString(passport.updatedAt),
-    scene: {
-      themeId: optionalString(passport.themeId),
-      equippedCosmeticIds: Array.isArray(passport.equippedCosmeticIds)
-        ? passport.equippedCosmeticIds.map(String).filter(Boolean).slice(0, 24)
-        : [],
-    },
+    scene: cosmeticLoadout,
     linkedProviders,
     featuredProofs,
   };
