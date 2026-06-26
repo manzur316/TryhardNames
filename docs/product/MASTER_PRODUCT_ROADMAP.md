@@ -24,7 +24,7 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - Public Profile `/id/:slug` is implemented as an MVP allowlisted projection surface.
 - Cosmetics are TryhardNames-owned themes, borders, and animations.
 
-## Current State After PR15
+## Current State After PR16
 
 - Repo security and reproducibility are established.
 - Gaming Passport domain foundation exists.
@@ -41,11 +41,11 @@ Public generators -> Parent Auth -> Private Draft -> Saved Names -> Linked Provi
 - PR10.x closed the theme, visual surface, tool audit, dynamic NameCard/lineup, and feature generator card alignment line.
 - Publish Policy contract is already implemented in domain code.
 - Public Projection contract is already implemented in domain code.
-- Provider-neutral domain/schema is partial, not runtime.
+- Provider-neutral runtime foundation is partial-runtime: contracts, local schema/RLS, repository scaffolding, audit events, blocked sync jobs, and token vault placeholder exist.
 - Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
 - Public `/id/:slug` profiles are implemented as an MVP allowlisted projection surface.
 
-Riot integration is not live. Discord integration is not live. No Riot API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles do not activate provider runtime or expose private fields.
+Riot integration is not live. Discord integration is not live. No Riot API calls are active. No Discord API calls are active. No production Riot key exists in the repo. Public `/id/:slug` profiles do not expose provider private fields, token fields, raw metadata, or owner identifiers.
 
 ## Main Roadmap Blocks
 
@@ -87,9 +87,10 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 
 ### PR16 - Provider Runtime Foundation
 
-- Add provider runtime contracts before any provider launch.
-- Cover token storage, link/unlink/revoke, sync jobs, rate limits, audit logs, and error handling.
-- Keep provider-neutral boundaries.
+- Implemented by PR16: add provider runtime contracts before any provider launch.
+- Implemented by PR16: add local connection intent, callback state, token vault placeholder, sync job, and audit-event schema with RLS.
+- Implemented by PR16: add owner-scoped repository scaffolding and private account status panel.
+- Still missing after PR16: provider-specific adapters, external callbacks, real encrypted token storage usage, provider API calls, and proof sync runtime.
 - Do not activate Riot or Discord.
 
 ### PR17 - First Provider Decision + Readiness Pack

@@ -1,18 +1,18 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status After PR15
+## Current Status After PR16
 
-This document reflects the PR15 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, and PR15, `feat(passport): add public gaming passport profile`.
+This document reflects the PR16 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, and PR16, `feat(passport): add provider runtime foundation`.
 
-TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, and a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, and provider-neutral runtime foundation contracts/schema/repository scaffolding.
 
 Riot integration is not live. Discord integration is not live. No public Riot data is live. The public `/id/:slug` route serves only policy-valid published Passports and does not activate provider runtime. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime.
 
 Gaming Passport remains a private-first, verifiable, shareable gaming resume. It is not a tracker, OP.GG alternative, custom MMR/ELO product, match-history dump, live-game advantage tool, hidden-player de-anonymization surface, or alternative ranking system.
 
-## PR History Through PR15
+## PR History Through PR16
 
-The repo history is summarized through PR15.
+The repo history is summarized through PR16.
 
 | PR | Title | Status | Outcome | Runtime impact | Non-goals |
 | --- | --- | --- | --- | --- | --- |
@@ -39,7 +39,8 @@ The repo history is summarized through PR15.
 | PR12 | `feat(account): persist saved names` | Merged | Added Supabase `saved_names`, owner-only RLS, saved-name repository, local-to-account sync, and docs/tests. | Authenticated users can persist saved names under Parent Auth while signed-out users keep local fallback. | No providers, Riot/Discord OAuth, publish commands, public profiles, remote Supabase, Vercel, secrets, migrations outside local files, or RLS outside this table. |
 | PR13 | `feat(account): improve private passport editor` | Merged | Adds Private Gaming Passport Editor V2, private preview, completion checklist, save-state clarity, and private Saved Names highlights through `scene_config.featuredSavedNames`. | Owners can shape a private draft more clearly inside `/account` without publishing or linking providers. | No publish commands, slug claim, public `/id/:slug`, Riot/Discord OAuth, providers, token storage, or remote service config. |
 | PR14 | `feat(passport): add publish runtime commands` | Merged | Added owner-controlled publication consent, slug claim/update, publish attempt, unpublish, command repository, private `/account` controls, and SQL RPC command functions. | Publish Runtime Commands exist and enforce the existing publication policy. Publish remains blocked until a verified linked provider exists. | No public `/id/:slug`, public profile route/API, provider runtime, Riot/Discord OAuth, provider token storage, secrets, or remote Supabase changes. |
-| PR15 | `feat(passport): add public gaming passport profile` | In progress | Adds public `/id/:slug`, public projection RPC, public profile UI, not-found/private-safe behavior, SEO/share metadata, tests, and docs. | Policy-valid published Passports can be served as allowlisted public projections. | No provider runtime, Riot/Discord OAuth, token storage, proof sync runtime, real Riot data, or private field exposure. |
+| PR15 | `feat(passport): add public gaming passport profile` | Merged | Added public `/id/:slug`, public projection RPC, public profile UI, not-found/private-safe behavior, SEO/share metadata, tests, and docs. | Policy-valid published Passports can be served as allowlisted public projections. | No provider runtime, Riot/Discord OAuth, token storage, proof sync runtime, real Riot data, or private field exposure. |
+| PR16 | `feat(passport): add provider runtime foundation` | In progress | Adds provider runtime contracts, connection intent/callback/sync/audit scaffolding, token vault placeholder, owner-only RLS, repository functions, and a private `/account` foundation panel. | Provider Runtime Foundation exists without activating any provider. | No Discord/Riot OAuth, provider API calls, provider-specific adapter runtime, real token storage usage, proof sync runtime, or public provider linking UI. |
 
 ## Live Surfaces
 
@@ -75,6 +76,8 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Public Gaming Passport MVP `/id/:slug` exists.
 - Public projection serving exists through `get_public_gaming_passport_projection`.
 - Public profile UI uses allowlisted projection data only.
+- Provider Runtime Foundation contracts and scaffolding exist.
+- Private `/account` Provider Runtime Foundation panel exists and is read-only.
 - Account Hunting Guide exists inside the account experience.
 - Favorite/star is the canonical saved-name UX.
 - Saved Names Supabase persistence exists through `public.saved_names`.
@@ -93,8 +96,8 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Private Gaming Passport Editor V2 is implemented as an owner-only draft editing surface.
 - Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
 - Public Profile `/id/:slug` is implemented as an MVP public projection surface.
-- Provider-neutral domain/schema is partial. Constants, statuses, local tables, and schema docs exist, but provider runtime does not.
-- Linked Provider domain is partial-contract and Linked Provider schema is partial-schema. Runtime link/unlink/revoke/sync is pending.
+- Provider-neutral domain/schema is partial-runtime. Constants, statuses, local tables, provider runtime contracts, repository scaffolding, intent/callback/sync/audit tables, and private account status UI exist, but no provider is live.
+- Linked Provider domain is partial-runtime and Linked Provider schema is partial-schema. Runtime activation, provider-specific adapters, and real callback/token handling are pending.
 - Verified Proof domain is partial-contract and Verified Proof schema is partial-schema. Sync runtime is pending.
 - Publish Policy is implemented as a domain contract and enforced by PR14 command runtime.
 - Public Projection is implemented as a contract and served by PR15 through an allowlisted RPC.
@@ -105,9 +108,9 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Discord OAuth.
 - Riot API calls.
 - Discord API calls.
-- Provider token storage.
-- Provider unlink/revoke runtime.
-- Provider sync jobs.
+- Real provider token storage usage.
+- Provider-specific unlink/revoke runtime.
+- Provider sync jobs that call external providers.
 - League of Legends adapter runtime.
 - Cosmetics.
 - Trust/safety moderation controls.
@@ -116,7 +119,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 ## Gated
 
 - Riot runtime remains gated by Riot Developer Portal approval and next steps.
-- Provider runtime foundation is gated by token storage, unlink/revoke, sync, rate-limit, audit, and privacy contracts.
+- Provider activation is gated by first-provider decision, provider-specific implementation, secure token handling, unlink/revoke operations, sync runtime, rate limits, audit, and privacy controls.
 - Public profile expansion remains gated by provider runtime, verified proof sync, trust/safety, and privacy controls.
 - Cosmetics are gated by product review and Riot/data monetization boundaries.
 - Broad launch is gated by trust/safety, privacy review, observability, and rollback readiness.
@@ -127,7 +130,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 | --- | --- | --- |
 | PR11.0 | Roadmap Reconciliation After PR10.8 and PR11.1 | Docs-only reconciliation of actual repo state, matrix, execution plan, and decision log. |
 | PR14 | Publish Runtime Commands | Adds consent, slug, publish, unpublish, and status transitions. |
-| PR16 | Provider Runtime Foundation | Adds provider runtime contracts, token storage, unlink/revoke, sync scaffolding, and audit boundaries without activating a specific provider. |
+| PR16 | Provider Runtime Foundation | Adds provider runtime contracts, token vault placeholder, unlink/revoke command contracts, sync scaffolding, and audit boundaries without activating a specific provider. |
 | PR17 | First Provider Decision + Readiness Pack | Chooses Discord pilot or Riot readiness based on approvals and risk. |
 | PR18 | Discord Pilot OR Riot Readiness | Executes the safer first provider path. Riot work remains gated if approval is not granted. |
 | PR19 | Riot Provider Runtime | Gated by Riot approval. Implements Riot OAuth/runtime only after explicit approval and provider foundation. |

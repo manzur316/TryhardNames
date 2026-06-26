@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, and PR15.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, and PR16.
 
 ## Closed Visual/Tooling Line
 
@@ -26,6 +26,8 @@ PR13 adds Private Gaming Passport Editor V2, private preview, completion checkli
 PR14 adds owner-controlled Publish Runtime Commands for consent, slug claim/update, publish attempt, and unpublish. It enforces the existing publication policy and keeps publish blocked until a verified linked provider exists. It does not add public `/id/:slug`, public profile serving, providers, or provider tokens.
 
 PR15 adds the Public Gaming Passport MVP at `/id/:slug`. It serves only allowlisted public projection data for policy-valid published Passports and returns safe unavailable behavior for drafts, unpublished, suspended, missing-consent, missing-provider, or nonexistent profiles. It does not add provider runtime, Riot/Discord OAuth, proof sync, token storage, or real Riot data.
+
+PR16 adds provider-neutral runtime foundation: provider contracts, connection intents, callback state contracts, token vault placeholder, blocked sync jobs, audit events, owner-only RLS, repository scaffolding, and a private account status panel. It does not activate Discord, Riot, OAuth, provider APIs, proof sync, real token storage usage, or public provider linking.
 
 ## Current Principle
 
@@ -89,7 +91,8 @@ Provider Runtime Foundation -> Proofs -> Cosmetics -> Trust -> Launch.
 - Goal: Build provider-neutral runtime infrastructure before any provider goes live.
 - Why now: Domain/schema exists partially, but runtime does not.
 - Already exists: Provider IDs, statuses, local linked-provider schema foundation.
-- Missing: Token storage, link/unlink/revoke, callback state, sync jobs, audit logs, rate limits, privacy docs.
+- Implemented by PR16: Provider runtime domain contracts, connection intent/callback state scaffolding, token vault placeholder with no client grants, blocked sync job model, provider audit events, owner-only RLS, repository scaffolding, source/domain/DB tests, and read-only account panel.
+- Missing: First-provider decision, provider-specific adapter, real callback handling, secure token encryption/retention, external sync worker, and provider launch operations.
 - Non-goals: No Discord or Riot activation.
 - Exit criteria: Provider runtime contracts are ready without a live provider.
 

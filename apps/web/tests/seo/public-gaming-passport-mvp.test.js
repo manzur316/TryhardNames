@@ -99,13 +99,14 @@ describe('Public Gaming Passport MVP', () => {
     assert.match(safetyNoticeSource, /not a tracker, OP\.GG clone, match-history dump, custom MMR\/ELO product, live-game advice tool/);
   });
 
-  it('updates roadmap docs for PR15 and keeps provider runtime pending', () => {
-    assert.match(currentRoadmap, /Current Status After PR15/);
+  it('updates roadmap docs for PR15 and keeps provider activation pending', () => {
+    assert.match(currentRoadmap, /Current Status After PR16/);
     assert.match(currentRoadmap, /Public Gaming Passport MVP/);
     assert.match(executionPlan, /PR15 Public Gaming Passport MVP `\/id\/:slug`[\s\S]*Implemented by PR15/);
     assert.match(statusMatrix, /Public Profile `\/id\/:slug` \| done/);
     assert.match(decisionLog, /Public Gaming Passport MVP serves only allowlisted projection data/);
-    assert.match(publicDoc, /Provider runtime remains pending/);
+    assert.match(publicDoc, /Provider activation remains pending/);
+    assert.match(publicDoc, /PR16 adds provider-neutral foundation/);
     assert.match(publicDoc, /Riot OAuth/);
     assert.match(packageJson.scripts.test, /public-gaming-passport-mvp\.test\.js/);
     assert.match(packageJson.scripts['test:seo'], /public-gaming-passport-mvp\.test\.js/);

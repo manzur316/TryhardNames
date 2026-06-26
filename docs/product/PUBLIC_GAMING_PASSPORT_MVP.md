@@ -87,7 +87,7 @@ TryhardNames remains identity tooling. The public profile is not:
 
 ## Provider Status
 
-Provider runtime remains pending. PR15 does not implement:
+Provider activation remains pending. PR16 adds provider-neutral foundation, but PR15 does not implement:
 
 - Riot OAuth;
 - Riot API calls;
@@ -101,4 +101,4 @@ Riot runtime remains gated by Riot approval.
 
 ## Next
 
-PR16 should build Provider Runtime Foundation: token storage, link/unlink/revoke, callback state, sync scaffolding, audit boundaries, privacy controls, and rate-limit contracts before any provider goes live.
+PR16 builds Provider Runtime Foundation: token vault placeholder, link/unlink/revoke contracts, callback state, sync scaffolding, audit boundaries, privacy controls, and rate-limit contracts before any provider goes live.

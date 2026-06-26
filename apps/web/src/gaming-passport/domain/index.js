@@ -3,4 +3,5 @@ export * from './contracts.js';
 export * from './stateMachine.js';
 export * from './publicationPolicy.js';
 export * from './publishCommands.js';
+export * from './providerRuntime.js';
 export * from './publicProjection.js';

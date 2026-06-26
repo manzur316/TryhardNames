@@ -6,9 +6,36 @@ It is not a tracker, an OP.GG alternative, a parallel ranking, a custom MMR/ELO 
 
 ## Current Implementation Note
 
-This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, PR3 added a local-only schema foundation, PR14 implemented publish runtime commands, and PR15 implemented the public `/id/:slug` MVP with allowlisted projection data. Linked provider runtime, proof sync, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
+This document began as a target architecture contract. Since then, PR4 implemented Parent Auth and the protected `/account` private draft surface, PR6 implemented the public `/gaming-passport` landing page, PR3 added a local-only schema foundation, PR14 implemented publish runtime commands, PR15 implemented the public `/id/:slug` MVP with allowlisted projection data, and PR16 added provider-neutral runtime foundation scaffolding. Provider activation, proof sync, Riot OAuth, Discord OAuth, and Riot API calls remain future/not implemented.
 
 Google is Parent Auth only. Riot and Discord remain future linked provider accounts. League of Legends remains a GameAdapter inside RiotProvider, not a standalone provider.
+
+## PR16 Provider Runtime Foundation
+
+PR16 adds provider-neutral runtime foundation without activating any provider.
+
+Implemented:
+
+- provider runtime domain contracts;
+- connection intent and callback state scaffolding;
+- replay and expiry guard contracts;
+- token vault placeholder with no real token storage usage;
+- blocked sync job scaffolding;
+- provider audit events;
+- owner-only RLS for foundation tables;
+- private `/account` foundation panel that says providers are not live.
+
+Still not implemented:
+
+- Discord account linking;
+- Riot account linking;
+- provider-specific adapters;
+- OAuth redirects or callback runtime;
+- provider API calls;
+- VerifiedProof sync runtime;
+- real encrypted provider token storage and rotation.
+
+The public `/id/:slug` projection remains allowlisted and is not expanded by PR16.
 
 ## Product Boundaries
 
@@ -402,17 +429,16 @@ Do not create a global Tryhard Score in this foundation. Future cosmetic unlock 
 
 ## Supabase Boundary
 
-This PR does not touch Supabase.
+PR16 adds local versioned SQL for provider runtime foundation tables and RLS. It does not touch remote Supabase configuration.
 
 It must not:
 
-- create projects;
-- create tables;
-- execute migrations;
-- install `@supabase/supabase-js`;
+- create remote projects;
+- execute remote migrations;
 - use service role credentials;
 - add keys;
 - modify Vercel env;
-- connect to a remote project.
+- connect to a remote project;
+- store live provider tokens.
 
-The documents prepare a future migration PR where SQL can be reviewed separately.
+The provider token vault table is a placeholder. Authenticated clients have no grants on it, and `token_ciphertext` is constrained to `null` in PR16.
