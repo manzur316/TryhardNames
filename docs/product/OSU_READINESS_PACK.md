@@ -280,6 +280,24 @@ RM-27 may proceed only as a limited runtime foundation if it implements:
 
 RM-27 must remain blocked if any of those are not accepted before runtime.
 
+## RM-27 Follow-Through
+
+RM-27 accepts the `conditional-go` as a disabled-by-default server-side foundation, not a production launch.
+
+RM-27 implements the accepted conditions with:
+
+- `apps/api` as the server boundary for Authorization Code exchange, `/me` ownership verification and revoke-current-token handling;
+- server-only `OSU_CLIENT_SECRET`, `SUPABASE_SERVICE_ROLE_KEY` and `OSU_STATE_SECRET`;
+- hashed, one-time OAuth state with short TTL and owner/passport binding;
+- `identify public` as the initial allowlisted scope set;
+- no-refresh-token storage strategy: the access token is used server-side for `/me`, revoked immediately and discarded;
+- private `linked_provider_accounts` and `verified_proofs` rows for `profile_linked`;
+- owner-only status and unlink/revoke endpoints;
+- revoked/stale proofs hidden from public projection;
+- no tracker/ranking clone, no match-history dump, no live-game advice and no hidden-player inference.
+
+RM-27 still does not approve production activation, public provider linking UI, public osu! proof promotion, refresh-token retention, broad polling, store/payment, `/cosmetics`, remote Supabase changes, Vercel changes or deploy execution.
+
 ## Non-Goals
 
 RM-26 does not implement:
@@ -319,4 +337,4 @@ No OAuth implementation. No callback route. No token storage implementation. No 
 
 Revert the RM-26 PR. It is docs/tests only and does not alter runtime, database, providers, auth, deployments, remote services, env vars, secrets, store/payment, `/cosmetics` or production configuration.
 
-RM-27 status: conditional-go
+RM-27 status: implemented as conditional foundation

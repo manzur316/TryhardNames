@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(176);
+select plan(179);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -466,6 +466,73 @@ select is(
   $$),
   '23514',
   'provider_token_vault cannot store token ciphertext in PR16'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_connection_intents (
+      owner_id,
+      passport_id,
+      provider,
+      state_hash,
+      requested_scopes,
+      expires_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'osu',
+      'osu-runtime-foundation-state',
+      array['identify', 'public']::text[],
+      now() + interval '10 minutes'
+    )
+  $$),
+  '00000',
+  'RM-27 allows osu provider connection intents with minimal scopes'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_connection_intents (
+      owner_id,
+      passport_id,
+      provider,
+      state_hash,
+      requested_scopes,
+      expires_at
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'osu',
+      'osu-runtime-bad-scope-state',
+      array['identify', 'friends.read']::text[],
+      now() + interval '10 minutes'
+    )
+  $$),
+  '23514',
+  'RM-27 rejects non-minimal osu provider scopes'
+);
+
+select is(
+  pg_temp.test_sqlstate($$
+    insert into public.provider_token_vault (
+      owner_id,
+      passport_id,
+      provider,
+      token_status,
+      token_ciphertext
+    )
+    values (
+      '00000000-0000-0000-0000-000000000001',
+      '10000000-0000-0000-0000-000000000001',
+      'osu',
+      'placeholder',
+      'osu-ciphertext-not-allowed-in-rm27'
+    )
+  $$),
+  '23514',
+  'RM-27 keeps osu token ciphertext blocked by no-refresh-token strategy'
 );
 
 select is(

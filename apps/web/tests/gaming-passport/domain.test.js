@@ -704,8 +704,8 @@ describe('Gaming Passport legacy proof expectations', () => {
 });
 
 describe('Gaming Passport provider runtime foundation contracts', () => {
-  it('recognizes Discord and Riot as contract providers while keeping runtime inactive', () => {
-    for (const provider of [LINKED_PROVIDER_IDS.DISCORD, LINKED_PROVIDER_IDS.RIOT]) {
+  it('recognizes Discord, osu!, and Riot as contract providers while keeping runtime inactive', () => {
+    for (const provider of [LINKED_PROVIDER_IDS.DISCORD, LINKED_PROVIDER_IDS.OSU, LINKED_PROVIDER_IDS.RIOT]) {
       const result = canStartProviderLink({
         passport: passport({ status: PASSPORT_STATUSES.UNPUBLISHED }),
         parentAuth: parentAuth(),
@@ -745,8 +745,8 @@ describe('Gaming Passport provider runtime foundation contracts', () => {
     const intent = createProviderConnectionIntent({
       ownerId: 'owner_1',
       passportId: 'gp_1',
-      provider: LINKED_PROVIDER_IDS.DISCORD,
-      stateHash: 'discord-foundation-state-hash',
+      provider: LINKED_PROVIDER_IDS.OSU,
+      stateHash: 'osu-foundation-state-hash',
       createdAt: now,
       expiresAt: '2026-06-23T18:10:00.000Z',
       now,

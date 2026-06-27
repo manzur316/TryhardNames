@@ -109,7 +109,7 @@ describe('RM-26 osu! Readiness Pack', () => {
       /no hidden-player inference/i,
       /no store\/payment/i,
       /no `?\/cosmetics`?/i,
-      /RM-27 status: (go|conditional-go|no-go)/i,
+      /RM-27 status: (go|conditional-go|no-go|implemented as conditional foundation)/i,
     ].forEach((pattern) => {
       assert.match(docs, pattern);
     });
@@ -128,21 +128,21 @@ describe('RM-26 osu! Readiness Pack', () => {
       /stale[\s\S]{0,80}revoked/i,
       /rate limit[\s\S]{0,120}backoff/i,
       /not official osu! endorsement/i,
-      /RM-27 status: conditional-go/i,
+      /RM-27 status: (conditional-go|implemented as conditional foundation)/i,
     ].forEach((pattern) => {
       assert.match(docs, pattern);
     });
   });
 
-  it('updates roadmap docs for RM-26 this PR and RM-27 conditional next', () => {
+  it('keeps RM-26 documented after the RM-27 runtime foundation handoff', () => {
     assert.match(readme, /RM-26 osu! Readiness Pack/);
     assert.match(roadmapIndex, /RM-25[\s\S]{0,180}Provider Expansion Readiness Matrix[\s\S]{0,180}done/);
-    assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}this PR/);
-    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}conditional next/);
-    assert.match(milestoneRegistry, /RM-26[\s\S]{0,220}osu! Readiness Pack[\s\S]{0,220}this PR/);
+    assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}done/);
+    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}this PR/);
+    assert.match(milestoneRegistry, /RM-26[\s\S]{0,220}osu! Readiness Pack[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-26 adds osu! Readiness Pack/);
-    assert.match(statusMatrix, /osu! Readiness Pack \| this PR/);
-    assert.match(currentRoadmap, /Current Status After RM-26/);
+    assert.match(statusMatrix, /osu! Readiness Pack \| done/);
+    assert.match(currentRoadmap, /Current Status After RM-27/);
     assert.match(decisionLog, /osu! readiness exits `conditional-go` for RM-27/);
     assert.match(providerExpansion, /RM-26 osu! Readiness Output/);
   });
@@ -162,7 +162,7 @@ describe('RM-26 osu! Readiness Pack', () => {
 
   it('does not add RM-26 database migrations or commercial routes', () => {
     assert.equal(
-      migrationFiles.some((file) => /rm26|osu/i.test(file)),
+      migrationFiles.some((file) => /rm26/i.test(file)),
       false
     );
 
