@@ -1,6 +1,6 @@
 # Provider Expansion Roadmap
 
-RM-23 defines how TryhardNames should evaluate providers after Provider Runtime Foundation, Riot Readiness, Cosmetics Foundation, and Trust/Safety controls.
+RM-23 defines how TryhardNames should evaluate providers after Provider Runtime Foundation, Riot Readiness, Cosmetics Foundation, and Trust/Safety controls. RM-25 applies that policy through the Provider Expansion Readiness Matrix.
 
 Provider expansion is readiness-first. Runtime comes later.
 
@@ -34,7 +34,7 @@ Readiness docs may be merged as RM milestones. Runtime work may start only after
 | Candidate | Type | Current posture | Notes |
 | --- | --- | --- | --- |
 | Riot | Approval-gated gaming provider | Existing readiness pack, runtime blocked | Riot runtime remains gated by explicit approval. |
-| osu! | Recommended first readiness candidate | Readiness candidate, not live runtime | Good candidate for RM-26 because account identity and profile/public API surfaces can be reviewed without Riot approval dependency. |
+| osu! | Recommended first readiness candidate | Recommended RM-26 readiness candidate, not live runtime | Good candidate for RM-26 because account identity and profile/public API surfaces can be reviewed without Riot approval dependency. |
 | Steam | Identity provider candidate | Future readiness | Strong identity footprint, but OpenID/API and public field policy need review. |
 | Supercell / Clash | Game candidate | Blocked until ownership verification strategy | Player tags and verification tokens need careful ownership and privacy design. |
 | Discord | Social/community provider | Future alternative | Useful for community identity, not achievement proof. Discord is not a gaming skill proof. |
@@ -58,6 +58,24 @@ Use this scorecard before selecting a provider for runtime:
 | Stale/revoked behavior | Are stale and revoked proofs clear and safe? |
 | Public projection | Does `/id/:slug` stay allowlisted? |
 | Trust/safety | Does the provider increase impersonation, harassment, privacy, or abuse risk? |
+
+The detailed RM-25 weighted scorecard lives in `PROVIDER_CANDIDATE_SCORECARD.md`. The RM-25 matrix lives in `PROVIDER_EXPANSION_READINESS_MATRIX.md`.
+
+## RM-25 Matrix Output
+
+RM-25 implements the provider expansion matrix as docs/tests-only decision support.
+
+Result:
+
+- osu! is the recommended RM-26 readiness pack.
+- RM-27 osu! Runtime Foundation remains conditional on RM-26 exiting with explicit go criteria.
+- Riot remains approval-gated.
+- Steam remains a future identity readiness candidate.
+- Supercell / Clash remains blocked until ownership verification strategy is documented from official sources.
+- Discord remains a future social/community candidate, not achievement proof.
+- Xbox / PlayStation / Nintendo / Epic remain future/high-friction candidates.
+
+RM-25 does not activate runtime, OAuth, callbacks, provider tokens, provider linking UI, env vars, routes, migrations, `/cosmetics`, store, checkout, payments, or remote service changes.
 
 ## Riot
 
@@ -126,9 +144,9 @@ Discord can prove social identity or community membership, but it is not an achi
 
 Discord Pilot remains an alternate future path only if product direction explicitly selects it.
 
-## Provider Runtime Non-Goals For RM-23
+## Provider Runtime Non-Goals For RM-23 And RM-25
 
-RM-23 does not implement:
+RM-23 and RM-25 do not implement:
 
 - Riot OAuth/API/runtime;
 - Discord OAuth/API/runtime;

@@ -125,10 +125,10 @@ describe('RM-24 Launch Readiness', () => {
     });
   });
 
-  it('updates roadmap docs for RM-24 and RM-25', () => {
-    assert.match(roadmapIndex, /RM-24[\s\S]{0,120}Launch Readiness[\s\S]{0,120}this PR/);
-    assert.match(roadmapIndex, /RM-25[\s\S]{0,120}Provider Expansion Readiness Matrix[\s\S]{0,120}next/);
-    assert.match(milestoneRegistry, /RM-24[\s\S]{0,160}Launch Readiness[\s\S]{0,160}this PR/);
+  it('keeps RM-24 documented after the RM-25 handoff', () => {
+    assert.match(roadmapIndex, /RM-24[\s\S]{0,120}Launch Readiness[\s\S]{0,120}done/);
+    assert.match(roadmapIndex, /RM-25[\s\S]{0,140}Provider Expansion Readiness Matrix[\s\S]{0,140}this PR/);
+    assert.match(milestoneRegistry, /RM-24[\s\S]{0,160}Launch Readiness[\s\S]{0,160}done/);
     assert.match(statusMatrix, /Launch readiness \| done[\s\S]*RM-25/);
     assert.match(decisionLog, /Launch Readiness is evidence and governance, not launch execution/);
     assert.match(readme, /RM-24 Launch Readiness Pack/);

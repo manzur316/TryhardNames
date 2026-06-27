@@ -181,6 +181,7 @@ Completed:
 - Trust / Safety / Privacy Controls Foundation with public profile report intent, safe report submission, private report storage, cosmetic abuse policy, and moderation runbook.
 - RM-23 Roadmap Governance + Provider Expansion Plan, defining GH PR # versus RM-XX, roadmap source-of-truth rules, and provider expansion readiness policy.
 - RM-24 Launch Readiness Pack with production smoke, observability, rollback, go/no-go, and policy final review docs.
+- RM-25 Provider Expansion Readiness Matrix comparing Riot, osu!, Steam, Supercell/Clash, Discord, and future console/Epic candidates without runtime activation.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -196,15 +197,15 @@ Waiting:
 
 Next product block:
 
-- RM-25 Provider Expansion Readiness Matrix.
+- RM-26 osu! Readiness Pack.
 
 Provider expansion planning:
 
-- RM-25 Provider Expansion Readiness Matrix.
-- RM-26 osu! Readiness Pack.
+- RM-25 Provider Expansion Readiness Matrix is implemented as docs/tests-only decision support.
+- RM-26 osu! Readiness Pack is the recommended next provider-specific readiness milestone.
 - RM-27 osu! Runtime Foundation, conditional on RM-26 and official review.
 - Riot runtime only after explicit approval evidence exists.
-- osu! is a readiness candidate, not live runtime.
+- osu! is the recommended readiness candidate, not live runtime.
 - Steam is a future identity provider candidate.
 - Supercell / Clash remains blocked until ownership verification strategy is documented.
 - Discord is a future social/community provider candidate, not an achievement proof.

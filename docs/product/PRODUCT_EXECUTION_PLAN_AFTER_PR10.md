@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, and RM-24.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, and RM-25.
 
 ## Closed Visual/Tooling Line
 
@@ -41,11 +41,13 @@ RM-23 adds Roadmap Governance + Provider Expansion Plan. It separates GitHub PR 
 
 RM-24 adds Launch Readiness. It creates the launch readiness overview, production smoke checklist, observability and monitoring checklist, rollback plan, launch go/no-go matrix, policy final review, RM24 scope doc, roadmap updates, and source-based tests. It does not execute deploy, touch remote services, add runtime, add routes, add migrations, or activate providers/store/payments.
 
+RM-25 adds Provider Expansion Readiness Matrix. It compares Riot, osu!, Steam, Supercell/Clash, Discord, and future console/Epic candidates using readiness-before-runtime criteria, recommends RM-26 osu! Readiness Pack, and keeps all runtime/OAuth/API/callback/token/env/store/payment/DB work out of scope.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness -> conditional provider runtime.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> conditional provider runtime.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -192,10 +194,11 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 
 - Goal: Compare future linked-provider candidates with the same readiness-before-runtime scorecard.
 - Why now: Riot remains approval-gated, and TryhardNames needs an auditable provider expansion path.
-- Already exists: Provider Runtime Foundation, Riot Readiness Pack, trust/safety controls, public projection boundaries.
-- Missing: Candidate-by-candidate official docs review and go/no-go scoring.
-- Non-goals: No provider runtime or OAuth.
-- Exit criteria: Candidate matrix identifies the safest readiness path without activating runtime.
+- Already exists: Provider Runtime Foundation, Riot Readiness Pack, trust/safety controls, public projection boundaries, and RM-23 provider expansion planning.
+- Implemented by RM-25: provider expansion readiness matrix, weighted candidate scorecard, provider candidate notes, RM25 scope doc, roadmap updates, and source guards.
+- Missing: RM-26 osu! provider-specific readiness pack and any future runtime approval.
+- Non-goals: No provider runtime, OAuth, APIs, callbacks, tokens, env vars, `/cosmetics`, store/payments, migrations, remote services, or deploy execution.
+- Exit criteria: Candidate matrix identifies osu! as the safest next readiness path without activating runtime.
 
 ### RM-26 osu! Readiness Pack
 

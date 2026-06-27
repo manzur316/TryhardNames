@@ -51,6 +51,7 @@ Branch names should include the RM identifier when useful:
 
 - `docs/rm23-roadmap-governance-provider-expansion`
 - `docs/rm24-launch-readiness`
+- `docs/rm25-provider-expansion-readiness-matrix`
 - `docs/rm26-osu-readiness-pack`
 
 Feature branches can keep conventional prefixes, but the PR body must declare the RM.
@@ -128,4 +129,4 @@ Every provider path must pass:
 - RM-26 osu! Readiness Pack.
 - RM-27 osu! Runtime Foundation, conditional on RM-26 and official review.
 
-RM-24 is implemented as launch readiness evidence and does not execute deploy. RM-25, RM-26, and RM-27 are not implemented by RM-24.
+RM-24 is implemented as launch readiness evidence and does not execute deploy. RM-25 is implemented as provider expansion decision support and does not activate runtime. RM-26 and RM-27 are not implemented by RM-25.
