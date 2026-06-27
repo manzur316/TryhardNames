@@ -1,6 +1,6 @@
 # Roadmap Status Matrix
 
-This matrix reflects main after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23 roadmap governance, and RM-24 launch readiness.
+This matrix reflects main after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23 roadmap governance, RM-24 launch readiness, and RM-25 provider expansion readiness matrix.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -34,10 +34,10 @@ This matrix reflects main after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR
 | Cosmetics monetization / inventory | pending | `PASSPORT_COSMETICS_FOUNDATION.md` | Explicit non-goals and future boundaries | Store/payment/inventory model, if ever approved | Future | No Stripe, MercadoPago, checkout, purchased inventory, loot boxes, gacha, or marketplace in PR21. |
 | Trust / Safety / Privacy Controls | done | `TRUST_SAFETY_PRIVACY_CONTROLS.md`, `reportPolicy.js`, `PublicProfileReportDialog.jsx`, `trustSafetyRepository.js`, `20260626100000_public_profile_reports.sql` | Public profile report intent, private report storage, safe report RPC, report category policy, cosmetic abuse policy, blocked visual identity terms, takedown/suspension/privacy docs, moderation runbook | Full moderation dashboard, report queue operations, rate limits, email notifications, operational takedown tooling | RM-23 | Public identity requires report, takedown, and privacy controls before broad distribution. |
 | Roadmap Governance | done | `ROADMAP_GOVERNANCE.md`, `ROADMAP_INDEX.md`, `ROADMAP_MILESTONE_REGISTRY.md` | GH PR # versus RM-XX convention, source-of-truth rules, milestone registry, PR body rules, follow-up rules | Future upkeep during every RM | RM-25 | GitHub/main/docs are the source of truth; chat is not. |
-| Provider Expansion Readiness Planning | done | `PROVIDER_EXPANSION_ROADMAP.md` | Readiness-before-runtime policy, candidate taxonomy, scorecard, osu! readiness recommendation, Steam/Supercell/Discord future candidate boundaries | RM-25 matrix and provider-specific readiness packs | RM-25 | No provider runtime without readiness pack first. |
+| Provider Expansion Readiness Planning | done | `PROVIDER_EXPANSION_ROADMAP.md`, `PROVIDER_EXPANSION_READINESS_MATRIX.md`, `PROVIDER_CANDIDATE_SCORECARD.md`, `PROVIDER_CANDIDATE_NOTES.md` | Readiness-before-runtime policy, candidate taxonomy, weighted RM-25 matrix, osu! readiness recommendation, Steam/Supercell/Discord future candidate boundaries | Provider-specific readiness packs | RM-26 | No provider runtime without readiness pack first. |
 | Launch readiness | done | `LAUNCH_READINESS.md`, `PRODUCTION_SMOKE_CHECKLIST.md`, `OBSERVABILITY_AND_MONITORING.md`, `ROLLBACK_PLAN.md`, `LAUNCH_GO_NO_GO_MATRIX.md`, `POLICY_FINAL_REVIEW.md` | Production smoke checklist, observability checklist, rollback plan, policy final review, launch go/no-go matrix, RM24 scope doc | Actual launch execution, production smoke evidence, owner go/no-go acceptance | RM-25 | RM-24 does not deploy; it prepares launch evidence and gates. |
-| Provider Expansion Readiness Matrix | pending | `PROVIDER_EXPANSION_ROADMAP.md` | Candidate taxonomy and scorecard | Detailed scored matrix | RM-25 | Provider expansion does not activate runtime. |
-| osu! Readiness Pack | pending | `PROVIDER_EXPANSION_ROADMAP.md` | Recommended readiness candidate | Official docs/API/OAuth/token/privacy review | RM-26 | osu! is not live runtime. |
+| Provider Expansion Readiness Matrix | done | `PROVIDER_EXPANSION_READINESS_MATRIX.md`, `PROVIDER_CANDIDATE_SCORECARD.md`, `PROVIDER_CANDIDATE_NOTES.md`, `RM25_PROVIDER_EXPANSION_SCOPE.md` | Detailed scored matrix and recommended RM-26 osu! Readiness Pack | Provider-specific readiness execution | RM-26 | Provider expansion does not activate runtime. |
+| osu! Readiness Pack | next | `PROVIDER_EXPANSION_READINESS_MATRIX.md`, `PROVIDER_EXPANSION_ROADMAP.md` | Recommended readiness candidate | Official docs/API/OAuth/token/privacy review | RM-26 | osu! is not live runtime. |
 | osu! Runtime Foundation | conditional | `PROVIDER_EXPANSION_ROADMAP.md` | Conditional roadmap slot | Runtime only if RM-26 passes official review | RM-27 | No runtime without readiness exit criteria. |
 
 ## Summary
@@ -54,5 +54,5 @@ This matrix reflects main after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR
 - PR22 implements Trust / Safety / Privacy Controls Foundation without provider launch, store/payments, `/cosmetics`, report admin UI, or public report lists.
 - RM-23 implements Roadmap Governance + Provider Expansion Plan and separates GitHub PR # from RM-XX.
 - RM-24 implements Launch Readiness as docs/tests-only evidence, not launch execution.
-- RM-25 Provider Expansion Readiness Matrix is the next implementation block; RM-26 osu! Readiness Pack and RM-27 conditional osu! Runtime Foundation are future blocks.
+- RM-25 Provider Expansion Readiness Matrix is implemented as docs/tests-only decision support; RM-26 osu! Readiness Pack is next, and RM-27 conditional osu! Runtime Foundation remains future.
 - Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.
