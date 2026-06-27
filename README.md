@@ -74,6 +74,10 @@ Current support docs:
 
 ## Planning Documents
 
+- `docs/product/ROADMAP_GOVERNANCE.md`
+- `docs/product/ROADMAP_INDEX.md`
+- `docs/product/ROADMAP_MILESTONE_REGISTRY.md`
+- `docs/product/PROVIDER_EXPANSION_ROADMAP.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
@@ -157,6 +161,8 @@ git worktree add "../TryhardNames-new-task" -b docs/example origin/main
 
 ## Roadmap Snapshot
 
+GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable product roadmap milestone identifier used in `docs/product`. Chat is not a source of truth.
+
 Completed:
 
 - Security/reproducibility.
@@ -173,6 +179,7 @@ Completed:
 - Riot Readiness Pack with approval gates, design-only RSO callback plan, token-retention requirements, and adapter contract review.
 - Passport Cosmetics Foundation with TryhardNames-owned visual-only cosmetics and Obsidian Pulse as a free foundation preview.
 - Trust / Safety / Privacy Controls Foundation with public profile report intent, safe report submission, private report storage, cosmetic abuse policy, and moderation runbook.
+- RM-23 Roadmap Governance + Provider Expansion Plan, defining GH PR # versus RM-XX, roadmap source-of-truth rules, and provider expansion readiness policy.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -188,11 +195,18 @@ Waiting:
 
 Next product block:
 
-- PR19 Riot Provider Runtime, only if explicit Riot approval exists.
+- RM-24 Launch Readiness.
 
-After provider foundation and approvals:
+Provider expansion planning:
 
+- RM-25 Provider Expansion Readiness Matrix.
+- RM-26 osu! Readiness Pack.
+- RM-27 osu! Runtime Foundation, conditional on RM-26 and official review.
 - Riot runtime only after explicit approval evidence exists.
+- osu! is a readiness candidate, not live runtime.
+- Steam is a future identity provider candidate.
+- Supercell / Clash remains blocked until ownership verification strategy is documented.
+- Discord is a future social/community provider candidate, not an achievement proof.
 - Discord pilot remains an alternate future path only if product direction explicitly changes.
 - Server-side token storage.
 - Unlink/revoke.

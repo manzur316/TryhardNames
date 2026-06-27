@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, and PR22.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, and RM-23.
 
 ## Closed Visual/Tooling Line
 
@@ -37,11 +37,15 @@ PR21 adds Passport Cosmetics Foundation. It creates a TryhardNames-owned local c
 
 PR22 adds Trust / Safety / Privacy Controls Foundation. It adds public profile report intent, safe report submission RPC, private report storage, report category policy, cosmetic abuse policy, blocked/reserved visual identity terms, takedown/suspension/privacy docs, and moderation runbook. It does not add provider launch expansion, `/cosmetics`, store, payments, pets/companions runtime, admin moderation dashboard, public report list, or email notifications.
 
+RM-23 adds Roadmap Governance + Provider Expansion Plan. It separates GitHub PR # from stable RM-XX milestones, defines GitHub/main/docs as the source of truth, adds the roadmap index and milestone registry, and documents provider expansion as readiness-before-runtime. It does not add runtime, providers, OAuth, `/cosmetics`, store, payments, migrations, env vars, or secrets.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> approved provider runtime -> Proofs -> Launch.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness -> conditional provider runtime.
+
+GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
 ## Corrected Roadmap
 
@@ -162,7 +166,17 @@ Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> approved pr
 - Non-goals: No provider launch expansion, `/cosmetics`, store, payments, pets/companions runtime, admin dashboard, public report list, or email notification service.
 - Exit criteria: Public profile abuse and privacy paths are documented, testable, and do not weaken public projection safety.
 
-### PR23 Launch Readiness
+### RM-23 Roadmap Governance + Provider Expansion Plan
+
+- Goal: Establish stable roadmap governance and provider expansion planning.
+- Why now: GitHub PR numbers no longer match product phase labels, and provider expansion needs readiness-before-runtime rules before launch readiness.
+- Already exists: RM-14 through RM-22 product history, merged GitHub PRs, roadmap docs, provider readiness docs, Riot readiness docs, cosmetics docs, trust/safety docs.
+- Implemented by RM-23: Roadmap governance, RM index, milestone registry, provider expansion roadmap, and source-based docs tests.
+- Missing: RM-24 Launch Readiness implementation, RM-25 provider expansion matrix, RM-26 osu! readiness, and RM-27 conditional runtime.
+- Non-goals: No runtime, routes, providers, OAuth, store/payments, migrations, env vars, secrets, or remote service changes.
+- Exit criteria: Docs clearly distinguish GH PR # from RM-XX and define provider expansion readiness policy.
+
+### RM-24 Launch Readiness
 
 - Goal: Prepare for a controlled public launch.
 - Why now: Launch should follow working product, provider/privacy controls, and rollback paths.
@@ -170,3 +184,34 @@ Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> approved pr
 - Missing: Production smoke, observability, rollback, policy final review, portal metadata sync.
 - Non-goals: No new product scope.
 - Exit criteria: Launch checklist is complete and risks are explicitly accepted or mitigated.
+
+### RM-25 Provider Expansion Readiness Matrix
+
+- Goal: Compare future linked-provider candidates with the same readiness-before-runtime scorecard.
+- Why now: Riot remains approval-gated, and TryhardNames needs an auditable provider expansion path.
+- Already exists: Provider Runtime Foundation, Riot Readiness Pack, trust/safety controls, public projection boundaries.
+- Missing: Candidate-by-candidate official docs review and go/no-go scoring.
+- Non-goals: No provider runtime or OAuth.
+- Exit criteria: Candidate matrix identifies the safest readiness path without activating runtime.
+
+### RM-26 osu! Readiness Pack
+
+- Goal: Review osu! as the recommended first provider expansion readiness candidate.
+- Why now: osu! can be evaluated independently from Riot approval, but runtime must not begin before official docs review.
+- Already exists: Provider expansion roadmap and readiness policy.
+- Missing: Official osu! docs review, OAuth/API model review, token/storage review, public proof shape, and trust/safety review.
+- Non-goals: No osu! OAuth/API/runtime, tokens, env vars, secrets, or callbacks.
+- Exit criteria: osu! readiness exits with explicit go/no-go criteria for RM-27.
+
+### RM-27 osu! Runtime Foundation
+
+- Goal: Conditional future runtime foundation for osu! only if RM-26 passes official review.
+- Why now: Runtime must follow readiness.
+- Already exists: Provider Runtime Foundation and future RM-26 readiness output.
+- Missing: Conditional implementation scope.
+- Non-goals: No runtime if readiness fails or is incomplete.
+- Exit criteria: Runtime foundation remains policy-compliant, owner-controlled, revocable, and public-projection-safe.
+
+### Legacy PR23 Label
+
+The old product label `PR23 Launch Readiness` is deprecated. Use RM-24 Launch Readiness.
