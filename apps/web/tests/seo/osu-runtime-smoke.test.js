@@ -37,6 +37,7 @@ const rm28DocPaths = [
   'docs/product/OSU_OWNER_LINKING_SMOKE_RUNBOOK.md',
   'docs/product/OSU_RUNTIME_SMOKE_RESULTS.md',
   'docs/product/RM28_OSU_RUNTIME_SMOKE_SCOPE.md',
+  'docs/product/RM29_OSU_SMOKE_BLOCKER_FIXES_SCOPE.md',
 ];
 const rm28Docs = rm28DocPaths.map(readRepo).join('\n');
 const roadmapDocs = [
@@ -49,6 +50,7 @@ const roadmapDocs = [
   'docs/product/DECISION_LOG.md',
 ].map(readRepo).join('\n');
 const apiOsuSource = readTree('apps/api/src/integrations/osu');
+const apiManualSmokeScript = readRepo('apps/api/scripts/osuManualSmoke.mjs');
 const webSource = readTree('apps/web/src', ['.js', '.jsx', '.ts', '.tsx']);
 const supabaseSource = readTree('supabase/migrations', ['.sql']);
 const appSource = readWeb('src/App.jsx');
@@ -56,8 +58,8 @@ const packageJson = JSON.parse(readWeb('package.json'));
 const apiPackageJson = JSON.parse(readRepo('apps/api/package.json'));
 const rootPackageJson = JSON.parse(readRepo('package.json'));
 
-describe('RM-28 osu! Runtime Smoke / Owner Linking QA', () => {
-  it('adds smoke QA docs and records a partial-pass instead of overclaiming full smoke', () => {
+describe('RM-28/RM-29 osu! Runtime Smoke / Owner Linking QA', () => {
+  it('adds smoke QA docs, preserves RM-28 partial-pass, and records RM-29 full-pass', () => {
     rm28DocPaths.forEach((path) => {
       assert.equal(existsSync(repoPath(path)), true);
     });
@@ -67,6 +69,9 @@ describe('RM-28 osu! Runtime Smoke / Owner Linking QA', () => {
     assert.match(rm28Docs, /Result: `partial-pass`/);
     assert.match(rm28Docs, /blocked-human/);
     assert.match(rm28Docs, /human owner opens the generated `authorizeUrl`/);
+    assert.match(rm28Docs, /RM-29 result: `full-pass`/);
+    assert.match(rm28Docs, /CALLBACK_REAL=pass/);
+    assert.match(rm28Docs, /RM-30 osu! Owner Linking UI Hardening \/ Private Account UX/);
     assert.doesNotMatch(rm28Docs, /Result: `full-pass`/);
   });
 
@@ -114,6 +119,38 @@ describe('RM-28 osu! Runtime Smoke / Owner Linking QA', () => {
     assert.doesNotMatch(webSource, /import\.meta\.env\.(OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY)|process\.env\.(OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY)/i);
   });
 
+  it('documents RM-29 full-pass callback, DB, token vault, unlink, projection, and negative evidence', () => {
+    [
+      /RM29_COMPLETE=pass/,
+      /LINKED_PROVIDER_ACCOUNT_STATUS=verified/,
+      /LINKED_PROVIDER_ACCOUNT_VISIBILITY=private/,
+      /VERIFIED_PROOF_STATUS=current/,
+      /VERIFIED_PROOF_VISIBILITY=private/,
+      /TOKEN_VAULT_ROWS_BEFORE_UNLINK=0/,
+      /PUBLIC_PROJECTION_BEFORE_UNLINK=true/,
+      /UNLINK_STATUS=revoked/,
+      /UNLINK_IDEMPOTENT_SECOND_CALL=true/,
+      /REVOKED_ACCOUNT_STATUS=revoked/,
+      /REVOKED_PROOF_STATUS=revoked/,
+      /PUBLIC_PROJECTION_AFTER_UNLINK=false/,
+      /NEGATIVE_CALLBACK_REPLAY_STATUS=400/,
+      /NEGATIVE_ALTERED_STATE_STATUS=400/,
+      /NEGATIVE_OTHER_OWNER_UNLINK_STATUS=404/,
+      /NEGATIVE_MISSING_AUTH_STATUS=401/,
+    ].forEach((pattern) => assert.match(rm28Docs, pattern));
+  });
+
+  it('adds a safe assisted local smoke script without logging OAuth or token material', () => {
+    assert.match(apiManualSmokeScript, /prepare/);
+    assert.match(apiManualSmokeScript, /complete/);
+    assert.match(apiManualSmokeScript, /AUTHORIZE_URL_REDACTED=true/);
+    assert.match(apiManualSmokeScript, /CONTEXT_CLEARED=true/);
+    assert.match(apiManualSmokeScript, /no_refresh_token_storage/);
+    assert.doesNotMatch(apiManualSmokeScript, /safeLog\([^)]*authorizeUrl/i);
+    assert.doesNotMatch(apiManualSmokeScript, /safeLog\([^)]*ownerAccessToken/i);
+    assert.doesNotMatch(apiManualSmokeScript, /safeLog\([^)]*oauthState/i);
+  });
+
   it('keeps forbidden RM-28 product surfaces out of source and docs', () => {
     const sourceOnly = `${apiOsuSource}\n${webSource}`;
 
@@ -129,11 +166,13 @@ describe('RM-28 osu! Runtime Smoke / Owner Linking QA', () => {
     assert.doesNotMatch(webSource, /osuRank|osuRanking|rankedScore|performancePoints|osuPp|ppScore|matchHistory|liveTracker/i);
   });
 
-  it('updates roadmap docs for RM-28 partial smoke and defines RM-29 blocker follow-up', () => {
+  it('updates roadmap docs for RM-29 full-pass smoke and defines RM-30 owner UX follow-up', () => {
     assert.match(roadmapDocs, /RM-27 osu! Runtime Foundation[^|\\n]*done|RM-27 osu! Runtime Foundation[\s\S]{0,180}done/);
     assert.match(roadmapDocs, /RM-28 osu! Runtime Smoke \/ Owner Linking QA/);
     assert.match(roadmapDocs, /partial-pass|blocked-human|blocked at human authorization/i);
     assert.match(roadmapDocs, /RM-29 osu! Smoke Blocker Fixes/);
+    assert.match(roadmapDocs, /full-pass|full local smoke completion/i);
+    assert.match(roadmapDocs, /RM-30 osu! Owner Linking UI Hardening \/ Private Account UX/);
   });
 
   it('wires RM-28 smoke tests into API and web test scripts', () => {

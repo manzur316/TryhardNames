@@ -137,7 +137,7 @@ describe('RM-25 Provider Expansion Readiness Matrix', () => {
     assert.match(milestoneRegistry, /RM-25[\s\S]{0,220}Provider Expansion Readiness Matrix[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-25 adds Provider Expansion Readiness Matrix/);
     assert.match(statusMatrix, /Provider Expansion Readiness Matrix \| done/);
-    assert.match(currentRoadmap, /Current Status After RM-28/);
+    assert.match(currentRoadmap, /Current Status After RM-29/);
     assert.match(decisionLog, /Provider Expansion Readiness Matrix recommends osu! readiness next/);
     assert.match(providerExpansion, /RM-25 Matrix Output/);
   });

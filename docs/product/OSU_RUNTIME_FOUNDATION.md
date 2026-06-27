@@ -136,3 +136,13 @@ RM-28 osu! Runtime Smoke / Owner Linking QA
 ```
 
 RM-28 debe validar el flujo con env de staging, callback registrado, smoke owner-only, unlink, revoke y public projection antes de cualquier production launch.
+
+## RM-29
+
+RM-29 completed the human-authorized local smoke after RM-28's partial-pass blocker. The callback, private DB rows, token vault non-persistence, owner-only unlink/revoke, public projection non-leakage, and negative cases passed locally.
+
+The next recommended milestone is:
+
+```txt
+RM-30 osu! Owner Linking UI Hardening / Private Account UX
+```

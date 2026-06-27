@@ -6,6 +6,10 @@ Result classification for this PR: `partial-pass`.
 
 The local runtime smoke reached the configured status and owner link-intent stages. The real osu! callback is blocked until a human owner opens the generated `authorizeUrl`, signs in to osu!, and authorizes the registered local callback.
 
+RM-29 follow-up result: `full-pass`.
+
+RM-29 completed the human-authorized callback locally and verified DB rows, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases.
+
 ## Scope
 
 RM-28 covers:
@@ -68,22 +72,30 @@ The RM-28 smoke keeps these security boundaries:
 - never expose provider proof publicly by default;
 - never use PocketBase for this smoke.
 
-## RM-29 Decision
+## RM-29 Decision From RM-28
 
-Because the real osu! callback remains blocked on human authorization, the next recommended milestone is:
+Because the real osu! callback was blocked on human authorization at the end of RM-28, the next recommended milestone was:
 
 ```txt
 RM-29 osu! Smoke Blocker Fixes
 ```
 
-If a human completes the authorization smoke later and all callback, DB, token vault, unlink, and public projection checks pass, RM-29 can be reclassified as:
+If a human completes the authorization smoke later and all callback, DB, token vault, unlink, and public projection checks pass, the following work can move to:
 
 ```txt
 RM-29 osu! Owner Linking UI Hardening / Private Account UX
 ```
 
-If any secret leakage, token persistence, public proof leakage, or owner isolation failure is found, RM-29 must become:
+If any secret leakage, token persistence, public proof leakage, or owner isolation failure is found, the following work must become:
 
 ```txt
 RM-29 osu! Runtime Security Fixes
+```
+
+## RM-29 Follow-Up
+
+RM-29 closed the RM-28 blocker as full-pass smoke completion. The next recommended milestone is:
+
+```txt
+RM-30 osu! Owner Linking UI Hardening / Private Account UX
 ```

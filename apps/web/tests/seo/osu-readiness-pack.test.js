@@ -142,7 +142,7 @@ describe('RM-26 osu! Readiness Pack', () => {
     assert.match(milestoneRegistry, /RM-26[\s\S]{0,220}osu! Readiness Pack[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-26 adds osu! Readiness Pack/);
     assert.match(statusMatrix, /osu! Readiness Pack \| done/);
-    assert.match(currentRoadmap, /Current Status After RM-28/);
+    assert.match(currentRoadmap, /Current Status After RM-29/);
     assert.match(decisionLog, /osu! readiness exits `conditional-go` for RM-27/);
     assert.match(providerExpansion, /RM-26 osu! Readiness Output/);
   });

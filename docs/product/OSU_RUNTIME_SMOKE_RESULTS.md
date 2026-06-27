@@ -1,85 +1,84 @@
-# RM-28 osu! Runtime Smoke Results
+# osu! Runtime Smoke Results
 
 Date: 2026-06-27
 
-Worktree:
-
-```txt
-C:\Users\Juandi Gamer\Documents\TryhardNames-rm28-osu-runtime-smoke
-```
-
-Branch:
-
-```txt
-test/rm28-osu-runtime-smoke-owner-linking
-```
-
-Base HEAD:
-
-```txt
-8ee0ceea7b090205d5f4dc543f9f8f5ea6337337
-```
-
 ## Result
 
-Result: `partial-pass`.
+RM-28 result: `partial-pass`.
 
-Blocker: real osu! callback requires human authorization in browser. Codex can generate and verify the link-intent response locally, but cannot sign in to osu! as the owner or approve the OAuth consent.
+Result: `partial-pass` for the historical RM-28 smoke.
+
+RM-29 result: `full-pass`.
+
+RM-29 completed the RM-28 blocker by running the real human-authorized osu! callback locally and verifying DB state, token non-persistence, unlink/revoke, public projection non-leakage, and negative cases.
+
+This was local-only smoke. It did not touch production, remote Supabase, Vercel, PocketBase, public provider UI, store/payments, `/cosmetics`, or tracker/ranking behavior.
 
 ## Local Services
 
-Expected local services:
+Validated local services:
 
 - Supabase local: `http://127.0.0.1:54321`;
 - API local: `http://localhost:3001`;
-- Web local: `http://localhost:5173`.
+- Web local: `http://localhost:5173`;
+- registered osu! callback: `http://localhost:3001/api/v1/integrations/osu/callback`.
 
-PocketBase was not used.
+## RM-29 Manual Authorization
 
-## Smoke Matrix
+Human authorization was required and completed.
+
+One earlier authorization attempt reached callback after the CSRF state TTL and correctly failed closed with HTTP 400. A fresh link-intent was created and authorized within the TTL; that callback completed successfully.
+
+The authorize URL, OAuth `code`, OAuth `state`, local owner JWT, and local secret values were not recorded in this document.
+
+## RM-29 Smoke Matrix
 
 | Check | Result | Evidence |
 | --- | --- | --- |
-| HEAD matches RM-27 merge | pass | `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`. |
-| Runtime status endpoint | pass | `GET /api/v1/integrations/osu` returned configured in local runtime. |
-| Status response safe fields | pass | No client secret, service role key, access token, refresh token, OAuth code, or token JSON fields detected. |
-| Local owner/JWT preparation | pass | Local-only Supabase owner, JWT, and private Passport draft were prepared without printing JWT. |
-| Link intent | pass | `POST /link-intent` returned HTTP 201 with `authorizeUrl`, `expiresAt`, `identify public`, and `no_refresh_token_storage`. |
-| Human authorizeUrl | blocked-human | Requires user to open authorize URL and authorize osu!. |
-| Real callback | blocked-human | Not completed by Codex. |
-| Linked provider DB verification | blocked-callback | Requires successful callback row. |
-| Verified proof DB verification | blocked-callback | Requires successful callback row. |
-| Token vault non-persistence | partial-pass | Token vault was not readable through REST, as expected for the protected table. DB constraints and tests keep `token_ciphertext` blocked; real callback evidence still pending. |
-| Unlink/revoke | blocked-callback | Requires linked provider account id from callback. |
-| Public projection revoked proof | blocked-callback | Requires linked/revoked proof from callback. |
-| Negative cases | partial-pass | Link-intent without auth returned 401, link-intent without `passportId` returned 400, callback without code returned 400, callback without state returned 400, and callback with altered state returned 400. Replay and other-owner unlink require callback fixture. |
+| Runtime status endpoint | pass | `GET /api/v1/integrations/osu` returned HTTP 200 and configured runtime. |
+| Status response safe fields | pass | No client secret, service role key, access token, refresh token, OAuth code, or sensitive token JSON property was exposed. |
+| Assisted smoke script | pass | `apps/api/scripts/osuManualSmoke.mjs` prepared local owner/JWT/passport context, created link-intent, opened authorization, and verified completion without printing secrets/tokens/code/state. |
+| Link intent | pass | `POST /link-intent` returned HTTP 201 with authorize URL, `identify public`, and `no_refresh_token_storage`. |
+| Human authorizeUrl | pass | User opened osu!, authorized the local registered callback, and reported callback completion. |
+| Real callback | pass | Callback produced linked status and created the expected private local records. |
+| Linked provider DB verification | pass | `linked_provider_accounts.provider = 'osu'`, `status = 'verified'`, `visibility = 'private'`. |
+| Verified proof DB verification | pass | `verified_proofs.provider = 'osu'`, `source_key = 'osu:profile_linked'`, `status = 'current'`, `visibility = 'private'`. |
+| Token vault non-persistence | pass | `provider_token_vault` had zero osu! token rows for the smoke link; no `token_ciphertext`, access token, or refresh token was persisted. |
+| Public projection before unlink | pass | Published local Passport projection existed only to exercise `/id/:slug` policy; private osu! provider/proof did not appear and internal ids/metadata/token status were absent. |
+| Callback replay | pass | Replay with the consumed state returned HTTP 400. |
+| Altered state | pass | Altered state returned HTTP 400. |
+| Other-owner unlink | pass | Other owner unlink attempt returned HTTP 404. |
+| Missing auth | pass | Link-intent without auth returned HTTP 401. |
+| Unlink/revoke | pass | Owner unlink returned revoked status and `publicServingAllowed = false`; second unlink was idempotent. |
+| DB after unlink | pass | Linked account became `status = 'revoked'`, `visibility = 'private'`; proof became `status = 'revoked'`, `visibility = 'private'`. |
+| Public projection after unlink | pass | Public projection returned unavailable/null because no verified provider remained; revoked proof did not appear. |
 
-## Local Smoke Values
+## RM-29 Smoke Values
 
-The local smoke produced:
+The successful RM-29 completion produced:
 
 ```txt
-STATUS_OK=true
-STATUS_VALUE=configured
-RUNTIME_CONFIGURED=true
-TOKEN_STRATEGY=no_refresh_token_storage
-LINK_INTENT_STATUS=201
-LINK_INTENT_HAS_AUTHORIZE_URL=true
-LINK_INTENT_HAS_EXPIRES_AT=true
-LINK_INTENT_SCOPES=identify public
-LINK_INTENT_TOKEN_STRATEGY=no_refresh_token_storage
-INTENT_ROWS=1
-CALLBACK_STATE_ROWS=1
-TOKEN_VAULT_REST_READABLE=false
-NO_AUTH_STATUS=401
-MISSING_PASSPORT_STATUS=400
-CALLBACK_MISSING_CODE_STATUS=400
-CALLBACK_MISSING_STATE_STATUS=400
-CALLBACK_ALTERED_STATE_STATUS=400
-MANUAL_AUTHORIZATION_REQUIRED=true
+RM29_COMPLETE=pass
+CALLBACK_REAL=pass
+LINKED_PROVIDER_ACCOUNT_STATUS=verified
+LINKED_PROVIDER_ACCOUNT_VISIBILITY=private
+VERIFIED_PROOF_STATUS=current
+VERIFIED_PROOF_VISIBILITY=private
+TOKEN_VAULT_ROWS_BEFORE_UNLINK=0
+PUBLIC_PROJECTION_BEFORE_UNLINK=true
+UNLINK_STATUS=revoked
+UNLINK_IDEMPOTENT_SECOND_CALL=true
+REVOKED_ACCOUNT_STATUS=revoked
+REVOKED_ACCOUNT_VISIBILITY=private
+REVOKED_PROOF_STATUS=revoked
+REVOKED_PROOF_VISIBILITY=private
+PUBLIC_PROJECTION_AFTER_UNLINK=false
+NEGATIVE_CALLBACK_REPLAY_STATUS=400
+NEGATIVE_ALTERED_STATE_STATUS=400
+NEGATIVE_OTHER_OWNER_UNLINK_STATUS=404
+NEGATIVE_MISSING_AUTH_STATUS=401
+CONTEXT_CLEARED=true
 ```
-
-The generated JWT, authorize URL, OAuth state, and any local secret values were not recorded in this document.
 
 ## Security Notes
 
@@ -91,30 +90,23 @@ The smoke and docs did not include:
 - refresh token;
 - OAuth code;
 - OAuth state value;
+- local owner JWT;
 - real osu! profile payload;
 - remote Supabase data;
 - Vercel configuration.
 
-## Required Manual Follow-Up
+The token strategy remains:
 
-To complete full-pass smoke, the owner must:
+```txt
+no_refresh_token_storage
+```
 
-1. run the local services;
-2. prepare `LOCAL_OWNER_JWT` and `LOCAL_PASSPORT_ID`;
-3. call `POST /api/v1/integrations/osu/link-intent`;
-4. open the returned `authorizeUrl`;
-5. authorize osu! in the browser;
-6. verify callback response;
-7. verify local DB rows;
-8. run unlink;
-9. verify revoked/private DB rows and public projection non-leakage.
-
-## RM-29 Recommendation
+## RM-30 Recommendation
 
 Next recommended RM:
 
 ```txt
-RM-29 osu! Smoke Blocker Fixes
+RM-30 osu! Owner Linking UI Hardening / Private Account UX
 ```
 
-Reason: the only remaining full-pass blocker is the manual osu! authorization and callback evidence. If the owner completes that smoke successfully, RM-29 should move to owner-linking UI hardening and private account UX. If any leakage or storage issue appears, RM-29 must become runtime security fixes.
+Reason: RM-29 closed the human authorization smoke blocker with full local callback, DB, token vault, unlink/revoke, public projection, and negative-case evidence. The next work can harden private owner UX without changing production, public provider UI, token strategy, or proof visibility defaults.
