@@ -1,10 +1,12 @@
-# RM-28 osu! Owner Linking Smoke Runbook
+# osu! Owner Linking Smoke Runbook
 
 This runbook repeats the local/staging smoke without committing secrets or touching production, remote Supabase, Vercel, PocketBase, store/payments, `/cosmetics`, public provider UI, or tracker/ranking surfaces.
 
+RM-28 used this runbook to document the blocked human authorization path. RM-29 completed the blocker with the assisted local script and a real osu! authorization callback.
+
 ## Preconditions
 
-- Worktree is on the RM-28 branch.
+- Worktree is on the current smoke branch.
 - Supabase local is running at `http://127.0.0.1:54321`.
 - `apps/api/.env` exists locally and is ignored by Git.
 - `apps/api/.env.example` contains placeholders only.
@@ -30,12 +32,76 @@ Do not print those values.
 ## Start Local Runtime
 
 ```powershell
-cd "C:\Users\Juandi Gamer\Documents\TryhardNames-rm28-osu-runtime-smoke"
+cd "C:\Users\Juandi Gamer\Documents\TryhardNames-rm29-osu-smoke-blocker-fixes"
 npm run db:start
 npx supabase@2.84.2 migration up --local
 npm run dev --prefix apps/api
 npm run dev --prefix apps/web -- --port 5173
 ```
+
+## Assisted RM-29 Smoke
+
+Use the assisted script for the full local callback smoke:
+
+```powershell
+node apps/api/scripts/osuManualSmoke.mjs prepare
+```
+
+Expected safe output:
+
+- runtime status configured;
+- local owner, other owner, and private Passport prepared;
+- link-intent returns HTTP 201;
+- authorization URL is opened in the browser;
+- authorization URL is not printed;
+- JWT, OAuth `code`, OAuth `state`, access token, refresh token, client secret, and service role key are not printed.
+
+The generated state expires after 10 minutes. If callback returns HTTP 400 because the owner waited too long, rerun `prepare` and authorize the new browser tab within the TTL.
+
+After the owner authorizes osu! and the local callback responds, run:
+
+```powershell
+node apps/api/scripts/osuManualSmoke.mjs complete
+```
+
+Expected safe output:
+
+```txt
+RM29_COMPLETE=pass
+CALLBACK_REAL=pass
+LINKED_PROVIDER_ACCOUNT_STATUS=verified
+LINKED_PROVIDER_ACCOUNT_VISIBILITY=private
+VERIFIED_PROOF_STATUS=current
+VERIFIED_PROOF_VISIBILITY=private
+TOKEN_VAULT_ROWS_BEFORE_UNLINK=0
+PUBLIC_PROJECTION_BEFORE_UNLINK=true
+UNLINK_STATUS=revoked
+UNLINK_IDEMPOTENT_SECOND_CALL=true
+REVOKED_ACCOUNT_STATUS=revoked
+REVOKED_ACCOUNT_VISIBILITY=private
+REVOKED_PROOF_STATUS=revoked
+REVOKED_PROOF_VISIBILITY=private
+PUBLIC_PROJECTION_AFTER_UNLINK=false
+NEGATIVE_CALLBACK_REPLAY_STATUS=400
+NEGATIVE_ALTERED_STATE_STATUS=400
+NEGATIVE_OTHER_OWNER_UNLINK_STATUS=404
+NEGATIVE_MISSING_AUTH_STATUS=401
+CONTEXT_CLEARED=true
+```
+
+If the callback succeeded but `complete` needs to be rerun before unlink, use:
+
+```powershell
+node apps/api/scripts/osuManualSmoke.mjs verify
+```
+
+If a smoke context must be discarded, use:
+
+```powershell
+node apps/api/scripts/osuManualSmoke.mjs cleanup
+```
+
+The context file lives under the local temp directory only and is cleared by successful `complete`. Do not commit or paste it.
 
 ## Status Smoke
 
@@ -72,6 +138,12 @@ Do not print the JWT.
 
 ## Link Intent Smoke
 
+Endpoint:
+
+```txt
+POST /api/v1/integrations/osu/link-intent
+```
+
 ```powershell
 curl.exe -sS -X POST "http://localhost:3001/api/v1/integrations/osu/link-intent" `
   -H "Authorization: Bearer $env:LOCAL_OWNER_JWT" `
@@ -99,7 +171,7 @@ Expected redirect:
 http://localhost:3001/api/v1/integrations/osu/callback?code=...&state=...
 ```
 
-Do not paste the `code`, `state`, or any token into docs or PR comments.
+Do not paste the `code`, `state`, authorize URL, JWT, or any token into docs or PR comments.
 
 ## Callback Expected Result
 
@@ -192,3 +264,5 @@ Full pass requires:
 - negative cases pass.
 
 Without human osu! authorization, record the result as `partial-pass` or `blocked`, not full pass.
+
+RM-29 full pass was reached after human authorization, real callback, DB verification, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases passed.

@@ -12,7 +12,9 @@ const rm28Docs = [
   'docs/product/OSU_OWNER_LINKING_SMOKE_RUNBOOK.md',
   'docs/product/OSU_RUNTIME_SMOKE_RESULTS.md',
   'docs/product/RM28_OSU_RUNTIME_SMOKE_SCOPE.md',
+  'docs/product/RM29_OSU_SMOKE_BLOCKER_FIXES_SCOPE.md',
 ].map(readRepo).join('\n');
+const manualSmokeScript = readRepo('apps/api/scripts/osuManualSmoke.mjs');
 
 const configuredEnv = Object.freeze({
   OSU_PROVIDER_ENABLED: 'true',
@@ -24,13 +26,14 @@ const configuredEnv = Object.freeze({
   SUPABASE_SERVICE_ROLE_KEY: 'sr',
 });
 
-describe('RM-28 osu! runtime smoke QA contracts', () => {
-  it('adds the smoke QA, runbook, results, and RM-28 scope docs', () => {
+describe('RM-28/RM-29 osu! runtime smoke QA contracts', () => {
+  it('adds the smoke QA, runbook, results, RM-28 scope, and RM-29 scope docs', () => {
     [
       'docs/product/OSU_RUNTIME_SMOKE_QA.md',
       'docs/product/OSU_OWNER_LINKING_SMOKE_RUNBOOK.md',
       'docs/product/OSU_RUNTIME_SMOKE_RESULTS.md',
       'docs/product/RM28_OSU_RUNTIME_SMOKE_SCOPE.md',
+      'docs/product/RM29_OSU_SMOKE_BLOCKER_FIXES_SCOPE.md',
     ].forEach((path) => {
       assert.equal(existsSync(repoPath(path)), true);
     });
@@ -39,6 +42,8 @@ describe('RM-28 osu! runtime smoke QA contracts', () => {
     assert.match(rm28Docs, /Owner Linking Smoke Runbook/);
     assert.match(rm28Docs, /Result: `partial-pass`/);
     assert.match(rm28Docs, /blocked-human/);
+    assert.match(rm28Docs, /RM-29 result: `full-pass`/);
+    assert.match(rm28Docs, /RM-30 osu! Owner Linking UI Hardening \/ Private Account UX/);
   });
 
   it('keeps runtime disabled by default and safe status config free of secret values', () => {
@@ -86,6 +91,43 @@ describe('RM-28 osu! runtime smoke QA contracts', () => {
     ].forEach((pattern) => assert.match(rm28Docs, pattern));
 
     assert.doesNotMatch(rm28Docs, /Result: `full-pass`/);
+  });
+
+  it('documents RM-29 full-pass callback, DB, token vault, unlink, projection, and negative evidence', () => {
+    [
+      /RM29_COMPLETE=pass/,
+      /CALLBACK_REAL=pass/,
+      /LINKED_PROVIDER_ACCOUNT_STATUS=verified/,
+      /LINKED_PROVIDER_ACCOUNT_VISIBILITY=private/,
+      /VERIFIED_PROOF_STATUS=current/,
+      /VERIFIED_PROOF_VISIBILITY=private/,
+      /TOKEN_VAULT_ROWS_BEFORE_UNLINK=0/,
+      /PUBLIC_PROJECTION_BEFORE_UNLINK=true/,
+      /UNLINK_STATUS=revoked/,
+      /UNLINK_IDEMPOTENT_SECOND_CALL=true/,
+      /REVOKED_ACCOUNT_STATUS=revoked/,
+      /REVOKED_ACCOUNT_VISIBILITY=private/,
+      /REVOKED_PROOF_STATUS=revoked/,
+      /REVOKED_PROOF_VISIBILITY=private/,
+      /PUBLIC_PROJECTION_AFTER_UNLINK=false/,
+      /NEGATIVE_CALLBACK_REPLAY_STATUS=400/,
+      /NEGATIVE_ALTERED_STATE_STATUS=400/,
+      /NEGATIVE_OTHER_OWNER_UNLINK_STATUS=404/,
+      /NEGATIVE_MISSING_AUTH_STATUS=401/,
+    ].forEach((pattern) => assert.match(rm28Docs, pattern));
+  });
+
+  it('adds a local assisted smoke script without logging OAuth or token material', () => {
+    assert.match(manualSmokeScript, /osuManualSmoke/);
+    assert.match(manualSmokeScript, /prepare/);
+    assert.match(manualSmokeScript, /complete/);
+    assert.match(manualSmokeScript, /AUTHORIZE_URL_REDACTED=true/);
+    assert.match(manualSmokeScript, /no_refresh_token_storage/);
+    assert.match(manualSmokeScript, /PUBLIC_PROJECTION_AFTER_UNLINK=\$\{projectionAfter\.exists\}/);
+    assert.match(manualSmokeScript, /return \{ exists: false \}/);
+    assert.doesNotMatch(manualSmokeScript, /safeLog\([^)]*authorizeUrl/i);
+    assert.doesNotMatch(manualSmokeScript, /safeLog\([^)]*ownerAccessToken/i);
+    assert.doesNotMatch(manualSmokeScript, /safeLog\([^)]*oauthState/i);
   });
 
   it('does not print token-like or secret-like values in RM-28 docs', () => {
