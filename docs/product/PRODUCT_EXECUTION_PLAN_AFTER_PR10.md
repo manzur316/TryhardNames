@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, and RM-25.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, and RM-26.
 
 ## Closed Visual/Tooling Line
 
@@ -43,11 +43,13 @@ RM-24 adds Launch Readiness. It creates the launch readiness overview, productio
 
 RM-25 adds Provider Expansion Readiness Matrix. It compares Riot, osu!, Steam, Supercell/Clash, Discord, and future console/Epic candidates using readiness-before-runtime criteria, recommends RM-26 osu! Readiness Pack, and keeps all runtime/OAuth/API/callback/token/env/store/payment/DB work out of scope.
 
+RM-26 adds osu! Readiness Pack. It reviews official osu! docs, OAuth/API model, Authorization Code ownership verification, scopes, public proof shape, token storage/retention risk, unlink/revoke, stale/revoked proof behavior, public projection safety, rate limits/backoff, trust/safety/privacy, branding/monetization, and exits `conditional-go` for RM-27. It does not add osu! runtime, OAuth implementation, API calls, callbacks, token storage implementation, env vars/secrets, DB migrations, `/cosmetics`, store/payment, remote services, or provider linking UI.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> conditional provider runtime.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 conditional provider runtime.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -204,17 +206,18 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 
 - Goal: Review osu! as the recommended first provider expansion readiness candidate.
 - Why now: osu! can be evaluated independently from Riot approval, but runtime must not begin before official docs review.
-- Already exists: Provider expansion roadmap and readiness policy.
-- Missing: Official osu! docs review, OAuth/API model review, token/storage review, public proof shape, and trust/safety review.
-- Non-goals: No osu! OAuth/API/runtime, tokens, env vars, secrets, or callbacks.
-- Exit criteria: osu! readiness exits with explicit go/no-go criteria for RM-27.
+- Already exists: Provider expansion roadmap, readiness policy, RM-25 matrix, provider-neutral runtime foundation, public projection guards, Riot approval gates, and trust/safety controls.
+- Implemented by RM-26: official osu! docs review, OAuth/API model review, ownership verification decision, minimal scope review, public proof model, token/storage risk review, unlink/revoke expectations, stale/revoked proof behavior, trust/safety/privacy review, branding/monetization review, roadmap updates, and source/docs tests.
+- Missing: RM-27 runtime implementation, exact registered callback URL, secure token exchange/storage runtime, real unlink/revoke execution, proof refresh sync, and production provider linking UI.
+- Non-goals: No osu! OAuth/API/runtime, tokens, env vars/secrets, callbacks, provider linking UI, DB migrations, remote services, store/payment, `/cosmetics`, Riot/Discord/Steam/Supercell runtime, or deploy execution.
+- Exit criteria: osu! readiness exits `conditional-go` for RM-27 with explicit runtime conditions.
 
 ### RM-27 osu! Runtime Foundation
 
-- Goal: Conditional future runtime foundation for osu! only if RM-26 passes official review.
-- Why now: Runtime must follow readiness.
-- Already exists: Provider Runtime Foundation and future RM-26 readiness output.
-- Missing: Conditional implementation scope.
+- Goal: Conditional future runtime foundation for osu! only if RM-26 accepted conditions are implemented safely.
+- Why now: Runtime must follow readiness and cannot start from Client Credentials or public profile lookup alone.
+- Already exists: Provider Runtime Foundation and RM-26 conditional-go readiness output.
+- Missing: Authorization Code runtime, callback route, CSRF-safe state, server-side token exchange, encrypted token handling or accepted no-refresh strategy, unlink/revoke, stale/revoked proof runtime, rate-limit/backoff, privacy copy, and public projection allowlist implementation.
 - Non-goals: No runtime if readiness fails or is incomplete.
 - Exit criteria: Runtime foundation remains policy-compliant, owner-controlled, revocable, and public-projection-safe.
 

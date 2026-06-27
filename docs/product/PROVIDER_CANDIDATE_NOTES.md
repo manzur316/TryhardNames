@@ -9,7 +9,7 @@ Revision ejecutada el 2026-06-27 usando fuentes oficiales publicas disponibles.
 | Candidate | official_docs_review | Official source posture |
 | --- | --- | --- |
 | Riot | run | Riot Developer Portal/API docs y docs internas de readiness existentes revisadas; runtime sigue approval-gated porque el repo no contiene approval evidence. |
-| osu! | run | osu! API v2/OAuth docs oficiales revisadas; buen candidato para RM-26 readiness, no runtime. |
+| osu! | run | osu! API v2/OAuth docs oficiales revisadas; RM-26 readiness sale `conditional-go` para RM-27, no runtime. |
 | Steam | run | Steam OpenID/Web API docs oficiales revisadas; buen candidato futuro de identidad, proof per-game requiere cautela. |
 | Supercell / Clash | partial | Landing/API docs oficiales publicas revisadas; la estrategia de ownership requiere revision manual del portal/documentacion oficial completa. |
 | Discord | run | Discord OAuth2/API docs oficiales revisadas; util como identidad social/community, no achievement proof. |
@@ -62,10 +62,11 @@ Required follow-up:
 
 Current posture:
 
-- recommended first readiness candidate;
+- reviewed first readiness candidate;
 - official docs are publicly available enough for RM-26 planning;
-- likely next milestone is RM-26 osu! Readiness Pack;
-- RM-26 is readiness only, not runtime.
+- RM-26 osu! Readiness Pack exits `conditional-go`;
+- RM-26 is readiness only, not runtime;
+- RM-27 is conditional next only if accepted runtime conditions are implemented safely.
 
 Why it is recommended:
 
@@ -75,15 +76,18 @@ Why it is recommended:
 - proof value is higher than social-only providers;
 - feasible to evaluate public profile fields, OAuth/API model, token storage, rate limits and branding before runtime.
 
+RM-26 decision:
+
+- ownership proof should use Authorization Code + `identify` + `/me`;
+- Client Credentials is not acceptable for ownership;
+- public proof should start as minimal `profile_linked`;
+- public projection remains allowlisted;
+- no tracker/ranking clone, no match-history dump, no live-game advice and no hidden-player inference;
+- no store/payment, no `/cosmetics`, no OAuth implementation, no callback route, no token storage implementation and no env vars/secrets in RM-26.
+
 Required follow-up:
 
-- official docs review in RM-26;
-- decide exact ownership proof shape;
-- define allowed profile/proof fields;
-- document scopes and token retention;
-- define unlink/revoke behavior;
-- define stale/revoked proof states;
-- verify no tracker/ranking clone drift.
+- RM-27 must implement callback/state, token handling, unlink/revoke, stale/revoked proof, rate-limit/backoff, privacy copy, branding boundaries and public projection guards before activation.
 
 ## Steam
 

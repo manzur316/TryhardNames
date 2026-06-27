@@ -1,6 +1,6 @@
 # Provider Expansion Roadmap
 
-RM-23 defines how TryhardNames should evaluate providers after Provider Runtime Foundation, Riot Readiness, Cosmetics Foundation, and Trust/Safety controls. RM-25 applies that policy through the Provider Expansion Readiness Matrix.
+RM-23 defines how TryhardNames should evaluate providers after Provider Runtime Foundation, Riot Readiness, Cosmetics Foundation, and Trust/Safety controls. RM-25 applies that policy through the Provider Expansion Readiness Matrix. RM-26 applies it to osu! with a provider-specific readiness pack.
 
 Provider expansion is readiness-first. Runtime comes later.
 
@@ -34,7 +34,7 @@ Readiness docs may be merged as RM milestones. Runtime work may start only after
 | Candidate | Type | Current posture | Notes |
 | --- | --- | --- | --- |
 | Riot | Approval-gated gaming provider | Existing readiness pack, runtime blocked | Riot runtime remains gated by explicit approval. |
-| osu! | Recommended first readiness candidate | Recommended RM-26 readiness candidate, not live runtime | Good candidate for RM-26 because account identity and profile/public API surfaces can be reviewed without Riot approval dependency. |
+| osu! | Reviewed first readiness candidate | RM-26 readiness pack exits `conditional-go`, not live runtime | Good candidate for RM-27 conditional runtime only after Authorization Code, token safety, unlink/revoke, stale-proof, projection, privacy and branding conditions are implemented. |
 | Steam | Identity provider candidate | Future readiness | Strong identity footprint, but OpenID/API and public field policy need review. |
 | Supercell / Clash | Game candidate | Blocked until ownership verification strategy | Player tags and verification tokens need careful ownership and privacy design. |
 | Discord | Social/community provider | Future alternative | Useful for community identity, not achievement proof. Discord is not a gaming skill proof. |
@@ -77,6 +77,25 @@ Result:
 
 RM-25 does not activate runtime, OAuth, callbacks, provider tokens, provider linking UI, env vars, routes, migrations, `/cosmetics`, store, checkout, payments, or remote service changes.
 
+## RM-26 osu! Readiness Output
+
+RM-26 implements the provider-specific osu! readiness pack as docs/tests-only review.
+
+Result:
+
+- official osu! docs review status is `run`;
+- ownership verification is viable through Authorization Code + `identify` + `/me`;
+- Client Credentials is not acceptable for account ownership;
+- minimal conceptual scopes are `identify public`;
+- public proof should be limited to `profile_linked`;
+- public projection remains allowlisted;
+- token storage/retention, unlink/revoke, stale/revoked proof and rate-limit/backoff are required for RM-27;
+- branding should be text-only unless official asset permission is accepted;
+- no store/payment, no `/cosmetics`, no tracker/ranking clone, no match-history dump, no live-game advice and no hidden-player inference are allowed;
+- RM-27 status: `conditional-go`.
+
+RM-26 does not activate osu! runtime, OAuth implementation, callback route, token storage implementation, env vars/secrets, DB migrations, provider linking UI, store/payment, `/cosmetics`, remote services or deploy execution.
+
 ## Riot
 
 Riot has an existing readiness pack:
@@ -90,9 +109,9 @@ Riot Runtime remains blocked until explicit approval exists in repo evidence. PR
 
 ## osu!
 
-osu! is the recommended first provider readiness candidate.
+RM-25 established that osu! is the recommended first provider readiness candidate. RM-26 reviews osu! and exits `conditional-go`.
 
-RM-26 should review:
+RM-26 reviews:
 
 - official osu! API and OAuth docs;
 - account ownership verification;
@@ -105,7 +124,7 @@ RM-26 should review:
 - public proof shape;
 - no tracker/ranking-copy drift beyond allowed public profile proof.
 
-RM-26 is readiness only. RM-27 is conditional runtime foundation only if RM-26 exits with explicit go criteria.
+RM-26 is readiness only. RM-27 is conditional runtime foundation only because RM-26 exits `conditional-go`; it must still implement accepted runtime conditions before activation.
 
 ## Steam
 
@@ -144,9 +163,9 @@ Discord can prove social identity or community membership, but it is not an achi
 
 Discord Pilot remains an alternate future path only if product direction explicitly selects it.
 
-## Provider Runtime Non-Goals For RM-23 And RM-25
+## Provider Runtime Non-Goals For RM-23, RM-25 And RM-26
 
-RM-23 and RM-25 do not implement:
+RM-23, RM-25 and RM-26 do not implement:
 
 - Riot OAuth/API/runtime;
 - Discord OAuth/API/runtime;
@@ -154,6 +173,7 @@ RM-23 and RM-25 do not implement:
 - Steam OpenID/API/runtime;
 - Supercell/Clash runtime;
 - provider tokens;
+- token storage implementation for osu!;
 - provider callback routes;
 - provider sync jobs;
 - public provider linking UI;

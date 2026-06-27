@@ -101,7 +101,7 @@ describe('RM-25 Provider Expansion Readiness Matrix', () => {
       /RM-26 osu! Readiness Pack/,
       /RM-27 osu! Runtime Foundation[\s\S]{0,120}conditional/i,
       /Riot remains approval-gated|Riot remains gated/i,
-      /osu![\s\S]{0,180}recommended[\s\S]{0,180}readiness[\s\S]{0,180}not runtime/i,
+      /osu![\s\S]{0,220}(recommended|reviewed|conditional-go)[\s\S]{0,220}readiness[\s\S]{0,220}(not runtime|not live runtime|no runtime)/i,
       /Steam[\s\S]{0,120}identity candidate/i,
       /Supercell \/ Clash[\s\S]{0,180}blocked until ownership verification/i,
       /Discord[\s\S]{0,180}social\/community[\s\S]{0,180}not achievement proof/i,
@@ -129,14 +129,14 @@ describe('RM-25 Provider Expansion Readiness Matrix', () => {
     });
   });
 
-  it('updates roadmap docs for RM-25 implemented and RM-26 next', () => {
+  it('keeps RM-25 documented after the RM-26 handoff', () => {
     assert.match(readme, /RM-25 Provider Expansion Readiness Matrix comparing/);
-    assert.match(roadmapIndex, /RM-25[\s\S]{0,140}Provider Expansion Readiness Matrix[\s\S]{0,140}this PR/);
-    assert.match(roadmapIndex, /RM-26[\s\S]{0,140}osu! Readiness Pack[\s\S]{0,140}next/);
-    assert.match(milestoneRegistry, /RM-25[\s\S]{0,180}Provider Expansion Readiness Matrix[\s\S]{0,180}this PR/);
+    assert.match(roadmapIndex, /RM-25[\s\S]{0,180}Provider Expansion Readiness Matrix[\s\S]{0,180}done/);
+    assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}this PR/);
+    assert.match(milestoneRegistry, /RM-25[\s\S]{0,220}Provider Expansion Readiness Matrix[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-25 adds Provider Expansion Readiness Matrix/);
     assert.match(statusMatrix, /Provider Expansion Readiness Matrix \| done/);
-    assert.match(currentRoadmap, /Current Status After RM-25/);
+    assert.match(currentRoadmap, /Current Status After RM-26/);
     assert.match(decisionLog, /Provider Expansion Readiness Matrix recommends osu! readiness next/);
     assert.match(providerExpansion, /RM-25 Matrix Output/);
   });
