@@ -78,6 +78,13 @@ Current support docs:
 - `docs/product/ROADMAP_INDEX.md`
 - `docs/product/ROADMAP_MILESTONE_REGISTRY.md`
 - `docs/product/PROVIDER_EXPANSION_ROADMAP.md`
+- `docs/product/OSU_READINESS_PACK.md`
+- `docs/product/OSU_PROVIDER_CONTRACT_REVIEW.md`
+- `docs/product/OSU_OAUTH_API_REVIEW.md`
+- `docs/product/OSU_PUBLIC_PROOF_MODEL.md`
+- `docs/product/OSU_TRUST_SAFETY_PRIVACY_REVIEW.md`
+- `docs/product/OSU_BRANDING_MONETIZATION_REVIEW.md`
+- `docs/product/RM26_OSU_READINESS_SCOPE.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
@@ -182,6 +189,7 @@ Completed:
 - RM-23 Roadmap Governance + Provider Expansion Plan, defining GH PR # versus RM-XX, roadmap source-of-truth rules, and provider expansion readiness policy.
 - RM-24 Launch Readiness Pack with production smoke, observability, rollback, go/no-go, and policy final review docs.
 - RM-25 Provider Expansion Readiness Matrix comparing Riot, osu!, Steam, Supercell/Clash, Discord, and future console/Epic candidates without runtime activation.
+- RM-26 osu! Readiness Pack with official docs review, OAuth/API model, ownership proof, public proof model, token/revoke/stale-proof review, trust/safety/privacy review, branding/monetization review, and conditional RM-27 decision without runtime activation.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -195,17 +203,21 @@ Waiting:
 
 - Riot confirmation/review.
 
-Next product block:
+This PR:
 
 - RM-26 osu! Readiness Pack.
 
+Next product block:
+
+- RM-27 osu! Runtime Foundation, conditional on RM-26 accepted requirements.
+
 Provider expansion planning:
 
-- RM-25 Provider Expansion Readiness Matrix is implemented as docs/tests-only decision support.
-- RM-26 osu! Readiness Pack is the recommended next provider-specific readiness milestone.
-- RM-27 osu! Runtime Foundation, conditional on RM-26 and official review.
+- RM-25 Provider Expansion Readiness Matrix is implemented as docs/tests-only decision support by GH PR #32 and merge commit `a072aed297d209107e6ca719874496f30eaac8e9`.
+- RM-26 osu! Readiness Pack is this PR and remains docs/tests-only.
+- RM-27 osu! Runtime Foundation is conditional next because RM-26 exits `conditional-go`.
 - Riot runtime only after explicit approval evidence exists.
-- osu! is the recommended readiness candidate, not live runtime.
+- osu! is the reviewed readiness candidate, not live runtime.
 - Steam is a future identity provider candidate.
 - Supercell / Clash remains blocked until ownership verification strategy is documented.
 - Discord is a future social/community provider candidate, not an achievement proof.

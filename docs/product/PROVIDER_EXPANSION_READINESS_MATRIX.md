@@ -8,8 +8,8 @@ Este PR implementa una matriz auditable. No implementa runtime, OAuth, callbacks
 
 Decision propuesta:
 
-- RM-26 debe ser osu! Readiness Pack.
-- RM-27 debe permanecer como osu! Runtime Foundation condicional, solo si RM-26 sale go despues de revision oficial.
+- RM-26 es osu! Readiness Pack.
+- RM-27 permanece como osu! Runtime Foundation condicional, porque RM-26 sale `conditional-go` despues de revision oficial.
 - Riot sigue gated por aprobacion explicita.
 - Steam queda como candidato futuro de identidad.
 - Supercell / Clash queda bloqueado hasta documentar ownership verification desde fuentes oficiales.
@@ -63,7 +63,7 @@ Los puntajes son decision-support. Un total alto no elimina gates criticos como 
 
 ## Recommended Ranking
 
-1. osu! - best next readiness candidate. Strong product fit, public official docs, and useful proof value. Still no runtime until RM-26 exits go.
+1. osu! - reviewed next readiness candidate. Strong product fit, public official docs, and useful proof value. Still no runtime until RM-27 implements RM-26 accepted conditions.
 2. Steam - strong future identity candidate. Better for identity than achievement proof; privacy/public-field review is required.
 3. Riot - high product fit but approval-gated. Existing readiness remains valid; runtime cannot start without explicit approval evidence.
 4. Discord - useful social/community identity candidate. Not achievement proof, so it should not be the next proof-focused readiness pack.
@@ -75,7 +75,7 @@ Los puntajes son decision-support. Un total alto no elimina gates criticos como 
 | Candidate | Type | Posture | Go/No-Go | Primary blockers | Required follow-up |
 | --- | --- | --- | --- | --- | --- |
 | Riot | Approval-gated gaming provider | Existing readiness pack; runtime blocked | No-go for runtime | No explicit approval evidence, approved scopes, callback URLs or production credentials in repo | Collect approval evidence, confirm scopes/callbacks, update token/revoke/privacy plan before RM-19 |
-| osu! | Gaming proof candidate | Recommended RM-26 readiness candidate | Go for readiness, no-go for runtime | Needs provider-specific docs review, scopes, token retention and public field decisions | RM-26 osu! Readiness Pack |
+| osu! | Gaming proof candidate | RM-26 readiness pack exits `conditional-go` | Conditional-go for RM-27, no runtime in RM-26 | Needs runtime implementation of callback/state, token safety, unlink/revoke, stale-proof, projection, privacy and rate-limit controls | RM-27 osu! Runtime Foundation if conditions are accepted |
 | Steam | Identity provider candidate | Future readiness candidate | Not first wave | Per-game proof inconsistency, profile privacy, Web API/OpenID boundary | Future Steam Identity Readiness |
 | Supercell / Clash | Game candidate | Blocked | No-go until ownership strategy | Player tag alone is insufficient; official ownership verification needs manual review | Document ownership verification and safe public fields |
 | Discord | Social/community candidate | Future alternate | Not proof-first | Social identity is not achievement proof; guild/member data has privacy risk | Future social/community readiness only if product direction chooses it |
@@ -108,27 +108,27 @@ Required follow-up:
 
 ### osu!
 
-Readiness state: recommended next readiness candidate.
+Readiness state: RM-26 readiness pack reviewed official docs and exits `conditional-go`.
 
 Decision:
 
-- go for RM-26 osu! Readiness Pack;
-- no-go for runtime in RM-25.
+- conditional-go for RM-27 osu! Runtime Foundation;
+- no-go for runtime in RM-26.
 
-Blockers before runtime:
+Conditions before runtime:
 
-- provider-specific official docs review;
-- exact ownership proof;
+- Authorization Code ownership with `identify` + `/me`;
+- exact callback URL and CSRF-safe state handling;
 - allowed public fields;
 - scopes and token retention;
 - unlink/revoke;
 - stale/revoked proof states;
+- rate-limit/backoff;
 - anti-tracker guardrails.
 
 Required follow-up:
 
-- create RM-26 readiness docs/tests;
-- confirm whether runtime should be RM-27 only after RM-26 exits go.
+- RM-27 may implement runtime only if these conditions are accepted and source guards remain clean.
 
 ### Steam
 
@@ -231,6 +231,8 @@ Future provider readiness must preserve:
 official_docs_review: run for publicly available official docs on 2026-06-27.
 
 Manual follow-up remains required for provider-specific implementation details that are behind portals, approval workflows or partner access. Supercell / Clash, PlayStation, Nintendo and some console/Epic details require manual official review before any readiness pack can claim implementation-ready facts.
+
+RM-26 official osu! docs review is recorded in `OSU_READINESS_PACK.md` and exits `conditional-go` for RM-27. It does not activate osu! runtime, OAuth implementation, callback route, token storage implementation, env vars/secrets, DB migrations, provider linking UI, store/payment or `/cosmetics`.
 
 ## Non-Goals
 
