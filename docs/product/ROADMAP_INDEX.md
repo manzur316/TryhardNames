@@ -41,8 +41,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | RM-24 | Launch Readiness | done | Production smoke, observability, rollback, policy review, launch checklist, and operational go/no-go. Does not execute deploy. |
 | RM-25 | Provider Expansion Readiness Matrix | done | Implemented by GH PR #32 / merge `a072aed297d209107e6ca719874496f30eaac8e9`. Compares provider candidates using readiness-before-runtime criteria and recommends RM-26 osu! Readiness Pack. |
 | RM-26 | osu! Readiness Pack | done | Implemented by GH PR #33 / merge `c933f7d4fb60ee5f5a334dd96af4ef20fa2ee294`. Reviews official osu! docs, account ownership, API/OAuth model, public fields, privacy, rate limits, proof boundaries, branding, token/revoke, and outputs `conditional-go` for RM-27. |
-| RM-27 | osu! Runtime Foundation | this PR | Disabled-by-default server-side foundation with OAuth state, token exchange, `/me` ownership verification, immediate revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards. Not production launch. |
-| RM-28 | osu! Runtime Smoke / Owner Linking QA | next | Staging/local smoke for configured env, callback, owner linking, unlink/revoke, revoked proof, public projection non-leakage, and rollback readiness. |
+| RM-27 | osu! Runtime Foundation | done | Implemented by GH PR #34 / merge `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`. Disabled-by-default server-side foundation with OAuth state, token exchange, `/me` ownership verification, immediate revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards. Not production launch. |
+| RM-28 | osu! Runtime Smoke / Owner Linking QA | this PR / partial-pass | Local smoke docs/tests for configured env, owner link-intent, manual callback, DB verification, token vault non-persistence, unlink/revoke, revoked proof, public projection non-leakage, and rollback readiness. Full callback evidence is blocked on human osu! authorization. |
+| RM-29 | osu! Smoke Blocker Fixes | next | Complete the human-authorized callback smoke, close any local JWT/browser blockers, and only then decide whether to move to owner-linking UI hardening or runtime security fixes. |
 
 ## Future Provider Candidates
 
@@ -51,9 +52,8 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-27
+## Not Implemented By RM-28
 
-- RM-28 osu! Runtime Smoke / Owner Linking QA.
 - Production osu! launch.
 - Public provider linking UI.
 - Browser token exchange.
@@ -61,3 +61,5 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Any env vars/secrets.
 - `/cosmetics`.
 - Store or payments.
+- Rank, PP, score, match-history, best-play, beatmap, or live tracker surfaces.
+- Full-pass callback evidence without human osu! authorization.

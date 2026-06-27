@@ -138,11 +138,11 @@ describe('RM-26 osu! Readiness Pack', () => {
     assert.match(readme, /RM-26 osu! Readiness Pack/);
     assert.match(roadmapIndex, /RM-25[\s\S]{0,180}Provider Expansion Readiness Matrix[\s\S]{0,180}done/);
     assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}done/);
-    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}this PR/);
+    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}done/);
     assert.match(milestoneRegistry, /RM-26[\s\S]{0,220}osu! Readiness Pack[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-26 adds osu! Readiness Pack/);
     assert.match(statusMatrix, /osu! Readiness Pack \| done/);
-    assert.match(currentRoadmap, /Current Status After RM-27/);
+    assert.match(currentRoadmap, /Current Status After RM-28/);
     assert.match(decisionLog, /osu! readiness exits `conditional-go` for RM-27/);
     assert.match(providerExpansion, /RM-26 osu! Readiness Output/);
   });
