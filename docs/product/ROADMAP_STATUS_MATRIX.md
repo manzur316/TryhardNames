@@ -1,13 +1,13 @@
 # Roadmap Status Matrix
 
-This matrix reflects the PR22 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, and PR22.
+This matrix reflects main after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, and RM-23 roadmap governance.
 
 | Area | Status | Evidence | Already exists | Missing | Next roadmap block | Notes / guardrails |
 | --- | --- | --- | --- | --- | --- | --- |
 | Public generators | done | Public routes, dynamic pages, feature generators | Free name/text/symbol/generator surfaces with favorite/star save UX | Provider/runtime proof surfaces | PR13 | Public generators stay public. |
-| Theme / visual surfaces | done | `UI_THEME_SURFACE_CONTRACT.md`, `THEME_AUDIT.md`, PR10.x docs | Theme contract and route audit follow-ups | Only critical visual fixes | PR23 | PR10.x visual/tooling line is closed. |
-| Tool container audit | done | `scripts/audit-tool-containers.mjs`, `TOOL_CONTAINER_VISUAL_AUDIT.md` | Chrome audit, JSON/Markdown/screenshot output | CI enforcement, if desired | PR23 | Audit is local tooling, not runtime. |
-| Dynamic NameCard + Lineup visual redesign | done | `NAMECARD_LINEUP_VISUAL_REDESIGN.md` | Dynamic card clamp, hierarchy, drawer coverage work | Legacy internal cleanup only if needed | PR23 | Favorite/star is now the canonical save model. |
+| Theme / visual surfaces | done | `UI_THEME_SURFACE_CONTRACT.md`, `THEME_AUDIT.md`, PR10.x docs | Theme contract and route audit follow-ups | Only critical visual fixes | RM-24 | PR10.x visual/tooling line is closed. |
+| Tool container audit | done | `scripts/audit-tool-containers.mjs`, `TOOL_CONTAINER_VISUAL_AUDIT.md` | Chrome audit, JSON/Markdown/screenshot output | CI enforcement, if desired | RM-24 | Audit is local tooling, not runtime. |
+| Dynamic NameCard + Lineup visual redesign | done | `NAMECARD_LINEUP_VISUAL_REDESIGN.md` | Dynamic card clamp, hierarchy, drawer coverage work | Legacy internal cleanup only if needed | RM-24 | Favorite/star is now the canonical save model. |
 | Feature generator visual alignment | done | `FEATURE_GENERATOR_CARD_VISUAL_ALIGNMENT.md` | GamerNames and RobloxNames card alignment | Account/editor depth | PR13 | No further visual patching unless critical. |
 | Parent Auth | done | `/sign-in`, `/sign-up`, `/auth/callback`, `/account` guard | TryhardNames account login and saved-name ownership | Editor depth and future account state | PR13 | Google is Parent Auth only, not public proof. |
 | Private Gaming Passport Draft | done | `AccountPage.jsx`, `passportRepository.js`, `PrivatePassportEditor.jsx` | Owner-only private draft create/read/update, Editor V2, private preview, completion checklist, private Saved Names highlights | Provider-backed proof management | PR16 | Draft stays private by default unless explicit publish policy is satisfied. |
@@ -32,8 +32,13 @@ This matrix reflects the PR22 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 | League of Legends adapter | pending | Roadmap docs only | Conceptual GameAdapter placement | Riot-backed LoL proof normalization | PR20 | No tracker, OP.GG clone, live-game advice, or hidden-player inference. |
 | Passport Cosmetics Foundation | done | `PASSPORT_COSMETICS_FOUNDATION.md`, cosmetic catalog/loadout/policy modules, `PassportCosmeticsPanel.jsx` | TryhardNames-owned local catalog, Obsidian Pulse free foundation preview, private equip/preview, safe public scene projection | Future `/cosmetics` showcase, entitlement hardening, optional inventory/payment review, pets/companions runtime | PR22+ | Cosmetics can style identity; cosmetics cannot manufacture proof. No store, payments, Riot assets, fake proofs, fake ranks, or proof boosts. |
 | Cosmetics monetization / inventory | pending | `PASSPORT_COSMETICS_FOUNDATION.md` | Explicit non-goals and future boundaries | Store/payment/inventory model, if ever approved | Future | No Stripe, MercadoPago, checkout, purchased inventory, loot boxes, gacha, or marketplace in PR21. |
-| Trust / Safety / Privacy Controls | done | `TRUST_SAFETY_PRIVACY_CONTROLS.md`, `reportPolicy.js`, `PublicProfileReportDialog.jsx`, `trustSafetyRepository.js`, `20260626100000_public_profile_reports.sql` | Public profile report intent, private report storage, safe report RPC, report category policy, cosmetic abuse policy, blocked visual identity terms, takedown/suspension/privacy docs, moderation runbook | Full moderation dashboard, report queue operations, rate limits, email notifications, operational takedown tooling | PR23 | Public identity requires report, takedown, and privacy controls before broad distribution. |
-| Launch readiness | pending | Roadmap docs only | Validation command habit | Production smoke, observability, rollback, privacy final review | PR23 | No launch until gates are satisfied. |
+| Trust / Safety / Privacy Controls | done | `TRUST_SAFETY_PRIVACY_CONTROLS.md`, `reportPolicy.js`, `PublicProfileReportDialog.jsx`, `trustSafetyRepository.js`, `20260626100000_public_profile_reports.sql` | Public profile report intent, private report storage, safe report RPC, report category policy, cosmetic abuse policy, blocked visual identity terms, takedown/suspension/privacy docs, moderation runbook | Full moderation dashboard, report queue operations, rate limits, email notifications, operational takedown tooling | RM-23 | Public identity requires report, takedown, and privacy controls before broad distribution. |
+| Roadmap Governance | done | `ROADMAP_GOVERNANCE.md`, `ROADMAP_INDEX.md`, `ROADMAP_MILESTONE_REGISTRY.md` | GH PR # versus RM-XX convention, source-of-truth rules, milestone registry, PR body rules, follow-up rules | Future upkeep during every RM | RM-24 | GitHub/main/docs are the source of truth; chat is not. |
+| Provider Expansion Readiness Planning | done | `PROVIDER_EXPANSION_ROADMAP.md` | Readiness-before-runtime policy, candidate taxonomy, scorecard, osu! readiness recommendation, Steam/Supercell/Discord future candidate boundaries | RM-25 matrix and provider-specific readiness packs | RM-25 | No provider runtime without readiness pack first. |
+| Launch readiness | pending | Roadmap docs only | Validation command habit | Production smoke, observability, rollback, privacy final review | RM-24 | No launch until gates are satisfied. |
+| Provider Expansion Readiness Matrix | pending | `PROVIDER_EXPANSION_ROADMAP.md` | Candidate taxonomy and scorecard | Detailed scored matrix | RM-25 | Provider expansion does not activate runtime. |
+| osu! Readiness Pack | pending | `PROVIDER_EXPANSION_ROADMAP.md` | Recommended readiness candidate | Official docs/API/OAuth/token/privacy review | RM-26 | osu! is not live runtime. |
+| osu! Runtime Foundation | conditional | `PROVIDER_EXPANSION_ROADMAP.md` | Conditional roadmap slot | Runtime only if RM-26 passes official review | RM-27 | No runtime without readiness exit criteria. |
 
 ## Summary
 
@@ -47,4 +52,7 @@ This matrix reflects the PR22 branch after PR10.8, PR11.1, PR12, PR13, PR14, PR1
 - PR19 is the earliest possible Riot runtime PR, only if explicit approval exists.
 - PR21 implements Passport Cosmetics Foundation without store, payments, provider data, fake proofs, or fake ranks.
 - PR22 implements Trust / Safety / Privacy Controls Foundation without provider launch, store/payments, `/cosmetics`, report admin UI, or public report lists.
+- RM-23 implements Roadmap Governance + Provider Expansion Plan and separates GitHub PR # from RM-XX.
+- RM-24 Launch Readiness is the next implementation block.
+- RM-25 Provider Expansion Readiness Matrix, RM-26 osu! Readiness Pack, and RM-27 conditional osu! Runtime Foundation are future blocks.
 - Saved Names Supabase persistence is implemented with owner-only RLS and local fallback.

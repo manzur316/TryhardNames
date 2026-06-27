@@ -2,7 +2,7 @@
 
 ## Current Status After PR22
 
-This document reflects the PR22 branch after PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, PR18, `docs(riot): add readiness pack`, PR21, `feat(passport): add cosmetics foundation`, and PR22, `feat(trust): add public profile safety controls`.
+This document reflects main after PR22 and the RM-23 roadmap governance update. It follows PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, PR18, `docs(riot): add readiness pack`, PR21, `feat(passport): add cosmetics foundation`, PR22, `feat(trust): add public profile safety controls`, and RM-23, Roadmap Governance + Provider Expansion Plan.
 
 TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, a first-provider decision record, a Riot Readiness Pack, Passport Cosmetics Foundation, and Trust / Safety / Privacy Controls Foundation.
 
@@ -44,7 +44,25 @@ The repo history is summarized through PR22.
 | PR17 | `docs(provider): add first provider decision readiness pack` | Merged | Adds the first-provider decision record, provider readiness checklist, and PR18 Riot Readiness scope. | Documentation/tests only. PR18 is selected as Riot Readiness because Riot approval is not evidenced. | No OAuth launch, provider runtime activation, API calls, secrets, env vars, routes, migrations, or UI changes. |
 | PR18 | `docs(riot): add readiness pack` | Merged | Adds Riot readiness pack, design-only RSO callback plan, token-retention requirements, adapter contract review, public projection review criteria, portal checklist, and source guards. | Documentation/tests only. Riot Runtime remains blocked. | No Riot OAuth, RSO redirect, callback route, Riot API calls, client secret, production key, env vars, provider activation, adapters, proof sync, public Riot data, routes, migrations, or remote service changes. |
 | PR21 | `feat(passport): add cosmetics foundation` | Merged | Adds Passport Cosmetics Foundation, local cosmetic catalog, visual-only policy, loadout sanitizer, private account panel, Obsidian Pulse foundation preview, and safe public scene rendering. | Owner drafts can equip TryhardNames-owned visual cosmetics through `scene_config`; public profiles render only allowlisted scene ids. | No store, payments, checkout, purchased inventory, `/cosmetics` route, pets/companions runtime, Riot assets, fake proofs, fake ranks, provider runtime, or Riot/Discord OAuth. |
-| PR22 | `feat(trust): add public profile safety controls` | In progress | Adds Trust / Safety / Privacy Controls Foundation, public profile report intent, safe report RPC, private report storage, cosmetic abuse policy, blocked visual identity terms, and moderation runbook. | Valid public `/id/:slug` profiles can be reported without exposing private report state or weakening public projection safety. | No Riot/Discord runtime, provider launch expansion, `/cosmetics`, store, payments, inventory purchases, pets/companions runtime, admin dashboard, public report list, or email notification service. |
+| PR22 | `feat(trust): add public profile safety controls` | Merged | Adds Trust / Safety / Privacy Controls Foundation, public profile report intent, safe report RPC, private report storage, cosmetic abuse policy, blocked visual identity terms, and moderation runbook. | Valid public `/id/:slug` profiles can be reported without exposing private report state or weakening public projection safety. | No Riot/Discord runtime, provider launch expansion, `/cosmetics`, store, payments, inventory purchases, pets/companions runtime, admin dashboard, public report list, or email notification service. |
+
+## Roadmap Governance Convention
+
+GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable product roadmap milestone identifier versioned in `docs/product`.
+
+The chat is not a source of truth.
+
+Examples from the repo:
+
+- GitHub PR #23 implemented RM-14 Publish Runtime Commands.
+- GitHub PR #24 implemented RM-15 Public Gaming Passport MVP.
+- GitHub PR #25 implemented RM-16 Provider Runtime Foundation.
+- GitHub PR #26 implemented RM-17 First Provider Decision Readiness.
+- GitHub PR #27 implemented RM-18 Riot Readiness Pack.
+- GitHub PR #28 implemented RM-21 Passport Cosmetics Foundation.
+- GitHub PR #29 implemented RM-22 Trust / Safety / Privacy Controls.
+
+RM-23 adds roadmap governance and provider expansion planning. RM-24 is Launch Readiness. The legacy product label "PR23 Launch Readiness" is deprecated and replaced by RM-24 Launch Readiness.
 
 ## Live Surfaces
 
@@ -145,18 +163,17 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 
 ## Corrected Roadmap Order
 
-| Proposed PR | Scope | Notes |
+| RM | Scope | Notes |
 | --- | --- | --- |
-| PR11.0 | Roadmap Reconciliation After PR10.8 and PR11.1 | Docs-only reconciliation of actual repo state, matrix, execution plan, and decision log. |
-| PR14 | Publish Runtime Commands | Adds consent, slug, publish, unpublish, and status transitions. |
-| PR16 | Provider Runtime Foundation | Adds provider runtime contracts, token vault placeholder, unlink/revoke command contracts, sync scaffolding, and audit boundaries without activating a specific provider. |
-| PR17 | First Provider Decision + Readiness Pack | Selects PR18 as Riot Readiness based on repo evidence and risk. |
-| PR18 | Riot Readiness Pack | Implemented as readiness-only docs/tests. Prepares Riot approval-safe design and checklists without Riot OAuth, Riot API calls, RSO runtime, secrets, or provider activation. |
-| PR19 | Riot Provider Runtime | Gated by Riot approval. Implements Riot OAuth/runtime only after explicit approval and provider foundation. |
-| PR20 | League of Legends Adapter | Normalizes LoL proofs under RiotProvider after Riot runtime is approved and implemented. |
-| PR21 | Cosmetics Foundation | Implemented as Passport Cosmetics Foundation with free/core, earned-ready, reserved Founder/Legacy, seasonal-ready docs, premium-preview Obsidian Pulse, safe scene projection, and no store/payments. |
-| PR22 | Trust / Safety / Privacy Controls | Implemented as a foundation with public profile report intent, safe report RPC, private report storage, cosmetic abuse policy, takedown/suspension/privacy docs, and tests. |
-| PR23 | Launch Readiness | Production smoke, observability, rollback, policy review, and launch checklist. |
+| RM-23 | Roadmap Governance + Provider Expansion Plan | Docs/tests-only. Defines GH PR # versus RM-XX, source-of-truth rules, roadmap index, milestone registry, and provider expansion readiness policy. |
+| RM-24 | Launch Readiness | Production smoke, observability, rollback, policy review, privacy review, and operational launch checklist. |
+| RM-25 | Provider Expansion Readiness Matrix | Compares Riot, osu!, Steam, Supercell/Clash, Discord, and future providers using readiness-before-runtime criteria. |
+| RM-26 | osu! Readiness Pack | Recommended first provider expansion readiness candidate. Docs/tests-only; no osu! runtime, OAuth, API calls, tokens, env vars, or secrets. |
+| RM-27 | osu! Runtime Foundation | Conditional future runtime only if RM-26 passes official review and product constraints. |
+| RM-19 | Riot Provider Runtime | Still gated by explicit Riot approval. Implements Riot OAuth/runtime only after approval and provider foundation. |
+| RM-20 | League of Legends Adapter | Still gated by approved Riot runtime. Normalizes LoL proofs under RiotProvider after Riot runtime is approved and implemented. |
+
+Legacy product labels such as "PR23 Launch Readiness" are deprecated. Use RM-24 Launch Readiness.
 
 ## Removed Stale Recommendations
 

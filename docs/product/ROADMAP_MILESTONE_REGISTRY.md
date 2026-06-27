@@ -1,0 +1,22 @@
+# Roadmap Milestone Registry
+
+This registry tracks stable RM milestones separately from GitHub's automatic pull request numbers.
+
+| RM | Name | Status | Implemented by GitHub PR(s) | Merge commit | Scope | Non-goals | Next |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| RM-14 | Publish Runtime Commands | done | GH PR #23 | not listed here | Owner-controlled consent, slug claim/update, publish attempt, unpublish, private account controls, command RPCs. | No public profile route, providers, OAuth, provider token storage, or secrets. | RM-15 |
+| RM-15 | Public Gaming Passport MVP `/id/:slug` | done | GH PR #24 | not listed here | Public route and allowlisted projection for policy-valid published Passports. | No provider runtime, real Riot data, private field exposure, or proof sync. | RM-16 |
+| RM-16 | Provider Runtime Foundation | done | GH PR #25 | not listed here | Provider-neutral contracts, schema/RLS, connection intents, callback state, sync/audit scaffolding, private panel. | No Discord/Riot activation, OAuth, API calls, adapters, or real token usage. | RM-17 |
+| RM-17 | First Provider Decision Readiness | done | GH PR #26 | not listed here | Approval-aware first-provider decision and readiness checklist. | No OAuth launch, callback route, API calls, provider activation, secrets, or migrations. | RM-18 |
+| RM-18 | Riot Readiness Pack | done | GH PR #27 | `facd3bec33845af80e1501579f79bda2f06abfbe` | Riot approval gates, design-only RSO callback plan, token plan, adapter review, portal checklist. | No Riot runtime, OAuth, API calls, callback route, env vars, secrets, or provider activation. | RM-21 unless approval unlocks RM-19/RM-20 |
+| RM-19 | Riot Provider Runtime | gated | none | none | Future Riot runtime only after explicit approval. | No work before approval. | RM-20 |
+| RM-20 | League of Legends Adapter | gated | none | none | Future LoL proof adapter under approved RiotProvider. | No tracker, match-history dump, custom MMR/ELO, or live-game advice. | RM-21 |
+| RM-21 | Passport Cosmetics Foundation | done | GH PR #28 | `aa68a0fb890e6a7f473820013885b34cf1971930` | TryhardNames-owned visual-only cosmetics, Obsidian Pulse free foundation preview, safe scene projection. | No store, payments, `/cosmetics`, pets/companions runtime, fake proofs, fake ranks, or Riot assets. | RM-22 |
+| RM-22 | Trust / Safety / Privacy Controls | done | GH PR #29 | `8820e056825fa32365c6504c7d4110ee8f1c7d57` | Public profile reports, safe report RPC, private report storage, cosmetic abuse policy, moderation runbook. | No provider runtime, `/cosmetics`, store, payments, admin dashboard, public report list, or email service. | RM-23 |
+| RM-23 | Roadmap Governance + Provider Expansion Plan | this PR | this GH PR | pending | RM convention, source-of-truth rules, roadmap index, provider expansion readiness roadmap. | No runtime, providers, OAuth, `/cosmetics`, payments, migrations, env vars, or secrets. | RM-24 |
+| RM-24 | Launch Readiness | future | none | none | Production smoke, observability, rollback, policy review, launch go/no-go. | No new product runtime scope. | RM-25 |
+| RM-25 | Provider Expansion Readiness Matrix | future | none | none | Compare provider candidates using readiness-before-runtime policy. | No provider runtime. | RM-26 |
+| RM-26 | osu! Readiness Pack | future | none | none | Official docs review, OAuth/API model review, proof/public projection design, trust/safety review. | No osu! runtime, tokens, callback route, env vars, or secrets. | RM-27 |
+| RM-27 | osu! Runtime Foundation | conditional future | none | none | Conditional runtime foundation only if RM-26 passes official review. | No runtime unless readiness exits with go criteria. | Future provider work |
+
+Historical RM-01 through RM-13 are summarized in `ROADMAP_INDEX.md`.
