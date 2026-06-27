@@ -37,9 +37,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 
 | RM | Name | Status | Scope |
 | --- | --- | --- | --- |
-| RM-23 | Roadmap Governance + Provider Expansion Plan | this PR | Defines RM convention, source-of-truth rules, provider expansion readiness policy, and future provider candidate taxonomy. |
-| RM-24 | Launch Readiness | next | Production smoke, observability, rollback, policy review, launch checklist, and operational go/no-go. |
-| RM-25 | Provider Expansion Readiness Matrix | future | Compares provider candidates using readiness-before-runtime criteria. |
+| RM-23 | Roadmap Governance + Provider Expansion Plan | done | Defines RM convention, source-of-truth rules, provider expansion readiness policy, and future provider candidate taxonomy. |
+| RM-24 | Launch Readiness | this PR | Production smoke, observability, rollback, policy review, launch checklist, and operational go/no-go. Does not execute deploy. |
+| RM-25 | Provider Expansion Readiness Matrix | next | Compares provider candidates using readiness-before-runtime criteria. |
 | RM-26 | osu! Readiness Pack | future | Reviews official osu! docs, account ownership, API/OAuth model, public fields, privacy, rate limits, and proof boundaries. |
 | RM-27 | osu! Runtime Foundation | conditional future | Runtime only if RM-26 passes official review and product constraints. |
 
@@ -50,9 +50,8 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-23
+## Not Implemented By RM-24
 
-- RM-24 Launch Readiness.
 - RM-25 Provider Expansion Readiness Matrix.
 - RM-26 osu! Readiness Pack.
 - RM-27 osu! Runtime Foundation.

@@ -140,11 +140,17 @@ Riot integration is not live. Discord integration is not live. No Riot API calls
 - Prepare broad public identity surfaces for abuse cases.
 - Keep public data allowlisted.
 
-### PR23 - Launch Readiness
+### RM-24 - Launch Readiness
 
 - Run production smoke.
 - Verify observability, rollback, policy copy, privacy controls, sitemap, and portal metadata.
 - Confirm no prohibited provider or Riot behavior exists.
+- RM-24 is readiness and does not execute deploy.
+
+### RM-25 - Provider Expansion Readiness Matrix
+
+- Compare Riot, osu!, Steam, Supercell / Clash, Discord, and future candidates with readiness-before-runtime criteria.
+- Keep provider runtime, OAuth/API calls, callback routes, tokens, env vars, and secrets out of scope.
 
 ## Dependency Gates
 
