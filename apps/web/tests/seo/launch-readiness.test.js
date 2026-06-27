@@ -128,12 +128,13 @@ describe('RM-24 Launch Readiness', () => {
   it('keeps RM-24 documented after later roadmap handoffs', () => {
     assert.match(roadmapIndex, /RM-24[\s\S]{0,120}Launch Readiness[\s\S]{0,120}done/);
     assert.match(roadmapIndex, /RM-25[\s\S]{0,180}Provider Expansion Readiness Matrix[\s\S]{0,180}done/);
-    assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}this PR/);
+    assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}done/);
+    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}this PR/);
     assert.match(milestoneRegistry, /RM-24[\s\S]{0,160}Launch Readiness[\s\S]{0,160}done/);
     assert.match(statusMatrix, /Launch readiness \| done[\s\S]*RM-25/);
     assert.match(decisionLog, /Launch Readiness is evidence and governance, not launch execution/);
     assert.match(readme, /RM-24 Launch Readiness Pack/);
-    assert.match(currentRoadmap, /Current Status After RM-26/);
+    assert.match(currentRoadmap, /Current Status After RM-27/);
     assert.match(executionPlan, /Implemented by RM-24/);
   });
 

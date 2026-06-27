@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, and RM-26.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, and RM-27.
 
 ## Closed Visual/Tooling Line
 
@@ -45,11 +45,13 @@ RM-25 adds Provider Expansion Readiness Matrix. It compares Riot, osu!, Steam, S
 
 RM-26 adds osu! Readiness Pack. It reviews official osu! docs, OAuth/API model, Authorization Code ownership verification, scopes, public proof shape, token storage/retention risk, unlink/revoke, stale/revoked proof behavior, public projection safety, rate limits/backoff, trust/safety/privacy, branding/monetization, and exits `conditional-go` for RM-27. It does not add osu! runtime, OAuth implementation, API calls, callbacks, token storage implementation, env vars/secrets, DB migrations, `/cosmetics`, store/payment, remote services, or provider linking UI.
 
+RM-27 adds osu! Runtime Foundation. It uses the server-side `apps/api` boundary, disabled-by-default runtime gates, OAuth state hash storage, Authorization Code token exchange, `/me` ownership verification, immediate token revoke, no-refresh-token storage, owner-only status/unlink, private `profile_linked` proof foundation, and local migration constraints. It does not launch production, store refresh tokens, add public linking UI, expose tokens/secrets to browser, add store/payments, add `/cosmetics`, deploy, or touch remote services.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 conditional provider runtime.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -214,12 +216,22 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 
 ### RM-27 osu! Runtime Foundation
 
-- Goal: Conditional future runtime foundation for osu! only if RM-26 accepted conditions are implemented safely.
-- Why now: Runtime must follow readiness and cannot start from Client Credentials or public profile lookup alone.
-- Already exists: Provider Runtime Foundation and RM-26 conditional-go readiness output.
-- Missing: Authorization Code runtime, callback route, CSRF-safe state, server-side token exchange, encrypted token handling or accepted no-refresh strategy, unlink/revoke, stale/revoked proof runtime, rate-limit/backoff, privacy copy, and public projection allowlist implementation.
-- Non-goals: No runtime if readiness fails or is incomplete.
-- Exit criteria: Runtime foundation remains policy-compliant, owner-controlled, revocable, and public-projection-safe.
+- Goal: Implement a disabled-by-default server-side osu! runtime foundation only within the accepted RM-26 conditions.
+- Why now: RM-26 exits `conditional-go`, and the repo has an `apps/api` server boundary that can hold client secret, service role, token exchange, `/me`, and revoke outside the browser.
+- Already exists: Provider Runtime Foundation, RM-26 readiness output, public projection guards, and trust/safety controls.
+- Implemented by RM-27: provider id `osu`, server env schema, `OSU_PROVIDER_ENABLED=false` default, API status/link-intent/callback/unlink endpoints, CSRF-safe state hash, server-side token exchange, `/me` ownership verification, immediate revoke, no-refresh-token storage, private `profile_linked` proof, owner-only unlink, migration constraints, docs, API tests, SEO/source tests, and DB tests.
+- Missing: configured staging env, registered osu! callback, end-to-end smoke, owner UX to initiate link, public proof promotion policy, refresh-token storage if ever approved, and production go/no-go.
+- Non-goals: No production launch, no public provider linking UI, no browser tokens/secrets, no refresh-token storage, no provider polling/sync, no rank/PP/score/match-history/live tracker, no `/cosmetics`, no store/payments, no remote service changes, no deploy.
+- Exit criteria: Foundation remains gated, server-side only, owner-controlled, revocable, no-refresh-token, and public-projection-safe.
+
+### RM-28 osu! Runtime Smoke / Owner Linking QA
+
+- Goal: Verify the RM-27 foundation with configured local/staging env before any public launch.
+- Why now: Runtime code exists but is disabled by default and needs operational proof.
+- Already exists: RM-27 server-side foundation.
+- Missing: registered callback, staging env values, smoke owner account, link/unlink test evidence, public projection non-leakage evidence, rollback notes.
+- Non-goals: No production launch before owner go/no-go.
+- Exit criteria: Owner-only smoke passes with no token leakage, revoke/unlink behavior verified, and public projection remains clean.
 
 ### Legacy PR23 Label
 

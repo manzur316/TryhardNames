@@ -9,7 +9,7 @@ Revision ejecutada el 2026-06-27 usando fuentes oficiales publicas disponibles.
 | Candidate | official_docs_review | Official source posture |
 | --- | --- | --- |
 | Riot | run | Riot Developer Portal/API docs y docs internas de readiness existentes revisadas; runtime sigue approval-gated porque el repo no contiene approval evidence. |
-| osu! | run | osu! API v2/OAuth docs oficiales revisadas; RM-26 readiness sale `conditional-go` para RM-27, no runtime. |
+| osu! | run | osu! API v2/OAuth docs oficiales revisadas; RM-26 readiness sale `conditional-go`; RM-27 agrega runtime foundation server-side gated, no production launch. |
 | Steam | run | Steam OpenID/Web API docs oficiales revisadas; buen candidato futuro de identidad, proof per-game requiere cautela. |
 | Supercell / Clash | partial | Landing/API docs oficiales publicas revisadas; la estrategia de ownership requiere revision manual del portal/documentacion oficial completa. |
 | Discord | run | Discord OAuth2/API docs oficiales revisadas; util como identidad social/community, no achievement proof. |
@@ -66,7 +66,7 @@ Current posture:
 - official docs are publicly available enough for RM-26 planning;
 - RM-26 osu! Readiness Pack exits `conditional-go`;
 - RM-26 is readiness only, not runtime;
-- RM-27 is conditional next only if accepted runtime conditions are implemented safely.
+- RM-27 accepts the conditions as a disabled-by-default server-side foundation, not a public launch.
 
 Why it is recommended:
 
@@ -87,7 +87,7 @@ RM-26 decision:
 
 Required follow-up:
 
-- RM-27 must implement callback/state, token handling, unlink/revoke, stale/revoked proof, rate-limit/backoff, privacy copy, branding boundaries and public projection guards before activation.
+- RM-28 must smoke-test owner linking, configured server env, callback/state failure modes, unlink/revoke, stale/revoked proof, rate-limit/backoff, privacy copy, branding boundaries and public projection guards before wider activation.
 
 ## Steam
 

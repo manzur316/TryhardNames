@@ -31,6 +31,7 @@ export const PARENT_AUTH_PROVIDER_IDS = /** @type {const} */ ({
 
 export const LINKED_PROVIDER_IDS = /** @type {const} */ ({
   DISCORD: 'discord',
+  OSU: 'osu',
   RIOT: 'riot',
 });
 

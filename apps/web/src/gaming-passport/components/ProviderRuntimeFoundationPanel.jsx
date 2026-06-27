@@ -10,6 +10,11 @@ const FOUNDATION_ITEMS = Object.freeze([
 
 const FUTURE_PROVIDERS = Object.freeze([
   {
+    name: 'osu!',
+    status: 'Server-gated foundation',
+    detail: 'Disabled by default. Requires server-side API config before any owner-only connection flow can be tested.',
+  },
+  {
     name: 'Discord',
     status: 'Future linked provider',
     detail: 'Not live. No account connection button or redirect is exposed.',
