@@ -180,6 +180,7 @@ Completed:
 - Passport Cosmetics Foundation with TryhardNames-owned visual-only cosmetics and Obsidian Pulse as a free foundation preview.
 - Trust / Safety / Privacy Controls Foundation with public profile report intent, safe report submission, private report storage, cosmetic abuse policy, and moderation runbook.
 - RM-23 Roadmap Governance + Provider Expansion Plan, defining GH PR # versus RM-XX, roadmap source-of-truth rules, and provider expansion readiness policy.
+- RM-24 Launch Readiness Pack with production smoke, observability, rollback, go/no-go, and policy final review docs.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -195,7 +196,7 @@ Waiting:
 
 Next product block:
 
-- RM-24 Launch Readiness.
+- RM-25 Provider Expansion Readiness Matrix.
 
 Provider expansion planning:
 
@@ -213,6 +214,6 @@ Provider expansion planning:
 - RiotProvider runtime.
 - LeagueOfLegendsAdapter.
 - Proof sync.
-- Future `/cosmetics` showcase and launch readiness.
+- Future `/cosmetics` showcase.
 
 No dates are promised. Riot runtime work should wait until approval and next steps are clear.

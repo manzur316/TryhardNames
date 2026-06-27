@@ -128,4 +128,4 @@ Every provider path must pass:
 - RM-26 osu! Readiness Pack.
 - RM-27 osu! Runtime Foundation, conditional on RM-26 and official review.
 
-RM-24, RM-25, RM-26, and RM-27 are not implemented by RM-23.
+RM-24 is implemented as launch readiness evidence and does not execute deploy. RM-25, RM-26, and RM-27 are not implemented by RM-24.

@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, and RM-23.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, and RM-24.
 
 ## Closed Visual/Tooling Line
 
@@ -38,6 +38,8 @@ PR21 adds Passport Cosmetics Foundation. It creates a TryhardNames-owned local c
 PR22 adds Trust / Safety / Privacy Controls Foundation. It adds public profile report intent, safe report submission RPC, private report storage, report category policy, cosmetic abuse policy, blocked/reserved visual identity terms, takedown/suspension/privacy docs, and moderation runbook. It does not add provider launch expansion, `/cosmetics`, store, payments, pets/companions runtime, admin moderation dashboard, public report list, or email notifications.
 
 RM-23 adds Roadmap Governance + Provider Expansion Plan. It separates GitHub PR # from stable RM-XX milestones, defines GitHub/main/docs as the source of truth, adds the roadmap index and milestone registry, and documents provider expansion as readiness-before-runtime. It does not add runtime, providers, OAuth, `/cosmetics`, store, payments, migrations, env vars, or secrets.
+
+RM-24 adds Launch Readiness. It creates the launch readiness overview, production smoke checklist, observability and monitoring checklist, rollback plan, launch go/no-go matrix, policy final review, RM24 scope doc, roadmap updates, and source-based tests. It does not execute deploy, touch remote services, add runtime, add routes, add migrations, or activate providers/store/payments.
 
 ## Current Principle
 
@@ -172,7 +174,7 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 - Why now: GitHub PR numbers no longer match product phase labels, and provider expansion needs readiness-before-runtime rules before launch readiness.
 - Already exists: RM-14 through RM-22 product history, merged GitHub PRs, roadmap docs, provider readiness docs, Riot readiness docs, cosmetics docs, trust/safety docs.
 - Implemented by RM-23: Roadmap governance, RM index, milestone registry, provider expansion roadmap, and source-based docs tests.
-- Missing: RM-24 Launch Readiness implementation, RM-25 provider expansion matrix, RM-26 osu! readiness, and RM-27 conditional runtime.
+- Missing: RM-25 provider expansion matrix, RM-26 osu! readiness, and RM-27 conditional runtime.
 - Non-goals: No runtime, routes, providers, OAuth, store/payments, migrations, env vars, secrets, or remote service changes.
 - Exit criteria: Docs clearly distinguish GH PR # from RM-XX and define provider expansion readiness policy.
 
@@ -180,10 +182,11 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 
 - Goal: Prepare for a controlled public launch.
 - Why now: Launch should follow working product, provider/privacy controls, and rollback paths.
-- Already exists: Validation command discipline and roadmap gates.
-- Missing: Production smoke, observability, rollback, policy final review, portal metadata sync.
-- Non-goals: No new product scope.
-- Exit criteria: Launch checklist is complete and risks are explicitly accepted or mitigated.
+- Already exists: Validation command discipline, roadmap gates, public profile/report controls, cosmetics boundaries, and provider readiness constraints.
+- Implemented by RM-24: Launch readiness overview, production smoke checklist, observability and monitoring checklist, rollback plan, launch go/no-go matrix, policy final review, RM24 scope doc, roadmap updates, and docs/source tests.
+- Missing: Actual launch execution, production smoke evidence, owner go/no-go acceptance, external observability integrations, and any future portal metadata sync required by the owner.
+- Non-goals: No deploy execution, runtime features, routes, providers, OAuth, `/cosmetics`, store/payments, migrations, env vars, secrets, or remote service changes.
+- Exit criteria: Launch checklist is auditable and risks are explicitly accepted or mitigated before any later launch execution.
 
 ### RM-25 Provider Expansion Readiness Matrix
 
