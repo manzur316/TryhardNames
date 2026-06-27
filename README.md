@@ -90,6 +90,10 @@ Current support docs:
 - `docs/product/OSU_TOKEN_REVOKE_UNLINK_PLAN.md`
 - `docs/product/OSU_RUNTIME_PUBLIC_PROJECTION_REVIEW.md`
 - `docs/product/RM27_OSU_RUNTIME_SCOPE.md`
+- `docs/product/OSU_RUNTIME_SMOKE_QA.md`
+- `docs/product/OSU_OWNER_LINKING_SMOKE_RUNBOOK.md`
+- `docs/product/OSU_RUNTIME_SMOKE_RESULTS.md`
+- `docs/product/RM28_OSU_RUNTIME_SMOKE_SCOPE.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
@@ -196,6 +200,7 @@ Completed:
 - RM-25 Provider Expansion Readiness Matrix comparing Riot, osu!, Steam, Supercell/Clash, Discord, and future console/Epic candidates without runtime activation.
 - RM-26 osu! Readiness Pack with official docs review, OAuth/API model, ownership proof, public proof model, token/revoke/stale-proof review, trust/safety/privacy review, branding/monetization review, and conditional RM-27 decision without runtime activation.
 - RM-27 osu! Runtime Foundation with disabled-by-default server-side API gates, CSRF-safe state, Authorization Code token exchange, `/me` ownership verification, immediate token revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards.
+- RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass docs and tests for local status, link-intent, manual callback, DB verification, token vault non-persistence, unlink/revoke, and negative cases. Full callback evidence remains blocked on human osu! authorization.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -211,17 +216,19 @@ Waiting:
 
 This PR:
 
-- RM-27 osu! Runtime Foundation.
+- RM-28 osu! Runtime Smoke / Owner Linking QA.
+- Result: partial-pass / blocked at human osu! authorization.
 
 Next product block:
 
-- RM-28 osu! Runtime Smoke / Owner Linking QA.
+- RM-29 osu! Smoke Blocker Fixes.
 
 Provider expansion planning:
 
 - RM-25 Provider Expansion Readiness Matrix is implemented as docs/tests-only decision support by GH PR #32 and merge commit `a072aed297d209107e6ca719874496f30eaac8e9`.
 - RM-26 osu! Readiness Pack is implemented by GH PR #33 and merge commit `c933f7d4fb60ee5f5a334dd96af4ef20fa2ee294`.
-- RM-27 osu! Runtime Foundation is this PR as disabled-by-default server-side foundation, not production launch.
+- RM-27 osu! Runtime Foundation is implemented by GH PR #34 and merge commit `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`.
+- RM-28 osu! Runtime Smoke / Owner Linking QA is this PR as partial-pass smoke evidence, not production launch.
 - Riot runtime only after explicit approval evidence exists.
 - osu! has a gated runtime foundation, not a live public launch.
 - Steam is a future identity provider candidate.

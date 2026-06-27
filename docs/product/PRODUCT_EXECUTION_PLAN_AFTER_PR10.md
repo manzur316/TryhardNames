@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, and RM-27.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, and RM-28.
 
 ## Closed Visual/Tooling Line
 
@@ -47,11 +47,13 @@ RM-26 adds osu! Readiness Pack. It reviews official osu! docs, OAuth/API model, 
 
 RM-27 adds osu! Runtime Foundation. It uses the server-side `apps/api` boundary, disabled-by-default runtime gates, OAuth state hash storage, Authorization Code token exchange, `/me` ownership verification, immediate token revoke, no-refresh-token storage, owner-only status/unlink, private `profile_linked` proof foundation, and local migration constraints. It does not launch production, store refresh tokens, add public linking UI, expose tokens/secrets to browser, add store/payments, add `/cosmetics`, deploy, or touch remote services.
 
+RM-28 adds osu! Runtime Smoke / Owner Linking QA as partial-pass evidence. It documents local status/config smoke, owner JWT and Passport preparation, link-intent smoke, manual authorizeUrl authorization, callback expectations, DB verification, token vault non-persistence, unlink/revoke checks, negative cases, and RM-29 handoff. Full callback evidence remains blocked on human osu! authorization. It does not add runtime behavior, public provider UI, refresh-token storage, store/payments, `/cosmetics`, tracker/ranking surfaces, remote Supabase changes, Vercel changes, deploy, or production launch.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -229,9 +231,19 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 - Goal: Verify the RM-27 foundation with configured local/staging env before any public launch.
 - Why now: Runtime code exists but is disabled by default and needs operational proof.
 - Already exists: RM-27 server-side foundation.
-- Missing: registered callback, staging env values, smoke owner account, link/unlink test evidence, public projection non-leakage evidence, rollback notes.
-- Non-goals: No production launch before owner go/no-go.
-- Exit criteria: Owner-only smoke passes with no token leakage, revoke/unlink behavior verified, and public projection remains clean.
+- Implemented by RM-28: smoke QA doc, owner-linking runbook, results doc, RM28 scope doc, API/web source guards, roadmap updates, status/link-intent smoke criteria, callback/DB/unlink/token vault verification criteria, negative case checklist, and RM-29 handoff.
+- Missing: human-authorized osu! callback evidence, DB rows created by the real callback, unlink/revoke after a real callback, and public projection non-leakage evidence after revoke.
+- Non-goals: No production launch, public provider UI, osu! Parent Auth, refresh-token storage, tracker/ranking surfaces, `/cosmetics`, store/payments, remote Supabase changes, Vercel changes, or deploy.
+- Exit criteria: Partial-pass is documented without overclaiming. Full pass requires owner-only smoke with no token leakage, revoke/unlink behavior verified, and public projection clean after human authorization.
+
+### RM-29 osu! Smoke Blocker Fixes
+
+- Goal: Complete the blocked human-authorized smoke path and close any local JWT, browser, callback, or runbook blockers before UI hardening.
+- Why now: RM-28 validates local status and link-intent but cannot complete osu! consent without a human owner.
+- Already exists: RM-27 runtime foundation and RM-28 partial smoke QA.
+- Missing: real callback evidence, token vault evidence after callback, unlink/revoke evidence after callback, and revoked proof public projection evidence.
+- Non-goals: No production launch, public proof promotion, refresh-token storage, tracker/ranking surfaces, store/payments, or `/cosmetics`.
+- Exit criteria: Either full smoke passes and RM-29 can hand off to owner-linking UI hardening, or any security/runtime defect is captured as a security fix milestone.
 
 ### Legacy PR23 Label
 

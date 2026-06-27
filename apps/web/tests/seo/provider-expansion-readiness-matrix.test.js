@@ -133,11 +133,11 @@ describe('RM-25 Provider Expansion Readiness Matrix', () => {
     assert.match(readme, /RM-25 Provider Expansion Readiness Matrix comparing/);
     assert.match(roadmapIndex, /RM-25[\s\S]{0,180}Provider Expansion Readiness Matrix[\s\S]{0,180}done/);
     assert.match(roadmapIndex, /RM-26[\s\S]{0,180}osu! Readiness Pack[\s\S]{0,180}done/);
-    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}this PR/);
+    assert.match(roadmapIndex, /RM-27[\s\S]{0,180}osu! Runtime Foundation[\s\S]{0,180}done/);
     assert.match(milestoneRegistry, /RM-25[\s\S]{0,220}Provider Expansion Readiness Matrix[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-25 adds Provider Expansion Readiness Matrix/);
     assert.match(statusMatrix, /Provider Expansion Readiness Matrix \| done/);
-    assert.match(currentRoadmap, /Current Status After RM-27/);
+    assert.match(currentRoadmap, /Current Status After RM-28/);
     assert.match(decisionLog, /Provider Expansion Readiness Matrix recommends osu! readiness next/);
     assert.match(providerExpansion, /RM-25 Matrix Output/);
   });
