@@ -327,6 +327,43 @@ describe('Gaming Passport provider visibility', () => {
     assert.equal(JSON.stringify(projection).includes('Hidden'), false);
   });
 
+  it('keeps osu! profile-linked owner proof private and absent from public projection by default', () => {
+    const osuProvider = linkedProvider({
+      id: 'lpa_osu',
+      provider: LINKED_PROVIDER_IDS.OSU,
+      externalAccountId: 'osu-internal-account',
+      displayName: 'OsuOwner',
+      visibility: PROVIDER_VISIBILITY.PRIVATE,
+    });
+    const osuProof = verifiedProof({
+      id: 'proof_osu_profile',
+      linkedProviderAccountId: 'lpa_osu',
+      provider: LINKED_PROVIDER_IDS.OSU,
+      game: null,
+      proofType: PROOF_TYPES.PROVIDER_OWNERSHIP,
+      sourceKey: 'osu:profile_linked',
+      mode: 'profile',
+      title: 'Linked osu! account',
+      displayValue: 'OsuOwner',
+      source: PROOF_SOURCES.LINKED_PROVIDER,
+      verificationMethod: VERIFICATION_METHODS.OAUTH,
+      visibility: PROOF_VISIBILITY.PRIVATE,
+    });
+
+    const projection = buildPublicPassportProjection({
+      passport: passport(),
+      linkedProviderAccounts: [osuProvider],
+      verifiedProofs: [osuProof],
+      featuredProofIds: [osuProof.id],
+    });
+
+    assert.ok(projection);
+    assert.deepEqual(projection.linkedProviders, []);
+    assert.deepEqual(projection.featuredProofs, []);
+    assert.equal(JSON.stringify(projection).includes('OsuOwner'), false);
+    assert.equal(JSON.stringify(projection).includes('osu-internal-account'), false);
+  });
+
   it('never exposes a revoked provider', () => {
     const activeProvider = linkedProvider({ id: 'lpa_active', externalAccountId: 'RiotPUUID-2' });
     const revokedProvider = linkedProvider({

@@ -134,7 +134,7 @@ describe('RM-24 Launch Readiness', () => {
     assert.match(statusMatrix, /Launch readiness \| done[\s\S]*RM-25/);
     assert.match(decisionLog, /Launch Readiness is evidence and governance, not launch execution/);
     assert.match(readme, /RM-24 Launch Readiness Pack/);
-    assert.match(currentRoadmap, /Current Status After RM-29/);
+    assert.match(currentRoadmap, /Current Status After RM-30/);
     assert.match(executionPlan, /Implemented by RM-24/);
   });
 

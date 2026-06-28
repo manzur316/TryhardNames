@@ -1,12 +1,12 @@
 # TryhardNames Current State And Roadmap
 
-## Current Status After RM-29
+## Current Status After RM-30
 
-This supersedes the previous `Current Status After PR22` snapshot, the `Current Status After RM-24` launch readiness snapshot, the `Current Status After RM-25` provider expansion matrix snapshot, the `Current Status After RM-26` osu! readiness snapshot, the `Current Status After RM-27` runtime foundation snapshot, and the `Current Status After RM-28` smoke QA snapshot.
+This supersedes the previous `Current Status After PR22` snapshot, the `Current Status After RM-24` launch readiness snapshot, the `Current Status After RM-25` provider expansion matrix snapshot, the `Current Status After RM-26` osu! readiness snapshot, the `Current Status After RM-27` runtime foundation snapshot, the `Current Status After RM-28` smoke QA snapshot, and the `Current Status After RM-29` smoke completion snapshot.
 
-This document reflects main after PR22, RM-23 roadmap governance, RM-24 Launch Readiness, RM-25 Provider Expansion Readiness Matrix, RM-26 osu! Readiness Pack, RM-27 osu! Runtime Foundation, RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass, and RM-29 osu! Smoke Blocker Fixes full-pass. It follows PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, PR18, `docs(riot): add readiness pack`, PR21, `feat(passport): add cosmetics foundation`, PR22, `feat(trust): add public profile safety controls`, RM-23, Roadmap Governance + Provider Expansion Plan, RM-24, Launch Readiness, RM-25, Provider Expansion Readiness Matrix, RM-26, osu! Readiness Pack, RM-27, osu! Runtime Foundation, RM-28, osu! Runtime Smoke / Owner Linking QA, and RM-29, osu! Smoke Blocker Fixes.
+This document reflects main after PR22, RM-23 roadmap governance, RM-24 Launch Readiness, RM-25 Provider Expansion Readiness Matrix, RM-26 osu! Readiness Pack, RM-27 osu! Runtime Foundation, RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass, RM-29 osu! Smoke Blocker Fixes full-pass, and RM-30 osu! Owner Linking UI Hardening. It follows PR10.8, `fix(generator): align feature generator cards`, PR11.1, `feat(account): add dashboard v2 and unify saved names`, PR12, `feat(account): persist saved names`, PR13, `feat(account): improve private passport editor`, PR14, `feat(passport): add publish runtime commands`, PR15, `feat(passport): add public gaming passport profile`, PR16, `feat(passport): add provider runtime foundation`, PR17, `docs(provider): add first provider decision readiness pack`, PR18, `docs(riot): add readiness pack`, PR21, `feat(passport): add cosmetics foundation`, PR22, `feat(trust): add public profile safety controls`, RM-23, Roadmap Governance + Provider Expansion Plan, RM-24, Launch Readiness, RM-25, Provider Expansion Readiness Matrix, RM-26, osu! Readiness Pack, RM-27, osu! Runtime Foundation, RM-28, osu! Runtime Smoke / Owner Linking QA, RM-29, osu! Smoke Blocker Fixes, and RM-30, osu! Owner Linking UI Hardening.
 
-TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, a first-provider decision record, a Riot Readiness Pack, Passport Cosmetics Foundation, Trust / Safety / Privacy Controls Foundation, RM-24 Launch Readiness, RM-25 Provider Expansion Readiness Matrix, RM-26 osu! Readiness Pack, RM-27 osu! Runtime Foundation, RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass, and RM-29 osu! Smoke Blocker Fixes full-pass local smoke completion.
+TryhardNames has public generators, a public `/gaming-passport` landing page, Parent Auth for TryhardNames accounts, a protected `/account` Account Dashboard V2, Supabase-backed saved names for authenticated users, local saved-name fallback for signed-out users, Private Gaming Passport Editor V2 for owner-only draft editing, owner-controlled Publish Runtime Commands for consent, slug claim, publish attempt, and unpublish, a public `/id/:slug` Gaming Passport MVP backed by allowlisted projection data, provider-neutral runtime foundation contracts/schema/repository scaffolding, a first-provider decision record, a Riot Readiness Pack, Passport Cosmetics Foundation, Trust / Safety / Privacy Controls Foundation, RM-24 Launch Readiness, RM-25 Provider Expansion Readiness Matrix, RM-26 osu! Readiness Pack, RM-27 osu! Runtime Foundation, RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass, RM-29 osu! Smoke Blocker Fixes full-pass local smoke completion, and RM-30 private owner osu! linking UX in `/account`.
 
 Riot integration is not live. Discord integration is not live. No public Riot data is live. The public `/id/:slug` route serves only policy-valid published Passports and does not activate provider runtime. No Riot OAuth button exists. No Riot API calls exist. No production Riot key exists in the repo or runtime. PR18 implements Riot readiness only. Riot Runtime remains blocked until explicit approval exists.
 
@@ -123,6 +123,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - RM-27 osu! Runtime Foundation exists as disabled-by-default server-side API foundation with no-refresh-token storage, immediate revoke, owner-only status/unlink, private proof foundation, local migration constraints, and public projection guards.
 - RM-28 osu! Runtime Smoke / Owner Linking QA exists as partial-pass evidence and runbook coverage for local status, owner link-intent, manual callback, DB verification, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases.
 - RM-29 osu! Smoke Blocker Fixes exists as full-pass local smoke completion with real human-authorized callback, private DB linked/proof rows, token vault non-persistence, owner-only/idempotent unlink, revoked/private DB state, public projection non-leakage, and negative cases.
+- RM-30 osu! Owner Linking UI Hardening exists as private owner `/account` UX for status, Connect osu!, Disconnect osu!, privacy copy, disabled runtime state, and backend-only API calls.
 - Account Hunting Guide exists inside the account experience.
 - Favorite/star is the canonical saved-name UX.
 - Saved Names Supabase persistence exists through `public.saved_names`.
@@ -141,8 +142,8 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Private Gaming Passport Editor V2 is implemented as an owner-only draft editing surface.
 - Publish Runtime Commands are implemented as owner-controlled, policy-enforced commands.
 - Public Profile `/id/:slug` is implemented as an MVP public projection surface.
-- Provider-neutral domain/schema is partial-runtime. Constants, statuses, local tables, provider runtime contracts, repository scaffolding, intent/callback/sync/audit tables, and private account status UI exist, but no provider is live.
-- Linked Provider domain is partial-runtime and Linked Provider schema is partial-schema. Runtime activation, provider-specific adapters, and real callback/token handling are pending.
+- Provider-neutral domain/schema is partial-runtime. Constants, statuses, local tables, provider runtime contracts, repository scaffolding, intent/callback/sync/audit tables, and private account status UI exist. osu! has owner-only private UI; Discord and Riot remain inactive.
+- Linked Provider domain is partial-runtime and Linked Provider schema is partial-schema. osu! owner linking is the first private runtime path; public proof policy, provider-specific adapters beyond osu!, and sync jobs remain pending.
 - Verified Proof domain is partial-contract and Verified Proof schema is partial-schema. Sync runtime is pending.
 - Publish Policy is implemented as a domain contract and enforced by PR14 command runtime.
 - Public Projection is implemented as a contract and served by PR15 through an allowlisted RPC.
@@ -154,7 +155,7 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 - Riot API calls.
 - Discord API calls.
 - Real provider token storage usage.
-- Provider-specific unlink/revoke runtime.
+- Provider-specific unlink/revoke runtime beyond osu! owner-only local unlink.
 - Provider sync jobs that call external providers.
 - League of Legends adapter runtime.
 - Future `/cosmetics` showcase route.
@@ -185,8 +186,9 @@ Public `/id/:slug` exists after PR15 and returns safe unavailable behavior for m
 | RM-26 | osu! Readiness Pack | Implemented by GH PR #33. Docs/tests-only official osu! readiness review; no osu! runtime, OAuth, API calls, callbacks, tokens, env vars, secrets, DB migrations, `/cosmetics`, store/payment, or remote service changes. |
 | RM-27 | osu! Runtime Foundation | Done by GH PR #34. Disabled-by-default server-side foundation; no production launch, no public linking UI, no browser secrets/tokens, no refresh-token storage. |
 | RM-28 | osu! Runtime Smoke / Owner Linking QA | Done / partial-pass. Validated configured local status and owner link-intent runbook; deferred real callback evidence to RM-29. |
-| RM-29 | osu! Smoke Blocker Fixes | This PR / full-pass. Completed human-authorized callback smoke, DB verification, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
-| RM-30 | osu! Owner Linking UI Hardening / Private Account UX | Next. Harden private owner UX around linking status, retry, revoke, privacy copy, and account controls after full smoke completion. |
+| RM-29 | osu! Smoke Blocker Fixes | Done / full-pass. Completed human-authorized callback smoke, DB verification, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
+| RM-30 | osu! Owner Linking UI Hardening / Private Account UX | This PR. Hardens private owner UX around linking status, backend link-intent, unlink confirmation, privacy copy, and account controls after full smoke completion. |
+| RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | Next. Defines whether and how private osu! proof can become public projection data under explicit owner policy. |
 | RM-19 | Riot Provider Runtime | Still gated by explicit Riot approval. Implements Riot OAuth/runtime only after approval and provider foundation. |
 | RM-20 | League of Legends Adapter | Still gated by approved Riot runtime. Normalizes LoL proofs under RiotProvider after Riot runtime is approved and implemented. |
 

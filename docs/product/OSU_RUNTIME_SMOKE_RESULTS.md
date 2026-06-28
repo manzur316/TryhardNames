@@ -101,12 +101,20 @@ The token strategy remains:
 no_refresh_token_storage
 ```
 
-## RM-30 Recommendation
+## RM-30 Follow-Up
 
-Next recommended RM:
+RM-30 is the follow-up owner UX hardening milestone:
 
 ```txt
 RM-30 osu! Owner Linking UI Hardening / Private Account UX
 ```
 
 Reason: RM-29 closed the human authorization smoke blocker with full local callback, DB, token vault, unlink/revoke, public projection, and negative-case evidence. The next work can harden private owner UX without changing production, public provider UI, token strategy, or proof visibility defaults.
+
+RM-30 keeps the RM-29 smoke result intact. It adds private `/account` controls only and does not require another real osu! authorization smoke because backend runtime behavior is unchanged.
+
+Next recommended RM after RM-30:
+
+```txt
+RM-31 osu! Private Proof Publish Policy / Public Projection Gate
+```

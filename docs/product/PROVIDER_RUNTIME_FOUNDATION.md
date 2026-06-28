@@ -2,7 +2,9 @@
 
 PR16 adds the provider-neutral runtime foundation for future linked providers.
 
-No provider is live after this PR. No Discord account linking is live. No Riot account linking is live. The work is intentionally contract, schema, repository, audit, and private status UI foundation only.
+No provider is live after PR16. No Discord account linking is live. No Riot account linking is live. The PR16 work is intentionally contract, schema, repository, audit, and private status UI foundation only.
+
+RM-30 later adds a separate owner-only osu! card in `/account`. That card is not public provider UI and does not change the provider-neutral foundation panel.
 
 ## Why This Exists
 
@@ -65,7 +67,7 @@ PR16 does not expand the public `/id/:slug` projection. Public profiles remain a
 
 ## Account UI
 
-`/account` includes a read-only Provider Runtime Foundation panel. It says providers are not live and does not render connection buttons or redirects.
+`/account` includes a read-only Provider Runtime Foundation panel. After RM-30, that panel stays server-gated and read-only for provider-neutral contracts, while osu! owner linking lives in a separate private account card.
 
 ## Next Roadmap Blocks
 

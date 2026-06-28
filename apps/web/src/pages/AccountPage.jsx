@@ -5,6 +5,7 @@ import { FavoritesContext } from '@/contexts/FavoritesContext.jsx';
 import { useAuth } from '@/core/hooks/useAuth.js';
 import { getSupabaseRuntime } from '@/lib/supabase/client.js';
 import SeoHead from '@/seo/SeoHead.jsx';
+import OsuProviderLinkingCard from '@/gaming-passport/components/OsuProviderLinkingCard.jsx';
 import PrivatePassportEditor from '@/gaming-passport/components/PrivatePassportEditor.jsx';
 import PassportPublishControls from '@/gaming-passport/components/PassportPublishControls.jsx';
 import ProviderRuntimeFoundationPanel from '@/gaming-passport/components/ProviderRuntimeFoundationPanel.jsx';
@@ -164,6 +165,12 @@ export default function AccountPage() {
             session={auth.session}
             isLoading={isDraftLoading}
             onPassportChange={setPassport}
+          />
+
+          <OsuProviderLinkingCard
+            passport={passport}
+            session={auth.session}
+            isPassportLoading={isDraftLoading}
           />
 
           <ProviderRuntimeFoundationPanel />
