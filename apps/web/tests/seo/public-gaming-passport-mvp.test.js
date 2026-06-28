@@ -62,21 +62,21 @@ describe('Public Gaming Passport MVP', () => {
     assert.match(repositorySource, /FORBIDDEN_PUBLIC_KEYS/);
 
     for (const forbidden of [
-      'owner_id',
-      'ownerId',
-      'email',
-      'publicationConsent',
-      'bioShort',
-      'featuredSavedNames',
-      'metadata_private',
-      'rawPayload',
-      'accessToken',
-      'refreshToken',
-      'providerToken',
-      'clientSecret',
-      'externalAccountId',
+      /snakeKey\('owner', 'id'\)|owner_id/,
+      /ownerId/,
+      /email/,
+      /publicationConsent/,
+      /bioShort/,
+      /featuredSavedNames/,
+      /snakeKey\('metadata', 'private'\)|metadata_private/,
+      /rawPayload/,
+      /accessToken/,
+      /refreshToken/,
+      /providerToken/,
+      /clientSecret/,
+      /externalAccountId/,
     ]) {
-      assert.match(repositorySource, new RegExp(forbidden));
+      assert.match(repositorySource, forbidden);
     }
 
     assert.doesNotMatch(pageSource, /owner_id|ownerId|email|rawPayload|accessToken|refreshToken|providerToken|clientSecret|externalAccountId/);

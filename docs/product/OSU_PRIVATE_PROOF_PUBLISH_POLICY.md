@@ -4,13 +4,13 @@
 
 RM-31 defines the publish policy for the osu! `osu:profile_linked` ownership proof.
 
-Policy result: RM-33 enables the safe local public projection smoke path, but no production launch occurs.
+Policy result: RM-33 enables the safe local public projection smoke path, and RM-34 osu! Public Profile Trust-Safety QA audits the public profile trust-safety behavior. No production launch occurs.
 
 RM-32 adds owner-facing controls that can set an eligible osu! linked provider account and private ownership proof to public preference. RM-32 does not invent automatic publication and does not enable public projection by default.
 
 The default domain block reason remains `public_projection_allowlist_disabled` unless the public projection caller explicitly enables the osu! allowlist.
 
-Next milestone: RM-34 osu! Public Profile Trust-Safety QA.
+Next milestone: RM-35 osu! Production Readiness / Staging Go-No-Go.
 
 ## Current Behavior
 
@@ -21,6 +21,7 @@ Next milestone: RM-34 osu! Public Profile Trust-Safety QA.
 - Owners can request public preference only through the private `/account` controls and owner-authenticated API route.
 - Revoked, stale, private, blocked, or missing-consent states do not project.
 - `/id/:slug` remains an allowlisted projection only.
+- RM-34 public rendering accepts osu! only through the allowlisted DTO shape and neutral public copy.
 
 ## Required Conditions
 
@@ -100,6 +101,25 @@ The following fields are never public for osu! projection:
 - missing owner consent: no public projection.
 - missing owner proof visibility control: legacy blocked state for RM-31.
 - disabled projection allowlist: blocked unless the explicit RM-33 public projection path enables it.
+
+## RM-34 Trust-Safety Result
+
+RM-34 found and fixed a narrow public profile mapper/renderer issue for the osu! allowlisted DTO shape.
+
+The accepted public copy is:
+
+- `Linked osu! account`;
+- `TryhardNames verified account ownership through osu! OAuth`.
+
+The blocked public copy is:
+
+- verified by osu!;
+- official osu!;
+- endorsed by osu!;
+- any official endorsement claim;
+- rank, PP, score, match-history, beatmap, best-play, live tracker, or hidden-player inference copy.
+
+Production remains blocked until RM-35.
 
 ## Non-goals
 

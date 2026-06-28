@@ -8,7 +8,8 @@ RM-31 added a closed public projection gate for osu!. RM-32 added owner proof vi
 - Default domain allowlist: disabled unless the projection caller passes `osuPublicProjectionAllowlistEnabled`.
 - Production status: not launched.
 - Public proof status: eligible only when every gate passes.
-- Next milestone: RM-34 osu! Public Profile Trust-Safety QA.
+- RM-34 status: trust-safety pass after minimum public renderer/mapper fix.
+- Next milestone: RM-35 osu! Production Readiness / Staging Go-No-Go.
 
 ## Code Boundaries
 
@@ -73,6 +74,21 @@ RM-33 removes the `public_projection_allowlist_disabled` blocker from the local 
 
 This is a local QA enablement, not a production launch.
 
+## RM-34 Update
+
+RM-34 audits the public profile UX and trust-safety behavior of the allowlisted osu! DTOs.
+
+Result:
+
+- public profile copy remains neutral;
+- public output uses `Linked osu! account`;
+- public copy can say TryhardNames verified account ownership through osu! OAuth;
+- public copy must not say verified by osu!, official osu!, endorsed by osu!, or imply endorsement;
+- the web mapper accepts osu! only through the allowlisted provider/proof DTO fields;
+- unsafe osu! profile URLs are stripped before rendering;
+- raw ids, metadata, token state, raw OAuth/API payloads, and tracker/ranking fields remain blocked;
+- production remains blocked until RM-35.
+
 ## Rollback
 
-Revert the RM-33 PR. It removes the local smoke migration, domain allowlist pipeline wiring, docs, and tests. No remote Supabase, Vercel, or production rollback is required by this PR.
+Revert the RM-33 PR to remove the local smoke migration and allowlisted projection branch. Revert the RM-34 PR to remove the public renderer/mapper hardening, docs, and tests. No remote Supabase, Vercel, or production rollback is required by RM-34 because it is not a production launch.

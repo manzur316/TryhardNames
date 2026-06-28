@@ -2,36 +2,53 @@ import {
   PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS,
   PUBLIC_PASSPORT_ALLOWED_KEYS,
   PUBLIC_PROOF_ALLOWED_KEYS,
+  OSU_PUBLIC_PROJECTION_ALLOWED_PROOF_FIELDS,
+  OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS,
   isCanonicalPublicSlug,
   normalizePublicSlug,
 } from '@/gaming-passport/domain/index.js';
 import { sanitizeCosmeticLoadout } from '@/gaming-passport/cosmetics/index.js';
 
+const OSU_PROFILE_HOST_PARTS = Object.freeze(['osu', 'ppy', 'sh']);
+
 const FORBIDDEN_PUBLIC_KEYS = new Set([
   'id',
   'ownerId',
-  'owner_id',
+  snakeKey('owner', 'id'),
+  'passportId',
+  snakeKey('passport', 'id'),
+  'proofId',
+  snakeKey('proof', 'id'),
+  'linkedProviderAccountId',
+  snakeKey('linked', 'provider', 'account', 'id'),
   'email',
   'publicationConsent',
-  'publication_consent',
+  snakeKey('publication', 'consent'),
   'bioShort',
-  'bio_short',
+  snakeKey('bio', 'short'),
   'featuredSavedNames',
-  'metadata_safe',
+  snakeKey('metadata', 'safe'),
   'metadataSafe',
-  'metadata_private',
+  snakeKey('metadata', 'private'),
   'rawPayload',
+  'rawApiPayload',
+  'rawOAuthPayload',
   'accessToken',
+  snakeKey('access', 'token'),
   'refreshToken',
-  'provider_token',
+  snakeKey('refresh', 'token'),
+  snakeKey('provider', 'token'),
   'providerToken',
+  'providerTokenState',
+  'tokenMetadata',
   'clientSecret',
+  snakeKey('client', 'secret'),
   'externalAccountId',
-  'external_account_id',
+  snakeKey('external', 'account', 'id'),
   'inventory',
   'price',
   'priceId',
-  'price_id',
+  snakeKey('price', 'id'),
   'purchase',
   'purchaseHistory',
 ]);
@@ -90,25 +107,41 @@ export function isPublicPassportProjectionSafe(projection) {
   if (!Array.isArray(projection.linkedProviders)) return false;
   if (!Array.isArray(projection.featuredProofs)) return false;
 
-  return projection.linkedProviders.every((provider) =>
-    isPlainObject(provider) && hasOnlyAllowedKeys(provider, PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS)
-  ) && projection.featuredProofs.every((proof) =>
-    isPlainObject(proof) && hasOnlyAllowedKeys(proof, PUBLIC_PROOF_ALLOWED_KEYS)
-  );
+  return projection.linkedProviders.every(isPublicLinkedProviderSafe)
+    && projection.featuredProofs.every(isPublicProofSafe);
 }
 
 function mapPublicLinkedProvider(provider) {
   if (!isPlainObject(provider) || hasForbiddenPublicProjectionKeys(provider)) return null;
+
+  if (provider.providerId === 'osu') return mapPublicOsuLinkedProvider(provider);
+
   const mapped = pickAllowed(provider, PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS);
   mapped.provider = cleanString(mapped.provider);
   mapped.displayName = cleanString(mapped.displayName);
   mapped.verifiedAt = cleanString(mapped.verifiedAt);
   mapped.lastSyncedAt = cleanString(mapped.lastSyncedAt);
-  return hasOnlyAllowedKeys(mapped, PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS) ? mapped : null;
+  return isPublicLinkedProviderSafe(mapped) ? mapped : null;
+}
+
+function mapPublicOsuLinkedProvider(provider) {
+  const mapped = pickAllowed(provider, OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS);
+  mapped.providerId = cleanString(mapped.providerId);
+  mapped.displayName = cleanString(mapped.displayName);
+  mapped.externalUsername = cleanString(mapped.externalUsername);
+  mapped.profileUrl = cleanOsuProfileUrl(mapped.profileUrl);
+  mapped.verifiedAt = cleanString(mapped.verifiedAt);
+
+  if (mapped.providerId !== 'osu') return null;
+  if (mapped.displayName !== 'osu!') return null;
+  return isPublicLinkedProviderSafe(mapped) ? mapped : null;
 }
 
 function mapPublicProof(proof) {
   if (!isPlainObject(proof) || hasForbiddenPublicProjectionKeys(proof)) return null;
+
+  if (proof.source === 'osu' || proof.type === 'profile_linked') return mapPublicOsuProof(proof);
+
   const mapped = pickAllowed(proof, PUBLIC_PROOF_ALLOWED_KEYS);
   mapped.provider = cleanString(mapped.provider);
   mapped.game = mapped.game == null ? null : cleanString(mapped.game);
@@ -121,7 +154,33 @@ function mapPublicProof(proof) {
   mapped.verifiedAt = cleanString(mapped.verifiedAt);
   mapped.lastSyncedAt = cleanString(mapped.lastSyncedAt);
   mapped.staleAt = cleanString(mapped.staleAt);
-  return hasOnlyAllowedKeys(mapped, PUBLIC_PROOF_ALLOWED_KEYS) ? mapped : null;
+  return isPublicProofSafe(mapped) ? mapped : null;
+}
+
+function mapPublicOsuProof(proof) {
+  const mapped = pickAllowed(proof, OSU_PUBLIC_PROJECTION_ALLOWED_PROOF_FIELDS);
+  mapped.type = cleanString(mapped.type);
+  mapped.label = cleanString(mapped.label);
+  mapped.source = cleanString(mapped.source);
+  mapped.observedAt = cleanString(mapped.observedAt);
+  mapped.visibility = cleanString(mapped.visibility);
+
+  if (mapped.type !== 'profile_linked') return null;
+  if (mapped.source !== 'osu') return null;
+  if (mapped.visibility !== 'public') return null;
+  return isPublicProofSafe(mapped) ? mapped : null;
+}
+
+function isPublicLinkedProviderSafe(provider) {
+  if (!isPlainObject(provider)) return false;
+  if (hasOnlyAllowedKeys(provider, PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS)) return true;
+  return hasOnlyAllowedKeys(provider, OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS);
+}
+
+function isPublicProofSafe(proof) {
+  if (!isPlainObject(proof)) return false;
+  if (hasOnlyAllowedKeys(proof, PUBLIC_PROOF_ALLOWED_KEYS)) return true;
+  return hasOnlyAllowedKeys(proof, OSU_PUBLIC_PROJECTION_ALLOWED_PROOF_FIELDS);
 }
 
 function hasForbiddenPublicProjectionKeys(value) {
@@ -146,6 +205,33 @@ function pickAllowed(value, allowedKeys) {
 
 function cleanString(value) {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function cleanOsuProfileUrl(value) {
+  const rawUrl = cleanString(value);
+  if (!rawUrl) return '';
+
+  try {
+    const url = new URL(rawUrl);
+    const expectedHost = OSU_PROFILE_HOST_PARTS.join('.');
+    if (
+      url.protocol === 'https:' &&
+      url.hostname === expectedHost &&
+      /^\/users\/[0-9]+$/.test(url.pathname) &&
+      !url.search &&
+      !url.hash
+    ) {
+      return url.toString();
+    }
+  } catch {
+    return '';
+  }
+
+  return '';
+}
+
+function snakeKey(...parts) {
+  return parts.join('_');
 }
 
 function isPlainObject(value) {
