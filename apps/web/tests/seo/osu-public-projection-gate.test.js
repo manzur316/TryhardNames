@@ -69,9 +69,11 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
     assert.match(roadmapDocs, /RM-32 osu! Owner Proof Visibility Controls/);
   });
 
-  it('implements an explicit osu! projection policy gate with a future allowlist', () => {
+  it('implements an explicit osu! projection policy gate with RM-32 controls and a disabled allowlist', () => {
     assert.match(policySource, /OSU_PROFILE_LINKED_SOURCE_KEY = 'osu:profile_linked'/);
     assert.match(policySource, /owner_visibility_controls_missing/);
+    assert.match(policySource, /OSU_PUBLIC_PROJECTION_BLOCK_REASON = 'public_projection_allowlist_disabled'/);
+    assert.match(policySource, /ownerVisibilityControlsEnabled = true/);
     assert.match(policySource, /publicProjectionAllowlistEnabled = false/);
     assert.match(policySource, /providerId/);
     assert.match(policySource, /externalUsername/);
@@ -81,7 +83,7 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
     assert.match(publicationPolicySource, /canProjectOsuProfileLinkedProof/);
   });
 
-  it('keeps public projection blocked in domain and Supabase RPC until RM-32 controls exist', () => {
+  it('keeps public projection blocked in Supabase RPC until RM-33 projection smoke', () => {
     assert.match(migrationSource, /RM-31 keeps osu! private/);
     assert.match(migrationSource, /provider\.provider <> 'osu'/);
     assert.match(migrationSource, /proof\.provider <> 'osu'/);

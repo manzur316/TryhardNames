@@ -8,7 +8,7 @@
     "start": "node src/main.js",
     "dev": "node src/main.js",
     "lint": "eslint . --quiet",
-    "test": "node --test tests/apiResponse.test.js tests/osuRuntime.test.js tests/osuRuntimeSmoke.test.js"
+    "test": "node --test tests/apiResponse.test.js tests/osuRuntime.test.js tests/osuRuntimeSmoke.test.js tests/osuRuntimeVisibility.test.js"
   },
   "dependencies": {
     "@eslint/js": "^10.0.1",

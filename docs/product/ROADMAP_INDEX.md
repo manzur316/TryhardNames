@@ -45,8 +45,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | RM-28 | osu! Runtime Smoke / Owner Linking QA | done / partial-pass | Local smoke docs/tests for configured env, owner link-intent, manual callback criteria, DB verification criteria, token vault non-persistence criteria, unlink/revoke criteria, revoked proof criteria, public projection non-leakage criteria, and rollback readiness. Full callback evidence was deferred to RM-29. |
 | RM-29 | osu! Smoke Blocker Fixes | done / full-pass | Completed the human-authorized callback smoke locally, verified private DB rows, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
 | RM-30 | osu! Owner Linking UI Hardening / Private Account UX | done | Harden private owner UX around osu! linking status, backend link-intent, unlink/revoke confirmation, privacy copy, and account controls after smoke completion. |
-| RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | this PR | Defines and enforces the closed public projection gate for osu! private ownership proof data. Public osu! projection remains blocked until owner visibility controls exist. |
-| RM-32 | osu! Owner Proof Visibility Controls | next | Add explicit owner controls for if and when an osu! proof may request public visibility under the RM-31 gate. |
+| RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | done | Defines and enforces the closed public projection gate for osu! private ownership proof data. Public osu! projection remained blocked until owner visibility controls existed. |
+| RM-32 | osu! Owner Proof Visibility Controls | this PR | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate while keeping public projection blocked by allowlist until RM-33. |
+| RM-33 | osu! Public Projection Smoke / Projection QA | next | Validate public projection with owner visibility controls, published Passport, consent, allowlist, blocked fields, and trust-safety gates before any production launch. |
 
 ## Future Provider Candidates
 
@@ -55,12 +56,11 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-31
+## Not Implemented By RM-32
 
 - Production osu! launch.
 - Public provider linking UI outside `/account`.
 - Automatic public osu! proof.
-- Owner proof visibility controls.
 - Browser token exchange.
 - Refresh-token storage.
 - Any env vars/secrets.

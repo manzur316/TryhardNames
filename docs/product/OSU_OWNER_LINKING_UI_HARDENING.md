@@ -26,6 +26,7 @@ The owner card may display only safe fields returned by the backend:
 - display name;
 - status;
 - visibility;
+- proof visibility;
 - verified timestamp;
 - revoked or stale timestamp;
 - safe profile URL.
@@ -119,4 +120,19 @@ RM-31 keeps public osu! projection blocked until owner proof visibility controls
 
 ```txt
 RM-32 osu! Owner Proof Visibility Controls
+```
+
+## RM-32 Update
+
+RM-32 extends the same private owner card with proof visibility controls:
+
+- `Make Public` records owner public preference only after the Passport is published, publication consent is true, and the proof/provider are current;
+- `Confirm Public` explains that public projection still waits for policy gates and RM-33 smoke;
+- `Make Private` lets the owner revert the proof to private;
+- the UI still uses only TryhardNames backend routes and does not call osu! APIs from the browser.
+
+Public osu! projection remains gated by allowlist after RM-32. The next recommended milestone is:
+
+```txt
+RM-33 osu! Public Projection Smoke / Projection QA
 ```

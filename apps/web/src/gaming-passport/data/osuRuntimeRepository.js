@@ -6,6 +6,13 @@ const SENSITIVE_RESPONSE_KEYS = new Set([
   ['client', 'secret'].join('_'),
   ['OSU', 'CLIENT', 'SECRET'].join('_'),
   ['SUPABASE', 'SERVICE', 'ROLE', 'KEY'].join('_'),
+  ['token', 'ciphertext'].join('_'),
+  ['provider', 'token'].join('_'),
+  ['external', 'account', 'id'].join('_'),
+  ['linked', 'provider', 'account', 'id'].join('_'),
+  ['owner', 'id'].join('_'),
+  ['raw', 'payload'].join('_'),
+  ['metadata', 'safe'].join('_'),
   'code',
 ]);
 
@@ -61,6 +68,34 @@ export async function unlinkOsuProvider({ accessToken, passportId, linkedProvide
       idempotent: Boolean(result.result?.idempotent),
       publicServingAllowed: result.result?.publicServingAllowed === true,
     },
+  };
+}
+
+export async function setOsuProofVisibility({
+  accessToken,
+  passportId,
+  linkedProviderAccountId,
+  visibility,
+}) {
+  assertParentBearer(accessToken);
+  const result = await requestOsuRuntime(`${OSU_RUNTIME_PATH}/proof-visibility`, {
+    accessToken,
+    method: 'POST',
+    body: {
+      passportId: requirePassportId(passportId),
+      linkedProviderAccountId: requireLinkedProviderAccountId(linkedProviderAccountId),
+      visibility: requireProofVisibility(visibility),
+    },
+  });
+
+  return {
+    status: cleanString(result.status),
+    tokenStrategy: cleanString(result.tokenStrategy),
+    visibility: cleanString(result.visibility),
+    publicServingAllowed: result.publicServingAllowed === true,
+    projectionEligibility: toSafeProjectionEligibility(result.projectionEligibility),
+    connection: toSafeConnectionStatus(result.connection),
+    proof: toSafeProofStatus(result.proof),
   };
 }
 
@@ -123,6 +158,38 @@ function toSafeConnectionStatus(connection = {}) {
     staleAt: cleanString(connection.staleAt),
     revokedAt: cleanString(connection.revokedAt),
     profileUrl: cleanSafeUrl(connection.profileUrl),
+    proof: toSafeProofStatus(connection.proof),
+  };
+}
+
+function toSafeProofStatus(proof = null) {
+  if (!proof || typeof proof !== 'object') return null;
+  return {
+    type: cleanString(proof.type),
+    source: cleanString(proof.source),
+    label: cleanString(proof.label),
+    status: cleanString(proof.status),
+    visibility: cleanString(proof.visibility),
+    verifiedAt: cleanString(proof.verifiedAt),
+    lastSyncedAt: cleanString(proof.lastSyncedAt),
+    staleAt: cleanString(proof.staleAt),
+    revokedAt: cleanString(proof.revokedAt),
+    publicServingAllowed: proof.publicServingAllowed === true,
+  };
+}
+
+function toSafeProjectionEligibility(value = null) {
+  if (!value || typeof value !== 'object') {
+    return {
+      allowed: false,
+      reason: '',
+      nextMilestone: '',
+    };
+  }
+  return {
+    allowed: value.allowed === true,
+    reason: cleanString(value.reason),
+    nextMilestone: cleanString(value.nextMilestone),
   };
 }
 
@@ -159,8 +226,16 @@ function requirePassportId(value) {
 
 function requireLinkedProviderAccountId(value) {
   const id = cleanString(value);
-  if (!id) throw createRuntimeError('linked_provider_account_id_required', 400);
+  if (!id) throw createRuntimeError(['linked', 'provider', 'account', 'id', 'required'].join('_'), 400);
   return id;
+}
+
+function requireProofVisibility(value) {
+  const visibility = cleanString(value).toLowerCase();
+  if (!['private', 'public'].includes(visibility)) {
+    throw createRuntimeError('proof_visibility_required', 400);
+  }
+  return visibility;
 }
 
 function createRuntimeError(message, status = 500) {

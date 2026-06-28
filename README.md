@@ -100,6 +100,8 @@ Current support docs:
 - `docs/product/OSU_PRIVATE_PROOF_PUBLISH_POLICY.md`
 - `docs/product/OSU_PUBLIC_PROJECTION_GATE.md`
 - `docs/product/RM31_OSU_PUBLIC_PROJECTION_GATE_SCOPE.md`
+- `docs/product/OSU_OWNER_PROOF_VISIBILITY_CONTROLS.md`
+- `docs/product/RM32_OSU_OWNER_PROOF_VISIBILITY_SCOPE.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
