@@ -11,8 +11,10 @@ This is not a production launch. RM-33 adds local domain, RPC, docs, and tests p
 Next milestone:
 
 ```txt
-RM-34 osu! Public Profile Trust-Safety QA
+RM-35 osu! Production Readiness / Staging Go-No-Go
 ```
+
+RM-34 result: public profile trust-safety QA passed after a minimum public renderer/mapper fix for the osu! allowlisted DTO shape. Production remains blocked.
 
 ## Required Gates
 
@@ -106,3 +108,11 @@ The RPC keeps generic non-osu provider and proof builders unchanged, keeps gener
 - No `/cosmetics`.
 - No store, checkout, billing, or payments.
 - No rank, PP, score, match-history, best-play, beatmap, or live tracker behavior.
+
+## RM-34 Trust-Safety Follow-Up
+
+RM-34 reviewed this local projection smoke output against public UX, privacy, branding, and rollback requirements.
+
+RM-34 fixed the narrow web public profile issue where the public mapper and renderer still expected the old generic provider/proof DTO shape. The public profile now renders the osu! allowlisted DTO with neutral copy, strips unsafe profile URLs, and does not expose raw ids, metadata, token state, or tracker/ranking fields.
+
+This does not launch production. RM-35 must provide production readiness and staging go/no-go evidence before any production enablement.

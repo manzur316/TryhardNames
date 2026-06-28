@@ -47,8 +47,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | RM-30 | osu! Owner Linking UI Hardening / Private Account UX | done | Harden private owner UX around osu! linking status, backend link-intent, unlink/revoke confirmation, privacy copy, and account controls after smoke completion. |
 | RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | done | Defines and enforces the closed public projection gate for osu! private ownership proof data. Public osu! projection remained blocked until owner visibility controls existed. |
 | RM-32 | osu! Owner Proof Visibility Controls | done | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate while keeping public projection blocked by allowlist until RM-33. |
-| RM-33 | osu! Public Projection Smoke / Projection QA | this PR | Enables safe local public projection smoke only through explicit allowlisted osu! provider/proof DTOs, published Passport, consent, owner public preference, and blocked-field tests. |
-| RM-34 | osu! Public Profile Trust-Safety QA | next | Validate public profile trust-safety behavior before any production launch. |
+| RM-33 | osu! Public Projection Smoke / Projection QA | done | Implemented by GH PR #40 / merge `97df703a88edc938e6ee3b4f0cd42b271b3d7599`. Enables safe local public projection smoke only through explicit allowlisted osu! provider/proof DTOs, published Passport, consent, owner public preference, and blocked-field tests. |
+| RM-34 | osu! Public Profile Trust-Safety QA | this PR | Audits public profile trust-safety behavior, fixes the minimum public renderer/mapper issue for osu! allowlisted DTOs, documents rollback, and keeps production blocked. |
+| RM-35 | osu! Production Readiness / Staging Go-No-Go | next | Future staging and production go/no-go evidence before any production osu! public projection enablement. |
 
 ## Future Provider Candidates
 
@@ -57,7 +58,7 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-33
+## Not Implemented By RM-34
 
 - Production osu! launch.
 - Public provider linking UI outside `/account`.
@@ -68,3 +69,5 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - `/cosmetics`.
 - Store or payments.
 - Rank, PP, score, match-history, best-play, beatmap, or live tracker surfaces.
+- Hidden-player inference.
+- Official osu! endorsement claims.

@@ -120,7 +120,7 @@ function PublicPassportLoaded({ passport }) {
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 {passport.featuredProofs.map((proof) => (
                   <PublicProofCard
-                    key={`${proof.provider}-${proof.proofType}-${proof.mode}-${proof.title}`}
+                    key={getPublicProofKey(proof)}
                     proof={proof}
                   />
                 ))}
@@ -142,6 +142,14 @@ function PublicPassportLoaded({ passport }) {
       </main>
     </>
   );
+}
+
+function getPublicProofKey(proof) {
+  if (proof.source === 'osu' && proof.type === 'profile_linked') {
+    return `${proof.source}-${proof.type}-${proof.observedAt || proof.label || 'profile'}`;
+  }
+
+  return `${proof.provider}-${proof.proofType}-${proof.mode}-${proof.title}`;
 }
 
 function PassportUnavailable({ slug, error }) {

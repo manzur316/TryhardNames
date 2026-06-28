@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, RM-28, RM-29, RM-30, RM-31, RM-32, and RM-33.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, RM-28, RM-29, RM-30, RM-31, RM-32, RM-33, and RM-34.
 
 ## Closed Visual/Tooling Line
 
@@ -59,11 +59,13 @@ RM-32 adds osu! Owner Proof Visibility Controls. It adds an owner-authenticated 
 
 RM-33 adds osu! Public Projection Smoke / Projection QA. It enables safe local public projection only through explicit allowlisted osu! provider/proof DTO builders, published Passport, publication consent, owner-public provider/proof preference, current verified provider/proof state, and blocked-field tests. It does not add production launch, public provider UI outside `/account`, Parent Auth via osu!, refresh-token storage, direct osu! browser API calls, store/payments, `/cosmetics`, tracker/ranking surfaces, remote Supabase changes, Vercel changes, deploy, or production launch.
 
+RM-34 adds osu! Public Profile Trust-Safety QA. It audits the RM-33 public profile output, fixes the minimum public renderer/mapper issue for osu! allowlisted DTOs, enforces safe profile URL handling, documents rollback, and keeps production blocked until RM-35. It does not add production launch, public provider UI outside `/account`, Parent Auth via osu!, refresh-token storage, direct osu! browser API calls, store/payments, `/cosmetics`, tracker/ranking surfaces, hidden-player inference, official endorsement claims, remote Supabase changes, Vercel changes, deploy, or production launch.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes -> RM-30 osu! Owner Linking UI Hardening / Private Account UX -> RM-31 osu! Private Proof Publish Policy / Public Projection Gate -> RM-32 osu! Owner Proof Visibility Controls -> RM-33 osu! Public Projection Smoke / Projection QA -> RM-34 osu! Public Profile Trust-Safety QA.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes -> RM-30 osu! Owner Linking UI Hardening / Private Account UX -> RM-31 osu! Private Proof Publish Policy / Public Projection Gate -> RM-32 osu! Owner Proof Visibility Controls -> RM-33 osu! Public Projection Smoke / Projection QA -> RM-34 osu! Public Profile Trust-Safety QA -> RM-35 osu! Production Readiness / Staging Go-No-Go.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -301,9 +303,19 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 - Goal: Verify public profile trust-safety behavior before any production osu! launch.
 - Why now: RM-33 proves local projection safety, but production still needs trust-safety QA and go/no-go evidence.
 - Already exists: RM-33 safe local projection smoke and blocked-field tests.
-- Missing: public profile trust-safety smoke, report/takedown review, owner go/no-go, and production readiness evidence.
-- Non-goals: No production launch without owner go/no-go, no automatic public proof, no tracker/ranking surfaces, no store/payments, no `/cosmetics`, and no token storage expansion.
-- Exit criteria: Public profile trust-safety acceptance is documented before any production enablement.
+- Implemented by RM-34: public profile trust-safety audit, safe osu! profile URL handling, neutral public copy, minimum public renderer/mapper fix for osu! allowlisted DTOs, rollback plan, roadmap updates, and source guards.
+- Missing: owner go/no-go, staging evidence, production readiness evidence, and production enablement decision.
+- Non-goals: No production launch without owner go/no-go, no automatic public proof, no tracker/ranking surfaces, no store/payments, no `/cosmetics`, no token storage expansion, no hidden-player inference, and no official endorsement claims.
+- Exit criteria: Public profile trust-safety acceptance is documented and production remains gated by RM-35.
+
+### RM-35 osu! Production Readiness / Staging Go-No-Go
+
+- Goal: Decide whether the RM-33/RM-34 public projection path can be enabled beyond local smoke.
+- Why now: RM-34 completed trust-safety QA but intentionally did not launch production.
+- Already exists: RM-33 local public projection smoke and RM-34 public profile trust-safety QA.
+- Missing: staging smoke, production config review, observability review, rollback acceptance, owner go/no-go, and final enablement decision.
+- Non-goals: No launch without explicit owner acceptance and all source guards passing.
+- Exit criteria: A clear go/no-go decision exists before any production public osu! projection enablement.
 
 ### Legacy PR23 Label
 

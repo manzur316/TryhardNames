@@ -467,6 +467,34 @@ describe('Gaming Passport provider visibility', () => {
     }
   });
 
+  it('drops unsafe osu! profile URLs before public rendering can link them', () => {
+    for (const profileUrl of [
+      'javascript:alert(1)',
+      'https://osu.ppy.sh/users/123456?from=tryhardnames',
+      'https://osu.ppy.sh/users/123456#profile',
+      'https://evil.example/users/123456',
+      'https://osu.ppy.sh/users/not-a-number',
+    ]) {
+      const projection = buildPublicPassportProjection({
+        passport: passport(),
+        linkedProviderAccounts: [
+          osuLinkedProvider({
+            visibility: PROVIDER_VISIBILITY.PUBLIC,
+            metadataSafe: { profileUrl },
+          }),
+        ],
+        verifiedProofs: [osuProfileProof({ visibility: PROOF_VISIBILITY.PUBLIC })],
+        featuredProofIds: ['proof_osu_profile'],
+        osuPublicProjectionAllowlistEnabled: true,
+      });
+
+      assert.ok(projection);
+      assert.equal(projection.linkedProviders.length, 1);
+      assert.equal(projection.linkedProviders[0].profileUrl, undefined);
+      assert.equal(JSON.stringify(projection).includes(profileUrl), false);
+    }
+  });
+
   it('keeps stale or revoked osu! proof states out of the projection policy', () => {
     const osuProvider = osuLinkedProvider({ visibility: PROVIDER_VISIBILITY.PUBLIC });
     const staleProof = osuProfileProof({

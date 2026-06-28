@@ -102,6 +102,11 @@ Current support docs:
 - `docs/product/RM31_OSU_PUBLIC_PROJECTION_GATE_SCOPE.md`
 - `docs/product/OSU_OWNER_PROOF_VISIBILITY_CONTROLS.md`
 - `docs/product/RM32_OSU_OWNER_PROOF_VISIBILITY_SCOPE.md`
+- `docs/product/OSU_PUBLIC_PROJECTION_SMOKE_QA.md`
+- `docs/product/RM33_OSU_PUBLIC_PROJECTION_SMOKE_SCOPE.md`
+- `docs/product/OSU_PUBLIC_PROFILE_TRUST_SAFETY_QA.md`
+- `docs/product/RM34_OSU_PUBLIC_PROFILE_TRUST_SAFETY_SCOPE.md`
+- `docs/product/OSU_PUBLIC_PROFILE_ROLLBACK_PLAN.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
@@ -213,6 +218,8 @@ Completed:
 - RM-30 osu! Owner Linking UI Hardening / Private Account UX with owner-only `/account` status, connect, unlink, privacy copy, and source guards.
 - RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
 - RM-32 osu! Owner Proof Visibility Controls.
+- RM-33 osu! Public Projection Smoke / Projection QA.
+- RM-34 osu! Public Profile Trust-Safety QA.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -228,12 +235,12 @@ Waiting:
 
 This PR:
 
-- RM-33 osu! Public Projection Smoke / Projection QA.
-- Result: safe local public projection gate is enabled only through explicit allowlist DTOs and full policy checks. This is not a production launch.
+- RM-34 osu! Public Profile Trust-Safety QA.
+- Result: trust-safety pass after a minimum public renderer/mapper fix for the RM-33 osu! allowlisted DTO shape. Production remains blocked.
 
 Next product block:
 
-- RM-34 osu! Public Profile Trust-Safety QA.
+- RM-35 osu! Production Readiness / Staging Go-No-Go.
 
 Provider expansion planning:
 
@@ -245,7 +252,8 @@ Provider expansion planning:
 - RM-30 osu! Owner Linking UI Hardening / Private Account UX is complete as private owner UI, not public provider UI.
 - RM-31 osu! Private Proof Publish Policy / Public Projection Gate is complete.
 - RM-32 osu! Owner Proof Visibility Controls is complete.
-- RM-33 osu! Public Projection Smoke / Projection QA is this PR and enables safe local projection only through allowlisted fields.
+- RM-33 osu! Public Projection Smoke / Projection QA is complete and enables safe local projection only through allowlisted fields.
+- RM-34 osu! Public Profile Trust-Safety QA is this PR and keeps production blocked until RM-35.
 - Riot runtime only after explicit approval evidence exists.
 - osu! has a gated runtime foundation, not a live public launch.
 - Steam is a future identity provider candidate.
