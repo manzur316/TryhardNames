@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(182);
+select plan(184);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -2023,6 +2023,7 @@ insert into public.linked_provider_accounts (
   display_name,
   status,
   visibility,
+  metadata_safe,
   verified_at
 )
 values (
@@ -2034,6 +2035,7 @@ values (
   'Hidden Discord',
   'verified',
   'private',
+  '{}'::jsonb,
   now()
 );
 
@@ -2085,6 +2087,7 @@ insert into public.linked_provider_accounts (
   display_name,
   status,
   visibility,
+  metadata_safe,
   verified_at
 )
 values (
@@ -2096,6 +2099,12 @@ values (
   'OsuPublicOwner',
   'verified',
   'public',
+  jsonb_build_object(
+    'profileUrl', 'https://osu.ppy.sh/users/123456',
+    'rawApiPayload', jsonb_build_object('rankedScore', 'must-not-leak'),
+    'tokenMetadata', 'must-not-leak',
+    'ownerId', 'must-not-leak'
+  ),
   now()
 );
 
@@ -2115,6 +2124,7 @@ insert into public.verified_proofs (
   verification_method,
   status,
   visibility,
+  metadata_safe,
   normalizer_version,
   verified_at
 )
@@ -2134,6 +2144,11 @@ values (
   'oauth',
   'current',
   'public',
+  jsonb_build_object(
+    'rawOAuthPayload', 'must-not-leak',
+    'matchHistory', 'must-not-leak',
+    'proofId', 'must-not-leak'
+  ),
   'osu-profile-linked-v1',
   now()
 );
@@ -2264,8 +2279,8 @@ select ok(
 
 select is(
   jsonb_array_length(public.get_public_gaming_passport_projection('player-one')->'linkedProviders'),
-  1,
-  'public projection includes only public linked providers'
+  2,
+  'public projection includes public linked providers and allowlisted osu provider'
 );
 
 select ok(
@@ -2277,10 +2292,21 @@ select is(
   (
     select count(*)::integer
     from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'linkedProviders') provider
-    where provider->>'provider' = 'osu'
+    where provider->>'providerId' = 'osu'
   ),
-  0,
-  'RM-31 public projection blocks osu linked provider even if manually marked public'
+  1,
+  'RM-33 public projection includes osu linked provider only through the allowlist DTO'
+);
+
+select is(
+  (
+    select string_agg(key, ',' order by key)
+    from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'linkedProviders') provider,
+      lateral jsonb_object_keys(provider) key
+    where provider->>'providerId' = 'osu'
+  ),
+  'displayName,externalUsername,profileUrl,providerId,verifiedAt',
+  'RM-33 osu linked provider exposes only allowlisted provider fields'
 );
 
 select is(
@@ -2295,18 +2321,30 @@ select is(
 
 select is(
   jsonb_array_length(public.get_public_gaming_passport_projection('player-one')->'featuredProofs'),
-  1,
-  'public projection includes only displayable featured proofs'
+  2,
+  'public projection includes displayable featured proofs and allowlisted osu proof'
 );
 
 select is(
   (
     select count(*)::integer
     from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'featuredProofs') proof
-    where proof->>'provider' = 'osu'
+    where proof->>'source' = 'osu'
+      and proof->>'type' = 'profile_linked'
   ),
-  0,
-  'RM-31 public projection blocks osu profile-linked proof until owner visibility controls exist'
+  1,
+  'RM-33 public projection includes osu profile-linked proof only through the allowlist DTO'
+);
+
+select is(
+  (
+    select string_agg(key, ',' order by key)
+    from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'featuredProofs') proof,
+      lateral jsonb_object_keys(proof) key
+    where proof->>'source' = 'osu'
+  ),
+  'label,observedAt,source,type,visibility',
+  'RM-33 osu proof exposes only allowlisted proof fields'
 );
 
 select ok(
@@ -2316,10 +2354,11 @@ select ok(
 );
 
 select ok(
-  position('OsuPublicOwner' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+  position('OsuPublicOwner' in public.get_public_gaming_passport_projection('player-one')::text) > 0
+    and position('Linked osu! account' in public.get_public_gaming_passport_projection('player-one')::text) > 0
     and position('OsuInternalPublicProjection' in public.get_public_gaming_passport_projection('player-one')::text) = 0
-    and position('Linked osu! account' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
-  'RM-31 public projection omits osu display name, internal id, and proof label'
+    and position('must-not-leak' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
+  'RM-33 public projection allows safe osu labels but omits internal id and malicious metadata'
 );
 
 select is(

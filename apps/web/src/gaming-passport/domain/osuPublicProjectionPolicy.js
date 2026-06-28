@@ -13,7 +13,7 @@ import {
 export const OSU_PROFILE_LINKED_SOURCE_KEY = 'osu:profile_linked';
 export const OSU_OWNER_VISIBILITY_CONTROLS_BLOCK_REASON = 'owner_visibility_controls_missing';
 export const OSU_PUBLIC_PROJECTION_BLOCK_REASON = 'public_projection_allowlist_disabled';
-export const OSU_PUBLIC_PROJECTION_NEXT_RM = 'RM-33 osu! Public Projection Smoke / Projection QA';
+export const OSU_PUBLIC_PROJECTION_NEXT_RM = 'RM-34 osu! Public Profile Trust-Safety QA';
 
 export const OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS = Object.freeze([
   'providerId',

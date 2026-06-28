@@ -12,8 +12,9 @@ import {
   validateVerifiedProofContract,
 } from './contracts.js';
 import {
-  canProjectOsuLinkedProvider,
-  canProjectOsuProfileLinkedProof,
+  getOsuPublicProjectionDecision,
+  isOsuLinkedProvider,
+  isOsuProfileLinkedProof,
 } from './osuPublicProjectionPolicy.js';
 
 export function isParentAccountAuthenticated(parentAuth) {
@@ -30,20 +31,43 @@ export function isLinkedProviderAccountValid(account) {
   );
 }
 
-export function isLinkedProviderAccountPubliclyVisible(account) {
-  return (
-    isLinkedProviderAccountValid(account) &&
-    account.visibility === PROVIDER_VISIBILITY.PUBLIC &&
-    canProjectOsuLinkedProvider(account)
+function getOsuProjectionOptions(options = {}) {
+  return {
+    passport: options.passport,
+    publicProjectionAllowlistEnabled:
+      options.osuPublicProjectionAllowlistEnabled === true ||
+      options.publicProjectionAllowlistEnabled === true,
+    suspensionBlock: options.suspensionBlock === true,
+    reportBlock: options.reportBlock === true,
+  };
+}
+
+function findOsuProfileLinkedProofForAccount(account, proofs) {
+  return (Array.isArray(proofs) ? proofs : []).find(
+    (proof) => proof.linkedProviderAccountId === account?.id && isOsuProfileLinkedProof(proof)
   );
+}
+
+export function isLinkedProviderAccountPubliclyVisible(account, options = {}) {
+  if (!isLinkedProviderAccountValid(account)) return false;
+  if (account.visibility !== PROVIDER_VISIBILITY.PUBLIC) return false;
+  if (!isOsuLinkedProvider(account)) return true;
+
+  return getOsuPublicProjectionDecision({
+    ...getOsuProjectionOptions(options),
+    linkedProviderAccount: account,
+    proof: findOsuProfileLinkedProofForAccount(account, options.verifiedProofs),
+  }).allowed;
 }
 
 export function getVerifiedLinkedProviderAccounts(accounts) {
   return (Array.isArray(accounts) ? accounts : []).filter(isLinkedProviderAccountValid);
 }
 
-export function getPublicLinkedProviderAccounts(accounts) {
-  return (Array.isArray(accounts) ? accounts : []).filter(isLinkedProviderAccountPubliclyVisible);
+export function getPublicLinkedProviderAccounts(accounts, options = {}) {
+  return (Array.isArray(accounts) ? accounts : []).filter((account) =>
+    isLinkedProviderAccountPubliclyVisible(account, options)
+  );
 }
 
 export function hasVerifiedLinkedProvider(accounts) {
@@ -78,21 +102,27 @@ export function canServePublishedPassport({ passport, linkedProviderAccounts } =
   );
 }
 
-export function canDisplayVerifiedProof(proof, linkedProviderAccounts = []) {
+export function canDisplayVerifiedProof(proof, linkedProviderAccounts = [], options = {}) {
   if (!proof || typeof proof !== 'object') return false;
   if (proof.visibility !== PROOF_VISIBILITY.PUBLIC) return false;
   if (![VERIFIED_PROOF_STATUSES.CURRENT, VERIFIED_PROOF_STATUSES.STALE].includes(proof.status)) return false;
   if (!validateVerifiedProofContract(proof, linkedProviderAccounts).ok) return false;
-  if (!canProjectOsuProfileLinkedProof({ proof, linkedProviderAccounts })) return false;
 
   const accounts = Array.isArray(linkedProviderAccounts) ? linkedProviderAccounts : [];
   const sourceAccount = accounts.find((account) => account.id === proof.linkedProviderAccountId);
-  return isLinkedProviderAccountValid(sourceAccount);
+  if (!isLinkedProviderAccountValid(sourceAccount)) return false;
+  if (!isOsuProfileLinkedProof(proof)) return true;
+
+  return getOsuPublicProjectionDecision({
+    ...getOsuProjectionOptions(options),
+    linkedProviderAccount: sourceAccount,
+    proof,
+  }).allowed;
 }
 
-export function getDisplayableVerifiedProofs(proofs, linkedProviderAccounts = []) {
+export function getDisplayableVerifiedProofs(proofs, linkedProviderAccounts = [], options = {}) {
   return (Array.isArray(proofs) ? proofs : []).filter((proof) =>
-    canDisplayVerifiedProof(proof, linkedProviderAccounts)
+    canDisplayVerifiedProof(proof, linkedProviderAccounts, options)
   );
 }
 
@@ -101,9 +131,10 @@ export function getFeaturedVerifiedProofs({
   featuredProofIds,
   linkedProviderAccounts,
   max = 6,
+  publicProjectionOptions = {},
 } = {}) {
   const limit = coerceFeaturedProofLimit(max);
-  const displayable = getDisplayableVerifiedProofs(proofs, linkedProviderAccounts);
+  const displayable = getDisplayableVerifiedProofs(proofs, linkedProviderAccounts, publicProjectionOptions);
   const byId = new Map(displayable.map((proof) => [proof.id, proof]));
 
   if (Array.isArray(featuredProofIds) && featuredProofIds.length > 0) {

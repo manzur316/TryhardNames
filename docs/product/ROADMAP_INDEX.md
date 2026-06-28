@@ -46,8 +46,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | RM-29 | osu! Smoke Blocker Fixes | done / full-pass | Completed the human-authorized callback smoke locally, verified private DB rows, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
 | RM-30 | osu! Owner Linking UI Hardening / Private Account UX | done | Harden private owner UX around osu! linking status, backend link-intent, unlink/revoke confirmation, privacy copy, and account controls after smoke completion. |
 | RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | done | Defines and enforces the closed public projection gate for osu! private ownership proof data. Public osu! projection remained blocked until owner visibility controls existed. |
-| RM-32 | osu! Owner Proof Visibility Controls | this PR | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate while keeping public projection blocked by allowlist until RM-33. |
-| RM-33 | osu! Public Projection Smoke / Projection QA | next | Validate public projection with owner visibility controls, published Passport, consent, allowlist, blocked fields, and trust-safety gates before any production launch. |
+| RM-32 | osu! Owner Proof Visibility Controls | done | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate while keeping public projection blocked by allowlist until RM-33. |
+| RM-33 | osu! Public Projection Smoke / Projection QA | this PR | Enables safe local public projection smoke only through explicit allowlisted osu! provider/proof DTOs, published Passport, consent, owner public preference, and blocked-field tests. |
+| RM-34 | osu! Public Profile Trust-Safety QA | next | Validate public profile trust-safety behavior before any production launch. |
 
 ## Future Provider Candidates
 
@@ -56,7 +57,7 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-32
+## Not Implemented By RM-33
 
 - Production osu! launch.
 - Public provider linking UI outside `/account`.

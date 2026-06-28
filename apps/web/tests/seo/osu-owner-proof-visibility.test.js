@@ -59,7 +59,7 @@ const webSource = readTree('apps/web/src');
 const packageJson = JSON.parse(readWeb('package.json'));
 
 describe('RM-32 osu! Owner Proof Visibility Controls', () => {
-  it('adds RM-32 docs and declares RM-33 public projection smoke next', () => {
+  it('keeps RM-32 docs linked to the RM-33 public projection smoke handoff', () => {
     assert.equal(existsSync(repoPath('docs/product/OSU_OWNER_PROOF_VISIBILITY_CONTROLS.md')), true);
     assert.equal(existsSync(repoPath('docs/product/RM32_OSU_OWNER_PROOF_VISIBILITY_SCOPE.md')), true);
     assert.match(docs, /RM-32 osu! Owner Proof Visibility Controls/);
@@ -96,7 +96,7 @@ describe('RM-32 osu! Owner Proof Visibility Controls', () => {
   it('keeps public projection gated after owner controls are present', () => {
     assert.match(policySource, /ownerVisibilityControlsEnabled = true/);
     assert.match(policySource, /publicProjectionAllowlistEnabled = false/);
-    assert.match(policySource, /OSU_PUBLIC_PROJECTION_NEXT_RM = 'RM-33 osu! Public Projection Smoke \/ Projection QA'/);
+    assert.match(policySource, /OSU_PUBLIC_PROJECTION_NEXT_RM = 'RM-34 osu! Public Profile Trust-Safety QA'/);
     assert.match(policySource, /OSU_PUBLIC_PROJECTION_BLOCK_REASON = 'public_projection_allowlist_disabled'/);
     assert.match(policySource, /OSU_OWNER_VISIBILITY_CONTROLS_BLOCK_REASON = 'owner_visibility_controls_missing'/);
     assert.match(migrationSource, /provider\.provider <> 'osu'/);
