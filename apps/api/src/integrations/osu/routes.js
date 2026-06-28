@@ -10,6 +10,7 @@ import {
   createOsuLinkState,
   findOsuCallbackStateByHash,
   getOsuConnectionStatus,
+  setOsuProfileProofVisibility,
   unlinkOsuProvider,
 } from './runtimeStore.js';
 
@@ -29,6 +30,7 @@ r.get('/', (req, res) => {
       'no_refresh_token_storage',
       'immediate_token_revoke_after_verification',
       'owner_only_unlink',
+      'owner_only_proof_visibility_controls',
     ],
   }));
 });
@@ -191,6 +193,37 @@ r.post('/unlink', async (req, res) => {
       tokenStrategy: config.tokenStrategy,
       revokeStrategy: 'local_revoke_no_token_stored',
       result,
+    }));
+  } catch (error) {
+    sendSafeError(res, error);
+  }
+});
+
+r.post('/proof-visibility', async (req, res) => {
+  const config = getOsuRuntimeConfig();
+  if (!config.configured) return osuUnavailable(res, config);
+
+  try {
+    const supabase = getSupabaseAdminClient(config);
+    const owner = await requireOwnerSession(req, supabase);
+    const passportId = safeText(req.body?.passportId);
+    const linkedProviderAccountId = safeText(req.body?.linkedProviderAccountId);
+    const nextVisibility = safeText(req.body?.visibility || req.body?.nextVisibility);
+    if (!passportId) return res.status(400).json(fail('missing_passport_id'));
+    if (!linkedProviderAccountId) return res.status(400).json(fail('missing_linked_provider_account_id'));
+    if (!nextVisibility) return res.status(400).json(fail('missing_visibility'));
+
+    const result = await setOsuProfileProofVisibility(supabase, {
+      ownerId: owner.ownerId,
+      passportId,
+      linkedProviderAccountId,
+      nextVisibility,
+    });
+
+    res.json(ok({
+      integration: 'osu',
+      tokenStrategy: config.tokenStrategy,
+      ...result,
     }));
   } catch (error) {
     sendSafeError(res, error);

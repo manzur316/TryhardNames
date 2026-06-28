@@ -16,6 +16,7 @@ import {
   PROVIDER_SYNC_JOB_STATUSES,
   PROVIDER_TOKEN_STATUSES,
   PROVIDER_VISIBILITY,
+  OSU_OWNER_VISIBILITY_CONTROLS_BLOCK_REASON,
   OSU_PUBLIC_PROJECTION_ALLOWED_PROOF_FIELDS,
   OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS,
   OSU_PUBLIC_PROJECTION_BLOCK_REASON,
@@ -381,7 +382,7 @@ describe('Gaming Passport provider visibility', () => {
     assert.equal(JSON.stringify(projection).includes('osu-internal-account'), false);
   });
 
-  it('blocks manually public osu! provider and profile proof until owner visibility controls exist', () => {
+  it('blocks owner-public osu! provider and profile proof while projection allowlist is disabled', () => {
     const osuProvider = osuLinkedProvider({
       visibility: PROVIDER_VISIBILITY.PUBLIC,
     });
@@ -460,6 +461,15 @@ describe('Gaming Passport provider visibility', () => {
     assert.equal(blocked.allowed, false);
     assert.equal(blocked.reason, OSU_PUBLIC_PROJECTION_BLOCK_REASON);
     assert.equal(blocked.nextMilestone, OSU_PUBLIC_PROJECTION_NEXT_RM);
+
+    const missingLegacyControls = getOsuPublicProjectionDecision({
+      passport: passport(),
+      linkedProviderAccount: osuProvider,
+      proof: osuProof,
+      ownerVisibilityControlsEnabled: false,
+    });
+    assert.equal(missingLegacyControls.allowed, false);
+    assert.equal(missingLegacyControls.reason, OSU_OWNER_VISIBILITY_CONTROLS_BLOCK_REASON);
 
     const allowedByFutureGate = getOsuPublicProjectionDecision({
       passport: passport(),

@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, RM-28, RM-29, RM-30, and RM-31.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, RM-28, RM-29, RM-30, RM-31, and RM-32.
 
 ## Closed Visual/Tooling Line
 
@@ -55,11 +55,13 @@ RM-30 adds osu! Owner Linking UI Hardening / Private Account UX. It adds an owne
 
 RM-31 adds osu! Private Proof Publish Policy / Public Projection Gate. It defines a closed gate for `osu:profile_linked`, adds a web domain policy, mirrors the closed gate in local public projection RPC, documents a future public allowlist, and keeps public osu! projection blocked until explicit owner proof visibility controls exist. It does not add production launch, automatic public proof, public provider UI, Parent Auth via osu!, refresh-token storage, direct osu! browser API calls, store/payments, `/cosmetics`, tracker/ranking surfaces, remote Supabase changes, Vercel changes, deploy, or production launch.
 
+RM-32 adds osu! Owner Proof Visibility Controls. It adds an owner-authenticated API route and private `/account` controls for changing the current osu! profile proof between private and public preference, validates owner/passport/provider/proof/current state, requires published Passport and publication consent before public preference, and keeps public projection blocked by allowlist until RM-33 smoke. It does not add production launch, automatic public proof, public provider UI, Parent Auth via osu!, refresh-token storage, direct osu! browser API calls, store/payments, `/cosmetics`, tracker/ranking surfaces, remote Supabase changes, Vercel changes, deploy, or production launch.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes -> RM-30 osu! Owner Linking UI Hardening / Private Account UX -> RM-31 osu! Private Proof Publish Policy / Public Projection Gate -> RM-32 osu! Owner Proof Visibility Controls.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes -> RM-30 osu! Owner Linking UI Hardening / Private Account UX -> RM-31 osu! Private Proof Publish Policy / Public Projection Gate -> RM-32 osu! Owner Proof Visibility Controls -> RM-33 osu! Public Projection Smoke / Projection QA.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -277,9 +279,19 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 - Goal: Add explicit owner controls for whether an eligible osu! proof can request public visibility under the RM-31 gate.
 - Why now: RM-31 intentionally keeps projection blocked because owner visibility controls do not exist.
 - Already exists: RM-27 runtime, RM-29 smoke evidence, RM-30 private owner UX, RM-31 closed projection gate.
-- Missing: owner UI/DB workflow for proof visibility promotion, audit copy, revoke back-to-private behavior, and public projection smoke after promotion.
-- Non-goals: No automatic publication, production launch without go/no-go, refresh-token storage, tracker/ranking surfaces, store/payments, or `/cosmetics`.
-- Exit criteria: Owner can explicitly choose visibility without leaking forbidden osu! fields, or the gate remains closed.
+- Implemented by RM-32: owner-authenticated API route, private Account UI controls for public/private preference, confirmation copy, owner/passport/provider/proof/current validations, published Passport and consent requirement for public preference, safe owner status payload, and source guards.
+- Missing: public projection smoke after owner visibility preference and production go/no-go.
+- Non-goals: No automatic publication, production launch without go/no-go, refresh-token storage, tracker/ranking surfaces, store/payments, direct osu! browser calls, or `/cosmetics`.
+- Exit criteria: Owner can explicitly choose visibility without leaking forbidden osu! fields while public projection remains blocked by allowlist.
+
+### RM-33 osu! Public Projection Smoke / Projection QA
+
+- Goal: Validate the public projection path after owner visibility controls exist.
+- Why now: RM-32 records owner visibility preference but still blocks public projection by allowlist.
+- Already exists: RM-27 runtime, RM-29 smoke evidence, RM-30 owner UX, RM-31 projection gate, RM-32 owner visibility controls.
+- Missing: projection allowlist smoke, public DTO evidence, blocked-field verification, and trust-safety gate evidence.
+- Non-goals: No production launch without go/no-go, no automatic public proof, no refresh-token storage, no tracker/ranking surfaces, no store/payments, no direct osu! browser calls, and no `/cosmetics`.
+- Exit criteria: Public projection is either proven safe with allowlisted fields only or remains gated with documented blockers.
 
 ### Legacy PR23 Label
 

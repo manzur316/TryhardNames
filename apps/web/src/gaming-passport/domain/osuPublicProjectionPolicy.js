@@ -11,8 +11,9 @@ import {
 } from './constants.js';
 
 export const OSU_PROFILE_LINKED_SOURCE_KEY = 'osu:profile_linked';
-export const OSU_PUBLIC_PROJECTION_BLOCK_REASON = 'owner_visibility_controls_missing';
-export const OSU_PUBLIC_PROJECTION_NEXT_RM = 'RM-32 osu! Owner Proof Visibility Controls';
+export const OSU_OWNER_VISIBILITY_CONTROLS_BLOCK_REASON = 'owner_visibility_controls_missing';
+export const OSU_PUBLIC_PROJECTION_BLOCK_REASON = 'public_projection_allowlist_disabled';
+export const OSU_PUBLIC_PROJECTION_NEXT_RM = 'RM-33 osu! Public Projection Smoke / Projection QA';
 
 export const OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS = Object.freeze([
   'providerId',
@@ -69,7 +70,7 @@ export function getOsuPublicProjectionDecision({
   passport,
   linkedProviderAccount,
   proof,
-  ownerVisibilityControlsEnabled = false,
+  ownerVisibilityControlsEnabled = true,
   publicProjectionAllowlistEnabled = false,
   suspensionBlock = false,
   reportBlock = false,
@@ -78,8 +79,7 @@ export function getOsuPublicProjectionDecision({
     return allow('not_osu');
   }
 
-  if (!ownerVisibilityControlsEnabled) return deny(OSU_PUBLIC_PROJECTION_BLOCK_REASON);
-  if (!publicProjectionAllowlistEnabled) return deny('public_projection_allowlist_disabled');
+  if (!ownerVisibilityControlsEnabled) return deny(OSU_OWNER_VISIBILITY_CONTROLS_BLOCK_REASON);
   if (passport?.status === PASSPORT_STATUSES.SUSPENDED || passport?.suspendedAt || suspensionBlock || reportBlock) {
     return deny('passport_blocked');
   }
@@ -95,6 +95,7 @@ export function getOsuPublicProjectionDecision({
   if (proof.source !== PROOF_SOURCES.LINKED_PROVIDER) return deny('proof_source_not_linked_provider');
   if (proof.verificationMethod !== VERIFICATION_METHODS.OAUTH) return deny('proof_not_oauth_verified');
   if (proof.revokedAt || proof.staleAt) return deny('proof_not_current');
+  if (!publicProjectionAllowlistEnabled) return deny(OSU_PUBLIC_PROJECTION_BLOCK_REASON);
 
   return allow('policy_gate_passed');
 }
