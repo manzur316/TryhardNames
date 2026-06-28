@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(179);
+select plan(182);
 
 create function pg_temp.test_sqlstate(statement text)
 returns text
@@ -2076,6 +2076,68 @@ values (
   now()
 );
 
+insert into public.linked_provider_accounts (
+  id,
+  passport_id,
+  owner_id,
+  provider,
+  external_account_id,
+  display_name,
+  status,
+  visibility,
+  verified_at
+)
+values (
+  '20000000-0000-0000-0000-000000000021',
+  '10000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  'osu',
+  'OsuInternalPublicProjection',
+  'OsuPublicOwner',
+  'verified',
+  'public',
+  now()
+);
+
+insert into public.verified_proofs (
+  id,
+  passport_id,
+  owner_id,
+  linked_provider_account_id,
+  provider,
+  game,
+  proof_type,
+  source_key,
+  mode,
+  title,
+  display_value,
+  source,
+  verification_method,
+  status,
+  visibility,
+  normalizer_version,
+  verified_at
+)
+values (
+  '30000000-0000-0000-0000-000000000021',
+  '10000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  '20000000-0000-0000-0000-000000000021',
+  'osu',
+  null,
+  'provider_ownership',
+  'osu:profile_linked',
+  'profile',
+  'Linked osu! account',
+  'OsuPublicOwner',
+  'linked_provider',
+  'oauth',
+  'current',
+  'public',
+  'osu-profile-linked-v1',
+  now()
+);
+
 insert into public.passport_featured_proofs (
   passport_id,
   owner_id,
@@ -2087,6 +2149,19 @@ values (
   '00000000-0000-0000-0000-000000000001',
   '30000000-0000-0000-0000-000000000001',
   0
+);
+
+insert into public.passport_featured_proofs (
+  passport_id,
+  owner_id,
+  verified_proof_id,
+  sort_order
+)
+values (
+  '10000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  '30000000-0000-0000-0000-000000000021',
+  1
 );
 
 update public.gaming_passports
@@ -2202,6 +2277,16 @@ select is(
   (
     select count(*)::integer
     from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'linkedProviders') provider
+    where provider->>'provider' = 'osu'
+  ),
+  0,
+  'RM-31 public projection blocks osu linked provider even if manually marked public'
+);
+
+select is(
+  (
+    select count(*)::integer
+    from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'linkedProviders') provider
     where provider ?| array['externalAccountId', 'external_account_id', 'metadata_safe', 'metadataSafe', 'owner_id', 'id']
   ),
   0,
@@ -2214,10 +2299,27 @@ select is(
   'public projection includes only displayable featured proofs'
 );
 
+select is(
+  (
+    select count(*)::integer
+    from jsonb_array_elements(public.get_public_gaming_passport_projection('player-one')->'featuredProofs') proof
+    where proof->>'provider' = 'osu'
+  ),
+  0,
+  'RM-31 public projection blocks osu profile-linked proof until owner visibility controls exist'
+);
+
 select ok(
   position('Private Proof' in public.get_public_gaming_passport_projection('player-one')::text) = 0
     and position('Hidden Value' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
   'public projection omits private proofs'
+);
+
+select ok(
+  position('OsuPublicOwner' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('OsuInternalPublicProjection' in public.get_public_gaming_passport_projection('player-one')::text) = 0
+    and position('Linked osu! account' in public.get_public_gaming_passport_projection('player-one')::text) = 0,
+  'RM-31 public projection omits osu display name, internal id, and proof label'
 );
 
 select is(

@@ -95,6 +95,11 @@ Current support docs:
 - `docs/product/OSU_RUNTIME_SMOKE_RESULTS.md`
 - `docs/product/RM28_OSU_RUNTIME_SMOKE_SCOPE.md`
 - `docs/product/RM29_OSU_SMOKE_BLOCKER_FIXES_SCOPE.md`
+- `docs/product/OSU_OWNER_LINKING_UI_HARDENING.md`
+- `docs/product/RM30_OSU_OWNER_LINKING_UI_SCOPE.md`
+- `docs/product/OSU_PRIVATE_PROOF_PUBLISH_POLICY.md`
+- `docs/product/OSU_PUBLIC_PROJECTION_GATE.md`
+- `docs/product/RM31_OSU_PUBLIC_PROJECTION_GATE_SCOPE.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
@@ -219,12 +224,12 @@ Waiting:
 
 This PR:
 
-- RM-30 osu! Owner Linking UI Hardening / Private Account UX.
-- Result: private owner UI hardening for configured osu! runtime, status, connect intent, and unlink/revoke controls.
+- RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
+- Result: public osu! projection remains blocked until explicit owner proof visibility controls exist, with domain and local RPC gates.
 
 Next product block:
 
-- RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
+- RM-32 osu! Owner Proof Visibility Controls.
 
 Provider expansion planning:
 
@@ -233,7 +238,8 @@ Provider expansion planning:
 - RM-27 osu! Runtime Foundation is implemented by GH PR #34 and merge commit `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`.
 - RM-28 osu! Runtime Smoke / Owner Linking QA is historical partial-pass smoke evidence.
 - RM-29 osu! Smoke Blocker Fixes is full-pass local smoke completion, not production launch.
-- RM-30 osu! Owner Linking UI Hardening / Private Account UX is this PR as private owner UI, not public provider UI.
+- RM-30 osu! Owner Linking UI Hardening / Private Account UX is complete as private owner UI, not public provider UI.
+- RM-31 osu! Private Proof Publish Policy / Public Projection Gate is this PR and keeps public osu! proof projection blocked.
 - Riot runtime only after explicit approval evidence exists.
 - osu! has a gated runtime foundation, not a live public launch.
 - Steam is a future identity provider candidate.

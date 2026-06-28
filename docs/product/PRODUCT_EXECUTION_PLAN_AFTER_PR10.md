@@ -1,6 +1,6 @@
 # Product Execution Plan After PR10.x
 
-This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, RM-28, RM-29, and RM-30.
+This is the living execution plan after PR10.8, PR11.1, PR12, PR13, PR14, PR15, PR16, PR17, PR18, PR21, PR22, RM-23, RM-24, RM-25, RM-26, RM-27, RM-28, RM-29, RM-30, and RM-31.
 
 ## Closed Visual/Tooling Line
 
@@ -53,11 +53,13 @@ RM-29 adds osu! Smoke Blocker Fixes as full-pass local smoke completion. It uses
 
 RM-30 adds osu! Owner Linking UI Hardening / Private Account UX. It adds an owner-only `/account` card for safe runtime status, backend link-intent, same-tab authorization redirect, owner status, unlink confirmation, privacy copy, and source guards. It does not add production launch, public provider UI, public osu! proof, Parent Auth via osu!, refresh-token storage, direct osu! browser API calls, store/payments, `/cosmetics`, tracker/ranking surfaces, remote Supabase changes, Vercel changes, deploy, or production launch.
 
+RM-31 adds osu! Private Proof Publish Policy / Public Projection Gate. It defines a closed gate for `osu:profile_linked`, adds a web domain policy, mirrors the closed gate in local public projection RPC, documents a future public allowlist, and keeps public osu! projection blocked until explicit owner proof visibility controls exist. It does not add production launch, automatic public proof, public provider UI, Parent Auth via osu!, refresh-token storage, direct osu! browser API calls, store/payments, `/cosmetics`, tracker/ranking surfaces, remote Supabase changes, Vercel changes, deploy, or production launch.
+
 ## Current Principle
 
 The next product cycle should move from polished acquisition surfaces into account-backed value:
 
-Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes -> RM-30 osu! Owner Linking UI Hardening / Private Account UX -> RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
+Riot Readiness -> Cosmetics Foundation -> Trust/Safety Foundation -> RM-23 Governance -> RM-24 Launch Readiness -> RM-25 Provider Expansion Readiness Matrix -> RM-26 osu! Readiness -> RM-27 osu! Runtime Foundation -> RM-28 osu! Runtime Smoke / Owner Linking QA -> RM-29 osu! Smoke Blocker Fixes -> RM-30 osu! Owner Linking UI Hardening / Private Account UX -> RM-31 osu! Private Proof Publish Policy / Public Projection Gate -> RM-32 osu! Owner Proof Visibility Controls.
 
 GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub records; RM-XX is the stable roadmap milestone identifier. Chat is not a source of truth.
 
@@ -256,7 +258,7 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 - Why now: RM-29 verified callback, DB, token vault, unlink/revoke, public projection, and negative cases.
 - Already exists: RM-27 runtime foundation, RM-28 smoke QA, RM-29 full-pass smoke completion.
 - Implemented by RM-30: private `/account` owner UI, safe status fields, configured/disabled/connected/revoked/stale states, backend-only link-intent/status/unlink calls, same-tab authorization redirect, visual unlink confirmation, privacy copy, and source guards.
-- Missing: public proof publish policy and production go/no-go.
+- Missing: public proof visibility controls and production go/no-go.
 - Non-goals: No production launch, public provider linking UI, public proof promotion, refresh-token storage, tracker/ranking surfaces, store/payments, or `/cosmetics`.
 - Exit criteria: Owner UX is clear, private by default, revocable, and aligned with the verified RM-29 runtime boundaries.
 
@@ -265,9 +267,19 @@ GitHub/main/docs are the source of truth. GitHub PR numbers are automatic GitHub
 - Goal: Define the explicit gate for whether a private osu! proof can ever become public projection data.
 - Why now: RM-30 gives owners private control, but public projection still needs a separate policy decision.
 - Already exists: RM-27 runtime, RM-29 smoke evidence, RM-30 private owner UX.
-- Missing: owner consent, projection allowlist, stale/revoked behavior, branding copy, and public safety review for osu! proof display.
-- Non-goals: No production launch without go/no-go, no refresh-token storage, no tracker/ranking surfaces, no store/payments, and no `/cosmetics`.
-- Exit criteria: Public projection remains closed unless explicit RM-31 policy allows a minimal safe shape.
+- Implemented by RM-31: closed domain gate for osu! public projection, local RPC exclusion for manually public osu! rows, future public field allowlist, blocked field list, stale/revoked/private handling, and docs/source/DB tests.
+- Missing: explicit owner proof visibility controls and production go/no-go.
+- Non-goals: No production launch without go/no-go, no automatic public proof, no refresh-token storage, no tracker/ranking surfaces, no store/payments, no Parent Auth via osu!, and no `/cosmetics`.
+- Exit criteria: Public osu! projection remains blocked until RM-32 adds explicit owner proof visibility controls.
+
+### RM-32 osu! Owner Proof Visibility Controls
+
+- Goal: Add explicit owner controls for whether an eligible osu! proof can request public visibility under the RM-31 gate.
+- Why now: RM-31 intentionally keeps projection blocked because owner visibility controls do not exist.
+- Already exists: RM-27 runtime, RM-29 smoke evidence, RM-30 private owner UX, RM-31 closed projection gate.
+- Missing: owner UI/DB workflow for proof visibility promotion, audit copy, revoke back-to-private behavior, and public projection smoke after promotion.
+- Non-goals: No automatic publication, production launch without go/no-go, refresh-token storage, tracker/ranking surfaces, store/payments, or `/cosmetics`.
+- Exit criteria: Owner can explicitly choose visibility without leaking forbidden osu! fields, or the gate remains closed.
 
 ### Legacy PR23 Label
 

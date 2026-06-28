@@ -16,6 +16,10 @@ import {
   PROVIDER_SYNC_JOB_STATUSES,
   PROVIDER_TOKEN_STATUSES,
   PROVIDER_VISIBILITY,
+  OSU_PUBLIC_PROJECTION_ALLOWED_PROOF_FIELDS,
+  OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS,
+  OSU_PUBLIC_PROJECTION_BLOCK_REASON,
+  OSU_PUBLIC_PROJECTION_NEXT_RM,
   PUBLIC_LINKED_PROVIDER_ALLOWED_KEYS,
   PUBLIC_PASSPORT_ALLOWED_KEYS,
   PUBLIC_PROOF_ALLOWED_KEYS,
@@ -46,8 +50,10 @@ import {
   canUnlinkProvider,
   createProviderConnectionIntent,
   getFeaturedVerifiedProofs,
+  getOsuPublicProjectionDecision,
   getPublishability,
   isCanonicalPublicSlug,
+  isOsuProfileLinkedProof,
   isPassportPublishable,
   sanitizeProviderPrivateMetadata,
   sanitizeProviderPublicMetadata,
@@ -134,6 +140,36 @@ function verifiedProof(overrides = {}) {
     accessToken: 'proof-secret-token',
     ...overrides,
   };
+}
+
+function osuLinkedProvider(overrides = {}) {
+  return linkedProvider({
+    id: 'lpa_osu',
+    provider: LINKED_PROVIDER_IDS.OSU,
+    externalAccountId: 'osu-internal-account',
+    displayName: 'OsuOwner',
+    visibility: PROVIDER_VISIBILITY.PRIVATE,
+    ...overrides,
+  });
+}
+
+function osuProfileProof(overrides = {}) {
+  return verifiedProof({
+    id: 'proof_osu_profile',
+    linkedProviderAccountId: 'lpa_osu',
+    provider: LINKED_PROVIDER_IDS.OSU,
+    game: null,
+    proofType: PROOF_TYPES.PROVIDER_OWNERSHIP,
+    sourceKey: 'osu:profile_linked',
+    mode: 'profile',
+    title: 'Linked osu! account',
+    displayValue: 'OsuOwner',
+    source: PROOF_SOURCES.LINKED_PROVIDER,
+    verificationMethod: VERIFICATION_METHODS.OAUTH,
+    visibility: PROOF_VISIBILITY.PRIVATE,
+    normalizerVersion: 'osu-profile-linked-v1',
+    ...overrides,
+  });
 }
 
 describe('Gaming Passport publication and serving policies', () => {
@@ -328,26 +364,29 @@ describe('Gaming Passport provider visibility', () => {
   });
 
   it('keeps osu! profile-linked owner proof private and absent from public projection by default', () => {
-    const osuProvider = linkedProvider({
-      id: 'lpa_osu',
-      provider: LINKED_PROVIDER_IDS.OSU,
-      externalAccountId: 'osu-internal-account',
-      displayName: 'OsuOwner',
-      visibility: PROVIDER_VISIBILITY.PRIVATE,
+    const osuProvider = osuLinkedProvider();
+    const osuProof = osuProfileProof();
+
+    const projection = buildPublicPassportProjection({
+      passport: passport(),
+      linkedProviderAccounts: [osuProvider],
+      verifiedProofs: [osuProof],
+      featuredProofIds: [osuProof.id],
     });
-    const osuProof = verifiedProof({
-      id: 'proof_osu_profile',
-      linkedProviderAccountId: 'lpa_osu',
-      provider: LINKED_PROVIDER_IDS.OSU,
-      game: null,
-      proofType: PROOF_TYPES.PROVIDER_OWNERSHIP,
-      sourceKey: 'osu:profile_linked',
-      mode: 'profile',
-      title: 'Linked osu! account',
-      displayValue: 'OsuOwner',
-      source: PROOF_SOURCES.LINKED_PROVIDER,
-      verificationMethod: VERIFICATION_METHODS.OAUTH,
-      visibility: PROOF_VISIBILITY.PRIVATE,
+
+    assert.ok(projection);
+    assert.deepEqual(projection.linkedProviders, []);
+    assert.deepEqual(projection.featuredProofs, []);
+    assert.equal(JSON.stringify(projection).includes('OsuOwner'), false);
+    assert.equal(JSON.stringify(projection).includes('osu-internal-account'), false);
+  });
+
+  it('blocks manually public osu! provider and profile proof until owner visibility controls exist', () => {
+    const osuProvider = osuLinkedProvider({
+      visibility: PROVIDER_VISIBILITY.PUBLIC,
+    });
+    const osuProof = osuProfileProof({
+      visibility: PROOF_VISIBILITY.PUBLIC,
     });
 
     const projection = buildPublicPassportProjection({
@@ -362,6 +401,101 @@ describe('Gaming Passport provider visibility', () => {
     assert.deepEqual(projection.featuredProofs, []);
     assert.equal(JSON.stringify(projection).includes('OsuOwner'), false);
     assert.equal(JSON.stringify(projection).includes('osu-internal-account'), false);
+    assert.equal(JSON.stringify(projection).includes('Linked osu! account'), false);
+  });
+
+  it('keeps stale or revoked osu! proof states out of the projection policy', () => {
+    const osuProvider = osuLinkedProvider({ visibility: PROVIDER_VISIBILITY.PUBLIC });
+    const staleProof = osuProfileProof({
+      visibility: PROOF_VISIBILITY.PUBLIC,
+      status: VERIFIED_PROOF_STATUSES.STALE,
+      staleAt: now,
+    });
+    const revokedProof = osuProfileProof({
+      id: 'proof_osu_revoked',
+      visibility: PROOF_VISIBILITY.PUBLIC,
+      status: VERIFIED_PROOF_STATUSES.REVOKED,
+      revokedAt: now,
+    });
+
+    for (const proof of [staleProof, revokedProof]) {
+      const projection = buildPublicPassportProjection({
+        passport: passport(),
+        linkedProviderAccounts: [osuProvider],
+        verifiedProofs: [proof],
+        featuredProofIds: [proof.id],
+      });
+
+      assert.ok(projection);
+      assert.deepEqual(projection.featuredProofs, []);
+      assert.equal(JSON.stringify(projection).includes(proof.displayValue), false);
+    }
+  });
+
+  it('defines the explicit osu! public projection policy and future allowlist', () => {
+    const osuProvider = osuLinkedProvider({ visibility: PROVIDER_VISIBILITY.PUBLIC });
+    const osuProof = osuProfileProof({ visibility: PROOF_VISIBILITY.PUBLIC });
+
+    assert.equal(isOsuProfileLinkedProof(osuProof), true);
+    assert.deepEqual(OSU_PUBLIC_PROJECTION_ALLOWED_PROVIDER_FIELDS, [
+      'providerId',
+      'displayName',
+      'externalUsername',
+      'profileUrl',
+      'verifiedAt',
+    ]);
+    assert.deepEqual(OSU_PUBLIC_PROJECTION_ALLOWED_PROOF_FIELDS, [
+      'type',
+      'label',
+      'source',
+      'observedAt',
+      'visibility',
+    ]);
+
+    const blocked = getOsuPublicProjectionDecision({
+      passport: passport(),
+      linkedProviderAccount: osuProvider,
+      proof: osuProof,
+    });
+    assert.equal(blocked.allowed, false);
+    assert.equal(blocked.reason, OSU_PUBLIC_PROJECTION_BLOCK_REASON);
+    assert.equal(blocked.nextMilestone, OSU_PUBLIC_PROJECTION_NEXT_RM);
+
+    const allowedByFutureGate = getOsuPublicProjectionDecision({
+      passport: passport(),
+      linkedProviderAccount: osuProvider,
+      proof: osuProof,
+      ownerVisibilityControlsEnabled: true,
+      publicProjectionAllowlistEnabled: true,
+    });
+    assert.equal(allowedByFutureGate.allowed, true);
+    assert.equal(allowedByFutureGate.reason, 'policy_gate_passed');
+
+    for (const denied of [
+      { passport: passport({ publicationConsent: false }), reason: 'owner_publish_consent_missing' },
+      { passport: passport({ status: PASSPORT_STATUSES.UNPUBLISHED }), reason: 'passport_not_published' },
+      { passport: passport({ status: PASSPORT_STATUSES.SUSPENDED }), reason: 'passport_blocked' },
+      { linkedProviderAccount: osuLinkedProvider({ visibility: PROVIDER_VISIBILITY.PRIVATE }), reason: 'linked_provider_not_public' },
+      { proof: osuProfileProof({ visibility: PROOF_VISIBILITY.PRIVATE }), reason: 'proof_not_public' },
+      {
+        proof: osuProfileProof({
+          visibility: PROOF_VISIBILITY.PUBLIC,
+          status: VERIFIED_PROOF_STATUSES.STALE,
+          staleAt: now,
+        }),
+        reason: 'proof_not_current',
+      },
+    ]) {
+      const decision = getOsuPublicProjectionDecision({
+        passport: denied.passport || passport(),
+        linkedProviderAccount: denied.linkedProviderAccount || osuProvider,
+        proof: denied.proof || osuProof,
+        ownerVisibilityControlsEnabled: true,
+        publicProjectionAllowlistEnabled: true,
+      });
+      assert.equal(decision.allowed, false);
+      assert.equal(decision.reason, denied.reason);
+    }
   });
 
   it('never exposes a revoked provider', () => {
