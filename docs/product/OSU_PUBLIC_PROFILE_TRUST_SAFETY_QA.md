@@ -19,10 +19,17 @@ RM-34 fixes only that trust-safety issue:
 
 Production remains blocked. RM-34 does not deploy, touch remote Supabase, touch Vercel, add a public provider linking UI, or launch osu! publicly.
 
+RM-35 readiness result:
+
+```txt
+Staging decision: conditional-go
+Production decision: no-go
+```
+
 Next milestone:
 
 ```txt
-RM-35 osu! Production Readiness / Staging Go-No-Go
+RM-36 osu! Staging Configuration / Manual Smoke
 ```
 
 ## Public Output Reviewed
@@ -123,7 +130,9 @@ RM-34 does not change owner mutation behavior:
 
 RM-34 is trust-safety QA, not launch execution.
 
-Before production enablement, RM-35 must provide:
+RM-35 provides the production readiness package, environment checklist, callback checklist, staging smoke runbook, monitoring requirements, and rollback summary.
+
+Before production enablement, RM-36 and later production go/no-go must provide:
 
 - staging go/no-go evidence;
 - owner acceptance;

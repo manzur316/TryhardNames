@@ -24,6 +24,8 @@ Expected local rollback impact:
 
 No production rollback is required by RM-34 because this PR does not deploy or enable production osu! public projection.
 
+RM-35 keeps production no-go and adds readiness rollback criteria. If staging fails, disable staging osu! runtime, disable the staging public projection allowlist, revert the staging deploy if needed, keep affected owner data private or revoked, and re-run the staging smoke before another go/no-go attempt.
+
 If a later RM enables production and a public profile issue is found:
 
 1. Disable the production osu! public projection allowlist.
@@ -32,6 +34,8 @@ If a later RM enables production and a public profile issue is found:
 4. Verify `/id/:slug` no longer includes osu! provider/proof DTOs.
 5. Confirm no raw ids, metadata, token state, or profile URLs remain in public output.
 6. Publish a follow-up security/trust-safety fix before re-enabling.
+
+If secret exposure is suspected, rotate the affected osu! OAuth app secret and relevant server-side credentials through the environment owner process. Do not print or commit rotated values.
 
 ## Rollback Verification
 
@@ -54,3 +58,6 @@ After rollback, verify:
 - No remote Supabase changes in RM-34.
 - No Vercel changes in RM-34.
 - No production launch in RM-34.
+- No remote Supabase changes in RM-35.
+- No Vercel changes in RM-35.
+- No production launch in RM-35.

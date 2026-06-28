@@ -107,6 +107,10 @@ Current support docs:
 - `docs/product/OSU_PUBLIC_PROFILE_TRUST_SAFETY_QA.md`
 - `docs/product/RM34_OSU_PUBLIC_PROFILE_TRUST_SAFETY_SCOPE.md`
 - `docs/product/OSU_PUBLIC_PROFILE_ROLLBACK_PLAN.md`
+- `docs/product/OSU_PRODUCTION_READINESS_GO_NO_GO.md`
+- `docs/product/OSU_STAGING_SMOKE_RUNBOOK.md`
+- `docs/product/OSU_ENVIRONMENT_CHECKLIST.md`
+- `docs/product/RM35_OSU_PRODUCTION_READINESS_SCOPE.md`
 - `docs/product/MASTER_PRODUCT_ROADMAP.md`
 - `docs/product/ROADMAP_STATUS_MATRIX.md`
 - `docs/product/PRODUCT_EXECUTION_PLAN_AFTER_PR10.md`
@@ -220,6 +224,7 @@ Completed:
 - RM-32 osu! Owner Proof Visibility Controls.
 - RM-33 osu! Public Projection Smoke / Projection QA.
 - RM-34 osu! Public Profile Trust-Safety QA.
+- RM-35 osu! Production Readiness / Staging Go-No-Go readiness package.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -235,12 +240,12 @@ Waiting:
 
 This PR:
 
-- RM-34 osu! Public Profile Trust-Safety QA.
-- Result: trust-safety pass after a minimum public renderer/mapper fix for the RM-33 osu! allowlisted DTO shape. Production remains blocked.
+- RM-35 osu! Production Readiness / Staging Go-No-Go.
+- Result: staging is `conditional-go` pending isolated staging configuration and manual smoke. Production is `no-go` until staging smoke evidence, owner go/no-go, environment review, callback review, rollback acceptance, monitoring review, and source guards pass.
 
 Next product block:
 
-- RM-35 osu! Production Readiness / Staging Go-No-Go.
+- RM-36 osu! Staging Configuration / Manual Smoke.
 
 Provider expansion planning:
 
@@ -253,7 +258,9 @@ Provider expansion planning:
 - RM-31 osu! Private Proof Publish Policy / Public Projection Gate is complete.
 - RM-32 osu! Owner Proof Visibility Controls is complete.
 - RM-33 osu! Public Projection Smoke / Projection QA is complete and enables safe local projection only through allowlisted fields.
-- RM-34 osu! Public Profile Trust-Safety QA is this PR and keeps production blocked until RM-35.
+- RM-34 osu! Public Profile Trust-Safety QA is implemented by GH PR #41 and merge commit `2e5526fecec611d588182452dbe08fd459af91f3`.
+- RM-35 osu! Production Readiness / Staging Go-No-Go is this PR and keeps production blocked while allowing staging to proceed only as `conditional-go`.
+- RM-36 osu! Staging Configuration / Manual Smoke is next.
 - Riot runtime only after explicit approval evidence exists.
 - osu! has a gated runtime foundation, not a live public launch.
 - Steam is a future identity provider candidate.
