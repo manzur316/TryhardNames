@@ -1,6 +1,8 @@
-# RM-27 osu! Runtime Public Projection Review
+# RM-27/RM-31 osu! Runtime Public Projection Review
 
 RM-27 keeps public projection closed by default.
+
+RM-31 makes that closure explicit for public projection: public osu! projection remains blocked until RM-32 adds owner proof visibility controls.
 
 ## What RM-27 Creates
 
@@ -22,7 +24,7 @@ Existing projection still only allows:
 - public linked provider allowlist;
 - public featured proof allowlist.
 
-Because RM-27 creates osu! provider/proof rows as private, they do not appear on `/id/:slug` unless future work deliberately changes visibility under publish policy.
+Because RM-27 creates osu! provider/proof rows as private, they do not appear on `/id/:slug`. RM-31 also blocks manually public osu! provider/proof rows in domain policy and local RPC projection until explicit owner visibility controls exist.
 
 ## Forbidden Public Fields
 
@@ -75,6 +77,15 @@ RM-27 adds no:
 
 ## Public Projection Decision
 
-Decision: pass with conditions.
+Decision: pass with conditions for RM-27 foundation, closed gate for RM-31.
 
 The foundation is safe because it creates private owner-linked data only, keeps public projection allowlisted, and adds tests/source guards against token/raw metadata/rank/tracker leakage.
+
+RM-31 adds:
+
+- `owner_visibility_controls_missing` as the current block reason;
+- a future allowlist for `providerId`, `displayName`, `externalUsername`, `profileUrl`, `verifiedAt`, `type`, `label`, `source`, `observedAt`, and `visibility`;
+- local RPC exclusion for osu! provider/proof rows until RM-32;
+- tests proving private, stale, revoked, and manually public osu! rows do not project.
+
+Next: RM-32 osu! Owner Proof Visibility Controls.

@@ -107,12 +107,16 @@ Required validation:
 - public projection domain test confirming private osu! proof remains absent by default;
 - build and lint.
 
-## Next RM
+## RM-31 Follow-up
 
-If RM-30 passes:
+RM-31 implements the policy gate requested after RM-30:
 
 ```txt
 RM-31 osu! Private Proof Publish Policy / Public Projection Gate
 ```
 
-RM-31 should define the explicit policy gate for whether an osu! private proof can ever be promoted into public projection. Until then, osu! proof data remains private by default.
+RM-31 keeps public osu! projection blocked until owner proof visibility controls exist. The next recommended milestone is:
+
+```txt
+RM-32 osu! Owner Proof Visibility Controls
+```

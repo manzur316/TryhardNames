@@ -11,6 +11,10 @@ import {
   isKnownLinkedProvider,
   validateVerifiedProofContract,
 } from './contracts.js';
+import {
+  canProjectOsuLinkedProvider,
+  canProjectOsuProfileLinkedProof,
+} from './osuPublicProjectionPolicy.js';
 
 export function isParentAccountAuthenticated(parentAuth) {
   return Boolean(parentAuth && typeof parentAuth === 'object' && parentAuth.authenticated === true);
@@ -27,7 +31,11 @@ export function isLinkedProviderAccountValid(account) {
 }
 
 export function isLinkedProviderAccountPubliclyVisible(account) {
-  return isLinkedProviderAccountValid(account) && account.visibility === PROVIDER_VISIBILITY.PUBLIC;
+  return (
+    isLinkedProviderAccountValid(account) &&
+    account.visibility === PROVIDER_VISIBILITY.PUBLIC &&
+    canProjectOsuLinkedProvider(account)
+  );
 }
 
 export function getVerifiedLinkedProviderAccounts(accounts) {
@@ -75,6 +83,7 @@ export function canDisplayVerifiedProof(proof, linkedProviderAccounts = []) {
   if (proof.visibility !== PROOF_VISIBILITY.PUBLIC) return false;
   if (![VERIFIED_PROOF_STATUSES.CURRENT, VERIFIED_PROOF_STATUSES.STALE].includes(proof.status)) return false;
   if (!validateVerifiedProofContract(proof, linkedProviderAccounts).ok) return false;
+  if (!canProjectOsuProfileLinkedProof({ proof, linkedProviderAccounts })) return false;
 
   const accounts = Array.isArray(linkedProviderAccounts) ? linkedProviderAccounts : [];
   const sourceAccount = accounts.find((account) => account.id === proof.linkedProviderAccountId);
