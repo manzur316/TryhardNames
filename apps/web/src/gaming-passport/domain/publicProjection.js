@@ -3,14 +3,45 @@ import {
   getPublicLinkedProviderAccounts,
   canServePublishedPassport,
 } from './publicationPolicy.js';
+import {
+  isOsuLinkedProvider,
+  isOsuProfileLinkedProof,
+} from './osuPublicProjectionPolicy.js';
 import { sanitizeCosmeticLoadout } from '../cosmetics/cosmeticLoadout.js';
+
+const OSU_PROFILE_HOST_PARTS = Object.freeze(['osu', 'ppy', 'sh']);
 
 function optionalString(value) {
   const text = String(value || '').trim();
   return text.length ? text : undefined;
 }
 
+function optionalOsuProfileUrl(account) {
+  const rawUrl = optionalString(account?.profileUrl || account?.metadataSafe?.profileUrl);
+  if (!rawUrl) return undefined;
+
+  try {
+    const url = new URL(rawUrl);
+    const expectedHost = OSU_PROFILE_HOST_PARTS.join('.');
+    if (
+      url.protocol === 'https:' &&
+      url.hostname === expectedHost &&
+      /^\/users\/[0-9]+$/.test(url.pathname) &&
+      !url.search &&
+      !url.hash
+    ) {
+      return url.toString();
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
 function projectLinkedProvider(account) {
+  if (isOsuLinkedProvider(account)) return projectOsuLinkedProvider(account);
+
   return {
     provider: account.provider,
     displayName: optionalString(account.displayName),
@@ -19,7 +50,19 @@ function projectLinkedProvider(account) {
   };
 }
 
+function projectOsuLinkedProvider(account) {
+  return {
+    providerId: 'osu',
+    displayName: 'osu!',
+    externalUsername: optionalString(account.displayName),
+    profileUrl: optionalOsuProfileUrl(account),
+    verifiedAt: optionalString(account.verifiedAt),
+  };
+}
+
 function projectProof(proof) {
+  if (isOsuProfileLinkedProof(proof)) return projectOsuProfileLinkedProof(proof);
+
   return {
     provider: proof.provider,
     game: proof.game || null,
@@ -35,16 +78,40 @@ function projectProof(proof) {
   };
 }
 
+function projectOsuProfileLinkedProof(proof) {
+  return {
+    type: 'profile_linked',
+    label: 'Linked osu! account',
+    source: 'osu',
+    observedAt: optionalString(proof.verifiedAt),
+    visibility: 'public',
+  };
+}
+
 export function buildPublicPassportProjection({
   passport,
   linkedProviderAccounts,
   verifiedProofs,
   featuredProofIds,
   maxFeaturedProofs = 6,
+  osuPublicProjectionAllowlistEnabled = false,
+  suspensionBlock = false,
+  reportBlock = false,
 } = {}) {
   if (!canServePublishedPassport({ passport, linkedProviderAccounts })) return null;
 
-  const linkedProviders = getPublicLinkedProviderAccounts(linkedProviderAccounts).map(projectLinkedProvider);
+  const publicProjectionOptions = {
+    passport,
+    verifiedProofs,
+    osuPublicProjectionAllowlistEnabled,
+    suspensionBlock,
+    reportBlock,
+  };
+
+  const linkedProviders = getPublicLinkedProviderAccounts(
+    linkedProviderAccounts,
+    publicProjectionOptions
+  ).map(projectLinkedProvider);
   const cosmeticLoadout = sanitizeCosmeticLoadout({
     themeId: passport.themeId || passport.sceneConfig?.themeId,
     equippedCosmeticIds: passport.equippedCosmeticIds || passport.sceneConfig?.equippedCosmeticIds,
@@ -54,6 +121,7 @@ export function buildPublicPassportProjection({
     featuredProofIds,
     linkedProviderAccounts,
     max: maxFeaturedProofs,
+    publicProjectionOptions,
   }).map(projectProof);
 
   return {

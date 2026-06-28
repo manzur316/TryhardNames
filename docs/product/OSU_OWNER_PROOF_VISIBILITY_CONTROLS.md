@@ -2,18 +2,18 @@
 
 RM-32 adds explicit owner controls for the osu! `profile_linked` proof in the private `/account` dashboard.
 
-Status: `this PR`.
+Status: `done`.
 
 ## Decision
 
 The default remains private. RM-32 lets the owner request `private` or `public` visibility for the current osu! profile-linked proof, but it does not auto-publish the proof and does not open public projection by default.
 
-Public projection remains gated. A public preference only becomes eligible after every policy condition passes and the public projection allowlist is enabled in a later smoke milestone.
+Public projection remains gated by policy. RM-33 enables the safe local public projection smoke path, but public preference only appears when every policy condition passes and the projection allowlist is active.
 
 Next milestone:
 
 ```txt
-RM-33 osu! Public Projection Smoke / Projection QA
+RM-34 osu! Public Profile Trust-Safety QA
 ```
 
 ## Architecture
@@ -65,7 +65,7 @@ The copy states:
 
 - private means only the owner can see the proof;
 - public means eligible for a public Gaming Passport only if publish policy and projection gates pass;
-- public projection remains gated until RM-33 smoke/QA;
+- public projection remains gated unless the RM-33 projection path explicitly enables the allowlist;
 - osu! is a linked provider, not Parent Auth;
 - no refresh tokens are stored;
 - unlink/revoke keeps public serving blocked.
@@ -74,13 +74,13 @@ The copy states:
 
 RM-32 removes the `owner_visibility_controls_missing` blocker from the default domain policy path because the controls now exist.
 
-The remaining default blocker is:
+The remaining default domain blocker is:
 
 ```txt
 public_projection_allowlist_disabled
 ```
 
-The local Supabase public projection RPC still excludes osu! provider and proof rows. RM-32 does not add a migration because it does not open public projection.
+RM-33 adds a local Supabase projection smoke migration that includes osu! only through allowlisted DTO builders. RM-32 itself did not add a migration.
 
 ## Public Allowlist
 

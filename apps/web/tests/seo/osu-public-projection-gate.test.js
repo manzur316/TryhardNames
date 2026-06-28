@@ -36,6 +36,8 @@ const docs = [
   'docs/product/OSU_PRIVATE_PROOF_PUBLISH_POLICY.md',
   'docs/product/OSU_PUBLIC_PROJECTION_GATE.md',
   'docs/product/RM31_OSU_PUBLIC_PROJECTION_GATE_SCOPE.md',
+  'docs/product/OSU_PUBLIC_PROJECTION_SMOKE_QA.md',
+  'docs/product/RM33_OSU_PUBLIC_PROJECTION_SMOKE_SCOPE.md',
 ].map(readRepo).join('\n');
 const roadmapDocs = [
   'README.md',
@@ -53,6 +55,7 @@ const repositorySource = readWeb('src/gaming-passport/data/publicPassportReposit
 const appSource = readWeb('src/App.jsx');
 const webSource = readTree('apps/web/src');
 const migrationSource = readRepo('supabase/migrations/20260628120000_osu_public_projection_gate.sql');
+const smokeMigrationSource = readRepo('supabase/migrations/20260628180000_osu_public_projection_smoke.sql');
 const databaseTestSource = readRepo('supabase/tests/database/gaming_passport_schema_test.sql');
 const packageJson = JSON.parse(readWeb('package.json'));
 
@@ -63,13 +66,17 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
     assert.equal(existsSync(repoPath('docs/product/RM31_OSU_PUBLIC_PROJECTION_GATE_SCOPE.md')), true);
     assert.match(docs, /RM-31 osu! Private Proof Publish Policy \/ Public Projection Gate/);
     assert.match(docs, /owner_visibility_controls_missing/);
-    assert.match(docs, /public osu! projection remains blocked/i);
+    assert.match(docs, /safe local projection gate/i);
     assert.match(docs, /RM-32 osu! Owner Proof Visibility Controls/);
+    assert.match(docs, /RM-33 osu! Public Projection Smoke \/ Projection QA/);
+    assert.match(docs, /RM-34 osu! Public Profile Trust-Safety QA/);
     assert.match(roadmapDocs, /RM-31 osu! Private Proof Publish Policy \/ Public Projection Gate/);
     assert.match(roadmapDocs, /RM-32 osu! Owner Proof Visibility Controls/);
+    assert.match(roadmapDocs, /RM-33 osu! Public Projection Smoke \/ Projection QA/);
+    assert.match(roadmapDocs, /RM-34 osu! Public Profile Trust-Safety QA/);
   });
 
-  it('implements an explicit osu! projection policy gate with RM-32 controls and a disabled allowlist', () => {
+  it('implements an explicit osu! projection policy gate with RM-32 controls and a disabled default allowlist', () => {
     assert.match(policySource, /OSU_PROFILE_LINKED_SOURCE_KEY = 'osu:profile_linked'/);
     assert.match(policySource, /owner_visibility_controls_missing/);
     assert.match(policySource, /OSU_PUBLIC_PROJECTION_BLOCK_REASON = 'public_projection_allowlist_disabled'/);
@@ -79,21 +86,28 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
     assert.match(policySource, /externalUsername/);
     assert.match(policySource, /profileUrl/);
     assert.match(policySource, /observedAt/);
-    assert.match(publicationPolicySource, /canProjectOsuLinkedProvider/);
-    assert.match(publicationPolicySource, /canProjectOsuProfileLinkedProof/);
+    assert.match(publicationPolicySource, /getOsuPublicProjectionDecision/);
+    assert.match(publicationPolicySource, /findOsuProfileLinkedProofForAccount/);
+    assert.match(publicProjectionSource, /osuPublicProjectionAllowlistEnabled = false/);
+    assert.match(publicProjectionSource, /projectOsuLinkedProvider/);
+    assert.match(publicProjectionSource, /projectOsuProfileLinkedProof/);
   });
 
-  it('keeps public projection blocked in Supabase RPC until RM-33 projection smoke', () => {
+  it('preserves the RM-31 closed RPC migration and adds the RM-33 allowlisted smoke migration', () => {
     assert.match(migrationSource, /RM-31 keeps osu! private/);
     assert.match(migrationSource, /provider\.provider <> 'osu'/);
     assert.match(migrationSource, /proof\.provider <> 'osu'/);
-    assert.match(databaseTestSource, /RM-31 public projection blocks osu linked provider even if manually marked public/);
-    assert.match(databaseTestSource, /RM-31 public projection blocks osu profile-linked proof until owner visibility controls exist/);
+    assert.match(smokeMigrationSource, /RM-33 enables the local osu! public projection smoke path/);
+    assert.match(smokeMigrationSource, /'providerId', 'osu'/);
+    assert.match(smokeMigrationSource, /'type', 'profile_linked'/);
+    assert.match(smokeMigrationSource, /proof\.source_key = 'osu:profile_linked'/);
+    assert.match(databaseTestSource, /RM-33 public projection includes osu linked provider only through the allowlist DTO/);
+    assert.match(databaseTestSource, /RM-33 public projection includes osu profile-linked proof only through the allowlist DTO/);
     assert.match(databaseTestSource, /OsuPublicOwner/);
     assert.match(databaseTestSource, /OsuInternalPublicProjection/);
   });
 
-  it('documents the public allowlist and blocked fields without enabling a public osu! proof', () => {
+  it('documents the public allowlist and blocked fields without launching production', () => {
     for (const allowed of ['providerId', 'displayName', 'externalUsername', 'profileUrl', 'verifiedAt', 'type', 'label', 'source', 'observedAt', 'visibility']) {
       assert.match(docs, new RegExp(allowed));
     }
@@ -116,6 +130,7 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
     }
 
     assert.match(docs, /No automatic public osu! proof/i);
+    assert.match(docs, /No production launch/i);
     assert.match(docs, /No Parent Auth via osu!/i);
     assert.match(docs, /No refresh-token storage/i);
   });
@@ -131,6 +146,8 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
 
   it('wires the RM-31 source guard into SEO tests', () => {
     assert.match(packageJson.scripts['test:seo'], /osu-public-projection-gate\.test\.js/);
+    assert.match(packageJson.scripts['test:seo'], /osu-public-projection-smoke\.test\.js/);
     assert.match(packageJson.scripts.test, /osu-public-projection-gate\.test\.js/);
+    assert.match(packageJson.scripts.test, /osu-public-projection-smoke\.test\.js/);
   });
 });

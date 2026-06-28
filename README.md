@@ -211,6 +211,8 @@ Completed:
 - RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass docs and tests for local status, link-intent, manual callback, DB verification, token vault non-persistence, unlink/revoke, and negative cases.
 - RM-29 osu! Smoke Blocker Fixes full-pass local smoke completion with real human-authorized callback, DB verification, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases.
 - RM-30 osu! Owner Linking UI Hardening / Private Account UX with owner-only `/account` status, connect, unlink, privacy copy, and source guards.
+- RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
+- RM-32 osu! Owner Proof Visibility Controls.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -226,12 +228,12 @@ Waiting:
 
 This PR:
 
-- RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
-- Result: public osu! projection remains blocked until explicit owner proof visibility controls exist, with domain and local RPC gates.
+- RM-33 osu! Public Projection Smoke / Projection QA.
+- Result: safe local public projection gate is enabled only through explicit allowlist DTOs and full policy checks. This is not a production launch.
 
 Next product block:
 
-- RM-32 osu! Owner Proof Visibility Controls.
+- RM-34 osu! Public Profile Trust-Safety QA.
 
 Provider expansion planning:
 
@@ -241,7 +243,9 @@ Provider expansion planning:
 - RM-28 osu! Runtime Smoke / Owner Linking QA is historical partial-pass smoke evidence.
 - RM-29 osu! Smoke Blocker Fixes is full-pass local smoke completion, not production launch.
 - RM-30 osu! Owner Linking UI Hardening / Private Account UX is complete as private owner UI, not public provider UI.
-- RM-31 osu! Private Proof Publish Policy / Public Projection Gate is this PR and keeps public osu! proof projection blocked.
+- RM-31 osu! Private Proof Publish Policy / Public Projection Gate is complete.
+- RM-32 osu! Owner Proof Visibility Controls is complete.
+- RM-33 osu! Public Projection Smoke / Projection QA is this PR and enables safe local projection only through allowlisted fields.
 - Riot runtime only after explicit approval evidence exists.
 - osu! has a gated runtime foundation, not a live public launch.
 - Steam is a future identity provider candidate.
