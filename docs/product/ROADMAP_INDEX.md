@@ -48,8 +48,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | done | Defines and enforces the closed public projection gate for osu! private ownership proof data. Public osu! projection remained blocked until owner visibility controls existed. |
 | RM-32 | osu! Owner Proof Visibility Controls | done | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate while keeping public projection blocked by allowlist until RM-33. |
 | RM-33 | osu! Public Projection Smoke / Projection QA | done | Implemented by GH PR #40 / merge `97df703a88edc938e6ee3b4f0cd42b271b3d7599`. Enables safe local public projection smoke only through explicit allowlisted osu! provider/proof DTOs, published Passport, consent, owner public preference, and blocked-field tests. |
-| RM-34 | osu! Public Profile Trust-Safety QA | this PR | Audits public profile trust-safety behavior, fixes the minimum public renderer/mapper issue for osu! allowlisted DTOs, documents rollback, and keeps production blocked. |
-| RM-35 | osu! Production Readiness / Staging Go-No-Go | next | Future staging and production go/no-go evidence before any production osu! public projection enablement. |
+| RM-34 | osu! Public Profile Trust-Safety QA | done | Implemented by GH PR #41 / merge `2e5526fecec611d588182452dbe08fd459af91f3`. Audits public profile trust-safety behavior, fixes the minimum public renderer/mapper issue for osu! allowlisted DTOs, documents rollback, and keeps production blocked. |
+| RM-35 | osu! Production Readiness / Staging Go-No-Go | this PR | Staging is `conditional-go` pending isolated staging configuration and manual smoke. Production is `no-go` until staging evidence, owner go/no-go, env/callback review, rollback acceptance, monitoring review, and source guards pass. |
+| RM-36 | osu! Staging Configuration / Manual Smoke | next | Future staging configuration and manual smoke execution. No production enablement without explicit owner approval. |
 
 ## Future Provider Candidates
 
@@ -58,9 +59,12 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-34
+## Not Implemented By RM-35
 
 - Production osu! launch.
+- Secret changes.
+- Remote Supabase changes.
+- Vercel changes.
 - Public provider linking UI outside `/account`.
 - Automatic public osu! proof.
 - Browser token exchange.

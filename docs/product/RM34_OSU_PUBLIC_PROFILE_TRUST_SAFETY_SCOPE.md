@@ -6,13 +6,13 @@ Audit the RM-33 safe local public projection output from a trust-safety, privacy
 
 ## Result
 
-Status: this PR.
+Status: done.
 
 Decision: trust-safety pass after a minimum public rendering fix.
 
 RM-34 found that public web rendering did not yet understand the osu!-specific allowlisted DTO shape. This PR fixes that narrow issue and adds source/docs tests so the public profile renders the allowlisted osu! provider and proof without overclaiming, leaking internals, or linking unsafe URLs.
 
-Production remains blocked until RM-35.
+Production remains blocked after RM-35. Staging is now `conditional-go`; production is `no-go` until staging smoke evidence and owner production acceptance exist.
 
 ## In Scope
 
@@ -53,10 +53,10 @@ RM-34 is acceptable when:
 - owner controls remain the only path to public preference;
 - revoked or stale states remain non-public;
 - rollback is documented;
-- RM-35 is declared as the next go/no-go milestone.
+- RM-35 readiness is complete and declares RM-36 as the next staging smoke milestone.
 
 ## Next
 
 ```txt
-RM-35 osu! Production Readiness / Staging Go-No-Go
+RM-36 osu! Staging Configuration / Manual Smoke
 ```
