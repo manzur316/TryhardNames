@@ -146,3 +146,15 @@ The next recommended milestone is:
 ```txt
 RM-30 osu! Owner Linking UI Hardening / Private Account UX
 ```
+
+## RM-30
+
+RM-30 adds owner-only private UX in `/account` for the existing osu! runtime foundation. It uses backend-only status, link-intent, and unlink routes, keeps Connect osu! disabled when runtime is not configured, confirms unlink before revoke, and explains that osu! is a linked provider, not Parent Auth.
+
+RM-30 does not change token strategy, public projection, production config, or proof visibility defaults. The token strategy remains `no_refresh_token_storage`, and the osu! profile-linked proof remains private by default.
+
+The next recommended milestone is:
+
+```txt
+RM-31 osu! Private Proof Publish Policy / Public Projection Gate
+```

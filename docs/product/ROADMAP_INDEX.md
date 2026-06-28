@@ -43,8 +43,9 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | RM-26 | osu! Readiness Pack | done | Implemented by GH PR #33 / merge `c933f7d4fb60ee5f5a334dd96af4ef20fa2ee294`. Reviews official osu! docs, account ownership, API/OAuth model, public fields, privacy, rate limits, proof boundaries, branding, token/revoke, and outputs `conditional-go` for RM-27. |
 | RM-27 | osu! Runtime Foundation | done | Implemented by GH PR #34 / merge `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`. Disabled-by-default server-side foundation with OAuth state, token exchange, `/me` ownership verification, immediate revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards. Not production launch. |
 | RM-28 | osu! Runtime Smoke / Owner Linking QA | done / partial-pass | Local smoke docs/tests for configured env, owner link-intent, manual callback criteria, DB verification criteria, token vault non-persistence criteria, unlink/revoke criteria, revoked proof criteria, public projection non-leakage criteria, and rollback readiness. Full callback evidence was deferred to RM-29. |
-| RM-29 | osu! Smoke Blocker Fixes | this PR / full-pass | Completed the human-authorized callback smoke locally, verified private DB rows, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
-| RM-30 | osu! Owner Linking UI Hardening / Private Account UX | next | Harden private owner UX around osu! linking status, retry/revoke copy, and account controls after smoke completion. |
+| RM-29 | osu! Smoke Blocker Fixes | done / full-pass | Completed the human-authorized callback smoke locally, verified private DB rows, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
+| RM-30 | osu! Owner Linking UI Hardening / Private Account UX | this PR | Harden private owner UX around osu! linking status, backend link-intent, unlink/revoke confirmation, privacy copy, and account controls after smoke completion. |
+| RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | next | Define the explicit policy gate for whether private osu! proof data can ever become public projection data. |
 
 ## Future Provider Candidates
 
@@ -53,14 +54,15 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-29
+## Not Implemented By RM-30
 
 - Production osu! launch.
-- Public provider linking UI.
+- Public provider linking UI outside `/account`.
+- Public osu! proof.
 - Browser token exchange.
 - Refresh-token storage.
 - Any env vars/secrets.
 - `/cosmetics`.
 - Store or payments.
 - Rank, PP, score, match-history, best-play, beatmap, or live tracker surfaces.
-- Owner Linking UI hardening.
+- Private proof publish policy.

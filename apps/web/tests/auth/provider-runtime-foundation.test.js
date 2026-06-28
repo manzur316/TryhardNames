@@ -73,13 +73,15 @@ describe('Provider Runtime Foundation', () => {
     assert.doesNotMatch(repositorySource, /api\.riotgames\.com|discord\.com\/api|oauth\/authorize|authorize\?/i);
   });
 
-  it('renders an account panel that is clearly not live and has no connect actions', () => {
+  it('renders an account panel that keeps provider-neutral contracts server-gated after RM-30', () => {
     assert.match(accountPageSource, /ProviderRuntimeFoundationPanel/);
     assert.match(panelSource, /Provider Runtime Foundation/);
-    assert.match(panelSource, /Linked providers are not live yet/);
-    assert.match(panelSource, /Not live/);
+    assert.match(panelSource, /Provider runtime stays server-gated/);
+    assert.match(panelSource, /Server-gated/);
+    assert.match(panelSource, /osu! owner linking is handled by the private card above/);
     assert.match(panelSource, /Riot requires approval|Requires Riot approval/);
     assert.match(panelSource, /No account connection button or redirect is exposed/);
+    assert.match(panelSource, /never run provider token exchange in the browser/);
     assert.doesNotMatch(panelSource, /Connect Riot|Connect Discord|Continue with Riot|Continue with Discord/);
     assert.doesNotMatch(panelSource, /href=.*riot|href=.*discord|onClick=.*provider/i);
   });

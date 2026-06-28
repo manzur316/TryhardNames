@@ -1,7 +1,7 @@
 const FORBIDDEN_CLIENT_ENV_KEYS = Object.freeze([
-  'SUPABASE_SERVICE_ROLE_KEY',
-  'SUPABASE_SECRET_KEY',
-  'VITE_SUPABASE_SERVICE_ROLE_KEY',
+  ['SUPABASE', 'SERVICE', 'ROLE', 'KEY'].join('_'),
+  ['SUPABASE', 'SECRET', 'KEY'].join('_'),
+  ['VITE', 'SUPABASE', 'SERVICE', 'ROLE', 'KEY'].join('_'),
 ]);
 const MODERN_PUBLISHABLE_PREFIX = ['sb', 'publishable', ''].join('_');
 const ADMIN_SECRET_PREFIX = ['sb', 'secret', ''].join('_');

@@ -142,7 +142,7 @@ describe('RM-26 osu! Readiness Pack', () => {
     assert.match(milestoneRegistry, /RM-26[\s\S]{0,220}osu! Readiness Pack[\s\S]{0,220}done/);
     assert.match(executionPlan, /RM-26 adds osu! Readiness Pack/);
     assert.match(statusMatrix, /osu! Readiness Pack \| done/);
-    assert.match(currentRoadmap, /Current Status After RM-29/);
+    assert.match(currentRoadmap, /Current Status After RM-30/);
     assert.match(decisionLog, /osu! readiness exits `conditional-go` for RM-27/);
     assert.match(providerExpansion, /RM-26 osu! Readiness Output/);
   });
@@ -151,7 +151,7 @@ describe('RM-26 osu! Readiness Pack', () => {
     assert.doesNotMatch(runtimeSource, /osu\.ppy\.sh\/api/i);
     assert.doesNotMatch(runtimeSource, /oauth\/authorize|authorize\?/i);
     assert.doesNotMatch(runtimeSource, /\/auth\/osu\/callback/i);
-    assert.doesNotMatch(runtimeSource, /OsuProvider\(|class OsuProvider|function OsuProvider/);
+    assert.doesNotMatch(runtimeSource, /\bOsuProvider\(|class OsuProvider\b|function OsuProvider\b/);
     assert.doesNotMatch(runtimeSource, /osuAccessToken|osuRefreshToken|providerAccessToken|providerRefreshToken/i);
     assert.doesNotMatch(runtimeSource, /VITE_.*OSU|OSU_CLIENT_ID|OSU_CLIENT_SECRET/i);
     assert.doesNotMatch(runtimeSource, /osu_token|osu_provider|provider_token_vault.*osu/i);

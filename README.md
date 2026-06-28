@@ -203,6 +203,7 @@ Completed:
 - RM-27 osu! Runtime Foundation with disabled-by-default server-side API gates, CSRF-safe state, Authorization Code token exchange, `/me` ownership verification, immediate token revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards.
 - RM-28 osu! Runtime Smoke / Owner Linking QA partial-pass docs and tests for local status, link-intent, manual callback, DB verification, token vault non-persistence, unlink/revoke, and negative cases.
 - RM-29 osu! Smoke Blocker Fixes full-pass local smoke completion with real human-authorized callback, DB verification, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases.
+- RM-30 osu! Owner Linking UI Hardening / Private Account UX with owner-only `/account` status, connect, unlink, privacy copy, and source guards.
 - Riot site verification.
 - Gaming Passport landing.
 - Riot review submission pack.
@@ -218,12 +219,12 @@ Waiting:
 
 This PR:
 
-- RM-29 osu! Smoke Blocker Fixes.
-- Result: full-pass local smoke completion after human osu! authorization.
+- RM-30 osu! Owner Linking UI Hardening / Private Account UX.
+- Result: private owner UI hardening for configured osu! runtime, status, connect intent, and unlink/revoke controls.
 
 Next product block:
 
-- RM-30 osu! Owner Linking UI Hardening / Private Account UX.
+- RM-31 osu! Private Proof Publish Policy / Public Projection Gate.
 
 Provider expansion planning:
 
@@ -231,7 +232,8 @@ Provider expansion planning:
 - RM-26 osu! Readiness Pack is implemented by GH PR #33 and merge commit `c933f7d4fb60ee5f5a334dd96af4ef20fa2ee294`.
 - RM-27 osu! Runtime Foundation is implemented by GH PR #34 and merge commit `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`.
 - RM-28 osu! Runtime Smoke / Owner Linking QA is historical partial-pass smoke evidence.
-- RM-29 osu! Smoke Blocker Fixes is this PR as full-pass local smoke completion, not production launch.
+- RM-29 osu! Smoke Blocker Fixes is full-pass local smoke completion, not production launch.
+- RM-30 osu! Owner Linking UI Hardening / Private Account UX is this PR as private owner UI, not public provider UI.
 - Riot runtime only after explicit approval evidence exists.
 - osu! has a gated runtime foundation, not a live public launch.
 - Steam is a future identity provider candidate.
