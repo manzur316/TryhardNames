@@ -39,18 +39,27 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 | --- | --- | --- | --- |
 | RM-23 | Roadmap Governance + Provider Expansion Plan | done | Defines RM convention, source-of-truth rules, provider expansion readiness policy, and future provider candidate taxonomy. |
 | RM-24 | Launch Readiness | done | Production smoke, observability, rollback, policy review, launch checklist, and operational go/no-go. Does not execute deploy. |
-| RM-25 | Provider Expansion Readiness Matrix | done | Implemented by GH PR #32 / merge `a072aed297d209107e6ca719874496f30eaac8e9`. Compares provider candidates using readiness-before-runtime criteria and recommends RM-26 osu! Readiness Pack. |
-| RM-26 | osu! Readiness Pack | done | Implemented by GH PR #33 / merge `c933f7d4fb60ee5f5a334dd96af4ef20fa2ee294`. Reviews official osu! docs, account ownership, API/OAuth model, public fields, privacy, rate limits, proof boundaries, branding, token/revoke, and outputs `conditional-go` for RM-27. |
-| RM-27 | osu! Runtime Foundation | done | Implemented by GH PR #34 / merge `8ee0ceea7b090205d5f4dc543f9f8f5ea6337337`. Disabled-by-default server-side foundation with OAuth state, token exchange, `/me` ownership verification, immediate revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards. Not production launch. |
+| RM-25 | Provider Expansion Readiness Matrix | done | Compares provider candidates using readiness-before-runtime criteria and recommends RM-26 osu! Readiness Pack. |
+| RM-26 | osu! Readiness Pack | done | Reviews official osu! docs, account ownership, API/OAuth model, public fields, privacy, rate limits, proof boundaries, branding, token/revoke, and outputs `conditional-go` for RM-27. |
+| RM-27 | osu! Runtime Foundation | done | Disabled-by-default server-side foundation with OAuth state, token exchange, `/me` ownership verification, immediate revoke, no-refresh-token storage strategy, owner-only unlink, private proof foundation, and public projection guards. Not production launch. |
 | RM-28 | osu! Runtime Smoke / Owner Linking QA | done / partial-pass | Local smoke docs/tests for configured env, owner link-intent, manual callback criteria, DB verification criteria, token vault non-persistence criteria, unlink/revoke criteria, revoked proof criteria, public projection non-leakage criteria, and rollback readiness. Full callback evidence was deferred to RM-29. |
 | RM-29 | osu! Smoke Blocker Fixes | done / full-pass | Completed the human-authorized callback smoke locally, verified private DB rows, token vault non-persistence, unlink/revoke, public projection non-leakage, and negative cases. |
-| RM-30 | osu! Owner Linking UI Hardening / Private Account UX | done | Harden private owner UX around osu! linking status, backend link-intent, unlink/revoke confirmation, privacy copy, and account controls after smoke completion. |
-| RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | done | Defines and enforces the closed public projection gate for osu! private ownership proof data. Public osu! projection remained blocked until owner visibility controls existed. |
-| RM-32 | osu! Owner Proof Visibility Controls | done | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate while keeping public projection blocked by allowlist until RM-33. |
-| RM-33 | osu! Public Projection Smoke / Projection QA | done | Implemented by GH PR #40 / merge `97df703a88edc938e6ee3b4f0cd42b271b3d7599`. Enables safe local public projection smoke only through explicit allowlisted osu! provider/proof DTOs, published Passport, consent, owner public preference, and blocked-field tests. |
-| RM-34 | osu! Public Profile Trust-Safety QA | done | Implemented by GH PR #41 / merge `2e5526fecec611d588182452dbe08fd459af91f3`. Audits public profile trust-safety behavior, fixes the minimum public renderer/mapper issue for osu! allowlisted DTOs, documents rollback, and keeps production blocked. |
-| RM-35 | osu! Production Readiness / Staging Go-No-Go | this PR | Staging is `conditional-go` pending isolated staging configuration and manual smoke. Production is `no-go` until staging evidence, owner go/no-go, env/callback review, rollback acceptance, monitoring review, and source guards pass. |
-| RM-36 | osu! Staging Configuration / Manual Smoke | next | Future staging configuration and manual smoke execution. No production enablement without explicit owner approval. |
+| RM-30 | osu! Owner Linking UI Hardening / Private Account UX | done | Hardened private owner UX around osu! linking status, backend link-intent, unlink/revoke confirmation, privacy copy, and account controls after smoke completion. |
+| RM-31 | osu! Private Proof Publish Policy / Public Projection Gate | done | Defines and enforces the closed public projection gate for osu! private ownership proof data. |
+| RM-32 | osu! Owner Proof Visibility Controls | done | Adds explicit owner controls for private/public osu! proof visibility preference under the RM-31 gate. |
+| RM-33 | osu! Public Projection Smoke / Projection QA | done | Enables safe local public projection smoke only through explicit allowlisted osu! provider/proof DTOs, published Passport, consent, owner public preference, and blocked-field tests. |
+| RM-34 | osu! Public Profile Trust-Safety QA | done | Audits public profile trust-safety behavior, fixes minimum public renderer/mapper issue for osu! allowlisted DTOs, documents rollback, and keeps production blocked. |
+| RM-35 | osu! Production Readiness / Staging Go-No-Go | done | Staging conditional-go and production no-go package with environment checklist, callback checklist, staging smoke runbook, monitoring/logging minimums, rollback summary, and source guards. |
+| RM-36 | osu! Staging Configuration / Manual Smoke | done | Full-pass practical staging smoke against isolated staging services. No production enablement. |
+| RM-37 | Vercel Runtime Hardening / Trust Proxy | done | Hardens Vercel runtime trust proxy behavior and resolves staging warning without changing production provider activation. |
+| RM-38 | Staging Operations Runbook / Environment Hygiene | done | Documents staging/production project separation, environment hygiene, and operator rules. |
+| RM-39 | Staging Branch Alignment / Deployment Policy Enforcement | done | Aligns `staging` with `main` and documents deployment policy. |
+| RM-40 | Source Guards / Environment Safety Tests | done | Adds source safety tests for secrets, scopes, Riot blocking, forbidden public surfaces, and endorsement claims. |
+| RM-41 | Production Readiness Audit | done | Audits production readiness after RM-40 and preserves production no-go. |
+| RM-42 | Production Environment Dry Audit | done | Records safe production/staging project inventory and future supervised production environment review checklist. |
+| RM-43 | Production Runtime Gate Hardening | done | Adds production runtime gates so `OSU_PROVIDER_ENABLED=true` alone cannot configure production osu! runtime. |
+| RM-44 | Production Candidate Smoke Plan / Operator Runbook | this PR | Defines future production candidate smoke sequence, abort criteria, rollback plan, evidence packet, and keeps production no-go. |
+| RM-45 | Production Go/No-Go Evidence Pack | next | Future docs/evidence milestone only after RM-44 is accepted. No production activation unless owner explicitly approves. |
 
 ## Future Provider Candidates
 
@@ -59,19 +68,19 @@ Early roadmap labels were recorded as PR-style product blocks. Their RM mapping 
 - Discord Social Provider Readiness.
 - Riot Runtime, still gated by explicit Riot approval.
 
-## Not Implemented By RM-35
+## Still Not Implemented After RM-44
 
 - Production osu! launch.
 - Secret changes.
-- Remote Supabase changes.
-- Vercel changes.
+- Remote Supabase changes by roadmap/docs RMs.
+- Vercel configuration changes by roadmap/docs RMs.
 - Public provider linking UI outside `/account`.
 - Automatic public osu! proof.
 - Browser token exchange.
 - Refresh-token storage.
-- Any env vars/secrets.
-- `/cosmetics`.
+- Any committed env vars/secrets.
+- `/cosmetics` route.
 - Store or payments.
 - Rank, PP, score, match-history, best-play, beatmap, or live tracker surfaces.
 - Hidden-player inference.
-- Official osu! endorsement claims.
+- Official Riot or osu! endorsement claims.
