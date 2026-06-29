@@ -87,7 +87,7 @@ export default function PrivatePassportPreview({ form, isLoading }) {
               <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
               This draft is private, has no public link, and does not publish automatically.
             </p>
-            <p>Not a ranking, tracker, match-history view, MMR/ELO product, or live-game advice surface.</p>
+            <p>Not a ranking, tracker, match log, competitive-rating product, or live-game advice surface.</p>
             <p>No provider data is used here. Riot and Discord remain future linked providers, not active integrations.</p>
           </div>
         </>

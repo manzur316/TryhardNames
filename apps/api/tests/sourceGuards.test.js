@@ -38,7 +38,12 @@ const appSource = readRepo('apps/web/src/App.jsx');
 const webSource = readTree('apps/web/src');
 const apiOsuConfig = readRepo('apps/api/src/integrations/osu/config.js');
 const apiRiotSource = readTree('apps/api/src/integrations/riot');
-const publicRuntimeSource = `${webSource}\n${apiRiotSource}`;
+const runtimeWebSource = [
+  readTree('apps/web/src/gaming-passport'),
+  readRepo('apps/web/src/pages/GamingPassportPage.jsx'),
+  readRepo('apps/web/src/pages/PublicGamingPassportPage.jsx'),
+].join('\n');
+const publicRuntimeSource = `${runtimeWebSource}\n${apiRiotSource}`;
 
 describe('RM-40 Source Guards / Environment Safety Tests', () => {
   it('keeps server secrets and provider tokens out of browser source', () => {

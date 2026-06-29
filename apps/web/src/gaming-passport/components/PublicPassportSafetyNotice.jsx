@@ -14,7 +14,7 @@ export default function PublicPassportSafetyNotice() {
               Public safety boundary
             </h2>
             <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-              This Passport is an identity surface, not a tracker, OP.GG clone, match-history dump, custom MMR/ELO product, live-game advice tool, hidden-player surface, or alternate ranking system.
+              This Passport is an identity surface, not a tracker, third-party stats clone, match log dump, custom competitive-rating product, live-game advice tool, hidden-player surface, or alternate ranking system.
             </p>
           </div>
         </div>

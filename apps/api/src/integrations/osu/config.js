@@ -3,6 +3,13 @@ const DEFAULT_TOKEN_ENDPOINT = 'https://osu.ppy.sh/oauth/token';
 const DEFAULT_API_BASE_URL = 'https://osu.ppy.sh/api/v2';
 const DEFAULT_SCOPES = Object.freeze(['identify', 'public']);
 const ALLOWED_SCOPES = new Set(DEFAULT_SCOPES);
+export const OSU_PRODUCTION_RUNTIME_GATES = Object.freeze([
+  'OSU_PRODUCTION_GO_NO_GO_ACCEPTED',
+  'OSU_PRODUCTION_CALLBACK_REVIEWED',
+  'OSU_PRODUCTION_ROLLBACK_ACCEPTED',
+  'OSU_PRODUCTION_MONITORING_REVIEWED',
+  'OSU_PRODUCTION_SOURCE_GUARDS_PASSED',
+]);
 
 export function getOsuRuntimeConfig(env = process.env) {
   const enabled = env.OSU_PROVIDER_ENABLED === 'true';
@@ -17,6 +24,7 @@ export function getOsuRuntimeConfig(env = process.env) {
   const apiBaseUrl = clean(env.OSU_API_BASE_URL) || DEFAULT_API_BASE_URL;
   const scopes = parseScopes(env.OSU_SCOPES);
   const invalidScopes = scopes.filter((scope) => !ALLOWED_SCOPES.has(scope));
+  const productionRuntimeGate = getProductionRuntimeGate(env, enabled);
 
   const missing = [];
   if (enabled) {
@@ -27,14 +35,18 @@ export function getOsuRuntimeConfig(env = process.env) {
     if (!supabaseUrl) missing.push('SUPABASE_URL');
     if (!supabaseServiceRoleKey) missing.push('SUPABASE_SERVICE_ROLE_KEY');
     if (invalidScopes.length > 0) missing.push('OSU_SCOPES');
+    missing.push(...productionRuntimeGate.missing);
   }
+
+  const configured = enabled && missing.length === 0;
 
   return {
     provider: 'osu',
     enabled,
-    configured: enabled && missing.length === 0,
-    status: !enabled ? 'disabled' : missing.length === 0 ? 'configured' : 'missing_configuration',
+    configured,
+    status: getRuntimeStatus({ enabled, configured, productionRuntimeGate }),
     missing,
+    productionRuntimeGate,
     clientId,
     clientSecret,
     hasClientSecret: Boolean(clientSecret),
@@ -58,10 +70,41 @@ export function toSafeOsuRuntimeConfig(config) {
     configured: config.configured,
     status: config.status,
     missing: config.missing,
+    productionRuntimeGate: {
+      required: config.productionRuntimeGate.required,
+      satisfied: config.productionRuntimeGate.satisfied,
+      missing: config.productionRuntimeGate.missing,
+    },
     scopes: config.scopes,
     tokenStrategy: config.tokenStrategy,
     hasClientSecret: config.hasClientSecret,
   };
+}
+
+function getRuntimeStatus({ enabled, configured, productionRuntimeGate }) {
+  if (!enabled) return 'disabled';
+  if (configured) return 'configured';
+  if (productionRuntimeGate.required && !productionRuntimeGate.satisfied) {
+    return 'production_gate_blocked';
+  }
+  return 'missing_configuration';
+}
+
+function getProductionRuntimeGate(env, enabled) {
+  const required = enabled && isProductionRuntime(env);
+  const missing = required
+    ? OSU_PRODUCTION_RUNTIME_GATES.filter((gateName) => clean(env[gateName]) !== 'true')
+    : [];
+
+  return {
+    required,
+    satisfied: required ? missing.length === 0 : true,
+    missing,
+  };
+}
+
+function isProductionRuntime(env) {
+  return ['NODE_ENV', 'VERCEL_ENV', 'APP_ENV'].some((name) => clean(env[name]) === 'production');
 }
 
 function parseScopes(value) {

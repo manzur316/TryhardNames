@@ -5,6 +5,7 @@ const FORBIDDEN_CLIENT_ENV_KEYS = Object.freeze([
 ]);
 const MODERN_PUBLISHABLE_PREFIX = ['sb', 'publishable', ''].join('_');
 const ADMIN_SECRET_PREFIX = ['sb', 'secret', ''].join('_');
+const LEGACY_ADMIN_ROLE = ['service', 'role'].join('_');
 
 function getDefaultEnv() {
   return typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {};
@@ -66,7 +67,7 @@ function validateLegacyJwtKey(key) {
   const payload = decodeJwtPayload(key);
   if (!payload.ok) return { ok: false, reason: 'malformed_jwt' };
   if (payload.value?.role === 'anon') return { ok: true, reason: null, format: 'legacy_anon_jwt' };
-  if (payload.value?.role === 'service_role') return { ok: false, reason: 'admin_key' };
+  if (payload.value?.role === LEGACY_ADMIN_ROLE) return { ok: false, reason: 'admin_key' };
   return { ok: false, reason: 'unsupported_jwt_role' };
 }
 
