@@ -94,7 +94,7 @@ export const LOL_HUB_SECTIONS = [
 
 export const LOL_HUB_FAQS = [
   {
-    question: 'Is this affiliated with Riot Games?',
+    question: 'Is this connected to Riot Games?',
     answer:
       'No. TryhardNames is an independent identity utility. League of Legends is a trademark of Riot Games, Inc.',
   },

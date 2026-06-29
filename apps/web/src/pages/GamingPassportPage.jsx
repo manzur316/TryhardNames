@@ -20,11 +20,11 @@ const plannedProofs = [
 ];
 
 const noGoCards = [
-  'No custom MMR or ELO',
+  'No custom competitive rating',
   'No live-game advantage',
   'No in-game recommendations',
-  'No OP.GG alternative',
-  'No match-history dumping',
+  'No third-party stats clone',
+  'No match log dumping',
   'No hidden-player de-anonymization',
   'No selling Riot data',
   'No public profile without consent',
@@ -199,8 +199,8 @@ const GamingPassportPage = () => {
             </div>
           </div>
           <div className="mt-6 grid gap-3 text-sm text-slate-700 dark:text-slate-300 md:grid-cols-2 lg:grid-cols-4">
-            <p>No custom MMR.</p>
-            <p>No ELO calculator.</p>
+            <p>No custom rating.</p>
+            <p>No ladder calculator.</p>
             <p>No alternative ranking system.</p>
             <p>No hidden player data.</p>
           </div>
@@ -261,9 +261,10 @@ const GamingPassportPage = () => {
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-700 dark:text-amber-200/80">Legal</p>
           <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-950 dark:text-white">Riot Games notice</h2>
           <p className="mt-4 max-w-4xl text-sm leading-6">
-            TryhardNames Gaming Passport is not endorsed by Riot Games and does not reflect the views or opinions of
-            Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all
-            associated properties are trademarks or registered trademarks of Riot Games, Inc.
+            Riot Games does not sponsor, approve, or operate TryhardNames Gaming Passport, and this page does not
+            reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot
+            Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot
+            Games, Inc.
           </p>
         </section>
       </main>

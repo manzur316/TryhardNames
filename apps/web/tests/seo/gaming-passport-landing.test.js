@@ -24,9 +24,9 @@ describe('Gaming Passport Riot review landing', () => {
   it('contains Riot review copy without claiming live Riot OAuth or rankings', () => {
     assert.match(pageSource, /Pending Riot approval/);
     assert.match(pageSource, /Riot Sign On/);
-    assert.match(pageSource, /No custom MMR/);
-    assert.match(pageSource, /No ELO calculator/);
-    assert.match(pageSource, /No OP\.GG alternative/);
+    assert.match(pageSource, /No custom competitive rating/);
+    assert.match(pageSource, /No ladder calculator/);
+    assert.match(pageSource, /No third-party stats clone/);
     assert.match(pageSource, /No in-game recommendations/);
     assert.match(pageSource, /No alternative ranking system/);
     assert.match(pageSource, /No hidden player data/);
@@ -66,7 +66,7 @@ describe('Gaming Passport Riot review landing', () => {
 
   it('renders the Riot legal notice visibly in page source', () => {
     assert.match(pageSource, /Riot Games notice/);
-    assert.match(pageSource, /TryhardNames Gaming Passport is not endorsed by Riot Games/);
+    assert.match(pageSource, /Riot Games does not sponsor, approve, or operate TryhardNames Gaming Passport/);
   });
 
   it('does not import Riot-owned visual assets or logos', () => {

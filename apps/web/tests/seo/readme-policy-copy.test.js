@@ -37,7 +37,7 @@ describe('README and public policy copy', () => {
 
   it('documents Gaming Passport terms and Riot ownership boundaries', () => {
     assert.match(termsSource, /Riot integration is pending Riot approval/);
-    assert.match(termsSource, /TryhardNames Gaming Passport is not endorsed by Riot Games/);
+    assert.match(termsSource, /Riot Games does not sponsor, approve, or operate TryhardNames Gaming Passport/);
     assert.match(termsSource, /Riot-owned trademarks, game data, properties, and assets remain Riot-owned/);
     assert.match(termsSource, /Riot data is not placed behind a paywall/);
   });

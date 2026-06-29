@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { getOsuRuntimeConfig, toSafeOsuRuntimeConfig } from '../src/integrations/osu/config.js';
+import {
+  getOsuRuntimeConfig,
+  OSU_PRODUCTION_RUNTIME_GATES,
+  toSafeOsuRuntimeConfig,
+} from '../src/integrations/osu/config.js';
 import { buildOsuAuthorizeUrl, exchangeOsuCode, fetchOsuOwnProfile, revokeOsuCurrentToken, sanitizeOsuRuntimeResult } from '../src/integrations/osu/oauthClient.js';
 import { createOsuState, hashOsuState, validateOsuStateRecord } from '../src/integrations/osu/oauthState.js';
 
@@ -13,6 +17,10 @@ const configuredEnv = Object.freeze({
   SUPABASE_URL: 'https://project.supabase.co',
   SUPABASE_SERVICE_ROLE_KEY: 'server-service-role-key',
 });
+
+const acceptedProductionGates = Object.freeze(
+  Object.fromEntries(OSU_PRODUCTION_RUNTIME_GATES.map((gateName) => [gateName, 'true'])),
+);
 
 describe('RM-27 osu! runtime foundation API contracts', () => {
   it('keeps osu! disabled by default and reports only safe config', () => {
@@ -27,7 +35,17 @@ describe('RM-27 osu! runtime foundation API contracts', () => {
     assert.equal(safe.configured, true);
     assert.equal(safe.hasClientSecret, true);
     assert.equal(Object.hasOwn(safe, 'clientSecret'), false);
+    assert.equal(Object.hasOwn(safe, 'stateSecret'), false);
     assert.equal(Object.hasOwn(safe, 'supabaseServiceRoleKey'), false);
+    assert.equal(Object.hasOwn(safe, 'accessToken'), false);
+    assert.equal(Object.hasOwn(safe, 'refreshToken'), false);
+    assert.equal(Object.hasOwn(safe, 'code'), false);
+    assert.equal(Object.hasOwn(safe, 'state'), false);
+
+    const safeJson = JSON.stringify(safe);
+    assert.equal(safeJson.includes('server-client-secret'), false);
+    assert.equal(safeJson.includes('server-service-role-key'), false);
+    assert.equal(safeJson.includes('state-secret-at-least-long-enough'), false);
   });
 
   it('rejects non-minimal scopes before runtime can be configured', () => {
@@ -39,6 +57,69 @@ describe('RM-27 osu! runtime foundation API contracts', () => {
     assert.equal(config.configured, false);
     assert.deepEqual(config.invalidScopes, ['friends.read']);
     assert.ok(config.missing.includes('OSU_SCOPES'));
+  });
+
+  it('blocks production osu! runtime unless every production hardening gate is accepted', () => {
+    const config = getOsuRuntimeConfig({
+      ...configuredEnv,
+      NODE_ENV: 'production',
+    });
+
+    assert.equal(config.enabled, true);
+    assert.equal(config.configured, false);
+    assert.equal(config.status, 'production_gate_blocked');
+    assert.equal(config.productionRuntimeGate.required, true);
+    assert.equal(config.productionRuntimeGate.satisfied, false);
+    assert.deepEqual(config.productionRuntimeGate.missing, OSU_PRODUCTION_RUNTIME_GATES);
+    for (const gateName of OSU_PRODUCTION_RUNTIME_GATES) {
+      assert.ok(config.missing.includes(gateName));
+    }
+  });
+
+  it('requires every production hardening gate before configured=true in production', () => {
+    const config = getOsuRuntimeConfig({
+      ...configuredEnv,
+      NODE_ENV: 'production',
+      ...acceptedProductionGates,
+    });
+
+    assert.equal(config.configured, true);
+    assert.equal(config.status, 'configured');
+    assert.equal(config.productionRuntimeGate.required, true);
+    assert.equal(config.productionRuntimeGate.satisfied, true);
+    assert.deepEqual(config.productionRuntimeGate.missing, []);
+  });
+
+  it('keeps production osu! runtime blocked when one production hardening gate is missing', () => {
+    const gateEnv = { ...acceptedProductionGates };
+    delete gateEnv.OSU_PRODUCTION_MONITORING_REVIEWED;
+
+    const config = getOsuRuntimeConfig({
+      ...configuredEnv,
+      VERCEL_ENV: 'production',
+      ...gateEnv,
+    });
+
+    assert.equal(config.configured, false);
+    assert.equal(config.status, 'production_gate_blocked');
+    assert.deepEqual(config.productionRuntimeGate.missing, ['OSU_PRODUCTION_MONITORING_REVIEWED']);
+    assert.ok(config.missing.includes('OSU_PRODUCTION_MONITORING_REVIEWED'));
+  });
+
+  it('does not require production hardening gates outside production', () => {
+    const staging = getOsuRuntimeConfig({
+      ...configuredEnv,
+      VERCEL_ENV: 'preview',
+    });
+    const development = getOsuRuntimeConfig({
+      ...configuredEnv,
+      NODE_ENV: 'development',
+    });
+
+    assert.equal(staging.configured, true);
+    assert.equal(staging.productionRuntimeGate.required, false);
+    assert.equal(development.configured, true);
+    assert.equal(development.productionRuntimeGate.required, false);
   });
 
   it('creates CSRF state with TTL, hashes it, and rejects missing, expired, reused, and mismatched state', () => {

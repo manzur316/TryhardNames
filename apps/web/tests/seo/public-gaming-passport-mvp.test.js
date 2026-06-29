@@ -96,7 +96,7 @@ describe('Public Gaming Passport MVP', () => {
     assert.doesNotMatch(publicServingSource, /Continue with Riot|Continue with Discord|Riot OAuth|Discord OAuth/i);
     assert.doesNotMatch(publicServingSource, /provider_token|providerToken|refreshToken|clientSecret|accessToken/i);
     assert.doesNotMatch(publicServingSource, /Riot API calls|riot api call/i);
-    assert.match(safetyNoticeSource, /not a tracker, OP\.GG clone, match-history dump, custom MMR\/ELO product, live-game advice tool/);
+    assert.match(safetyNoticeSource, /not a tracker, third-party stats clone, match log dump, custom competitive-rating product, live-game advice tool/);
   });
 
   it('updates roadmap docs for PR15 and keeps provider activation pending', () => {

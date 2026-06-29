@@ -61,9 +61,10 @@ const TermsOfServicePage = () => {
               TryhardNames, and TryhardNames does not display live Riot data in production.
             </p>
             <p className="text-dark-300 leading-relaxed mb-4">
-              TryhardNames Gaming Passport is not endorsed by Riot Games and does not reflect the views or opinions of
-              Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and
-              all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+              Riot Games does not sponsor, approve, or operate TryhardNames Gaming Passport, and this page does not
+              reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot
+              Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot
+              Games, Inc.
             </p>
             <p className="text-dark-300 leading-relaxed">
               Riot-owned trademarks, game data, properties, and assets remain Riot-owned. Users may not use
