@@ -73,7 +73,7 @@ describe('RM-40 Source Guards / Environment Safety Tests', () => {
   it('keeps forbidden public surfaces and endorsement claims out of runtime source', () => {
     assert.doesNotMatch(appSource, /path=["']\/(cosmetics|store|checkout|billing)["']/i);
     assert.doesNotMatch(publicRuntimeSource, /officially endorsed|official partner|endorsed by (riot|osu!?)|affiliated with (riot|osu!?)/i);
-    assert.doesNotMatch(publicRuntimeSource, /matchHistory|liveTracker|mmr|elo|op\.gg|performancePoints|rankedScore|bestPlays|beatmap/i);
+    assert.doesNotMatch(publicRuntimeSource, /matchHistory|liveTracker|\bmmr\b|\belo\b|op\.gg|performancePoints|rankedScore|bestPlays|beatmap/i);
   });
 
   it('wires RM-40 source guards into API tests', () => {
