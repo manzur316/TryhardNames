@@ -132,7 +132,8 @@ This section lists variable names and boundaries only. It intentionally contains
 | `OSU_TOKEN_ENDPOINT` | server | Official osu! token endpoint unless explicitly overridden for test. | Official osu! endpoint. |
 | `OSU_API_BASE_URL` | server | Official osu! API base unless explicitly overridden for test. | Official osu! API base. |
 | `OSU_SCOPES` | server | Minimal scopes only: `identify public`. | Minimal scopes only: `identify public`, after approval. |
-| `RIOT_PROVIDER_ENABLED` or equivalent Riot runtime gate | server | Must remain disabled unless a future Riot RM approves runtime. | Must remain disabled until Riot approval and owner go/no-go. |
+
+Riot currently has no approved runtime surface in this runbook. If a future RM introduces Riot runtime environment variables, that RM must document the exact names, default-disabled gate, approval path, and rollback before activation.
 
 ### Browser/public variables
 
