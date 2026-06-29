@@ -7,8 +7,11 @@ import morgan from 'morgan';
 
 import routes from './routes/index.js';
 import { errorMiddleware } from './middleware/index.js';
+import { getTrustProxyConfig } from './config/trustProxy.js';
 
 const app = express();
+
+app.set('trust proxy', getTrustProxyConfig());
 
 app.use(helmet());
 app.use(cors({
