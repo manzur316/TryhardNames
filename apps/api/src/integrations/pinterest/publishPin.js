@@ -95,6 +95,31 @@ function sanitizePinResponse(data) {
   };
 }
 
+export function sanitizePinterestPublishErrorDetails(data) {
+  if (!data || typeof data !== 'object') {
+    return {};
+  }
+
+  const rawMessage = data.message
+    || data.error_description
+    || data.error?.message
+    || data.details
+    || data.raw;
+  const rawCode = data.code || data.error?.code || data.error;
+  const rawType = data.type || data.error?.type || data.reason;
+
+  const details = {};
+  const code = normalizeText(String(rawCode || ''), 80);
+  const type = normalizeText(String(rawType || ''), 80);
+  const message = normalizeText(String(rawMessage || ''), 300);
+
+  if (code) details.code = code;
+  if (type) details.type = type;
+  if (message) details.message = message;
+
+  return details;
+}
+
 export function validatePublishPayload(body) {
   if (!body || typeof body !== 'object') {
     return { ok: false, error: 'Body must be a JSON object' };
@@ -214,7 +239,7 @@ export async function publishPinterestPin(value, cfg) {
       ok: false,
       status: response.status,
       error: 'publish_failed',
-      details: data,
+      details: sanitizePinterestPublishErrorDetails(data),
     };
   }
 
