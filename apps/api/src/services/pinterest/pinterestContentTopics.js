@@ -154,6 +154,9 @@ const TOPIC_ALIASES = {
   'valorant-usernames': 'valorant-sweaty',
   'fortnite-usernames': 'fortnite-sweaty',
   'roblox-usernames': 'roblox-names',
+  'discord-usernames': 'brandable-usernames',
+  'discord-names': 'brandable-usernames',
+  'social-usernames': 'brandable-usernames',
 };
 
 export function listPinterestContentTopicDefs() {

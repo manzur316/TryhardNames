@@ -1,9 +1,16 @@
+import { timingSafeEqual } from 'node:crypto';
 import { Router } from 'express';
 import { INTEGRATION_STATUS } from '../../core/index.js';
 import { fail, ok } from '../../shared/apiResponse.js';
 import { normalizeExportPayload } from '../../services/export/exportPayload.js';
 import { buildTrustedExportRenderUrl, pickImageRenderFormat } from '../../services/export/exportTrustedUrl.js';
-import { getPinterestConfig, getPinterestPublishConfig } from './config.js';
+import {
+  getPinterestAutomationConfig,
+  getPinterestConfig,
+  getPinterestPublishConfig,
+  PINTEREST_AUTOMATION_SECRET_HEADER,
+  PINTEREST_AUTOMATION_SECRET_HEADER_FALLBACK,
+} from './config.js';
 import { createPinterestState, validatePinterestState } from './oauthState.js';
 import {
   publishPinterestPin,
@@ -22,8 +29,54 @@ function pinterestUnavailable(res, cfg) {
   }));
 }
 
+function clean(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function safeCompareAutomationKey(a, b) {
+  const left = Buffer.from(a, 'utf8');
+  const right = Buffer.from(b, 'utf8');
+  if (left.length !== right.length) {
+    return false;
+  }
+  return timingSafeEqual(left, right);
+}
+
+export function getPinterestAutomationRequestKey(req) {
+  return clean(
+    req.get(PINTEREST_AUTOMATION_SECRET_HEADER)
+      || req.get(PINTEREST_AUTOMATION_SECRET_HEADER_FALLBACK),
+  );
+}
+
+export function validatePinterestAutomationRequest(req, automationCfg) {
+  if (!automationCfg.ok) {
+    return { ok: false, status: 401, error: 'automation_not_configured', missing: automationCfg.missing };
+  }
+
+  const providedKey = getPinterestAutomationRequestKey(req);
+  if (!providedKey) {
+    return { ok: false, status: 401, error: 'automation_unauthorized' };
+  }
+
+  if (!safeCompareAutomationKey(providedKey, automationCfg.automationSecret)) {
+    return { ok: false, status: 401, error: 'automation_unauthorized' };
+  }
+
+  return { ok: true };
+}
+
+function automationUnavailable(res, auth) {
+  return res.status(auth.status).json(fail(auth.error, {
+    integration: 'pinterest',
+    missing: auth.missing || undefined,
+    hint: 'Configure Pinterest automation gateway and pass the required automation header from n8n.',
+  }));
+}
+
 r.get('/', (req, res) => {
   const cfg = getPinterestConfig();
+  const automationCfg = getPinterestAutomationConfig();
   res.json(ok({
     integration: 'pinterest',
     role: 'export_consumer',
@@ -31,6 +84,13 @@ r.get('/', (req, res) => {
     missing: cfg.missing,
     scopes: cfg.scopes,
     hasPublishToken: cfg.hasAccessToken,
+    automationGateway: {
+      required: true,
+      configured: automationCfg.ok,
+      missing: automationCfg.missing,
+      headerName: automationCfg.headerName,
+      fallbackHeaderName: automationCfg.fallbackHeaderName,
+    },
     capabilities: [
       'oauth_authorize_url',
       'publish_contract_validation',
@@ -162,6 +222,12 @@ r.post('/publish', async (req, res) => {
  * (e.g. Cloudinary secure_url). No export contract, no /exports/render, no artifacts.
  */
 r.post('/publish-direct', async (req, res) => {
+  const automationCfg = getPinterestAutomationConfig();
+  const automationAuth = validatePinterestAutomationRequest(req, automationCfg);
+  if (!automationAuth.ok) {
+    return automationUnavailable(res, automationAuth);
+  }
+
   const cfg = getPinterestPublishConfig();
   if (!cfg.ok) {
     return res.status(401).json(fail('unauthorized', {

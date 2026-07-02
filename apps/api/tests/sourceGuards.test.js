@@ -38,6 +38,10 @@ const appSource = readRepo('apps/web/src/App.jsx');
 const webSource = readTree('apps/web/src');
 const apiOsuConfig = readRepo('apps/api/src/integrations/osu/config.js');
 const apiRiotSource = readTree('apps/api/src/integrations/riot');
+const apiPinterestConfig = readRepo('apps/api/src/integrations/pinterest/config.js');
+const apiPinterestRoutes = readRepo('apps/api/src/integrations/pinterest/routes.js');
+const apiPinterestPublish = readRepo('apps/api/src/integrations/pinterest/publishPin.js');
+const apiPinterestTopics = readRepo('apps/api/src/services/pinterest/pinterestContentTopics.js');
 const runtimeWebSource = [
   readTree('apps/web/src/gaming-passport'),
   readRepo('apps/web/src/pages/GamingPassportPage.jsx'),
@@ -83,5 +87,15 @@ describe('RM-40 Source Guards / Environment Safety Tests', () => {
 
   it('wires RM-40 source guards into API tests', () => {
     assert.match(apiPackageJson.scripts.test, /sourceGuards\.test\.js/);
+  });
+
+  it('keeps Pinterest automation gateway protected and backward-compatible with n8n topics', () => {
+    assert.match(apiPinterestConfig, /PINTEREST_AUTOMATION_SECRET/);
+    assert.match(apiPinterestRoutes, /validatePinterestAutomationRequest/);
+    assert.match(apiPinterestRoutes, /getPinterestAutomationConfig\(\)/);
+    assert.match(apiPinterestRoutes, /automation_not_configured|automation_unauthorized/);
+    assert.match(apiPinterestPublish, /sanitizePinterestPublishErrorDetails/);
+    assert.match(apiPinterestTopics, /'discord-usernames': 'brandable-usernames'/);
+    assert.match(apiPinterestTopics, /'social-usernames': 'brandable-usernames'/);
   });
 });
