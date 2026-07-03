@@ -1,0 +1,292 @@
+{
+  "name": "TryhardNames Pinterest API",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        0
+      ],
+      "id": "78661e9e-864d-4034-b60b-60683b1b81e7",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "url": "={{'https://tryhardnames.com/api/v1/pinterest/content?topic=' + $json.topic + '&random=true&usernameCount=8'}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -528,
+        -192
+      ],
+      "id": "d7b0735c-4832-47ed-aed7-98c5902acb21",
+      "name": "GET Pinterest Content"
+    },
+    {
+      "parameters": {
+        "jsCode": "const usernames =\n  ($json.usernames || [])\n    .slice(0, 6);\n\nconst visual =\n  $json.visualMutation || {};\n\nconst seo =\n  $json.seo || {};\n\nconst keyword =\n  $json.keyword || 'Gaming Usernames';\n\nconst title =\n  seo.pinterestTitle || keyword;\n\n// --- BANCO DE OPCIONES EXPANDIDO PARA MAXIMA ALEATORIEDAD ---\n\nconst compositions = [\n  'dynamic diagonal split screen',\n  'asymmetrical tech-magazine layout',\n  'centered heroic movie poster composition',\n  'rule-of-thirds cinematic gaming setup',\n  'vertical grid alignment with strong depth of field',\n  'overlapping futuristic polaroid panels',\n  'geometric cyberpunk collage layout',\n  'clean isometric corporate gaming interface',\n  'minimalist multi-panel visual grid',\n  'high-contrast split-tone hero focus'\n];\nconst composition = visual.composition || compositions[Math.floor(Math.random() * compositions.length)];\n\nconst lightings = [\n  'bioluminescent neon backlight with sharp rim light',\n  'cinematic moody esports lighting with dramatic shadows',\n  'high-contrast cyberpunk chaser lights and soft fog illumination',\n  'futuristic synthwave glowing ambience with lens flares',\n  'hyper-bright gaming arena strobe lights and intense glow',\n  'dark moody low-key studio lighting with striking accent colors',\n  'ray-traced volumetric light beams cutting through haze',\n  'cybernetic pulse lighting with shifting color shadows',\n  'dramatic under-lighting from a glowing tech console',\n  'subtle pastel studio softbox setup with sharp metallic glare'\n];\nconst lighting = visual.lighting || lightings[Math.floor(Math.random() * lightings.length)];\n\nconst colorPalettes = [\n  'vibrant cyberpunk neon, electric violet, acid green, deep obsidian',\n  'dark esports palette, hot crimson, electric blue, charcoal black',\n  'monochromatic dark mode, stealth gray, toxic neon yellow highlights',\n  'retro synthwave tones, pastel magenta, cyan, deep cosmic purple',\n  'luxury premium gaming colors, matte black, metallic gold, royal sapphire',\n  'glitch aesthetic multi-color mix, glitch pink, corrupted cyan, deep void navy',\n  'mecha armor industrial colors, arctic white, carbon fiber black, orange alert',\n  'deep phantom space violet, cosmic stardust white, nebula indigo',\n  'toxic venom green, nuclear hazard yellow, dark graphite gray',\n  'minimalist high-fashion gaming, pure alabaster, soft beige, stark matte black'\n];\nconst colors = visual.colors || colorPalettes[Math.floor(Math.random() * colorPalettes.length)];\n\nconst typographies = [\n  'sleek minimalist sci-fi typography, high-contrast crisp text',\n  'bold aggressive esports typography, heavy block letters',\n  'modern clean geometric sans-serif fonts, razor-sharp edges',\n  'glowing electronic HUD digital typeface, high legibility',\n  'futuristic stencil tech lettering, premium layout text',\n  'brutalist ultra-bold typography with digital tech subtext',\n  'cyberpunk liquid-neon lettering style with high contrast',\n  'sharp metallic chiseled gaming font with outer outer glow',\n  'clean pixelated arcade font modern adaptation, sharp tracking',\n  'premium tech-magazine layout typography, ultra thin accents'\n];\nconst typography = visual.typography || typographies[Math.floor(Math.random() * typographies.length)];\n\nconst cameras = [\n  'dynamic low-angle heroic shot',\n  'close-up intense portrait view',\n  'three-quarter medium shot with dramatic perspective',\n  'cinematic wide shot cropped for vertical framing',\n  'extreme close-up on gaming equipment and character face',\n  'dramatic dutch angle action shot with high perspective lines',\n  'macro view focusing over the shoulder of the player',\n  'symmetrical eye-level frontal power pose',\n  'dynamic fisheye cybernetic interface perspective',\n  'cinematic profile shot with sharp focus on cyber-implants'\n];\nconst camera = visual.camera || cameras[Math.floor(Math.random() * cameras.length)];\n\nconst renderStyles = [\n  'next-gen cinematic 3D render, flawless octane shading',\n  'ultra detailed digital art, crisp vector accents',\n  'photorealistic gaming CGI, Unreal Engine 5 aesthetic',\n  'stylized premium illustration, high-end comic shading',\n  'polished esports concept art, macro-level digital textures',\n  'gritty hyper-detailed cyber-noir graphical novel artwork',\n  'smooth digital airbrushing with highly polished vector overlays',\n  'futuristic tech-concept schematics art overlayed on 3D model',\n  'high-contrast stylized vaporwave graphic design rendering',\n  'matte painting masterpiece with incredible cinematic realism'\n];\nconst renderStyle = visual.renderStyle || renderStyles[Math.floor(Math.random() * renderStyles.length)];\n\nconst moods = [\n  'hypnotic futuristic hype, high-energy arcade tech',\n  'competitive gaming energy, intense focus, pro-player vibe',\n  'mysterious dark web hacker atmosphere, high tech tension',\n  'epic virtual reality adventure, legendary championship mood',\n  'cyberpunk underworld adrenaline, chaotic fast-paced streaming',\n  'zen hyper-focused flow state, professional streaming focus',\n  'triumphant tournament victory celebration, pure esports ecstasy',\n  'rebellious underground neon skater crew vibe',\n  'high-tech tactical espionage, precise military stealth gaming',\n  'limitless virtual simulation power, transcendent gaming aura'\n];\nconst mood = visual.mood || moods[Math.floor(Math.random() * moods.length)];\n\n// --- CATEGORIAS COMPLEMENTARIAS ---\n\nconst usernameText =\n  usernames.join(', ');\n\nconst characterPrompts = [\n  'anonymous esports gamer character',\n  'futuristic gaming character',\n  'competitive tactical gamer',\n  'stylized streamer character',\n  'cyberpunk esports player',\n  'dark gaming avatar',\n  'cyber-enhanced elite pro-gamer',\n  'futuristic android streamer with glowing hair',\n  'neon-masked synthwave hacker character',\n  'holographic neon esports avatar',\n  'mecha-armor pilot wearing an advanced gaming visor',\n  'female tech-wear streamer with custom glowing headphones',\n  'phantom esports rogue assassin avatar with glowing eyes',\n  'cyber-samurai pro gamer with a katana neon controller',\n  'streetwear-styled virtual reality influencer avatar',\n  'tactical specs operative monitoring dual tech screens'\n];\nconst character = characterPrompts[Math.floor(Math.random() * characterPrompts.length)];\n\nconst layouts = [\n  'usernames displayed in glowing UI panels',\n  'gaming names shown in futuristic interface',\n  'stacked usernames with esports HUD design',\n  'neon gamer tags floating beside character',\n  'competitive username layout for pinterest',\n  'usernames embedded in clean floating holographic glass widgets',\n  'gamer tags integrated into a sleek vertical cyberpunk timeline',\n  'names arranged in sharp, minimalist laser-etched data boxes',\n  'clean geometric scoreboard layout inside a streamer overlay',\n  'usernames beautifully integrated into neon street signs',\n  'asymmetric layout with a massive glowing text block on the left',\n  'curved tactical HUD circles surrounding the username lists'\n];\nconst usernameLayout = layouts[Math.floor(Math.random() * layouts.length)];\n\n// --- GENERACION DEL PROMPT ---\n\nconst prompt = `\nCreate a highly viral, high-conversion Pinterest gaming poster.\n\nMain topic:\n${keyword}\n\nVisual style:\n${renderStyle}\n\nMood:\n${mood}\n\nLighting:\n${lighting}\n\nColor palette:\n${colors}\n\nComposition:\n${composition}\n\nTypography:\n${typography}\n\nCamera angle:\n${camera}\n\nMain character:\n${character}\n\nLayout:\n${usernameLayout}\n\nFeatured usernames:\n${usernameText}\n\nThe image should look like:\n- high CTR Pinterest content\n- viral gaming thumbnail\n- premium esports branding\n- modern gaming identity design\n- highly polished social media creative\n\nRequirements:\n- vertical 2:3 pinterest aspect ratio\n- extremely readable text\n- clean visual hierarchy\n- strong focal point\n- cinematic depth\n- modern esports aesthetic\n- ultra high detail\n- no blurry text\n- no watermark\n- no extra random words\n- polished professional composition\n\nBranding:\nInclude subtle TryhardNames branding at the bottom.\n\nStyle inspiration:\nPinterest viral gaming posters, esports thumbnails, gaming identity branding, modern streamer graphics.\n`.trim();\n\nreturn [\n  {\n    json: {\n      ...$json,\n\n      dalle: {\n        prompt,\n        size: '1024x1536',\n        quality: 'high',\n        style: 'vivid'\n      }\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        48
+      ],
+      "id": "f5530b65-698c-47ff-973b-d3b40737f322",
+      "name": "Build Dalle Prompt"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "model": "gpt-image-1",
+        "prompt": "={{$json.dalle.prompt}}",
+        "options": {
+          "size": "1024x1536"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        144,
+        -128
+      ],
+      "id": "e9bfa246-60c8-4bee-b139-faae8235c391",
+      "name": "Generate image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{'https://api.cloudinary.com/v1_1/' + $vars.CLOUDINARY_CLOUD_NAME + '/image/upload'}}",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "upload_preset",
+              "value": "={{$vars.CLOUDINARY_UPLOAD_PRESET}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        336,
+        -128
+      ],
+      "id": "8e93a9c2-91a1-47d2-93f8-784b4660181f",
+      "name": "Upload To Cloudinary"
+    },
+    {
+      "parameters": {
+        "jsCode": "function shuffle(arr) {\n  return [...arr]\n    .sort(() => Math.random() - 0.5);\n}\n\nconst usernames =\n  ($json.usernames || [])\n    .slice(0, 5);\n\nconst hashtags =\n  shuffle($json.hashtags || [])\n    .slice(0, 6);\n\nconst keyword =\n  $json.keyword || 'Gaming Usernames';\n\nconst title =\n  $json.title ||\n  `${keyword} | TryhardNames`;\n\nconst usernamePreview =\n  usernames.join(', ');\n\nconst ctaPool = [\n  'Find more usernames on TryhardNames.',\n  'Discover more gaming names instantly.',\n  'Get more tryhard usernames now.',\n  'Explore more gamer tags on TryhardNames.',\n  'Find your next gaming identity.'\n];\n\nconst cta =\n  ctaPool[\n    Math.floor(Math.random() * ctaPool.length)\n  ];\n\nconst descriptionTemplates = [\n\n  `Discover ${keyword.toLowerCase()} for competitive players and gamers. Examples include ${usernamePreview}. ${cta}`,\n\n  `Looking for ${keyword.toLowerCase()}? Try usernames like ${usernamePreview}. ${cta}`,\n\n  `${keyword} perfect for competitive gaming, ranked matches, and online identity inspiration. Featured names: ${usernamePreview}. ${cta}`,\n\n  `Unique ${keyword.toLowerCase()} curated for gamers, streamers, and esports players. Ideas: ${usernamePreview}. ${cta}`\n];\n\nconst description =\n  descriptionTemplates[\n    Math.floor(Math.random() * descriptionTemplates.length)\n  ];\n\nconst seo = {\n  pinterestTitle:\n    title.slice(0, 100),\n\n  pinterestDescription:\n    `${description}\\n\\n${hashtags.join(' ')}`.slice(0, 800),\n\n  hashtags,\n\n  keywordDensity: {\n    primary: keyword,\n    category: $json.category || null\n  },\n\n  engagementSignals: {\n    usernamesUsed: usernames.length,\n    hashtagsUsed: hashtags.length,\n    ctaIncluded: true\n  }\n};\n\nreturn [\n  {\n    json: {\n      ...$json,\n      seo\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        48
+      ],
+      "id": "5e8ede77-bee8-4b3a-a151-8470708e6b33",
+      "name": "Build Pinterest SEO"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        32
+      ],
+      "id": "ce7b6510-44d3-4e41-90e0-e455fe4db8a0",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://tryhardnames.com/api/v1/integrations/pinterest/publish-direct",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-TryhardNames-Automation-Secret",
+              "value": "={{$vars.PINTEREST_AUTOMATION_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"boardId\": \"={{$('Topic Rotation Engine').item.json.boardId}}\",\n  \"title\": \"={{$json.seo?.pinterestTitle || $json.title}}\",\n  \"description\": \"={{$json.seo?.pinterestDescription || `${$json.description}\\\\n\\\\n${($json.hashtags || []).join(' ')}`}}\",\n  \"imageUrl\": \"={{$json.secure_url}}\",\n  \"link\": \"={{$json.canonicalUrl}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        768,
+        32
+      ],
+      "id": "f433ba57-0409-4d2d-99b7-60a488d347c0",
+      "name": "Publish Direct"
+    },
+    {
+      "parameters": {
+        "jsCode": "const workflowData = $getWorkflowStaticData('global');\n\nconst topics = [\n  {\n    topic: 'gamer-names',\n    category: 'topic-hub',\n    stylePreset: 'competitive_identity',\n    weight: 10,\n    boardId: '<PINTEREST_BOARD_ID_GAMER_NAMES>'\n  },\n\n  {\n    topic: 'valorant-sweaty',\n    category: 'valorant',\n    stylePreset: 'dark_red_neon',\n    weight: 10,\n    boardId: '<PINTEREST_BOARD_ID_VALORANT_SWEATY>'\n  },\n\n  {\n    topic: 'valorant-usernames',\n    category: 'valorant',\n    stylePreset: 'cinematic_esports',\n    weight: 9,\n    boardId: '<PINTEREST_BOARD_ID_VALORANT_USERNAMES>'\n  },\n\n  {\n    topic: 'roblox-names',\n    category: 'roblox',\n    stylePreset: 'pastel_gaming',\n    weight: 8,\n    boardId: '<PINTEREST_BOARD_ID_ROBLOX_NAMES>'\n  },\n\n  {\n    topic: 'roblox-tryhard',\n    category: 'roblox',\n    stylePreset: 'pink_neon_competitive',\n    weight: 8,\n    boardId: '<PINTEREST_BOARD_ID_ROBLOX_TRYHARD>'\n  },\n\n  {\n    topic: 'fortnite-sweaty',\n    category: 'fortnite',\n    stylePreset: 'purple_gaming',\n    weight: 9,\n    boardId: '<PINTEREST_BOARD_ID_FORTNITE_SWEATY>'\n  },\n\n  {\n    topic: 'league-of-legends',\n    category: 'lol',\n    stylePreset: 'emerald_fantasy',\n    weight: 7,\n    boardId: '<PINTEREST_BOARD_ID_LEAGUE_OF_LEGENDS>'\n  },\n\n  {\n    topic: 'discord-usernames',\n    category: 'social',\n    stylePreset: 'modern_clean',\n    weight: 6,\n    boardId: '<PINTEREST_BOARD_ID_DISCORD_USERNAMES>'\n  }\n];\n\nconst avoidRepeatWindow = 4;\n\nif (!workflowData.previousTopics) {\n  workflowData.previousTopics = [];\n}\n\nconst recentTopics =\n  workflowData.previousTopics.slice(-avoidRepeatWindow);\n\nconst weightedPool = [];\n\nfor (const item of topics) {\n\n  const recentlyUsed =\n    recentTopics.includes(item.topic);\n\n  let effectiveWeight =\n    item.weight;\n\n  if (recentlyUsed) {\n    effectiveWeight =\n      Math.max(1, Math.floor(item.weight * 0.25));\n  }\n\n  for (let i = 0; i < effectiveWeight; i++) {\n    weightedPool.push(item);\n  }\n}\n\nconst selected =\n  weightedPool[\n    Math.floor(Math.random() * weightedPool.length)\n  ];\n\nworkflowData.previousTopics.push(selected.topic);\n\nif (workflowData.previousTopics.length > 20) {\n  workflowData.previousTopics =\n    workflowData.previousTopics.slice(-20);\n}\n\nconst seasonalKey =\n  new Date().toISOString().slice(0, 7);\n\nreturn [\n  {\n    json: {\n      topic: selected.topic,\n      category: selected.category,\n      stylePreset: selected.stylePreset,\n      boardId: selected.boardId,\n\n      rotationMeta: {\n        antiRepetition: true,\n        avoidRepeatWindow,\n        seasonalKey,\n        deterministicReady: true\n      },\n\n      generatedAt:\n        new Date().toISOString()\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        -112
+      ],
+      "id": "8ad0a69e-61a5-4caa-9852-faa5cf2c35a7",
+      "name": "Topic Rotation Engine"
+    },
+    {
+      "parameters": {
+        "jsCode": "const styleMap = {\n\n  dark_red_neon: {\n    lighting: [\n      'dark red neon cinematic lighting',\n      'aggressive tactical shadows',\n      'high contrast red esports glow'\n    ],\n\n    colors: [\n      'red and black',\n      'dark crimson neon',\n      'black tactical red'\n    ]\n  },\n\n  cinematic_esports: {\n    lighting: [\n      'cinematic esports lighting',\n      'blue rim lighting',\n      'high contrast competitive glow'\n    ],\n\n    colors: [\n      'blue esports neon',\n      'dark navy gaming',\n      'electric blue glow'\n    ]\n  },\n\n  pastel_gaming: {\n    lighting: [\n      'soft pastel gaming glow',\n      'pink ambient lighting',\n      'cute aesthetic neon'\n    ],\n\n    colors: [\n      'pink and blue',\n      'pastel cyber aesthetic',\n      'soft neon gradient'\n    ]\n  },\n\n  pink_neon_competitive: {\n    lighting: [\n      'pink competitive neon',\n      'purple gaming glow',\n      'vibrant streamer lighting'\n    ],\n\n    colors: [\n      'pink and purple',\n      'neon magenta',\n      'streamer aesthetic'\n    ]\n  },\n\n  emerald_fantasy: {\n    lighting: [\n      'emerald fantasy glow',\n      'mystical cinematic lighting',\n      'dark fantasy atmosphere'\n    ],\n\n    colors: [\n      'emerald green',\n      'dark fantasy teal',\n      'mystic green and black'\n    ]\n  },\n\n  modern_clean: {\n    lighting: [\n      'minimal modern lighting',\n      'clean soft shadows',\n      'bright futuristic lighting'\n    ],\n\n    colors: [\n      'white and blue',\n      'minimal grayscale',\n      'clean discord aesthetic'\n    ]\n  },\n\n  purple_gaming: {\n    lighting: [\n      'purple gaming neon',\n      'competitive streamer lighting',\n      'dark violet glow'\n    ],\n\n    colors: [\n      'purple and black',\n      'dark violet cyberpunk',\n      'streamer purple neon'\n    ]\n  }\n};\n\nconst compositions = [\n  'vertical pinterest poster composition',\n  'gaming thumbnail layout',\n  'large centered title with side character',\n  'split layout with usernames on right side',\n  'minimal clean centered layout',\n  'cinematic esports poster composition',\n  'dynamic diagonal action composition'\n];\n\nconst typography = [\n  'bold esports typography',\n  'minimal futuristic typography',\n  'glowing neon title text',\n  'stacked gaming title',\n  'competitive thumbnail typography'\n];\n\nconst cameraAngles = [\n  'close-up portrait',\n  'dynamic action angle',\n  'front-facing symmetrical portrait',\n  'low-angle cinematic shot',\n  'mid-shot gaming poster'\n];\n\nfunction randomItem(arr) {\n  return arr[\n    Math.floor(Math.random() * arr.length)\n  ];\n}\n\nconst preset =\n  $json.stylePreset || 'cinematic_esports';\n\nconst selectedStyle =\n  styleMap[preset] || styleMap.cinematic_esports;\n\nconst visualMutation = {\n\n  lighting:\n    randomItem(selectedStyle.lighting),\n\n  colors:\n    randomItem(selectedStyle.colors),\n\n  composition:\n    randomItem(compositions),\n\n  typography:\n    randomItem(typography),\n\n  camera:\n    randomItem(cameraAngles),\n\n  renderStyle:\n    Math.random() > 0.5\n      ? 'ultra detailed digital art'\n      : 'stylized esports illustration',\n\n  mood:\n    Math.random() > 0.5\n      ? 'competitive gaming energy'\n      : 'viral pinterest gaming design'\n};\n\nreturn [\n  {\n    json: {\n      ...$json,\n      visualMutation\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        48
+      ],
+      "id": "e5150873-1b87-4a33-9c4b-a497ec23bed0",
+      "name": "Visual Mutation Engine"
+    }
+  ],
+  "connections": {
+    "Build Dalle Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate image",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "GET Pinterest Content": {
+      "main": [
+        [
+          {
+            "node": "Visual Mutation Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate image": {
+      "main": [
+        [
+          {
+            "node": "Upload To Cloudinary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload To Cloudinary": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Pinterest SEO": {
+      "main": [
+        [
+          {
+            "node": "Build Dalle Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Publish Direct",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Topic Rotation Engine": {
+      "main": [
+        [
+          {
+            "node": "GET Pinterest Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visual Mutation Engine": {
+      "main": [
+        [
+          {
+            "node": "Build Pinterest SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Topic Rotation Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "tags": []
+}
