@@ -20,6 +20,18 @@ Expected flow:
 
 `Manual Trigger -> Topic Rotation Engine -> GET Pinterest Content -> Visual Mutation Engine -> Build Pinterest SEO -> Build Dalle Prompt -> Generate image -> Upload To Cloudinary -> Merge -> Publish Direct`
 
+## Content API v2 Migration Proposal
+
+The checked-in workflow still calls the backwards-compatible v1 endpoint:
+
+`GET /api/v1/pinterest/content`
+
+MKT-02 adds a richer generated campaign endpoint:
+
+`GET /api/v1/pinterest/content-v2`
+
+Do not edit the importable workflow JSON until the n8n flow is migrated and smoked in a duplicate workflow. Use `MKT02_CONTENT_V2_MIGRATION.md` for the proposed node-by-node migration plan.
+
 ## n8n Configuration
 
 Configure these in n8n before any run:
