@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -131,7 +132,7 @@ describe('RM-34 osu! Public Profile Trust-Safety QA', () => {
     assert.doesNotMatch(publicProfileSource, /OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY|access_token|refresh_token|client_secret/i);
     assert.doesNotMatch(publicProfileSource, /token_ciphertext|provider_token|external_account_id|linked_provider_account_id|owner_id|passport_id|proof_id/i);
     assert.doesNotMatch(publicProfileSource, /osuRank|osuRanking|rankedScore|performancePoints|osuPp|ppScore|matchHistory|liveTracker|bestPlays|beatmap/i);
-    assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(webSource), /osu\.ppy\.sh/);
     assert.doesNotMatch(appSource, /path=["']\/cosmetics|path=["']\/store|path=["']\/checkout|path=["']\/billing/);
     assert.doesNotMatch(appSource, /path=["'][^"']*osu/i);
   });

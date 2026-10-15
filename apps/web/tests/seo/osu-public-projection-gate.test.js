@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -138,7 +139,7 @@ describe('RM-31 osu! Private Proof Publish Policy / Public Projection Gate', () 
   it('keeps forbidden browser and product surfaces out of RM-31 source', () => {
     const rm31ProjectionSource = `${policySource}\n${publicationPolicySource}\n${publicProjectionSource}\n${repositorySource}`;
 
-    assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(webSource), /osu\.ppy\.sh/);
     assert.doesNotMatch(rm31ProjectionSource, /OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY|access_token|refresh_token|client_secret/i);
     assert.doesNotMatch(appSource, /path=["']\/cosmetics|path=["']\/store|path=["']\/checkout|path=["']\/billing/);
     assert.doesNotMatch(webSource, /osuRank|osuRanking|rankedScore|performancePoints|osuPp|ppScore|matchHistory|liveTracker|bestPlays|beatmap/i);

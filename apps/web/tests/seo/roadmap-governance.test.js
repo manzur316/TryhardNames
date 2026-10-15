@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -127,7 +128,7 @@ describe('Roadmap Governance and Provider Expansion Plan', () => {
   it('keeps runtime source free of provider activation, cosmetics route, and payment/store activation', () => {
     assert.doesNotMatch(runtimeSource, /api\.riotgames\.com|discord\.com\/api|osu\.ppy\.sh\/api/i);
     assert.doesNotMatch(runtimeSource, /steamcommunity\.com\/openid|api\.steampowered\.com|developer\.clashofclans\.com/i);
-    assert.doesNotMatch(runtimeSource, /oauth\/authorize|authorize\?/i);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(runtimeSource), /oauth\/authorize|authorize\?/i);
     assert.doesNotMatch(appSource, /path=["']\/cosmetics["']/);
     assert.doesNotMatch(appSource, /path=["']\/store["']|path=["']\/checkout["']|path=["']\/billing["']/);
     assert.doesNotMatch(packageJson.dependencies ? JSON.stringify(packageJson.dependencies) : '', /Stripe|MercadoPago/i);

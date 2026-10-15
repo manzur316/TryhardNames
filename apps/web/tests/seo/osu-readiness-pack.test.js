@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -149,7 +150,7 @@ describe('RM-26 osu! Readiness Pack', () => {
 
   it('keeps runtime source free of osu! API, OAuth, callback, env var, token, migration, and payment activation', () => {
     assert.doesNotMatch(runtimeSource, /osu\.ppy\.sh\/api/i);
-    assert.doesNotMatch(runtimeSource, /oauth\/authorize|authorize\?/i);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(runtimeSource), /oauth\/authorize|authorize\?/i);
     assert.doesNotMatch(runtimeSource, /\/auth\/osu\/callback/i);
     assert.doesNotMatch(runtimeSource, /\bOsuProvider\(|class OsuProvider\b|function OsuProvider\b/);
     assert.doesNotMatch(runtimeSource, /osuAccessToken|osuRefreshToken|providerAccessToken|providerRefreshToken/i);

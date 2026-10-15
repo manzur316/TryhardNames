@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -144,7 +145,7 @@ describe('RM-25 Provider Expansion Readiness Matrix', () => {
 
   it('keeps runtime source free of provider API, OAuth, callback, env var, route, and payment activation', () => {
     assert.doesNotMatch(runtimeSource, /api\.riotgames\.com|discord\.com\/api|osu\.ppy\.sh\/api|steamcommunity\.com\/openid|api\.steampowered\.com|developer\.clashofclans\.com/i);
-    assert.doesNotMatch(runtimeSource, /oauth\/authorize|authorize\?/i);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(runtimeSource), /oauth\/authorize|authorize\?/i);
     assert.doesNotMatch(runtimeSource, /\/auth\/riot\/callback|\/auth\/discord\/callback|\/auth\/osu\/callback|\/auth\/steam\/callback|\/auth\/clash\/callback/i);
     assert.doesNotMatch(runtimeSource, /RiotProvider\(|LeagueOfLegendsAdapter\(|DiscordProvider\(|\bOsuProvider\(|SteamProvider\(|SupercellProvider\(/);
     assert.doesNotMatch(runtimeSource, /riotAccessToken|riotRefreshToken|discordAccessToken|discordRefreshToken|osuAccessToken|osuRefreshToken|steamAccessToken|steamRefreshToken|clashAccessToken|clashRefreshToken|providerAccessToken|providerRefreshToken/i);

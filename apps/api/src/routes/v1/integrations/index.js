@@ -4,6 +4,7 @@ import discord from '../../../integrations/discord/routes.js';
 import openai from '../../../integrations/openai/routes.js';
 import riot from '../../../integrations/riot/routes.js';
 import osu from '../../../integrations/osu/routes.js';
+import osuLinking from '../../../integrations/osu-linking/runtime.js';
 import roblox from '../../../integrations/roblox/runtime.js';
 
 const r = Router();
@@ -12,6 +13,7 @@ r.use('/pinterest', pinterest);
 r.use('/discord', discord);
 r.use('/openai', openai);
 r.use('/riot', riot);
+r.use('/osu', osuLinking);
 r.use('/osu', osu);
 r.use('/roblox', roblox);
 

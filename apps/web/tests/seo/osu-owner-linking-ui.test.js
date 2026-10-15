@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -86,7 +87,7 @@ describe('RM-30 osu! Owner Linking UI Hardening', () => {
     assert.match(osuRepositorySource, /\/unlink/);
     assert.match(osuRepositorySource, /Authorization: `Bearer \$\{options\.accessToken\}`/);
     assert.match(osuCardSource, /window\.location\.assign\(authorizeUrl\)/);
-    assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(webSource), /osu\.ppy\.sh/);
   });
 
   it('keeps disabled and revoke-safe UI states explicit', () => {

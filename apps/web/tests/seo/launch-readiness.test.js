@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -141,7 +142,7 @@ describe('RM-24 Launch Readiness', () => {
   it('keeps runtime free of provider activation, OAuth, cosmetics route, store, and payments', () => {
     assert.doesNotMatch(runtimeSource, /api\.riotgames\.com|discord\.com\/api|osu\.ppy\.sh\/api/i);
     assert.doesNotMatch(runtimeSource, /steamcommunity\.com\/openid|api\.steampowered\.com|developer\.clashofclans\.com/i);
-    assert.doesNotMatch(runtimeSource, /oauth\/authorize|authorize\?/i);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(runtimeSource), /oauth\/authorize|authorize\?/i);
     assert.doesNotMatch(runtimeSource, /VITE_.*RIOT|VITE_.*DISCORD|VITE_.*OSU|VITE_.*STEAM|VITE_.*CLASH/i);
     assert.doesNotMatch(appSource, /path=["']\/cosmetics["']/);
     assert.doesNotMatch(appSource, /path=["']\/store["']|path=["']\/checkout["']|path=["']\/billing["']/);

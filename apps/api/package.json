@@ -8,7 +8,9 @@
     "start": "node src/main.js",
     "dev": "node src/main.js",
     "lint": "eslint . --quiet",
-    "test": "node --test tests/apiResponse.test.js tests/osuRuntime.test.js tests/osuRuntimeSmoke.test.js tests/osuRuntimeVisibility.test.js tests/trustProxy.test.js tests/sourceGuards.test.js tests/pinterestAutomation.test.js tests/pinterestContentV2.test.js tests/robloxLinking.test.js tests/robloxClient.test.js",
+    "test": "node --test tests/apiResponse.test.js tests/osuRuntime.test.js tests/osuRuntimeSmoke.test.js tests/osuRuntimeVisibility.test.js tests/trustProxy.test.js tests/sourceGuards.test.js tests/pinterestAutomation.test.js tests/pinterestContentV2.test.js tests/robloxLinking.test.js tests/robloxClient.test.js tests/osuLinking.test.js tests/osuLinkingClient.test.js",
+    "test:osu:linking": "node --test tests/osuLinking.test.js tests/osuLinkingClient.test.js",
+    "test:osu:db": "node scripts/testOsuLinkingDatabase.js",
     "test:roblox:linking": "node --test tests/robloxLinking.test.js tests/robloxClient.test.js",
     "test:roblox:db": "node scripts/testRobloxDatabase.js",
     "dev:roblox:linking": "node scripts/runRobloxLinking.js --local-review"

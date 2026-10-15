@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -105,7 +106,7 @@ describe('RM-32 osu! Owner Proof Visibility Controls', () => {
   });
 
   it('does not add browser secrets, direct osu! calls, public routes, commerce, or tracker features', () => {
-    assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(webSource), /osu\.ppy\.sh/);
     assertNoProviderSecrets(webSource);
     assert.doesNotMatch(osuOwnerVisibilitySource, /external_account_id|owner_id|rawPayload|metadata_safe|token_ciphertext|provider_token/i);
     assert.doesNotMatch(osuCardSource, /console\.(log|warn|error)|localStorage|sessionStorage/);

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { withoutReviewedOsuRedirectGuard } from './provider-secret-guard.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
@@ -125,7 +126,7 @@ describe('RM-35 osu! Production Readiness / Staging Go-No-Go', () => {
 
   it('keeps forbidden browser and public route surfaces out of RM-35 source', () => {
     assertNoProviderSecrets(webSource);
-    assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
+    assert.doesNotMatch(withoutReviewedOsuRedirectGuard(webSource), /osu\.ppy\.sh/);
     assert.doesNotMatch(webSource, /osuRank|osuRanking|rankedScore|performancePoints|osuPp|ppScore|matchHistory|liveTracker|bestPlays|beatmap/i);
     assert.doesNotMatch(appSource, /path=["']\/cosmetics|path=["']\/store|path=["']\/checkout|path=["']\/billing/);
     assert.doesNotMatch(appSource, /path=["'][^"']*osu/i);
