@@ -47,11 +47,11 @@ export default function PrivateOsuAccountCard({ profile, busy, onUnlink }) {
       <summary>Connection details<ChevronDown size={16} aria-hidden="true" /></summary>
       <div className="gp-osu-card-details-body">
         <dl><div><dt>Source</dt><dd>osu!</dd></div><div><dt>Verification</dt><dd>Account ownership</dd></div>{card.verifiedAt && <div><dt>Verified</dt><dd><time dateTime={card.verifiedAt}>{displayDate(card.verifiedAt)}</time></dd></div>}<div><dt>Visibility</dt><dd>Private / Not published</dd></div></dl>
-        {confirmUnlink ? <div className="gp-osu-card-confirm" role="group" aria-label="Confirm unlink">
+        {onUnlink && (confirmUnlink ? <div className="gp-osu-card-confirm" role="group" aria-label="Confirm unlink">
           <p>Unlink {card.username} from this Passport?</p>
           <button className="gp-button" type="button" disabled={busy} onClick={() => setConfirmUnlink(false)}>Cancel</button>
           <button className="gp-button gp-osu-card-unlink" type="button" disabled={busy} onClick={() => { setConfirmUnlink(false); onUnlink(profile.id); }}><Unplug size={15} aria-hidden="true" />Confirm unlink</button>
-        </div> : <button className="gp-text-button gp-osu-card-unlink" type="button" disabled={busy} onClick={() => setConfirmUnlink(true)}><Unplug size={15} aria-hidden="true" />Unlink account</button>}
+        </div> : <button className="gp-text-button gp-osu-card-unlink" type="button" disabled={busy} onClick={() => setConfirmUnlink(true)}><Unplug size={15} aria-hidden="true" />Unlink account</button>)}
       </div>
     </details>
   </article>;

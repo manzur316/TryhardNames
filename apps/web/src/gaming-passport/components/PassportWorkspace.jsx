@@ -10,6 +10,7 @@ import PassportIdentityScene from './PassportIdentityScene.jsx';
 import AvatarFramePicker from './AvatarFramePicker.jsx';
 import BackgroundPicker from './BackgroundPicker.jsx';
 import PersistentRobloxConnections from './PersistentRobloxConnections.jsx';
+import SavedOsuConnections from './SavedOsuConnections.jsx';
 import { isPrivateOsuProbeEnabled } from '../data/privateOsuProbe.js';
 import { isPrivateOsuPersistenceEnabled } from '../data/privateOsuPersistence.js';
 import { isPrivateRobloxProbeEnabled } from '../data/privateRobloxProbe.js';
@@ -166,7 +167,7 @@ function OwnerWorkspace({ auth }) {
       {message && <p role="status" className="gp-feedback"><Check size={16} />{message}</p>}
       {error && <div role="alert" className="gp-feedback gp-error">{error}{ownerId && !passport && <button className="gp-button" onClick={() => setRetry((value) => value + 1)}>Retry</button>}</div>}
 
-      <div className="gp-identity-banner" ref={sceneRef}><PassportIdentityScene alias={form.alias} avatarUrl={form.avatarUrl} bio={form.bioShort} scene={form.sceneConfig} privatePreview localOnly={!ownerId} isPublished={passport?.status === 'published'} gameHighlights={ownerId && passport ? [...(showOsuPersistence ? gameHighlights : []), ...linkedRobloxHighlights] : []} probeHighlights={showRobloxProbe && robloxHighlight ? [robloxHighlight] : []} /></div>
+      <div className="gp-identity-banner" ref={sceneRef}><PassportIdentityScene alias={form.alias} avatarUrl={form.avatarUrl} bio={form.bioShort} scene={form.sceneConfig} privatePreview localOnly={!ownerId} isPublished={passport?.status === 'published'} gameHighlights={ownerId && passport ? [...gameHighlights, ...linkedRobloxHighlights] : []} probeHighlights={showRobloxProbe && robloxHighlight ? [robloxHighlight] : []} /></div>
 
       <div className={`gp-editor-layout ${mode === 'preview' ? 'gp-preview-mode' : ''}`}>
         {mode === 'edit' && <aside className="gp-inspector" aria-label="Passport editor">
@@ -208,10 +209,11 @@ function OwnerWorkspace({ auth }) {
         </aside>}
 
         <div className="gp-canvas" id="gp-linked-games" tabIndex={-1}>
+          {ownerId && passport && !showOsuPersistence && !showOsuProbe && <SavedOsuConnections key={passport.id} ownerId={ownerId} passportId={passport.id} onHighlightsChange={setGameHighlights} />}
           {ownerId && passport && !showRobloxProbe && <PersistentRobloxConnections ownerId={ownerId} onHighlightsChange={setLinkedRobloxHighlights} onAvailabilityChange={setRobloxAvailable} />}
           {showRobloxProbe && PrivateRobloxProbe && <Suspense fallback={<p role="status">Loading private Roblox test...</p>}><PrivateRobloxProbe onHighlightChange={setRobloxHighlight} /></Suspense>}
           {showOsuPersistence && PersistentOsuConnections ? <Suspense fallback={<p role="status">Loading private osu! accounts...</p>}><PersistentOsuConnections auth={auth} passportReady={Boolean(passport)} onHighlightsChange={setGameHighlights} /></Suspense>
-            : showOsuProbe && PrivateOsuProbe ? <Suspense fallback={<p role="status">Loading private osu! test...</p>}><PrivateOsuProbe /></Suspense> : showRobloxProbe || robloxAvailable ? null : <section className="gp-owner-connections">
+            : showOsuProbe && PrivateOsuProbe ? <Suspense fallback={<p role="status">Loading private osu! test...</p>}><PrivateOsuProbe /></Suspense> : showRobloxProbe || robloxAvailable || gameHighlights.length ? null : <section className="gp-owner-connections">
             <div className="gp-section-heading"><h2>My games</h2><LockKeyhole size={16} aria-hidden="true" /></div>
             <div className="gp-connections-content"><Gamepad2 size={30} aria-hidden="true" /><div><h3>Your story starts with you.</h3><p>{ownerId ? 'No game accounts are displayed in this preview.' : 'This local draft contains your presentation only. No accounts or achievements are verified.'}</p></div>
               {auth.isConfigured && !ownerId && <Link className="gp-button" to="/sign-in?returnTo=%2Fgaming-passport">Sign in<ArrowRight size={15} /></Link>}

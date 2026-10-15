@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { readWorkspaceDraft, removeLegacyPresentationParams, saveWorkspaceDraft, WORKSPACE_DRAFT_KEY } from '../../src/gaming-passport/data/workspaceDraft.js';
 import { buildPrivateOsuCard } from '../../src/gaming-passport/data/privateOsuCard.js';
+import { getSavedOsuConnections, mapSavedOsuConnection } from '../../src/gaming-passport/data/savedOsuConnections.js';
 import { buildPrivateGameHighlights } from '../../src/gaming-passport/data/privateGameHighlights.js';
 import { GAME_BADGES, getGameBadge } from '../../src/gaming-passport/data/gameBadges.js';
 import { PROFILE_BACKGROUND_OPTIONS, resolveProfileBackground, sanitizeProfileBackgroundId } from '../../src/gaming-passport/data/profileBackgrounds.js';
@@ -13,6 +14,75 @@ function storage(initial = {}) {
   const values = new Map(Object.entries(initial));
   return { getItem: (key) => values.get(key) || null, setItem: (key, value) => values.set(key, value) };
 }
+
+const savedOsuRow = {
+  id: 'saved-account', owner_id: 'owner', passport_id: 'passport', provider: 'osu',
+  external_account_id: '12345', status: 'verified', visibility: 'private', revoked_at: null,
+  verified_at: '2026-10-15T00:00:00Z', last_synced_at: '2026-10-15T00:00:00Z',
+  metadata_safe: { normalizerVersion: 'osu.private.v1', snapshot: {
+    username: 'Saved player', mode: 'osu', pp: 2.83, globalRank: 3050088,
+    countryRank: null, accuracyPercent: 92.5, medals: 0, arbitrary: 'excluded',
+  } },
+};
+
+test('saved osu! owner read restores card and header without a local OAuth service', async () => {
+  const calls = [];
+  const query = {};
+  for (const method of ['select', 'eq', 'in', 'is', 'order']) query[method] = (...args) => {
+    calls.push([method, ...args]); return query;
+  };
+  query.abortSignal = async () => ({ data: [savedOsuRow, { ...savedOsuRow, owner_id: 'other' },
+    { ...savedOsuRow, passport_id: 'other' }, { ...savedOsuRow, status: 'revoked' }], error: null });
+  const client = { from(table) { assert.equal(table, 'linked_provider_accounts'); return query; } };
+  const saved = await getSavedOsuConnections(client, { access_token: 'test-only', user: { id: 'owner' } }, 'passport', new AbortController().signal);
+  assert.equal(saved.length, 1);
+  assert.equal(buildPrivateOsuCard(saved[0]).pp, '2.83');
+  assert.equal(buildPrivateGameHighlights(saved)[0].game, 'osu!');
+  assert.ok(calls.some((call) => JSON.stringify(call) === JSON.stringify(['eq', 'owner_id', 'owner'])));
+  assert.ok(calls.some((call) => JSON.stringify(call) === JSON.stringify(['eq', 'passport_id', 'passport'])));
+  assert.ok(calls.some((call) => JSON.stringify(call) === JSON.stringify(['eq', 'provider', 'osu'])));
+  assert.ok(calls.some((call) => JSON.stringify(call) === JSON.stringify(['is', 'revoked_at', null])));
+  for (const field of ['owner_id', 'passport_id', 'metadata_safe', 'external_account_id', 'arbitrary']) assert.equal(saved[0][field], undefined);
+});
+
+test('saved osu! reads require an owner session and propagate load failures', async () => {
+  const client = { from() { throw new Error('must not query'); } };
+  for (const session of [null, { user: { id: 'owner' } }, { access_token: 'test-only' }]) {
+    await assert.rejects(() => getSavedOsuConnections(client, session, 'passport'), /sign_in_required/);
+  }
+  const query = {};
+  for (const method of ['select', 'eq', 'in', 'is', 'order']) query[method] = () => query;
+  query.abortSignal = async () => ({ data: null, error: new Error('read failed') });
+  await assert.rejects(() => getSavedOsuConnections({ from: () => query },
+    { access_token: 'test-only', user: { id: 'owner' } }, 'passport'), /read failed/);
+});
+
+test('saved osu! display fails closed for revoked, unsupported and unverified rows', () => {
+  for (const patch of [{ status: 'revoked' }, { status: 'pending' }, { status: 'failed' },
+    { visibility: 'public' }, { provider: 'roblox' }, { revoked_at: '2026-10-15T00:00:00Z' },
+    { external_account_id: '123?bad' }, { verified_at: null }, { metadata_safe: {} }]) {
+    assert.equal(mapSavedOsuConnection({ ...savedOsuRow, ...patch }), null);
+  }
+  assert.equal(mapSavedOsuConnection(null), null);
+  const fresh = mapSavedOsuConnection(savedOsuRow, Date.parse('2026-10-15T01:00:00Z'));
+  assert.equal(fresh.status, 'verified');
+  assert.equal(fresh.avatarUrl, 'https://a.ppy.sh/12345');
+  assert.equal(mapSavedOsuConnection(savedOsuRow, Date.parse('2026-10-16T00:00:00Z')).status, 'stale');
+});
+
+test('production renders saved osu! independently of development linking and clears stale requests', () => {
+  const source = readFileSync(new URL('../../src/gaming-passport/components/PassportWorkspace.jsx', import.meta.url), 'utf8');
+  assert.match(source, /import SavedOsuConnections from/);
+  assert.match(source, /!showOsuPersistence && !showOsuProbe && <SavedOsuConnections/);
+  assert.match(source, /\[\.\.\.gameHighlights, \.\.\.linkedRobloxHighlights\]/);
+  const component = readFileSync(new URL('../../src/gaming-passport/components/SavedOsuConnections.jsx', import.meta.url), 'utf8');
+  assert.match(component, /requestVersion !== version/);
+  assert.match(component, /controller\?\.abort\(\)/);
+  assert.match(component, /onHighlightsChange\(\[\]\)/);
+  assert.doesNotMatch(component, /localhost|\.rpc\(|localStorage|requestOsuPersistence/);
+  const card = readFileSync(new URL('../../src/gaming-passport/components/PrivateOsuAccountCard.jsx', import.meta.url), 'utf8');
+  assert.match(card, /onUnlink && \(confirmUnlink/);
+});
 
 test('legacy Identity Kit alias and bio become presentation, never verified data', () => {
   const old = JSON.stringify({ primaryAlias: 'Nexor', bioLine: 'My story', rank: 'diamond', ownerId: 'other' });
