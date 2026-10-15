@@ -2,7 +2,7 @@ import React from 'react';
 import SeoHead from '@/seo/SeoHead.jsx';
 
 const PrivacyPolicyPage = () => {
-  const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const lastUpdated = 'October 14, 2026';
 
   return (
     <>
@@ -57,8 +57,30 @@ const PrivacyPolicyPage = () => {
               <li>Provider tokens will stay server-side when implemented.</li>
               <li>Public pages will show only approved/allowlisted fields.</li>
               <li>We do not sell Riot data, use hidden player data, or put Riot data behind a paywall.</li>
-              <li>Unlink/revoke is planned before provider launch and is not currently available.</li>
+              <li>Unlink/revoke for future providers is planned before their launch.</li>
             </ul>
+            <h3 className="text-xl font-bold text-dark-50 mt-6 mb-3">Roblox private linking test</h3>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              Roblox linking is currently restricted to approved testers. After you authorize Roblox with the
+              openid and profile permissions, we receive your Roblox user ID, username, display name, avatar URL,
+              and account creation date when supplied. We use these fields only to verify account ownership and
+              display your linked identity in your private Passport. We do not request your Roblox password,
+              Robux balance, purchase history, or a cross-game competitive ranking.
+            </p>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              Authorization tokens are handled only on our server, are not saved in the Passport database, and
+              the Roblox refresh token is revoked after verification. You then confirm the link in TryhardNames.
+              The ownership badge records verification at that time; it does not represent ongoing authorization.
+              An encrypted, HTTP-only security cookie and a temporary server record bind this process to your
+              signed-in account. Attempts expire after 10 minutes; temporary profile data is cleared on completion,
+              cancellation, unlinking, or subsequent expired-attempt cleanup.
+            </p>
+            <p className="text-dark-300 leading-relaxed">
+              Linked Roblox profile fields remain private and are not sold or used for advertising. Unlinking
+              removes the displayed profile and clears its stored profile snapshot. Revoked identifiers and
+              verification records remain to prevent reassignment and abuse. For deletion requests, use the
+              contact details below. Roblox linking does not publish your Passport or authorize future access.
+            </p>
           </section>
 
           <section>

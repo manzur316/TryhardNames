@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
+import { assertNoProviderSecrets } from './provider-secret-guard.js';
 
 const readWeb = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const readRepo = (path) => readFileSync(new URL(`../../../../${path}`, import.meta.url), 'utf8');
@@ -53,12 +54,12 @@ const roadmapDocs = [
 const packageJson = JSON.parse(readWeb('package.json'));
 
 describe('RM-30 osu! Owner Linking UI Hardening', () => {
-  it('adds owner-only account UI docs and wires the private card into /account', () => {
+  it('preserves historical linking docs but directs account to the unified private workspace', () => {
     assert.equal(existsSync(repoPath('docs/product/OSU_OWNER_LINKING_UI_HARDENING.md')), true);
     assert.equal(existsSync(repoPath('docs/product/RM30_OSU_OWNER_LINKING_UI_SCOPE.md')), true);
-    assert.match(accountPageSource, /OsuProviderLinkingCard/);
-    assert.match(accountPageSource, /passport=\{passport\}/);
-    assert.match(accountPageSource, /session=\{auth\.session\}/);
+    assert.doesNotMatch(accountPageSource, /OsuProviderLinkingCard/);
+    assert.match(accountPageSource, /to="\/gaming-passport"/);
+    assert.match(readWeb('src/gaming-passport/components/PassportWorkspace.jsx'), /<PersistentOsuConnections auth=\{auth\} passportReady=\{Boolean\(passport\)\}/);
     assert.match(osuCardSource, /Private owner connection/);
     assert.match(osuCardSource, /Connect osu!/);
     assert.match(osuCardSource, /Disconnect osu!/);
@@ -101,7 +102,7 @@ describe('RM-30 osu! Owner Linking UI Hardening', () => {
   });
 
   it('does not expose browser secrets, provider tokens, raw metadata, or internal provider identifiers', () => {
-    assert.doesNotMatch(webSource, /OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY|access_token|refresh_token|client_secret/);
+    assertNoProviderSecrets(webSource);
     assert.doesNotMatch(osuPrivateUiSource, /external_account_id|externalAccountId|owner_id|ownerId|rawPayload|metadata_safe|metadataSafe|token_ciphertext|provider_token/i);
     assert.doesNotMatch(osuCardSource, /console\.(log|warn|error)|localStorage|sessionStorage/);
     assert.doesNotMatch(osuRepositorySource, /console\.(log|warn|error)|localStorage|sessionStorage/);

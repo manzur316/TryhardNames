@@ -79,8 +79,7 @@ export const FavoritesProvider = ({ children }) => {
       }
 
       loadLocalFavorites();
-    } catch (error) {
-      console.error('Error loading favorites:', error);
+    } catch {
       loadLocalFavorites({
         mode: 'local-fallback',
         error: 'Saved names are stored locally on this device until account sync is available.',
@@ -198,7 +197,7 @@ export const FavoritesProvider = ({ children }) => {
     const removeKey = favoriteRecordKey(favToRemove);
     const nextFavorites = favorites.filter((fav) => favoriteRecordKey(fav) !== removeKey);
     setFavorites(nextFavorites);
-    persistNamesIfChanged(nextFavorites.map((fav) => fav?.name).filter(Boolean), { mirrorLegacy: false });
+    persistNamesIfChanged(nextFavorites.map((fav) => fav?.name).filter(Boolean));
 
     if (auth.session?.user?.id) {
       try {
@@ -240,7 +239,7 @@ export const FavoritesProvider = ({ children }) => {
   const clearFavorites = useCallback(async () => {
     const currentFavs = [...favorites];
     setFavorites([]);
-    persistNamesIfChanged([], { mirrorLegacy: false });
+    persistNamesIfChanged([]);
     try {
       localStorage.removeItem('tryhard_favorites');
     } catch {

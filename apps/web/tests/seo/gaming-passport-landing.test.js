@@ -5,12 +5,14 @@ import { describe, it } from 'node:test';
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 const pageSource = read('src/pages/GamingPassportPage.jsx');
+const workspaceSource = read('src/gaming-passport/components/PassportWorkspace.jsx');
+const workspaceStyles = read('src/gaming-passport/passport.css');
 const appSource = read('src/App.jsx');
 const navigationSource = read('src/core/components/Navigation.jsx');
 const routeCatalogSource = read('src/core/routing/routeCatalog.js');
 const signInSource = read('src/pages/auth/SignInPage.jsx');
 
-describe('Gaming Passport Riot review landing', () => {
+describe('Unified Gaming Passport workspace and policy', () => {
   it('registers /gaming-passport as a public app route', () => {
     assert.match(appSource, /path="\/gaming-passport"/);
     assert.match(routeCatalogSource, /'\/gaming-passport'/);
@@ -43,19 +45,20 @@ describe('Gaming Passport Riot review landing', () => {
     assert.match(pageSource, /bg-slate-50/);
     assert.match(pageSource, /dark:bg-slate-950/);
     assert.match(pageSource, /text-slate-950 dark:text-white/);
-    assert.match(pageSource, /border-slate-200\/80 bg-white\/80/);
-    assert.match(pageSource, /dark:border-white\/10 dark:bg-white\/\[0\.035\]/);
-    assert.match(pageSource, /border-slate-300[\s\S]*bg-white[\s\S]*text-slate-700/);
-    assert.match(pageSource, /dark:border-white\/15 dark:bg-white\/\[0\.04\] dark:text-slate-100/);
+    assert.match(workspaceStyles, /--gp-panel: #fff/);
+    assert.match(workspaceStyles, /\.dark \.gp-workspace/);
+    assert.match(workspaceStyles, /--gp-panel: #15181d/);
+    assert.match(workspaceStyles, /background: var\(--gp-input\)/);
+    assert.match(workspaceStyles, /color: var\(--gp-text\)/);
   });
 
-  it('keeps light-mode accent icons legible with pastel chips', () => {
-    assert.match(pageSource, /bg-cyan-50/);
-    assert.match(pageSource, /dark:bg-cyan-300\/10/);
-    assert.match(pageSource, /bg-emerald-50/);
-    assert.match(pageSource, /dark:bg-emerald-300\/10/);
-    assert.match(pageSource, /bg-violet-50/);
-    assert.match(pageSource, /dark:bg-violet-300\/10/);
+  it('uses accessible, labeled swatches and a single shared editor', () => {
+    assert.match(pageSource, /<PassportWorkspace/);
+    assert.match(workspaceSource, /aria-pressed=\{form.sceneConfig.accent === color\}/);
+    assert.match(workspaceSource, /aria-labelledby="gp-accent-label"/);
+    assert.match(workspaceStyles, /color: #141518/);
+    assert.match(workspaceStyles, /:focus-visible/);
+    assert.doesNotMatch(navigationSource, /to="\/identity-kit"/);
   });
 
   it('keeps Parent Auth and future linked providers separate', () => {

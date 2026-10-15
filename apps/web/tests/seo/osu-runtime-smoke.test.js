@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
+import { assertNoProviderSecrets } from './provider-secret-guard.js';
 
 const readWeb = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const readRepo = (path) => readFileSync(new URL(`../../../../${path}`, import.meta.url), 'utf8');
@@ -115,7 +116,7 @@ describe('RM-28/RM-29 osu! Runtime Smoke / Owner Linking QA', () => {
     assert.match(apiOsuSource, /source_key: PROFILE_LINKED_SOURCE_KEY/);
     assert.match(supabaseSource, /provider_token_vault_no_ciphertext_in_pr16/);
     assert.doesNotMatch(supabaseSource, /drop constraint provider_token_vault_no_ciphertext_in_pr16/i);
-    assert.doesNotMatch(webSource, /access_token|refresh_token/i);
+    assertNoProviderSecrets(webSource);
     assert.doesNotMatch(webSource, /import\.meta\.env\.(OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY)|process\.env\.(OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY)/i);
   });
 

@@ -154,7 +154,7 @@ export default function PrivatePassportEditor({
         </form>
 
         <div className="space-y-5">
-          <PrivatePassportPreview form={{ ...form, sceneConfig }} isLoading={isDraftLoading} />
+          <PrivatePassportPreview form={{ ...form, sceneConfig }} isLoading={isDraftLoading} isPublished={passport?.status === 'published'} />
           <PassportCompletionChecklist
             form={{ ...form, sceneConfig }}
             validation={validation}

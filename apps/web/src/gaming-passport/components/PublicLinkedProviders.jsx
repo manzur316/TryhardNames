@@ -3,14 +3,7 @@ import { BadgeCheck, ExternalLink } from 'lucide-react';
 
 export default function PublicLinkedProviders({ providers = [] }) {
   if (!providers.length) {
-    return (
-      <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.04]">
-        <h2 className="text-lg font-semibold text-slate-950 dark:text-white">Linked providers</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-          No public linked provider cards are visible on this Passport.
-        </p>
-      </section>
-    );
+    return null;
   }
 
   return (

@@ -27,11 +27,12 @@ const privateCosmeticsSource = [
 ].join('\n');
 
 describe('Passport Cosmetics Foundation account integration', () => {
-  it('adds the private Passport Cosmetics panel to the account editor flow', () => {
+  it('preserves cosmetic editor modules without duplicating the editor in account', () => {
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/PassportCosmeticsPanel.jsx', import.meta.url)), true);
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/CosmeticPicker.jsx', import.meta.url)), true);
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/CosmeticLoadoutPreview.jsx', import.meta.url)), true);
-    assert.match(accountPageSource, /PrivatePassportEditor/);
+    assert.doesNotMatch(accountPageSource, /PrivatePassportEditor/);
+    assert.match(accountPageSource, /to="\/gaming-passport"/);
     assert.match(privateEditorSource, /PassportCosmeticsPanel/);
     assert.match(privateEditorSource, /sanitizeCosmeticLoadout/);
     assert.doesNotMatch(privateEditorSource, /xl:grid-cols-\[/);

@@ -106,18 +106,16 @@ function PublicPassportLoaded({ passport }) {
         path={`/id/${passport.slug}`}
         ogType="profile"
       />
-      <main className="bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
+      <main className="gp-public bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
         <PublicPassportCard passport={passport} />
-        <PublicPassportSafetyNotice />
 
-        <section className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:px-8">
-          <div>
-            <div className="flex items-center gap-2">
+        <section className="gp-public-content">
+          {passport.featuredProofs.length > 0 && <div>
+            <div className="gp-section-heading">
               <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
               <h2 className="text-xl font-semibold text-slate-950 dark:text-white">Featured public proofs</h2>
             </div>
-            {passport.featuredProofs.length > 0 ? (
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="gp-proof-grid">
                 {passport.featuredProofs.map((proof) => (
                   <PublicProofCard
                     key={getPublicProofKey(proof)}
@@ -125,20 +123,17 @@ function PublicPassportLoaded({ passport }) {
                   />
                 ))}
               </div>
-            ) : (
-              <div className="mt-4 rounded-lg border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.04]">
-                <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  This public Passport has no featured proof cards yet.
-                </p>
-              </div>
-            )}
-          </div>
+          </div>}
 
-          <div className="space-y-6">
+          <div className="space-y-6 py-8">
             <PublicLinkedProviders providers={passport.linkedProviders} />
             <PublicProfileReportDialog slug={passport.slug} />
           </div>
         </section>
+        <details className="gp-policy">
+          <summary>Verification & privacy</summary>
+          <PublicPassportSafetyNotice />
+        </details>
       </main>
     </>
   );

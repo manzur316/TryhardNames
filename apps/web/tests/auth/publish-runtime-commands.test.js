@@ -63,9 +63,9 @@ describe('Publish Runtime Commands', () => {
     assert.doesNotMatch(repositorySource, /\.update\(\{[\s\S]*publication_consent/);
   });
 
-  it('renders private account controls with accurate product copy', () => {
+  it('retains historical publication controls without mounting them in the private staging account', () => {
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/PassportPublishControls.jsx', import.meta.url)), true);
-    assert.match(accountPageSource, /PassportPublishControls/);
+    assert.doesNotMatch(accountPageSource, /PassportPublishControls|\.rpc\(/);
     assert.match(controlsSource, /Private publish controls/);
     assert.match(controlsSource, /Public <code>\/id\/:slug<\/code> serving exists/);
     assert.match(controlsSource, /publish policy requirements are satisfied/);

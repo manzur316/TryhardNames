@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
+import { assertNoProviderSecrets } from '../../web/tests/seo/provider-secret-guard.js';
 
 const repoPath = (path) => new URL(`../../../${path}`, import.meta.url);
 const readRepo = (path) => readFileSync(repoPath(path), 'utf8');
@@ -57,10 +58,10 @@ describe('RM-40 Source Guards / Environment Safety Tests', () => {
       /RIOT_CLIENT_SECRET/i,
       /GOOGLE_CLIENT_SECRET/i,
       /client_secret/i,
-      /access_token/i,
       /refresh_token/i,
       /service_role/i,
     ];
+    assertNoProviderSecrets(webSource);
 
     for (const pattern of forbiddenBrowserPatterns) {
       assert.doesNotMatch(webSource, pattern);

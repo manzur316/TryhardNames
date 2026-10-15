@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
+import { assertNoProviderSecrets } from './provider-secret-guard.js';
 
 const readWeb = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const readRepo = (path) => readFileSync(new URL(`../../../../${path}`, import.meta.url), 'utf8');
@@ -105,7 +106,7 @@ describe('RM-32 osu! Owner Proof Visibility Controls', () => {
 
   it('does not add browser secrets, direct osu! calls, public routes, commerce, or tracker features', () => {
     assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
-    assert.doesNotMatch(webSource, /OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY|access_token|refresh_token|client_secret/);
+    assertNoProviderSecrets(webSource);
     assert.doesNotMatch(osuOwnerVisibilitySource, /external_account_id|owner_id|rawPayload|metadata_safe|token_ciphertext|provider_token/i);
     assert.doesNotMatch(osuCardSource, /console\.(log|warn|error)|localStorage|sessionStorage/);
     assert.doesNotMatch(osuRepositorySource, /console\.(log|warn|error)|localStorage|sessionStorage/);

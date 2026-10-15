@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
+import { assertNoProviderSecrets } from './provider-secret-guard.js';
 
 const readWeb = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const readRepo = (path) => readFileSync(new URL(`../../../../${path}`, import.meta.url), 'utf8');
@@ -123,7 +124,7 @@ describe('RM-35 osu! Production Readiness / Staging Go-No-Go', () => {
   });
 
   it('keeps forbidden browser and public route surfaces out of RM-35 source', () => {
-    assert.doesNotMatch(webSource, /OSU_CLIENT_SECRET|SUPABASE_SERVICE_ROLE_KEY|access_token|refresh_token|client_secret/i);
+    assertNoProviderSecrets(webSource);
     assert.doesNotMatch(webSource, /osu\.ppy\.sh/);
     assert.doesNotMatch(webSource, /osuRank|osuRanking|rankedScore|performancePoints|osuPp|ppScore|matchHistory|liveTracker|bestPlays|beatmap/i);
     assert.doesNotMatch(appSource, /path=["']\/cosmetics|path=["']\/store|path=["']\/checkout|path=["']\/billing/);

@@ -2,8 +2,9 @@ import React from 'react';
 import { Lock, ShieldCheck } from 'lucide-react';
 import { DEFAULT_SCENE_CONFIG } from '@/gaming-passport/data/passportRepository.js';
 import { getCosmeticPresentationTokens } from '@/gaming-passport/cosmetics/index.js';
+import PassportIdentityScene from './PassportIdentityScene.jsx';
 
-export default function PrivatePassportPreview({ form, isLoading }) {
+export default function PrivatePassportPreview({ form, isLoading, isPublished = false }) {
   const scene = form.sceneConfig || DEFAULT_SCENE_CONFIG;
   const featuredSavedNames = Array.isArray(scene.featuredSavedNames) ? scene.featuredSavedNames : [];
   const cosmeticTokens = getCosmeticPresentationTokens(scene);
@@ -14,7 +15,6 @@ export default function PrivatePassportPreview({ form, isLoading }) {
     amber: 'border-amber-300 bg-amber-50/80 dark:border-amber-300/40 dark:bg-amber-300/10',
   };
   const densityClass = scene.density === 'dense' ? 'gap-3 p-5' : 'gap-5 p-6';
-  const layoutClass = scene.layout === 'compact' ? 'flex items-center gap-4' : 'space-y-4';
 
   return (
     <section className={`flex flex-col ${accentClasses[scene.accent] || accentClasses.cyan} ${cosmeticTokens.shellClassName} ${densityClass}`}>
@@ -24,7 +24,7 @@ export default function PrivatePassportPreview({ form, isLoading }) {
           Private preview
         </span>
         <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:bg-black/20 dark:text-slate-200">
-          Not published
+          {isPublished ? 'Published Passport' : 'Not published'}
         </span>
       </div>
 
@@ -32,17 +32,7 @@ export default function PrivatePassportPreview({ form, isLoading }) {
         <p className="text-sm text-slate-600 dark:text-slate-300">Preparing draft preview...</p>
       ) : (
         <>
-          <div className={layoutClass}>
-            <AvatarPreview avatarUrl={form.avatarUrl} alias={form.alias} />
-            <div>
-              <div className={`inline-flex ${cosmeticTokens.nameplateClassName}`}>
-                <h2 className={`text-2xl font-semibold ${cosmeticTokens.headingClassName}`}>{form.alias || 'Unnamed player'}</h2>
-              </div>
-              <p className={`mt-2 text-sm leading-6 ${cosmeticTokens.bodyClassName}`}>
-                {form.bioShort || 'Add a short private bio to preview your future Gaming Passport.'}
-              </p>
-            </div>
-          </div>
+          <PassportIdentityScene alias={form.alias} avatarUrl={form.avatarUrl} bio={form.bioShort} scene={scene} privatePreview isPublished={isPublished} />
 
           {cosmeticTokens.activeCosmetics.length > 0 && (
             <div className="rounded-lg border border-slate-200 bg-white/70 p-3 dark:border-white/10 dark:bg-black/20">
@@ -85,7 +75,7 @@ export default function PrivatePassportPreview({ form, isLoading }) {
           <div className="grid gap-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
             <p className="inline-flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
-              This draft is private, has no public link, and does not publish automatically.
+              {isPublished ? 'This Passport is published. Saving presentation changes can update its public profile.' : 'This draft is private, has no public link, and does not publish automatically.'}
             </p>
             <p>Not a ranking, tracker, match log, competitive-rating product, or live-game advice surface.</p>
             <p>No provider data is used here. Riot and Discord remain future linked providers, not active integrations.</p>
@@ -93,23 +83,5 @@ export default function PrivatePassportPreview({ form, isLoading }) {
         </>
       )}
     </section>
-  );
-}
-
-function AvatarPreview({ avatarUrl, alias }) {
-  if (avatarUrl) {
-    return (
-      <img
-        src={avatarUrl}
-        alt={alias ? `${alias} avatar` : 'Draft avatar'}
-        className="h-20 w-20 rounded-lg border border-slate-300 object-cover dark:border-white/15"
-      />
-    );
-  }
-
-  return (
-    <div className="flex h-20 w-20 items-center justify-center rounded-lg border border-slate-300 bg-white text-2xl font-semibold text-cyan-700 dark:border-white/15 dark:bg-black/30 dark:text-cyan-200">
-      {(alias || '?').trim().slice(0, 1).toUpperCase() || '?'}
-    </div>
   );
 }

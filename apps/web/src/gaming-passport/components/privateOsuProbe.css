@@ -1,0 +1,86 @@
+.gp-osu-probe { min-width: 0; container-type: inline-size; }
+.gp-osu-private { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--gp-muted); }
+.gp-osu-private > svg { color: var(--gp-gold); }
+.gp-osu-connection-action { padding: 22px 0 10px; }
+.gp-osu-connect-button {
+  position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 14px;
+  width: min(100%, 360px); min-height: 84px; padding: 8px 22px 8px 12px;
+  border: 1px solid #ef9bc2; border-radius: 8px; background: #9b285d; color: #fff;
+  box-shadow: inset 0 1px 0 #ffffff35, 0 5px 0 #5c1838, 0 9px 18px #30101f25;
+  font-size: 15px; font-weight: 700; line-height: 1.35; text-align: left;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+/* Depth belongs to the control, not the unmodified, upright official logo. */
+.gp-osu-connect-button::before {
+  content: ''; position: absolute; inset: -1px; border: 2px solid #ffb9da; border-radius: inherit;
+  pointer-events: none; opacity: 0; animation: gp-osu-invite 1.8s ease-out 2;
+}
+.gp-osu-connect-logo { display: grid; place-items: center; width: 72px; height: 68px; flex: none; }
+.gp-osu-connect-logo img { display: block; width: 64px; height: 64px; object-fit: contain; }
+.gp-osu-connect-label { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.gp-osu-connect-icon { flex: none; transition: transform .18s ease; }
+.gp-osu-connect-button:hover:not(:disabled), .gp-osu-connect-button:focus-visible {
+  transform: translateY(-2px); background: #aa2d67;
+  box-shadow: inset 0 1px 0 #ffffff45, 0 7px 0 #5c1838, 0 12px 22px #30101f35;
+}
+.gp-osu-connect-button:hover:not(:disabled) .gp-osu-connect-icon { transform: translateX(2px); }
+.gp-osu-connect-button:focus-visible { outline: 3px solid var(--gp-text); outline-offset: 5px; }
+.gp-osu-connect-button:active:not(:disabled) { transform: translateY(3px); box-shadow: inset 0 1px 0 #ffffff35, 0 2px 0 #5c1838; }
+.gp-workspace .gp-osu-connect-button:disabled { opacity: 1; color: #f0e8ec; background: #69505c; border-color: #947782; box-shadow: 0 3px 0 #40313a; }
+.gp-osu-connect-button:disabled::before { animation: none; }
+.gp-osu-connect-spinner { animation: gp-osu-wait .85s linear infinite; }
+@keyframes gp-osu-invite { 0%, 100% { opacity: 0; } 45% { opacity: .85; } }
+@keyframes gp-osu-wait { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .gp-osu-connect-button, .gp-osu-connect-icon { transition: none; }
+  .gp-osu-connect-button::before, .gp-osu-connect-spinner { animation: none; }
+  .gp-osu-connect-button:hover:not(:disabled), .gp-osu-connect-button:focus-visible, .gp-osu-connect-button:active:not(:disabled),
+  .gp-osu-connect-button:hover:not(:disabled) .gp-osu-connect-icon { transform: none; }
+}
+.gp-osu-probe > .gp-button { margin-top: 18px; }
+.gp-osu-connect { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding: 24px 0; font-size: 13px; }
+.gp-osu-connect > div { flex: 1; min-width: 160px; }
+.gp-osu-connect h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.gp-osu-connect p { color: var(--gp-muted); }
+.gp-osu-profile { margin: 18px 0; border: 1px solid var(--gp-line); border-top: 2px solid #e578ac; border-radius: 6px; background: var(--gp-panel); overflow: hidden; }
+.gp-osu-profile > header { display: flex; align-items: center; gap: 16px; min-height: 112px; padding: 22px 24px; background-image: linear-gradient(90deg, var(--gp-panel) 20%, transparent 100%), url('/passport/osu-rhythm.webp'); background-position: center, right 54%; background-size: cover; }
+.gp-osu-profile header > div { min-width: 0; }
+.gp-osu-profile header > img { width: 64px; height: 64px; flex: none; border-radius: 6px; object-fit: cover; }
+.gp-osu-profile header h3 { font-size: 22px; font-weight: 750; overflow-wrap: anywhere; }
+.gp-osu-profile header p { font-size: 12px; color: var(--gp-muted); }
+.gp-osu-profile header p span { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: var(--gp-green); }
+.gp-osu-profile header button { margin-left: auto; background: var(--gp-panel); }
+.gp-osu-game-name { display: flex; align-items: center; gap: 12px; }
+.gp-osu-mark { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 50%; background: #a63769; border: 2px solid #efa5c7; color: #fff; font-size: 19px; font-weight: 750; }
+.gp-osu-player { display: flex; align-items: center; gap: 16px; padding: 24px; }
+.gp-osu-avatar { display: grid; place-items: center; flex: none; width: 64px; height: 64px; border-radius: 6px; background: var(--gp-input); border: 1px solid var(--gp-line); color: var(--gp-cyan); font-size: 28px; overflow: hidden; }
+.gp-osu-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.gp-osu-player-identity { min-width: 0; flex: 1; }
+.gp-osu-player-identity h4 { font-family: inherit; font-size: 24px; line-height: 1.25; font-weight: 700; overflow-wrap: anywhere; }
+.gp-osu-authorized { display: flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 11px; color: var(--gp-green); }
+.gp-osu-profile dt { display: flex; align-items: center; gap: 6px; color: var(--gp-muted); font-size: 11px; margin-bottom: 6px; }
+.gp-osu-profile dd { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; font-size: 21px; font-weight: 650; line-height: 1.3; }
+.gp-osu-performance { min-width: 0; max-width: 45%; margin-left: auto; padding-left: 20px; border-left: 1px solid var(--gp-line); }
+.gp-osu-performance dd { color: var(--gp-cyan); font-size: 34px; font-weight: 700; line-height: 1.2; }
+.gp-osu-performance dd span { font-size: 14px; font-weight: 500; }
+/* Direct definition lists also support the independent persisted-connection card. */
+.gp-osu-profile > dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); border-top: 1px solid var(--gp-line); margin: 0 24px; padding: 20px 0; gap: 20px 18px; }
+.gp-osu-profile > dl > div { min-width: 0; }
+.gp-osu-profile > dl:not(.gp-osu-stats) > div:first-child dd { color: var(--gp-cyan); }
+.gp-osu-stats dt svg { color: var(--gp-gold); }
+.gp-osu-profile footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; border-top: 1px solid var(--gp-line); padding: 14px 24px; font-size: 11px; color: var(--gp-muted); line-height: 1.6; }
+.gp-osu-profile footer > span { display: flex; align-items: center; gap: 7px; }
+@container (max-width: 600px) {
+  .gp-osu-player { flex-wrap: wrap; }
+  .gp-osu-performance { flex-basis: 100%; max-width: none; margin-left: 0; border-left: 0; padding: 8px 0 0; }
+  .gp-osu-profile > dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container (max-width: 400px) {
+  .gp-osu-profile > header { padding: 20px 16px; gap: 12px; }
+  .gp-osu-player { padding: 24px 16px; gap: 12px; }
+  .gp-osu-player-identity h4 { font-size: 21px; }
+  .gp-osu-profile > dl { margin-inline: 16px; }
+  .gp-osu-profile > dl dd { font-size: 19px; }
+  .gp-osu-profile footer { padding-inline: 16px; }
+  .gp-osu-connect .gp-button { margin-left: 64px; }
+}

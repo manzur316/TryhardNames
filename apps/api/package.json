@@ -8,7 +8,10 @@
     "start": "node src/main.js",
     "dev": "node src/main.js",
     "lint": "eslint . --quiet",
-    "test": "node --test tests/apiResponse.test.js tests/osuRuntime.test.js tests/osuRuntimeSmoke.test.js tests/osuRuntimeVisibility.test.js tests/trustProxy.test.js tests/sourceGuards.test.js tests/pinterestAutomation.test.js tests/pinterestContentV2.test.js"
+    "test": "node --test tests/apiResponse.test.js tests/osuRuntime.test.js tests/osuRuntimeSmoke.test.js tests/osuRuntimeVisibility.test.js tests/trustProxy.test.js tests/sourceGuards.test.js tests/pinterestAutomation.test.js tests/pinterestContentV2.test.js tests/robloxLinking.test.js tests/robloxClient.test.js",
+    "test:roblox:linking": "node --test tests/robloxLinking.test.js tests/robloxClient.test.js",
+    "test:roblox:db": "node scripts/testRobloxDatabase.js",
+    "dev:roblox:linking": "node scripts/runRobloxLinking.js --local-review"
   },
   "dependencies": {
     "@eslint/js": "^10.0.1",
@@ -21,6 +24,7 @@
     "globals": "^17.3.0",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
+    "pg": "8.23.1",
     "pocketbase": "^0.26.8",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

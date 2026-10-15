@@ -73,8 +73,8 @@ describe('Provider Runtime Foundation', () => {
     assert.doesNotMatch(repositorySource, /api\.riotgames\.com|discord\.com\/api|oauth\/authorize|authorize\?/i);
   });
 
-  it('renders an account panel that keeps provider-neutral contracts server-gated after RM-30', () => {
-    assert.match(accountPageSource, /ProviderRuntimeFoundationPanel/);
+  it('retains internal foundation contracts without mounting the technical panel in account', () => {
+    assert.doesNotMatch(accountPageSource, /ProviderRuntimeFoundationPanel/);
     assert.match(panelSource, /Provider Runtime Foundation/);
     assert.match(panelSource, /Provider runtime stays server-gated/);
     assert.match(panelSource, /Server-gated/);

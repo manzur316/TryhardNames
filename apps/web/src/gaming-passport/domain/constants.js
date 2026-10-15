@@ -37,6 +37,7 @@ export const LINKED_PROVIDER_IDS = /** @type {const} */ ({
 
 export const GAME_IDS = /** @type {const} */ ({
   LEAGUE_OF_LEGENDS: 'league_of_legends',
+  OSU: 'osu',
 });
 
 export const PROOF_TYPES = /** @type {const} */ ({

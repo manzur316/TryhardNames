@@ -26,12 +26,14 @@ const combinedEditorSource = [
 ].join('\n');
 
 describe('Private Gaming Passport Editor V2', () => {
-  it('extracts the private editor into focused Gaming Passport components', () => {
+  it('retains legacy editor modules while account points to the unified workspace', () => {
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/PrivatePassportEditor.jsx', import.meta.url)), true);
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/PrivatePassportPreview.jsx', import.meta.url)), true);
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/PassportCompletionChecklist.jsx', import.meta.url)), true);
     assert.equal(existsSync(new URL('../../src/gaming-passport/components/SavedNameHighlightsPicker.jsx', import.meta.url)), true);
-    assert.match(accountPageSource, /PrivatePassportEditor/);
+    assert.doesNotMatch(accountPageSource, /PrivatePassportEditor/);
+    assert.match(accountPageSource, /to="\/gaming-passport"/);
+    assert.match(readWeb('src/gaming-passport/components/PassportWorkspace.jsx'), /updatePassportPresentation\(client, sessionRef\.current, passport\.id, form\)/);
     assert.match(editorSource, /Private editor V2/);
     assert.match(previewSource, /Private preview/);
     assert.match(checklistSource, /Private completion checklist/);

@@ -296,6 +296,9 @@ export default defineConfig({
 	],
 	server: {
 		port: 3000,
+		proxy: {
+			'/api/v1/integrations/roblox': 'http://127.0.0.1:3005',
+		},
 		cors: true,
 		headers: {
 			'Cross-Origin-Embedder-Policy': 'credentialless',

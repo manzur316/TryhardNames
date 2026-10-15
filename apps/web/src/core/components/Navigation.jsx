@@ -90,12 +90,9 @@ export const Navigation = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-0.5">
+          <nav className="hidden xl:flex items-center gap-0.5">
             <Link to="/" className={NAV_LINK}>
               Home
-            </Link>
-            <Link to="/identity-kit" className={NAV_LINK}>
-              Identity Kit
             </Link>
             <Link to="/gaming-passport" className={NAV_LINK}>
               Gaming Passport
@@ -165,9 +162,11 @@ export const Navigation = () => {
             
             {/* Mobile Menu Toggle */}
             <button 
-              className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
+              className="xl:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -177,13 +176,10 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-white/[0.08] bg-[#05070d]/98 backdrop-blur-xl transition-colors duration-300">
+        <div id="mobile-navigation" className="xl:hidden border-t border-white/[0.08] bg-[#05070d]/98 backdrop-blur-xl transition-colors duration-300">
           <div className="px-4 pt-2 pb-6 space-y-1 h-[calc(100vh-4rem)] overflow-y-auto">
             <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
               Home
-            </Link>
-            <Link to="/identity-kit" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
-              Identity Kit
             </Link>
             <Link to="/gaming-passport" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white transition-colors duration-200">
               Gaming Passport

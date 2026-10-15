@@ -2,6 +2,8 @@ import {
   buildDefaultCosmeticLoadout,
   sanitizeCosmeticLoadout,
 } from '../cosmetics/cosmeticLoadout.js';
+import { sanitizeAvatarFrameId } from './avatarFrames.js';
+import { sanitizeProfileBackgroundId } from './profileBackgrounds.js';
 
 export const PASSPORT_SELECT_COLUMNS = [
   'id',
@@ -181,12 +183,16 @@ export function sanitizeSceneConfig(sceneConfig = {}) {
   const source = sceneConfig && typeof sceneConfig === 'object' && !Array.isArray(sceneConfig)
     ? sceneConfig
     : {};
+  const avatarFrameId = sanitizeAvatarFrameId(source.avatarFrameId);
+  const backgroundId = sanitizeProfileBackgroundId(source.backgroundId);
 
   return {
     layout: pickOption(source.layout, SCENE_CONFIG_OPTIONS.layout, DEFAULT_SCENE_CONFIG.layout),
     accent: pickOption(source.accent, SCENE_CONFIG_OPTIONS.accent, DEFAULT_SCENE_CONFIG.accent),
     density: pickOption(source.density, SCENE_CONFIG_OPTIONS.density, DEFAULT_SCENE_CONFIG.density),
     ...sanitizeCosmeticLoadout(source),
+    ...(avatarFrameId ? { avatarFrameId } : {}),
+    ...(backgroundId ? { backgroundId } : {}),
     featuredSavedNames: sanitizeFeaturedSavedNames(source.featuredSavedNames),
   };
 }

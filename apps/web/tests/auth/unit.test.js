@@ -140,6 +140,56 @@ describe('Parent Auth configuration', () => {
     assert.equal(runtime.config.isConfigured, false);
     resetSupabaseRuntimeForTests();
   });
+
+  it('shares a fully initialized client between concurrent callers during the SDK import', async () => {
+    resetSupabaseRuntimeForTests();
+    const config = readSupabaseConfig({
+      VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_local',
+    });
+    let runtime;
+    try {
+      // No session or credentials are supplied, so SDK initialization needs no network request.
+      const results = await Promise.all([
+        getSupabaseRuntime({ config }),
+        getSupabaseRuntime(),
+        getSupabaseRuntime(),
+      ]);
+      [runtime] = results;
+      assert.ok(runtime.client?.auth);
+      assert.equal(runtime.config.isConfigured, true);
+      assert.equal(results[1], runtime);
+      assert.equal(results[2], runtime);
+      assert.equal(await getSupabaseRuntime(), runtime);
+    } finally {
+      await runtime?.client?.auth.stopAutoRefresh();
+      resetSupabaseRuntimeForTests();
+    }
+  });
+
+  it('shares a safe failure without retrying client initialization for concurrent callers', async () => {
+    resetSupabaseRuntimeForTests();
+    let calls = 0;
+    try {
+      const first = getSupabaseRuntime({
+        config: readSupabaseConfig({
+          VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+          VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_local',
+        }),
+        factory: () => {
+          calls += 1;
+          throw new Error('Initialization failed');
+        },
+      });
+      const [left, right] = await Promise.all([first, getSupabaseRuntime()]);
+      assert.equal(left, right);
+      assert.equal(left.client, null);
+      assert.equal(left.config.isConfigured, false);
+      assert.equal(calls, 1);
+    } finally {
+      resetSupabaseRuntimeForTests();
+    }
+  });
 });
 
 describe('Parent Auth service calls', () => {

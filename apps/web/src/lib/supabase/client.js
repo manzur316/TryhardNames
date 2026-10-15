@@ -1,7 +1,6 @@
 import { readSupabaseConfig } from './config.js';
 
-let cachedClient;
-let cachedConfig;
+let runtimePromise;
 
 export function createSupabaseClientFromFactory(factory, config = readSupabaseConfig()) {
   if (!config.isConfigured) return null;
@@ -17,33 +16,33 @@ export function createSupabaseClientFromFactory(factory, config = readSupabaseCo
 }
 
 export async function getSupabaseRuntime({ factory, config: configOverride } = {}) {
-  if (cachedConfig) {
-    return { client: cachedClient, config: cachedConfig };
+  if (!runtimePromise) {
+    runtimePromise = initializeSupabaseRuntime(factory, configOverride || readSupabaseConfig());
   }
+  return runtimePromise;
+}
 
-  cachedConfig = configOverride || readSupabaseConfig();
-  cachedClient = null;
-
-  if (!cachedConfig.isConfigured) {
-    return { client: cachedClient, config: cachedConfig };
+async function initializeSupabaseRuntime(factory, config) {
+  if (!config.isConfigured) {
+    return { client: null, config };
   }
 
   try {
     const createClient = factory || (await import('@supabase/supabase-js')).createClient;
-    cachedClient = createSupabaseClientFromFactory(createClient, cachedConfig);
+    const client = createSupabaseClientFromFactory(createClient, config);
+    return { client, config };
   } catch {
-    cachedConfig = {
-      ...cachedConfig,
-      isConfigured: false,
-      reason: 'Supabase client could not be initialized safely.',
+    return {
+      client: null,
+      config: {
+        ...config,
+        isConfigured: false,
+        reason: 'Supabase client could not be initialized safely.',
+      },
     };
-    cachedClient = null;
   }
-
-  return { client: cachedClient, config: cachedConfig };
 }
 
 export function resetSupabaseRuntimeForTests() {
-  cachedClient = undefined;
-  cachedConfig = undefined;
+  runtimePromise = undefined;
 }

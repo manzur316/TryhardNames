@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
+import { assertNoProviderSecrets } from './provider-secret-guard.js';
 
 const readWeb = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const readRepo = (path) => readFileSync(new URL(`../../../../${path}`, import.meta.url), 'utf8');
@@ -107,7 +108,7 @@ describe('RM-27 osu! Runtime Foundation', () => {
 
     assert.doesNotMatch(webSource, /OSU_CLIENT_SECRET|osuAccessToken|osuRefreshToken|providerAccessToken|providerRefreshToken/i);
     assert.doesNotMatch(webSource, /import\.meta\.env\.SUPABASE_SERVICE_ROLE_KEY|process\.env\.SUPABASE_SERVICE_ROLE_KEY/i);
-    assert.doesNotMatch(webSource, /access_token|refresh_token|token_ciphertext/i);
+    assertNoProviderSecrets(webSource);
     assert.doesNotMatch(webSource, /osu\.ppy\.sh\/oauth|osu\.ppy\.sh\/api/i);
     assert.doesNotMatch(webSource, /\/api\/v1\/integrations\/osu\/callback|\/auth\/osu\/callback/i);
   });

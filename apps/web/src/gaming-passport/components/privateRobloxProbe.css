@@ -1,0 +1,47 @@
+.gp-roblox-probe { margin-bottom: 20px; min-width: 0; container-type: inline-size; }
+.gp-roblox-private { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-muted); font-size: 12px; }
+.gp-roblox-account { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto auto; align-items: center; gap: 22px; padding: 22px 24px 14px; border: 1px solid #584044; border-top: 2px solid #fa6675; border-radius: 8px; background: linear-gradient(110deg, #392025 0%, #1b1c20 38%, #17191d 100%); }
+.gp-roblox-emblem { width: 112px; }
+.gp-roblox-player { min-width: 0; }
+.gp-roblox-game { display: block; margin-bottom: 12px; color: #ff98a3; font-size: 14px; font-weight: 700; }
+.gp-roblox-player-row { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.gp-roblox-avatar { width: 52px; height: 52px; flex: none; display: grid; place-items: center; overflow: hidden; border: 1px solid #715055; border-radius: 6px; background: #292b30; color: #e6d6d8; }
+.gp-roblox-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.gp-roblox-identity { min-width: 0; overflow-wrap: anywhere; }
+.gp-roblox-identity h3 { margin: 0; color: #f4f7f6; font-size: 20px; font-weight: 700; line-height: 1.3; letter-spacing: 0; }
+.gp-roblox-identity p { margin: 4px 0 0; color: #bac0ca; font-size: 12px; }
+.gp-roblox-identity .gp-roblox-verified { display: flex; align-items: center; gap: 5px; color: #84e1ba; }
+.gp-roblox-verified svg { flex: none; }
+.gp-roblox-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin: 0; padding-left: 22px; border-left: 1px solid #44363c; font-size: 12px; }
+.gp-roblox-facts > div { min-width: 0; }
+.gp-roblox-facts dt { color: #b6b8c0; }
+.gp-roblox-facts dd { margin: 6px 0 0; color: #f4f7f6; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.gp-roblox-actions { display: flex; align-items: center; gap: 8px; }
+.gp-roblox-actions .gp-button, .gp-roblox-actions .gp-icon-button { color: #f4f7f6; background: #30272c; border-color: #86636a; }
+.gp-roblox-actions .gp-button:hover:not(:disabled), .gp-roblox-actions .gp-icon-button:hover:not(:disabled) { color: #fff; background: #493039; border-color: #ff98a3; }
+.gp-roblox-actions :focus-visible { outline: 2px solid #ff98a3; outline-offset: 3px; }
+.gp-roblox-actions .gp-icon-button { width: 36px; height: 36px; flex-shrink: 0; }
+.gp-roblox-notice { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 6px; margin: 0; border-top: 1px solid #44363c; padding-top: 12px; color: #b6b8c0; font-size: 11px; line-height: 1.5; }
+.gp-roblox-notice svg { flex-shrink: 0; margin-top: 2px; }
+.gp-roblox-confirm { flex-wrap: wrap; align-items: center; font-size: 13px; }
+.gp-roblox-account + .gp-roblox-account { margin-top: 12px; }
+.gp-roblox-probe > .gp-button { margin-top: 12px; }
+@container (max-width: 850px) {
+  .gp-roblox-account { grid-template-columns: 88px minmax(0, 1fr) auto; gap: 16px; padding: 18px; }
+  .gp-roblox-emblem { width: 88px; }
+  .gp-roblox-facts { grid-column: 2; grid-row: 2; border: 0; padding: 0; }
+  .gp-roblox-actions { grid-column: 3; grid-row: 1 / 3; }
+}
+@container (max-width: 540px) {
+  .gp-roblox-account { grid-template-columns: 72px minmax(0, 1fr); gap: 16px 12px; padding: 16px 12px 12px; }
+  .gp-roblox-emblem { width: 72px; align-self: start; }
+  .gp-roblox-player-row { flex-wrap: wrap; gap: 8px; }
+  .gp-roblox-avatar { width: 40px; height: 40px; }
+  .gp-roblox-identity { flex-basis: 100%; }
+  .gp-roblox-identity h3 { font-size: 18px; }
+  .gp-roblox-game { margin-bottom: 8px; }
+  .gp-roblox-facts { grid-column: 1 / -1; grid-row: auto; border-top: 1px solid #44363c; padding-top: 14px; }
+  .gp-roblox-actions { grid-column: 1 / -1; grid-row: auto; justify-content: flex-end; }
+  .gp-roblox-probe .gp-section-heading { align-items: flex-start; flex-wrap: wrap; gap: 8px; }
+  .gp-roblox-actions .gp-button { white-space: normal; }
+}

@@ -77,6 +77,13 @@ describe('Saved Names Supabase persistence', () => {
     assert.doesNotMatch(accountPageSource, /Lineup|Copy pack|Export Discord Pack|Recent picks/);
   });
 
+  it('mirrors explicit removals to existing legacy storage so deleted names cannot reappear', () => {
+    assert.match(favoritesContextSource, /persistNamesIfChanged\(nextFavorites\.map\(\(fav\) => fav\?\.name\)\.filter\(Boolean\)\);/);
+    assert.match(favoritesContextSource, /persistNamesIfChanged\(\[\]\);/);
+    assert.doesNotMatch(favoritesContextSource, /mirrorLegacy: false/);
+    assert.match(readWeb('src/utils/favoritesSoT.js'), /mirrorLegacy = true/);
+  });
+
   it('keeps FavoriteStarButton and MinimalFavoritesPeek on the canonical context path', () => {
     assert.match(favoriteStarSource, /FavoritesContext/);
     assert.match(favoriteStarSource, /favoritesContext\?\.addFavorite/);

@@ -2,7 +2,7 @@ import React from 'react';
 import SeoHead from '@/seo/SeoHead.jsx';
 
 const TermsOfServicePage = () => {
-  const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const lastUpdated = 'October 14, 2026';
 
   return (
     <>
@@ -56,6 +56,14 @@ const TermsOfServicePage = () => {
 
           <section>
             <h2 className="text-2xl font-bold text-dark-50 mb-4">4. Riot and Third-Party Game Services</h2>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              Roblox linking is an optional private test for approved testers. Only link accounts you own.
+              A Roblox ownership badge records a successful authorization at the displayed verification time;
+              it is not a skill rank, official endorsement, or guarantee of continuing account control.
+              You can unlink the account from your private Passport. TryhardNames is independent of Roblox
+              Corporation, and this test does not imply Roblox review approval. Roblox names, logos, and
+              properties remain the property of their respective owners.
+            </p>
             <p className="text-dark-300 leading-relaxed mb-4">
               Riot integration is pending Riot approval. Riot account linking / Riot Sign On is not currently available through
               TryhardNames, and TryhardNames does not display live Riot data in production.

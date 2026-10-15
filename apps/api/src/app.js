@@ -18,7 +18,9 @@ app.use(cors({
   origin: process.env.CORS_ORIGIN,
   credentials: true,
 }));
-app.use(morgan('combined'));
+// OAuth callbacks and their referrers can contain single-use credentials.
+app.use(morgan(':method :safe-path :status :response-time ms'));
+morgan.token('safe-path', (req) => req.path);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
