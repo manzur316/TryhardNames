@@ -106,3 +106,15 @@ do not delete user Passports or apply a destructive database reset.
 Official registration guidance:
 https://create.roblox.com/docs/cloud/auth/oauth2-registration
 
+## Dependency Review
+
+The release audit identified two critical inherited dependency advisories. The
+lockfile updates proxy-addr to 2.0.8 and shell-quote to 1.12.0 without changing
+their major versions. All four application test suites were rerun afterward.
+
+This is not a clean dependency audit: npm audit --omit=dev still reports 25
+advisories (19 high, 5 moderate, 1 low) on October 14, 2026. These include existing
+image-processing, routing, and tooling dependency trees. Broader dependency
+remediation requires its own compatibility review; this release does not claim
+to resolve those pre-existing advisories.
+
