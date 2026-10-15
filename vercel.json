@@ -10,467 +10,467 @@
     },
     {
       "source": "/about",
-      "destination": "/index.html"
+      "destination": "/about.html"
     },
     {
       "source": "/account",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/aesthetic-gaming-tags",
-      "destination": "/index.html"
+      "destination": "/aesthetic-gaming-tags.html"
     },
     {
       "source": "/apex/cool",
-      "destination": "/index.html"
+      "destination": "/apex/cool.html"
     },
     {
       "source": "/apex/edgy",
-      "destination": "/index.html"
+      "destination": "/apex/edgy.html"
     },
     {
       "source": "/apex/movement",
-      "destination": "/index.html"
+      "destination": "/apex/movement.html"
     },
     {
       "source": "/apex/predator",
-      "destination": "/index.html"
+      "destination": "/apex/predator.html"
     },
     {
       "source": "/apex/pro",
-      "destination": "/index.html"
+      "destination": "/apex/pro.html"
     },
     {
       "source": "/apex/sweaty",
-      "destination": "/index.html"
+      "destination": "/apex/sweaty.html"
     },
     {
       "source": "/apex/tryhard",
-      "destination": "/index.html"
+      "destination": "/apex/tryhard.html"
     },
     {
       "source": "/auth/callback",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/brandable-usernames",
-      "destination": "/index.html"
+      "destination": "/brandable-usernames.html"
     },
     {
       "source": "/cod/cool",
-      "destination": "/index.html"
+      "destination": "/cod/cool.html"
     },
     {
       "source": "/cod/edgy",
-      "destination": "/index.html"
+      "destination": "/cod/edgy.html"
     },
     {
       "source": "/cod/funny",
-      "destination": "/index.html"
+      "destination": "/cod/funny.html"
     },
     {
       "source": "/cod/pro",
-      "destination": "/index.html"
+      "destination": "/cod/pro.html"
     },
     {
       "source": "/cod/sweaty",
-      "destination": "/index.html"
+      "destination": "/cod/sweaty.html"
     },
     {
       "source": "/cod/tryhard",
-      "destination": "/index.html"
+      "destination": "/cod/tryhard.html"
     },
     {
       "source": "/competitive-gamer-names",
-      "destination": "/index.html"
+      "destination": "/competitive-gamer-names.html"
     },
     {
       "source": "/contact",
-      "destination": "/index.html"
+      "destination": "/contact.html"
     },
     {
       "source": "/cs2/3-letter",
-      "destination": "/index.html"
+      "destination": "/cs2/3-letter.html"
     },
     {
       "source": "/cs2/brandable",
-      "destination": "/index.html"
+      "destination": "/cs2/brandable.html"
     },
     {
       "source": "/cs2/cool",
-      "destination": "/index.html"
+      "destination": "/cs2/cool.html"
     },
     {
       "source": "/cs2/edgy",
-      "destination": "/index.html"
+      "destination": "/cs2/edgy.html"
     },
     {
       "source": "/cs2/og",
-      "destination": "/index.html"
+      "destination": "/cs2/og.html"
     },
     {
       "source": "/cs2/one-word",
-      "destination": "/index.html"
+      "destination": "/cs2/one-word.html"
     },
     {
       "source": "/cs2/pro",
-      "destination": "/index.html"
+      "destination": "/cs2/pro.html"
     },
     {
       "source": "/edgy-gamer-tags",
-      "destination": "/index.html"
+      "destination": "/edgy-gamer-tags.html"
     },
     {
       "source": "/favorites",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/fortnite/cool",
-      "destination": "/index.html"
+      "destination": "/fortnite/cool.html"
     },
     {
       "source": "/fortnite/funny",
-      "destination": "/index.html"
+      "destination": "/fortnite/funny.html"
     },
     {
       "source": "/fortnite/og",
-      "destination": "/index.html"
+      "destination": "/fortnite/og.html"
     },
     {
       "source": "/fortnite/pro",
-      "destination": "/index.html"
+      "destination": "/fortnite/pro.html"
     },
     {
       "source": "/fortnite/sweaty",
-      "destination": "/index.html"
+      "destination": "/fortnite/sweaty.html"
     },
     {
       "source": "/fortnite/tryhard",
-      "destination": "/index.html"
+      "destination": "/fortnite/tryhard.html"
     },
     {
       "source": "/gamer-bio-generator",
-      "destination": "/index.html"
+      "destination": "/gamer-bio-generator.html"
     },
     {
       "source": "/gamer-names",
-      "destination": "/index.html"
+      "destination": "/gamer-names.html"
     },
     {
       "source": "/gamer-names/cool",
-      "destination": "/index.html"
+      "destination": "/gamer-names/cool.html"
     },
     {
       "source": "/gamer-names/edgy",
-      "destination": "/index.html"
+      "destination": "/gamer-names/edgy.html"
     },
     {
       "source": "/gamer-names/funny",
-      "destination": "/index.html"
+      "destination": "/gamer-names/funny.html"
     },
     {
       "source": "/gamer-names/pro",
-      "destination": "/index.html"
+      "destination": "/gamer-names/pro.html"
     },
     {
       "source": "/gaming-passport",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/general/3-letter",
-      "destination": "/index.html"
+      "destination": "/general/3-letter.html"
     },
     {
       "source": "/general/anime",
-      "destination": "/index.html"
+      "destination": "/general/anime.html"
     },
     {
       "source": "/general/best",
-      "destination": "/index.html"
+      "destination": "/general/best.html"
     },
     {
       "source": "/general/cool",
-      "destination": "/index.html"
+      "destination": "/general/cool.html"
     },
     {
       "source": "/general/edgy",
-      "destination": "/index.html"
+      "destination": "/general/edgy.html"
     },
     {
       "source": "/general/funny",
-      "destination": "/index.html"
+      "destination": "/general/funny.html"
     },
     {
       "source": "/general/pro",
-      "destination": "/index.html"
+      "destination": "/general/pro.html"
     },
     {
       "source": "/gta-rp/brandable",
-      "destination": "/index.html"
+      "destination": "/gta-rp/brandable.html"
     },
     {
       "source": "/gta-rp/cartel",
-      "destination": "/index.html"
+      "destination": "/gta-rp/cartel.html"
     },
     {
       "source": "/gta-rp/gang",
-      "destination": "/index.html"
+      "destination": "/gta-rp/gang.html"
     },
     {
       "source": "/gta-rp/luxury",
-      "destination": "/index.html"
+      "destination": "/gta-rp/luxury.html"
     },
     {
       "source": "/gta-rp/mafia",
-      "destination": "/index.html"
+      "destination": "/gta-rp/mafia.html"
     },
     {
       "source": "/gta-rp/realistic",
-      "destination": "/index.html"
+      "destination": "/gta-rp/realistic.html"
     },
     {
       "source": "/gta-rp/street",
-      "destination": "/index.html"
+      "destination": "/gta-rp/street.html"
     },
     {
       "source": "/leaderboards",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/league-of-legends",
-      "destination": "/index.html"
+      "destination": "/league-of-legends.html"
     },
     {
       "source": "/league-of-legends/3-letter",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/3-letter.html"
     },
     {
       "source": "/league-of-legends/aesthetic",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/aesthetic.html"
     },
     {
       "source": "/league-of-legends/anime",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/anime.html"
     },
     {
       "source": "/league-of-legends/brandable",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/brandable.html"
     },
     {
       "source": "/league-of-legends/clean",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/clean.html"
     },
     {
       "source": "/league-of-legends/cool",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/cool.html"
     },
     {
       "source": "/league-of-legends/edgy",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/edgy.html"
     },
     {
       "source": "/league-of-legends/funny",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/funny.html"
     },
     {
       "source": "/league-of-legends/korean",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/korean.html"
     },
     {
       "source": "/league-of-legends/one-word",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/one-word.html"
     },
     {
       "source": "/league-of-legends/pro",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/pro.html"
     },
     {
       "source": "/league-of-legends/sweaty",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/sweaty.html"
     },
     {
       "source": "/league-of-legends/tryhard",
-      "destination": "/index.html"
+      "destination": "/league-of-legends/tryhard.html"
     },
     {
       "source": "/minecraft/bedwars",
-      "destination": "/index.html"
+      "destination": "/minecraft/bedwars.html"
     },
     {
       "source": "/minecraft/brandable",
-      "destination": "/index.html"
+      "destination": "/minecraft/brandable.html"
     },
     {
       "source": "/minecraft/cool",
-      "destination": "/index.html"
+      "destination": "/minecraft/cool.html"
     },
     {
       "source": "/minecraft/medieval",
-      "destination": "/index.html"
+      "destination": "/minecraft/medieval.html"
     },
     {
       "source": "/minecraft/og",
-      "destination": "/index.html"
+      "destination": "/minecraft/og.html"
     },
     {
       "source": "/minecraft/pvp",
-      "destination": "/index.html"
+      "destination": "/minecraft/pvp.html"
     },
     {
       "source": "/minecraft/smp",
-      "destination": "/index.html"
+      "destination": "/minecraft/smp.html"
     },
     {
       "source": "/minecraft/survival",
-      "destination": "/index.html"
+      "destination": "/minecraft/survival.html"
     },
     {
       "source": "/nickname-symbols",
-      "destination": "/index.html"
+      "destination": "/nickname-symbols.html"
     },
     {
       "source": "/privacy-policy",
-      "destination": "/index.html"
+      "destination": "/privacy-policy.html"
     },
     {
       "source": "/roblox-names",
-      "destination": "/index.html"
+      "destination": "/roblox-names.html"
     },
     {
       "source": "/roblox-names/aesthetic",
-      "destination": "/index.html"
+      "destination": "/roblox-names/aesthetic.html"
     },
     {
       "source": "/roblox-names/cool",
-      "destination": "/index.html"
+      "destination": "/roblox-names/cool.html"
     },
     {
       "source": "/roblox-names/funny",
-      "destination": "/index.html"
+      "destination": "/roblox-names/funny.html"
     },
     {
       "source": "/roblox-names/tryhard",
-      "destination": "/index.html"
+      "destination": "/roblox-names/tryhard.html"
     },
     {
       "source": "/roblox/aesthetic",
-      "destination": "/index.html"
+      "destination": "/roblox/aesthetic.html"
     },
     {
       "source": "/roblox/anime",
-      "destination": "/index.html"
+      "destination": "/roblox/anime.html"
     },
     {
       "source": "/roblox/avatar",
-      "destination": "/index.html"
+      "destination": "/roblox/avatar.html"
     },
     {
       "source": "/roblox/cool",
-      "destination": "/index.html"
+      "destination": "/roblox/cool.html"
     },
     {
       "source": "/roblox/cute",
-      "destination": "/index.html"
+      "destination": "/roblox/cute.html"
     },
     {
       "source": "/roblox/funny",
-      "destination": "/index.html"
+      "destination": "/roblox/funny.html"
     },
     {
       "source": "/roblox/rp",
-      "destination": "/index.html"
+      "destination": "/roblox/rp.html"
     },
     {
       "source": "/roblox/soft",
-      "destination": "/index.html"
+      "destination": "/roblox/soft.html"
     },
     {
       "source": "/roblox/tiktok",
-      "destination": "/index.html"
+      "destination": "/roblox/tiktok.html"
     },
     {
       "source": "/roblox/tryhard",
-      "destination": "/index.html"
+      "destination": "/roblox/tryhard.html"
     },
     {
       "source": "/sign-in",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/sign-up",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     },
     {
       "source": "/stylish-text-generator",
-      "destination": "/index.html"
+      "destination": "/stylish-text-generator.html"
     },
     {
       "source": "/terms-of-service",
-      "destination": "/index.html"
+      "destination": "/terms-of-service.html"
     },
     {
       "source": "/valorant/aesthetic",
-      "destination": "/index.html"
+      "destination": "/valorant/aesthetic.html"
     },
     {
       "source": "/valorant/aim",
-      "destination": "/index.html"
+      "destination": "/valorant/aim.html"
     },
     {
       "source": "/valorant/chamber",
-      "destination": "/index.html"
+      "destination": "/valorant/chamber.html"
     },
     {
       "source": "/valorant/clean",
-      "destination": "/index.html"
+      "destination": "/valorant/clean.html"
     },
     {
       "source": "/valorant/cool",
-      "destination": "/index.html"
+      "destination": "/valorant/cool.html"
     },
     {
       "source": "/valorant/edgy",
-      "destination": "/index.html"
+      "destination": "/valorant/edgy.html"
     },
     {
       "source": "/valorant/funny",
-      "destination": "/index.html"
+      "destination": "/valorant/funny.html"
     },
     {
       "source": "/valorant/jett",
-      "destination": "/index.html"
+      "destination": "/valorant/jett.html"
     },
     {
       "source": "/valorant/pro",
-      "destination": "/index.html"
+      "destination": "/valorant/pro.html"
     },
     {
       "source": "/valorant/radiant",
-      "destination": "/index.html"
+      "destination": "/valorant/radiant.html"
     },
     {
       "source": "/valorant/reyna",
-      "destination": "/index.html"
+      "destination": "/valorant/reyna.html"
     },
     {
       "source": "/valorant/sweaty",
-      "destination": "/index.html"
+      "destination": "/valorant/sweaty.html"
     },
     {
       "source": "/valorant/tactical",
-      "destination": "/index.html"
+      "destination": "/valorant/tactical.html"
     },
     {
       "source": "/valorant/tryhard",
-      "destination": "/index.html"
+      "destination": "/valorant/tryhard.html"
     },
     {
       "source": "/valorant/vct",
-      "destination": "/index.html"
+      "destination": "/valorant/vct.html"
     },
     {
       "source": "/id/:slug([a-z0-9][a-z0-9-]{0,30}[a-z0-9])",
-      "destination": "/index.html"
+      "destination": "/_app.html"
     }
   ],
   "redirects": [
@@ -572,6 +572,546 @@
     {
       "source": "/index.html",
       "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-names.html",
+      "destination": "/roblox-names",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-names.html",
+      "destination": "/gamer-names",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends.html",
+      "destination": "/league-of-legends",
+      "permanent": true
+    },
+    {
+      "source": "/competitive-gamer-names.html",
+      "destination": "/competitive-gamer-names",
+      "permanent": true
+    },
+    {
+      "source": "/aesthetic-gaming-tags.html",
+      "destination": "/aesthetic-gaming-tags",
+      "permanent": true
+    },
+    {
+      "source": "/brandable-usernames.html",
+      "destination": "/brandable-usernames",
+      "permanent": true
+    },
+    {
+      "source": "/edgy-gamer-tags.html",
+      "destination": "/edgy-gamer-tags",
+      "permanent": true
+    },
+    {
+      "source": "/stylish-text-generator.html",
+      "destination": "/stylish-text-generator",
+      "permanent": true
+    },
+    {
+      "source": "/nickname-symbols.html",
+      "destination": "/nickname-symbols",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy.html",
+      "destination": "/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/terms-of-service.html",
+      "destination": "/terms-of-service",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-bio-generator.html",
+      "destination": "/gamer-bio-generator",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-names/cool.html",
+      "destination": "/roblox-names/cool",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-names/funny.html",
+      "destination": "/roblox-names/funny",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-names/aesthetic.html",
+      "destination": "/roblox-names/aesthetic",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-names/tryhard.html",
+      "destination": "/roblox-names/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-names/cool.html",
+      "destination": "/gamer-names/cool",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-names/funny.html",
+      "destination": "/gamer-names/funny",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-names/pro.html",
+      "destination": "/gamer-names/pro",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-names/edgy.html",
+      "destination": "/gamer-names/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/sweaty.html",
+      "destination": "/valorant/sweaty",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/funny.html",
+      "destination": "/valorant/funny",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/pro.html",
+      "destination": "/valorant/pro",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/aesthetic.html",
+      "destination": "/valorant/aesthetic",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/cool.html",
+      "destination": "/valorant/cool",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/tryhard.html",
+      "destination": "/valorant/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/edgy.html",
+      "destination": "/valorant/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/clean.html",
+      "destination": "/valorant/clean",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/tactical.html",
+      "destination": "/valorant/tactical",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/jett.html",
+      "destination": "/valorant/jett",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/reyna.html",
+      "destination": "/valorant/reyna",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/chamber.html",
+      "destination": "/valorant/chamber",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/radiant.html",
+      "destination": "/valorant/radiant",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/aim.html",
+      "destination": "/valorant/aim",
+      "permanent": true
+    },
+    {
+      "source": "/valorant/vct.html",
+      "destination": "/valorant/vct",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite/sweaty.html",
+      "destination": "/fortnite/sweaty",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite/funny.html",
+      "destination": "/fortnite/funny",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite/pro.html",
+      "destination": "/fortnite/pro",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite/og.html",
+      "destination": "/fortnite/og",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite/cool.html",
+      "destination": "/fortnite/cool",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite/tryhard.html",
+      "destination": "/fortnite/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/cute.html",
+      "destination": "/roblox/cute",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/soft.html",
+      "destination": "/roblox/soft",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/aesthetic.html",
+      "destination": "/roblox/aesthetic",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/anime.html",
+      "destination": "/roblox/anime",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/tiktok.html",
+      "destination": "/roblox/tiktok",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/avatar.html",
+      "destination": "/roblox/avatar",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/rp.html",
+      "destination": "/roblox/rp",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/cool.html",
+      "destination": "/roblox/cool",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/tryhard.html",
+      "destination": "/roblox/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/roblox/funny.html",
+      "destination": "/roblox/funny",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/smp.html",
+      "destination": "/minecraft/smp",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/survival.html",
+      "destination": "/minecraft/survival",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/pvp.html",
+      "destination": "/minecraft/pvp",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/bedwars.html",
+      "destination": "/minecraft/bedwars",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/medieval.html",
+      "destination": "/minecraft/medieval",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/og.html",
+      "destination": "/minecraft/og",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/cool.html",
+      "destination": "/minecraft/cool",
+      "permanent": true
+    },
+    {
+      "source": "/minecraft/brandable.html",
+      "destination": "/minecraft/brandable",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/one-word.html",
+      "destination": "/cs2/one-word",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/og.html",
+      "destination": "/cs2/og",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/pro.html",
+      "destination": "/cs2/pro",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/cool.html",
+      "destination": "/cs2/cool",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/edgy.html",
+      "destination": "/cs2/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/3-letter.html",
+      "destination": "/cs2/3-letter",
+      "permanent": true
+    },
+    {
+      "source": "/cs2/brandable.html",
+      "destination": "/cs2/brandable",
+      "permanent": true
+    },
+    {
+      "source": "/apex/movement.html",
+      "destination": "/apex/movement",
+      "permanent": true
+    },
+    {
+      "source": "/apex/predator.html",
+      "destination": "/apex/predator",
+      "permanent": true
+    },
+    {
+      "source": "/apex/sweaty.html",
+      "destination": "/apex/sweaty",
+      "permanent": true
+    },
+    {
+      "source": "/apex/pro.html",
+      "destination": "/apex/pro",
+      "permanent": true
+    },
+    {
+      "source": "/apex/cool.html",
+      "destination": "/apex/cool",
+      "permanent": true
+    },
+    {
+      "source": "/apex/tryhard.html",
+      "destination": "/apex/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/apex/edgy.html",
+      "destination": "/apex/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/realistic.html",
+      "destination": "/gta-rp/realistic",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/mafia.html",
+      "destination": "/gta-rp/mafia",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/cartel.html",
+      "destination": "/gta-rp/cartel",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/luxury.html",
+      "destination": "/gta-rp/luxury",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/gang.html",
+      "destination": "/gta-rp/gang",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/street.html",
+      "destination": "/gta-rp/street",
+      "permanent": true
+    },
+    {
+      "source": "/gta-rp/brandable.html",
+      "destination": "/gta-rp/brandable",
+      "permanent": true
+    },
+    {
+      "source": "/cod/sweaty.html",
+      "destination": "/cod/sweaty",
+      "permanent": true
+    },
+    {
+      "source": "/cod/funny.html",
+      "destination": "/cod/funny",
+      "permanent": true
+    },
+    {
+      "source": "/cod/pro.html",
+      "destination": "/cod/pro",
+      "permanent": true
+    },
+    {
+      "source": "/cod/cool.html",
+      "destination": "/cod/cool",
+      "permanent": true
+    },
+    {
+      "source": "/cod/tryhard.html",
+      "destination": "/cod/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/cod/edgy.html",
+      "destination": "/cod/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/pro.html",
+      "destination": "/league-of-legends/pro",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/sweaty.html",
+      "destination": "/league-of-legends/sweaty",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/tryhard.html",
+      "destination": "/league-of-legends/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/one-word.html",
+      "destination": "/league-of-legends/one-word",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/3-letter.html",
+      "destination": "/league-of-legends/3-letter",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/clean.html",
+      "destination": "/league-of-legends/clean",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/korean.html",
+      "destination": "/league-of-legends/korean",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/aesthetic.html",
+      "destination": "/league-of-legends/aesthetic",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/anime.html",
+      "destination": "/league-of-legends/anime",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/funny.html",
+      "destination": "/league-of-legends/funny",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/edgy.html",
+      "destination": "/league-of-legends/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/brandable.html",
+      "destination": "/league-of-legends/brandable",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends/cool.html",
+      "destination": "/league-of-legends/cool",
+      "permanent": true
+    },
+    {
+      "source": "/general/best.html",
+      "destination": "/general/best",
+      "permanent": true
+    },
+    {
+      "source": "/general/cool.html",
+      "destination": "/general/cool",
+      "permanent": true
+    },
+    {
+      "source": "/general/funny.html",
+      "destination": "/general/funny",
+      "permanent": true
+    },
+    {
+      "source": "/general/pro.html",
+      "destination": "/general/pro",
+      "permanent": true
+    },
+    {
+      "source": "/general/anime.html",
+      "destination": "/general/anime",
+      "permanent": true
+    },
+    {
+      "source": "/general/3-letter.html",
+      "destination": "/general/3-letter",
+      "permanent": true
+    },
+    {
+      "source": "/general/edgy.html",
+      "destination": "/general/edgy",
       "permanent": true
     }
   ],

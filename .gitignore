@@ -4,6 +4,7 @@ node_modules/
 dist/
 **/dist/
 .vercel/
+apps/web/.prerender/
 
 **/.env
 **/.env.*

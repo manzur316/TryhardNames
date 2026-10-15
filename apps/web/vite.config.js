@@ -284,7 +284,8 @@ logger.error = (msg, options) => {
 	loggerError(msg, options);
 }
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
+	publicDir: isSsrBuild ? false : 'public',
 	optimizeDeps: {
 		include: allDeps,
 	},
@@ -321,4 +322,4 @@ export default defineConfig({
 			]
 		}
 	}
-});
+}));

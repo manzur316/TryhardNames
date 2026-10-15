@@ -1,5 +1,6 @@
 .git/
 .vercel/
+apps/web/.prerender/
 node_modules/
 **/node_modules/
 dist/

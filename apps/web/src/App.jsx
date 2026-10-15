@@ -61,14 +61,14 @@ const PageLoader = () => (
   </div>
 );
 
-function App() {
+function App({ router: AppRouter = Router, location }) {
   return (
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
           <DataProvider>
             <DataCacheProvider>
-              <Router>
+              <AppRouter location={location}>
                 <RouteGuard>
                   <LegacyRouteHandler>
                     <FavoritesProvider>
@@ -134,7 +134,7 @@ function App() {
                     </FavoritesProvider>
                   </LegacyRouteHandler>
                 </RouteGuard>
-              </Router>
+              </AppRouter>
             </DataCacheProvider>
           </DataProvider>
         </AuthProvider>

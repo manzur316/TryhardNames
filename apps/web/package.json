@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "vite --host :: --port 3000",
-    "build": "node scripts/generate-seo-routing.js --check && node scripts/generate-sitemap.js && node tools/generate-llms.js && vite build",
+    "build": "node scripts/generate-seo-routing.js --check && node scripts/generate-sitemap.js && node tools/generate-llms.js && vite build && vite build --ssr src/entry-prerender.jsx --outDir .prerender && node scripts/prerender.js && node --test tests/prerender/build.test.js",
     "start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
     "audit:tool-containers": "node ../../scripts/audit-tool-containers.mjs",
     "lint": "eslint . --quiet",
@@ -86,6 +86,7 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
+    "parse5": "7.3.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "terser": "^5.37.0",
