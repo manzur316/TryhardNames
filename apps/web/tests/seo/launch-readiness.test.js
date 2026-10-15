@@ -152,7 +152,7 @@ describe('RM-24 Launch Readiness', () => {
 
   it('does not add RM-24 database migrations', () => {
     assert.equal(
-      migrationFiles.some((file) => /rm24|launch|readiness/i.test(file)),
+      migrationFiles.some((file) => file !== '20261015173323_passport_publication_launch.sql' && /rm24|launch|readiness/i.test(file)),
       false
     );
   });

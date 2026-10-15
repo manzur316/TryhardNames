@@ -5,6 +5,7 @@ import pg from 'pg';
 import { readFileSync } from 'node:fs';
 import { rootCertificates } from 'node:tls';
 import { authenticateOwner } from '../passport-owner.js';
+import { readLinkingAccess, canLink } from '../linking-access.js';
 import { authorizeUrl, createAuthorization, readAuthorizedProfile, readProbeConfig } from './client.js';
 
 export const BASE = '/api/v1/integrations/roblox';
@@ -17,11 +18,10 @@ export function readRuntimeConfig(env = process.env) {
   if (env.ROBLOX_LINKING_ENABLED !== 'true') return null;
   try {
     const origin = new URL(env.ROBLOX_APP_ORIGIN);
-    const local = env.NODE_ENV !== 'production' && env.ROBLOX_LOCAL_TEST === 'true'
+    const local = env.NODE_ENV !== 'production' && !env.VERCEL && env.ROBLOX_LOCAL_TEST === 'true'
       && origin.origin === 'http://localhost:3000';
     if (origin.href !== origin.origin + '/' || (!local && origin.origin !== 'https://www.tryhardnames.com')) throw new Error();
-    const testers = (env.ROBLOX_TESTER_IDS || '').split(',').map((s) => s.trim());
-    if (!testers.length || testers.length > 10 || testers.some((id) => !UUID.test(id))) throw new Error();
+    const access = readLinkingAccess(env, 'ROBLOX');
     const key = env.ROBLOX_COOKIE_KEY || '';
     if (!/^[a-fA-F0-9]{64}$/.test(key)) throw new Error();
     const database = new URL(env.ROBLOX_PASSPORT_DATABASE_URL);
@@ -37,7 +37,7 @@ export function readRuntimeConfig(env = process.env) {
       const claims = JSON.parse(Buffer.from(publicKey.split('.')[1], 'base64url').toString());
       if (claims.role !== 'anon') throw new Error();
     }
-    return { ...readProbeConfig(env), origin: origin.origin, local, testers: new Set(testers),
+    return { ...readProbeConfig(env), ...access, origin: origin.origin, local,
       cookieKey: Buffer.from(key, 'hex'), callbackUrl: origin.origin + BASE + '/callback',
       apiUrl: api.origin, publicKey, connectionString: database.href };
   } catch { throw fail('configuration_missing', 503); }
@@ -137,7 +137,7 @@ export function createRobloxRouter({ getRuntime, readProfile = readAuthorizedPro
   };
   async function ownerFor(req, config, store) {
     const owner = await store.authenticate(req);
-    if (!config.testers.has(owner.ownerId)) throw fail('tester_required', 403);
+    if (!canLink(config, owner.ownerId)) throw fail('tester_required', 403);
     return owner;
   }
   router.get('/status', run(async (req, res, config, store) => {
@@ -160,7 +160,7 @@ export function createRobloxRouter({ getRuntime, readProfile = readAuthorizedPro
       attempt = readCookie(req, config);
       if (typeof req.query.state !== 'string' || !/^[\w-]{43}$/.test(req.query.state)
         || !timingSafeEqual(Buffer.from(req.query.state), Buffer.from(attempt.state))
-        || !config.testers.has(attempt.ownerId)) throw fail('invalid_attempt');
+        || !canLink(config, attempt.ownerId)) throw fail('invalid_attempt');
       await store.transition('claim', attempt, attempt);
       claimed = true;
       if (req.query.error || typeof req.query.code !== 'string' || !/^[\x21-\x7e]{1,4096}$/.test(req.query.code)) throw fail('invalid_attempt');

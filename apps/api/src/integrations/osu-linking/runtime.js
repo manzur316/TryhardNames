@@ -17,7 +17,7 @@ export function readRuntimeConfig(env = process.env) {
   if (env.OSU_LINKING_ENABLED !== 'true') return null;
   try {
     const origin = new URL(env.OSU_APP_ORIGIN);
-    const local = env.NODE_ENV !== 'production' && env.OSU_LOCAL_TEST === 'true'
+    const local = env.NODE_ENV !== 'production' && !env.VERCEL && env.OSU_LOCAL_TEST === 'true'
       && origin.origin === 'http://localhost:3000';
     if (origin.href !== origin.origin + '/' || (!local && origin.origin !== 'https://www.tryhardnames.com')) throw new Error();
     const key = env.OSU_COOKIE_KEY || '';

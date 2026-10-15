@@ -7,7 +7,9 @@ game emblems and backgrounds, and persistent Roblox identity linking for explici
 allowlisted testers. It does not open Roblox to the general public or activate
 the local osu!, Clash, Riot, or other provider experiments.
 
-Roblox approval remains pending. Do not remove the tester restriction before review.
+Roblox approval and public application status were confirmed by the owner on October 15, 2026.
+The implementation retains tester mode by default; the prepared public beta requires
+the explicit server setting ROBLOX_LINKING_ACCESS=public. This does not publish profile data.
 The new database was explicitly selected for the initial launch. Preview retains its
 previous environment; production and local development must be treated as separate.
 

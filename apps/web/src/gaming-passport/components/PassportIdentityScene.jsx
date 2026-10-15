@@ -9,7 +9,7 @@ import '../passport.css';
 import './privateIdentityScene.css';
 
 export default function PassportIdentityScene({
-  alias, avatarUrl, bio, scene = {}, slug, updatedAt, privatePreview = false, localOnly = false, isPublished = false, gameHighlights = [], probeHighlights = [],
+  alias, avatarUrl, bio, scene = {}, slug, updatedAt, privatePreview = false, publicPresentation = false, localOnly = false, isPublished = false, gameHighlights = [], probeHighlights = [],
 }) {
   const [brokenAvatar, setBrokenAvatar] = useState('');
   const [shareMessage, setShareMessage] = useState('');
@@ -17,15 +17,16 @@ export default function PassportIdentityScene({
   const accent = ['cyan', 'violet', 'emerald', 'amber'].includes(scene.accent) ? scene.accent : 'violet';
   const title = alias || (privatePreview ? 'Your identity' : slug);
   const decorated = loadout.themeId === 'theme.obsidian-pulse';
-  const frame = privatePreview ? resolveAvatarFrame(scene.avatarFrameId, decorated) : null;
-  const background = privatePreview ? resolveProfileBackground(scene.backgroundId) : null;
+  const richPresentation = privatePreview || publicPresentation;
+  const frame = richPresentation ? resolveAvatarFrame(scene.avatarFrameId, decorated) : null;
+  const background = richPresentation ? resolveProfileBackground(scene.backgroundId) : null;
   const frameStyle = frame?.src ? { '--avatar-size': `${frame.size}%`, '--avatar-left': `${(100 - frame.size) / 2}%`, '--avatar-top': `${frame.top}%` } : undefined;
   const avatarSource = avatarUrl || (decorated ? '/passport/moonlit-avatar.webp' : '');
   const hasAvatar = avatarSource && avatarSource !== brokenAvatar
     && (avatarSource === '/passport/moonlit-avatar.webp' || /^https?:\/\//i.test(avatarSource));
   const Heading = privatePreview ? 'h2' : 'h1';
-  const highlightCount = privatePreview ? gameHighlights.length + probeHighlights.length : 0;
-  const hasHighlights = privatePreview && highlightCount > 0;
+  const highlightCount = richPresentation ? gameHighlights.length + probeHighlights.length : 0;
+  const hasHighlights = richPresentation && highlightCount > 0;
   const portrait = <div className="gp-avatar-frame">
     {hasAvatar ? <img src={avatarSource} alt="" referrerPolicy="no-referrer" onError={() => setBrokenAvatar(avatarSource)} />
       : alias ? <span aria-hidden="true">{Array.from(alias)[0].toUpperCase()}</span>
@@ -52,7 +53,7 @@ export default function PassportIdentityScene({
     <p className="gp-overline">Gaming Passport</p>
     <Heading className={title?.length > 28 ? 'gp-long-alias' : undefined}>{title}</Heading>
     {!privatePreview && slug && <p className="gp-handle">@{slug}</p>}
-    {privatePreview && bio && <p className="gp-bio">{bio}</p>}
+    {richPresentation && bio && <p className="gp-bio">{bio}</p>}
     {privatePreview ? (
       <div className="gp-private-state"><LockKeyhole size={14} aria-hidden="true" /><span>{localOnly ? 'Local draft' : 'Private preview'}</span><span>{isPublished ? 'Published Passport' : 'Not published'}</span></div>
     ) : (
@@ -65,11 +66,11 @@ export default function PassportIdentityScene({
   </div>;
 
   return (
-    <section className={`gp-scene gp-accent-${accent} ${privatePreview ? 'gp-scene-owner' : ''} ${hasHighlights ? 'gp-scene-with-games' : ''} ${decorated ? 'gp-scene-pulse' : ''} ${scene.layout === 'compact' ? 'gp-scene-compact' : ''} ${scene.density === 'dense' ? 'gp-scene-dense' : ''}`} data-highlight-count={privatePreview ? highlightCount : undefined} aria-label={privatePreview ? 'Private Gaming Passport preview' : 'Gaming Passport'}>
-      {!privatePreview && <img className="gp-cover" src="/passport/passport-citadel.webp" alt="" fetchPriority="high" width="2160" height="720" />}
-      {privatePreview && <img className="gp-owner-backdrop" data-background={background.id} src={background.src} alt="" aria-hidden="true" width={background.width} height={background.height} />}
+    <section className={`gp-scene gp-accent-${accent} ${richPresentation ? 'gp-scene-owner' : ''} ${hasHighlights ? 'gp-scene-with-games' : ''} ${decorated ? 'gp-scene-pulse' : ''} ${scene.layout === 'compact' ? 'gp-scene-compact' : ''} ${scene.density === 'dense' ? 'gp-scene-dense' : ''}`} data-highlight-count={richPresentation ? highlightCount : undefined} aria-label={privatePreview ? 'Private Gaming Passport preview' : 'Gaming Passport'}>
+      {!richPresentation && <img className="gp-cover" src="/passport/passport-citadel.webp" alt="" fetchPriority="high" width="2160" height="720" />}
+      {richPresentation && <img className="gp-owner-backdrop" data-background={background.id} src={background.src} alt="" aria-hidden="true" width={background.width} height={background.height} />}
       <div className="gp-scene-inner">
-        {privatePreview ? <>
+        {richPresentation ? <>
           <div className="gp-owner-profile">
             <div className={`gp-owner-avatar ${frame.src ? 'gp-owner-avatar-ornate' : ''}`} data-frame={frame.id} style={frameStyle}>
               {portrait}

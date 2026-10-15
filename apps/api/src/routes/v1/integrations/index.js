@@ -6,6 +6,7 @@ import riot from '../../../integrations/riot/routes.js';
 import osu from '../../../integrations/osu/routes.js';
 import osuLinking from '../../../integrations/osu-linking/runtime.js';
 import roblox from '../../../integrations/roblox/runtime.js';
+import steam from '../../../integrations/steam/runtime.js';
 
 const r = Router();
 
@@ -16,5 +17,6 @@ r.use('/riot', riot);
 r.use('/osu', osuLinking);
 r.use('/osu', osu);
 r.use('/roblox', roblox);
+r.use('/steam', steam);
 
 export default r;

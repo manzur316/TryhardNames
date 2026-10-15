@@ -18,10 +18,10 @@ export async function authenticateOwner(header, clientFactory) {
     || !Number.isFinite(claims.exp) || claims.exp * 1000 <= Date.now()) {
     throw new PrivateLinkError('sign_in_required', 401);
   }
-  const result = await client.from('gaming_passports').select('id,status,slug,publication_consent')
+  const result = await client.from('gaming_passports').select('id,status,slug,publication_consent,suspended_at')
     .eq('owner_id', data.user.id).maybeSingle();
   if (result.error || !result.data) throw new PrivateLinkError('passport_required', 409);
-  if (result.data.status !== 'draft_private' || result.data.slug !== null || result.data.publication_consent !== false) {
+  if (result.data.suspended_at || !['draft_private', 'published', 'unpublished'].includes(result.data.status)) {
     throw new PrivateLinkError('private_passport_required', 409);
   }
   return { ownerId: data.user.id, sessionId: claims.session_id, passportId: result.data.id, client };

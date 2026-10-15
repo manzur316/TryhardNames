@@ -18,6 +18,7 @@ const fixture = () => ({ accountId: '12345', username: 'TestPlayer', displayName
   createdAt: null, verifiedAt: new Date().toISOString(), access_token: 'must-not-persist' });
 
 async function setup(t, options = {}) {
+  const runtimeConfig = options.config || config;
   const transitions = [];
   let phase = '';
   let snapshot;
@@ -39,7 +40,7 @@ async function setup(t, options = {}) {
     },
   };
   const app = express();
-  app.use(BASE, createRobloxRouter({ getRuntime: () => options.disabled ? null : { config, store },
+  app.use(BASE, createRobloxRouter({ getRuntime: () => options.disabled ? null : { config: runtimeConfig, store },
     readProfile: async () => { exchanges++; if (options.failProvider) throw new Error('secret-provider-payload'); return fixture(); } }));
   const server = app.listen(0, '127.0.0.1');
   await once(server, 'listening');
@@ -75,6 +76,26 @@ test('encrypted browser attempt rejects tampering, expiry and different applicat
   assert.throws(() => openAttempt('X' + sealed.slice(1), config));
   assert.throws(() => openAttempt(sealed, config, () => value.expires));
   assert.throws(() => openAttempt(sealed, { ...config, origin: 'https://other.example' }));
+});
+
+test('public Roblox allows a non-tester through the complete flow, without bypassing auth', async (t) => {
+  assert.throws(() => readRuntimeConfig({ ...env, ROBLOX_APP_ORIGIN: 'http://localhost:3000', ROBLOX_LOCAL_TEST: 'true', VERCEL: '1' }), /configuration_missing/);
+  const publicConfig = readRuntimeConfig({ ...env, ROBLOX_LINKING_ACCESS: 'public', ROBLOX_TESTER_IDS: '' });
+  assert.equal(publicConfig.testers.size, 0);
+  assert.throws(() => readRuntimeConfig({ ...env, ROBLOX_LINKING_ACCESS: 'typo' }));
+  const s = await setup(t, { config: publicConfig });
+  assert.equal((await s.call('/connect', 'POST', { Authorization: '' })).status, 401);
+  const { Cookie, state } = await s.connect();
+  assert.match((await s.call('/callback?code=code&state=' + state, 'GET', { Cookie })).headers.get('location'), /robloxLink=ready/);
+  assert.equal((await s.call('/complete', 'POST', { Cookie })).status, 200);
+  assert.deepEqual(s.transitions, ['start','claim','ready','complete']);
+});
+
+test('tester mode still rejects a valid owner outside its allowlist', async (t) => {
+  const s = await setup(t, { config: { ...config, testers: new Set() } });
+  assert.equal((await s.call('/connect', 'POST')).status, 403);
+  assert.equal((await s.call('/status')).status, 403);
+  assert.deepEqual(s.transitions, []);
 });
 
 test('production authorization and exchange use the same registered callback, PKCE and minimal scopes', async () => {

@@ -74,7 +74,7 @@ test('production renders saved osu! independently of development linking and cle
   const source = readFileSync(new URL('../../src/gaming-passport/components/PassportWorkspace.jsx', import.meta.url), 'utf8');
   assert.match(source, /import SavedOsuConnections from/);
   assert.match(source, /!showOsuPersistence && !showOsuProbe && <SavedOsuConnections/);
-  assert.match(source, /\[\.\.\.gameHighlights, \.\.\.linkedRobloxHighlights\]/);
+  assert.match(source, /\[\.\.\.gameHighlights, \.\.\.linkedRobloxHighlights, \.\.\.linkedSteamHighlights\]/);
   const component = readFileSync(new URL('../../src/gaming-passport/components/SavedOsuConnections.jsx', import.meta.url), 'utf8');
   assert.match(component, /requestVersion !== version/);
   assert.match(component, /controller\?\.abort\(\)/);
@@ -157,17 +157,19 @@ test('shared public scene has no private biography or parent identity input', ()
 
 test('private header combines a decorative backdrop and actual games without changing public or share guards', () => {
   const source = readFileSync(new URL('../../src/gaming-passport/components/PassportIdentityScene.jsx', import.meta.url), 'utf8');
-  assert.match(source, /!privatePreview && <img className="gp-cover" src="\/passport\/passport-citadel\.webp"/);
-  assert.match(source, /privatePreview && <img className="gp-owner-backdrop"[^>]+src=\{background\.src\} alt="" aria-hidden="true"/);
-  assert.match(source, /privatePreview \? resolveProfileBackground\(scene\.backgroundId\) : null/);
-  assert.match(source, /data-highlight-count=\{privatePreview \? highlightCount : undefined\}/);
-  assert.match(source, /const highlightCount = privatePreview \? gameHighlights.length \+ probeHighlights.length : 0/);
-  assert.match(source, /const hasHighlights = privatePreview && highlightCount > 0/);
+  assert.match(source, /const richPresentation = privatePreview \|\| publicPresentation/);
+  assert.match(source, /publicPresentation = false/);
+  assert.match(source, /!richPresentation && <img className="gp-cover" src="\/passport\/passport-citadel\.webp"/);
+  assert.match(source, /richPresentation && <img className="gp-owner-backdrop"[^>]+src=\{background\.src\} alt="" aria-hidden="true"/);
+  assert.match(source, /richPresentation \? resolveProfileBackground\(scene\.backgroundId\) : null/);
+  assert.match(source, /data-highlight-count=\{richPresentation \? highlightCount : undefined\}/);
+  assert.match(source, /const highlightCount = richPresentation \? gameHighlights.length \+ probeHighlights.length : 0/);
+  assert.match(source, /const hasHighlights = richPresentation && highlightCount > 0/);
   assert.match(source, /hasHighlights && <PrivateGameHighlights highlights=\{gameHighlights\}/);
-  assert.match(source, /privatePreview \? 'gp-scene-owner' : ''/);
+  assert.match(source, /richPresentation \? 'gp-scene-owner' : ''/);
   assert.match(source, /if \(privatePreview \|\| !slug\) return/);
   assert.match(source, /!privatePreview && slug/);
-  assert.match(source, /privatePreview && bio/);
+  assert.match(source, /richPresentation && bio/);
   assert.doesNotMatch(source, /auth\.user|user_metadata|email|verifiedProofs|competitive_rank|level|ShieldCheck/);
 });
 
@@ -181,14 +183,18 @@ test('private highlights use bounded single tiles and a two-column desktop mosai
 test('user-supplied game insignias have stable names and bounded local assets', () => {
   assert.ok(Object.isFrozen(GAME_BADGES));
   assert.deepEqual(GAME_BADGES.map((badge) => badge.id), [
-    'fortnite', 'rocket-league', 'apex-legends', 'valorant', 'osu', 'counter-strike-2', 'brawl-stars', 'league-of-legends', 'clash-of-clans', 'roblox',
+    'fortnite', 'rocket-league', 'apex-legends', 'valorant', 'osu', 'counter-strike-2', 'brawl-stars', 'league-of-legends', 'clash-of-clans', 'roblox', 'steam',
   ]);
-  assert.equal(new Set(GAME_BADGES.map((badge) => badge.game)).size, 10);
+  assert.equal(new Set(GAME_BADGES.map((badge) => badge.game)).size, 11);
   let totalBytes = 0;
   for (const badge of GAME_BADGES) {
     assert.ok(Object.isFrozen(badge));
     assert.deepEqual(Object.keys(badge).sort(), ['game', 'id', 'src']);
     assert.equal(getGameBadge(badge.game), badge);
+    if (badge.id === 'steam') {
+      assert.equal(badge.src, 'https://store.fastly.steamstatic.com/public/shared/images/header/logo_steam.svg');
+      continue;
+    }
     assert.equal(badge.src, `/passport/game-badges/${badge.id}.${badge.id === 'roblox' ? 'png' : 'webp'}`);
     const bytes = readFileSync(new URL(`../../public${badge.src}`, import.meta.url));
     if (badge.id === 'roblox') {
@@ -315,7 +321,7 @@ test('private header preserves the chosen avatar, with initials or icon on failu
 
 test('header ornament is decoration only and the optimized assets are available', () => {
   const source = readFileSync(new URL('../../src/gaming-passport/components/PassportIdentityScene.jsx', import.meta.url), 'utf8');
-  assert.match(source, /privatePreview \? <>/);
+  assert.match(source, /richPresentation \? <>/);
   assert.match(source, /className=\{`gp-owner-avatar/);
   assert.match(source, /frame\.src && <img className="gp-avatar-ornament"[^>]+alt="" aria-hidden="true"/);
   for (const name of ['passport-citadel-v2.webp', 'passport-avatar-frame.webp']) {

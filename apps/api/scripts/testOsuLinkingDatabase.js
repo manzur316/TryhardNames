@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 
 // No published ports, no network and ephemeral storage. Never accepts a database URL.
 const container = 'thn-osu-test-' + randomUUID();
+const publication = process.argv.includes('--publication');
 const run = (...args) => execFileSync('docker', args, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
 try {
   run('run', '--detach', '--rm', '--network', 'none', '--name', container,
@@ -20,16 +21,19 @@ try {
     create table auth.sessions(id uuid primary key, user_id uuid references auth.users, not_after timestamptz);
     create function auth.uid() returns uuid language sql as
       'select nullif(current_setting(''request.jwt.claim.sub'', true), '''')::uuid';
+    create function auth.jwt() returns jsonb language sql as
+      'select nullif(current_setting(''request.jwt.claims'', true), '''')::jsonb';
   `;
   const migrations = ['20260623190000_gaming_passport_core.sql', '20261014204209_osu_private_persistence.sql',
-    '20261014213058_passport_internal_helper_paths.sql', '20261015024632_roblox_private_linking_runtime.sql', '20261015061942_osu_production_linking.sql']
+    '20261014213058_passport_internal_helper_paths.sql', '20261015024632_roblox_private_linking_runtime.sql', '20261015061942_osu_production_linking.sql',
+    ...(publication ? ['20261015173323_passport_publication_launch.sql'] : [])]
     .map((name) => readFileSync(new URL('migrations/' + name, root), 'utf8')).join('\n');
-  const tests = readFileSync(new URL('tests/database/osu_production_linking_test.sql', root), 'utf8');
+  const tests = readFileSync(new URL('tests/database/' + (publication ? 'passport_publication_test.sql' : 'osu_production_linking_test.sql'), root), 'utf8');
   const result = execFileSync('docker', ['exec', '-i', container, 'psql', '-U', 'postgres', '-v', 'ON_ERROR_STOP=1', '-At'],
     { input: bootstrap + migrations + tests, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
   const count = (result.match(/^ok:/gm) || []).length;
   if (count < 20) throw new Error('missing_assertions');
-  console.log('Osu database: ' + count + ' assertions passed in isolated PostgreSQL; no remote database accessed.');
+  console.log((publication ? 'Publication' : 'Osu') + ' database: ' + count + ' assertions passed in isolated PostgreSQL; no remote database accessed.');
 } catch (error) {
   console.error(error.stderr?.toString() || error.message);
   process.exitCode = 1;

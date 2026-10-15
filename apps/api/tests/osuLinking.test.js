@@ -79,6 +79,7 @@ test('encrypted browser attempt rejects tampering, expiry and different applicat
 });
 
 test('production authorization and exchange use the same registered callback and minimal scopes', async () => {
+  assert.throws(() => readRuntimeConfig({ ...env, OSU_APP_ORIGIN: 'http://localhost:3000', OSU_LOCAL_TEST: 'true', VERCEL: '1' }), /configuration_missing/);
   const url = new URL(authorizeUrl(config, createAuthorization()));
   assert.equal(url.searchParams.get('redirect_uri'), config.callbackUrl);
   assert.equal(url.searchParams.get('scope'), 'identify public');

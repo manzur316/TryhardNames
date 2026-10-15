@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { AlertTriangle, Home, ShieldCheck } from 'lucide-react';
 import PublicLinkedProviders from '@/gaming-passport/components/PublicLinkedProviders.jsx';
 import PublicPassportCard from '@/gaming-passport/components/PublicPassportCard.jsx';
+import PublicPassportProfile from '@/gaming-passport/components/PublicPassportProfile.jsx';
 import PublicPassportSafetyNotice from '@/gaming-passport/components/PublicPassportSafetyNotice.jsx';
 import PublicProfileReportDialog from '@/gaming-passport/components/PublicProfileReportDialog.jsx';
 import PublicProofCard from '@/gaming-passport/components/PublicProofCard.jsx';
@@ -57,8 +58,15 @@ export default function PublicGamingPassportPage() {
     }
 
     loadPassport();
+    const refresh = () => { if (!document.hidden) loadPassport(); };
+    const timer = window.setInterval(refresh, 30000);
+    window.addEventListener('focus', refresh);
+    window.addEventListener('pageshow', refresh);
     return () => {
       cancelled = true;
+      window.clearInterval(timer);
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener('pageshow', refresh);
     };
   }, [slug]);
 
@@ -107,9 +115,9 @@ function PublicPassportLoaded({ passport }) {
         ogType="profile"
       />
       <main className="gp-public bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
-        <PublicPassportCard passport={passport} />
+        {passport.schemaVersion === 2 ? <PublicPassportProfile passport={passport} /> : <PublicPassportCard passport={passport} />}
 
-        <section className="gp-public-content">
+        {passport.schemaVersion !== 2 && <section className="gp-public-content">
           {passport.featuredProofs.length > 0 && <div>
             <div className="gp-section-heading">
               <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
@@ -129,7 +137,7 @@ function PublicPassportLoaded({ passport }) {
             <PublicLinkedProviders providers={passport.linkedProviders} />
             <PublicProfileReportDialog slug={passport.slug} />
           </div>
-        </section>
+        </section>}
         <details className="gp-policy">
           <summary>Verification & privacy</summary>
           <PublicPassportSafetyNotice />

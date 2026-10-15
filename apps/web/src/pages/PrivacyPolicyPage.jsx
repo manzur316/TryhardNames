@@ -59,10 +59,10 @@ const PrivacyPolicyPage = () => {
               <li>We do not sell Riot data, use hidden player data, or put Riot data behind a paywall.</li>
               <li>Unlink/revoke for future providers is planned before their launch.</li>
             </ul>
-            <h3 className="text-xl font-bold text-dark-50 mt-6 mb-3">Roblox private linking test</h3>
+            <h3 className="text-xl font-bold text-dark-50 mt-6 mb-3">Roblox account linking</h3>
             <p className="text-dark-300 leading-relaxed mb-4">
-              Roblox linking is currently restricted to approved testers. After you authorize Roblox with the
-              openid and profile permissions, we receive your Roblox user ID, username, display name, avatar URL,
+              When Roblox linking is available, you can authorize Roblox with the
+              openid and profile permissions. We receive your Roblox user ID, username, display name, avatar URL,
               and account creation date when supplied. We use these fields only to verify account ownership and
               display your linked identity in your private Passport. We do not request your Roblox password,
               Robux balance, purchase history, or a cross-game competitive ranking.
@@ -76,10 +76,29 @@ const PrivacyPolicyPage = () => {
               cancellation, unlinking, or subsequent expired-attempt cleanup.
             </p>
             <p className="text-dark-300 leading-relaxed">
-              Linked Roblox profile fields remain private and are not sold or used for advertising. Unlinking
+              Linked Roblox profile fields are private by default and are not sold or used for advertising. Unlinking
               removes the displayed profile and clears its stored profile snapshot. Revoked identifiers and
               verification records remain to prevent reassignment and abuse. For deletion requests, use the
               contact details below. Roblox linking does not publish your Passport or authorize future access.
+            </p>
+            <h3 className="text-xl font-bold text-dark-50 mt-6 mb-3">osu! and Steam account linking</h3>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              osu! authorization uses identify and public permissions to verify your account and read your
+              username, game mode, performance points, ranks, accuracy and medal count when available.
+              Tokens are processed server-side and revoked after verification, not stored for ongoing access.
+            </p>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              Steam sign-in uses OpenID to verify your Steam ID. We read your display name, avatar and account
+              creation date when available, plus the game count and up to six most-played games with reported
+              total and recent playtime. Steam privacy settings can make these details unavailable. We do not
+              receive your Steam password or infer a competitive rank from library size or playtime.
+            </p>
+            <p className="text-dark-300 leading-relaxed">
+              You confirm each connection before it is saved. These are dated snapshots, not continuous
+              monitoring. Steam snapshots remain private in this release. Publishing a Passport is a separate
+              action and does not automatically publish newly linked accounts. Unlinking clears the saved
+              profile snapshot and revokes its ownership proof; identifiers and revocation records are retained
+              to prevent reassignment and abuse. Temporary linking attempts expire after at most ten minutes.
             </p>
           </section>
 

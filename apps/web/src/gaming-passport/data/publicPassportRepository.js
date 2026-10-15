@@ -8,6 +8,7 @@ import {
   normalizePublicSlug,
 } from '@/gaming-passport/domain/index.js';
 import { sanitizeCosmeticLoadout } from '@/gaming-passport/cosmetics/index.js';
+import { mapPublicPassportV2 } from './publicPassportV2.js';
 
 const OSU_PROFILE_HOST_PARTS = Object.freeze(['osu', 'ppy', 'sh']);
 
@@ -69,6 +70,7 @@ export async function getPublicPassportBySlug(client, slug) {
 }
 
 export function mapPublicPassportProjection(projection) {
+  if (projection?.schemaVersion === 2) return mapPublicPassportV2(projection);
   if (!isPlainObject(projection)) return null;
   if (hasForbiddenPublicProjectionKeys(projection)) return null;
 
