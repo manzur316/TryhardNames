@@ -125,7 +125,7 @@ function inferredEditorialLinks({ category, keyword }) {
     out.push({ label: 'Aesthetic gaming tags hub', to: '/aesthetic-gaming-tags' });
   }
   if (c === 'minecraft' && (k === 'smp' || k === 'medieval')) {
-    out.push({ label: 'Roleplay usernames (general)', to: '/general/rp' });
+    out.push({ label: 'Roblox roleplay usernames', to: '/roblox/rp' });
   }
 
   return uniqLinks(out);

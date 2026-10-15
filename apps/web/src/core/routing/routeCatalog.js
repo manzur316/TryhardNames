@@ -11,7 +11,7 @@
  * @module core/routing/routeCatalog
  */
 
-import { TOPIC_HUB_ROUTES } from '@/seo/programmatic/topicHubRoutes.js';
+import { TOPIC_HUB_ROUTES } from '../../seo/programmatic/topicHubRoutes.js';
 
 /** Exact pathname matches for every static `<Route>` in App.jsx (incl. topic hubs). */
 export const APP_REGISTERED_STATIC_PATHS = Object.freeze([

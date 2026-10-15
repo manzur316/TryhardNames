@@ -43,9 +43,9 @@ export const RobloxNamesPage = () => {
       faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Roblox Name Generator - Create Unique Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Navigate the massive ecosystem of Roblox with a username that captures your unique style. Because Roblox hosts millions of active players across thousands of distinct experiences, securing a memorable and available name requires creativity. Our generator is optimized specifically for Roblox's platform culture, helping you bypass the frustration of "username already taken" errors.
         </p>

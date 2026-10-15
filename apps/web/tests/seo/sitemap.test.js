@@ -8,9 +8,10 @@ import {
 } from '../../src/utils/sitemapGenerator.js';
 
 describe('sitemap generation', () => {
-  it('uses a deterministic lastmod date', () => {
-    assert.equal(getSitemapLastmod(), '2026-05-10');
-    assert.match(generateSitemap(), /<lastmod>2026-05-10<\/lastmod>/);
+  it('does not invent modification dates shared by unrelated pages', () => {
+    assert.equal(getSitemapLastmod(), null);
+    assert.doesNotMatch(generateSitemap(), /<lastmod>/);
+    assert.match(generateSitemap(), /<loc>https:\/\/www\.tryhardnames\.com\//);
   });
 
   it('includes core public routes once', () => {
@@ -19,13 +20,12 @@ describe('sitemap generation', () => {
     assert.ok(paths.includes('/'));
     assert.ok(paths.includes('/roblox-names'));
     assert.ok(paths.includes('/gamer-names'));
-    assert.ok(paths.includes('/identity-kit'));
+    assert.ok(!paths.includes('/identity-kit'));
     assert.ok(paths.includes('/gaming-passport'));
   });
 
   it('assigns expected metadata for public route classes', () => {
     assert.deepEqual(getPageMetadata('/'), { priority: 1.0, changefreq: 'daily' });
-    assert.deepEqual(getPageMetadata('/identity-kit'), { priority: 0.8, changefreq: 'monthly' });
     assert.deepEqual(getPageMetadata('/gaming-passport'), { priority: 0.8, changefreq: 'monthly' });
     assert.deepEqual(getPageMetadata('/roblox-names'), { priority: 0.9, changefreq: 'weekly' });
     assert.deepEqual(getPageMetadata('/roblox-names/cool'), {

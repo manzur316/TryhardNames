@@ -81,7 +81,6 @@ export default function PublicGamingPassportPage() {
           title="Gaming Passport | TryhardNames"
           description="Loading a public TryhardNames Gaming Passport."
           path={`/id/${normalizedSlug || slug}`}
-          noIndex
           skipCanonical
         />
         <main className="min-h-[70vh] bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">

@@ -41,9 +41,9 @@ export const RobloxNamesTryhardPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Tryhard Roblox Names - Competitive & Serious Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Establish dominance before the match even begins with a username that projects competitive prowess and dedication. Tryhard Roblox names are designed for players who play to win, whether in intense shooters, fast-paced minigames, or ranked arenas. These names let everyone in the lobby know that you are a serious threat.
         </p>

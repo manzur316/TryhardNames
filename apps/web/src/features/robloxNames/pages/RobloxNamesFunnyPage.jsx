@@ -41,9 +41,9 @@ export const RobloxNamesFunnyPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Funny Roblox Names - Humorous & Entertaining Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Gaming is ultimately about having fun, and a humorous username is the perfect way to spread entertainment across the platform. A funny Roblox name breaks the ice in social games, diffuses tension in competitive matches, and guarantees you will get a reaction from other players the moment you join a server.
         </p>

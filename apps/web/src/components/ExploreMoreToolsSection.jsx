@@ -37,10 +37,10 @@ const ExploreMoreToolsSection = ({ game }) => {
       border: 'hover:border-primary/50'
     },
     {
-      title: 'Clan names',
-      description: 'Team tags for rosters, streams, and squads',
+      title: 'Gamer names',
+      description: 'Player aliases for games and streams',
       icon: Shield,
-      path: '/clan-name-generator',
+      path: '/gamer-names',
       color: 'text-secondary',
       bg: 'bg-secondary/10',
       border: 'hover:border-secondary/50'

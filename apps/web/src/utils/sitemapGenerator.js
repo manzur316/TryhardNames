@@ -1,10 +1,10 @@
 
 import { getAllValidSlugs } from './pageLoader.js';
 import { getAllTopicHubPaths } from '../seo/programmatic/hubs.js';
+import { SITE_ORIGIN } from '../seo/constants.js';
 
-const toolPages = ['/stylish-text-generator', '/nickname-symbols', '/identity-kit', '/gaming-passport'];
+const toolPages = ['/stylish-text-generator', '/nickname-symbols', '/gaming-passport'];
 const hubPages = ['/roblox-names', '/gamer-names', '/league-of-legends'];
-const DEFAULT_SITEMAP_LASTMOD = '2026-05-10';
 
 /** Indexable static routes not covered by hub/tool/dynamic lists */
 const staticPages = [
@@ -23,7 +23,8 @@ const staticPages = [
   '/gamer-names/edgy',
 ];
 
-export const getSitemapLastmod = () => DEFAULT_SITEMAP_LASTMOD;
+// Omit lastmod until each page has a reliable content modification timestamp.
+export const getSitemapLastmod = () => null;
 
 /**
  * Automatically determines page priority and change frequency based on URL structure.
@@ -96,13 +97,11 @@ export const getSitemapUrls = () => {
 };
 
 export const generateSitemap = () => {
-  const baseUrl = 'https://tryhardnames.com';
+  const baseUrl = SITE_ORIGIN;
   const urls = getSitemapUrls();
-  const date = getSitemapLastmod();
 
   const urlElements = urls.map(url => `  <url>
     <loc>${baseUrl}${url.path}</loc>
-    <lastmod>${date}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority.toFixed(1)}</priority>
   </url>`).join('\n');

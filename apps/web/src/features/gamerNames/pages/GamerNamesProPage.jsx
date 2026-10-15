@@ -41,9 +41,9 @@ export const GamerNamesProPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Pro Gamer Names - Professional Gaming Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Launch your esports career with a username that commands respect and professional credibility. If you are competing in tournaments, climbing the highest ranked ladders, or seeking team recruitment, your name is your brand. A pro gamer name ensures you are taken seriously by organizations, sponsors, and the competitive community.
         </p>

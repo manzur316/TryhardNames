@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import SeoHead from '@/seo/SeoHead.jsx';
 import { Link } from 'react-router-dom';
 import { Trophy, Users, Gamepad2, ArrowRight, TrendingUp } from 'lucide-react';
 
@@ -27,10 +27,9 @@ const LeaderboardsPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Gaming Name Leaderboards | TryhardNames</title>
-        <meta name="description" content="Discover the most popular, trending, and highly-rated gaming names and games on TryhardNames." />
-      </Helmet>
+      <SeoHead title="Gaming Name Leaderboards | TryhardNames"
+        description="Gaming name leaderboards are being prepared."
+        path="/leaderboards" noIndex skipCanonical />
 
       <div className="bg-background text-foreground flex-grow flex flex-col">
         <div className="container mx-auto px-4 py-12 max-w-5xl flex-grow">

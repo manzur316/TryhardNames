@@ -41,9 +41,9 @@ export const RobloxNamesCoolPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Cool Roblox Names - Stylish & Impressive Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Elevate your presence in any server with a sleek, sophisticated username. A cool Roblox name acts as your digital calling card, instantly communicating confidence and style to other players. Whether you are dominating in action games or leading a popular group, an impressive name ensures you are remembered long after the session ends.
         </p>

@@ -67,7 +67,7 @@ const HomePage = () => {
     { label: 'Valorant', to: '/valorant/sweaty' },
     { label: 'Fortnite', to: '/fortnite/tryhard' },
     { label: 'Call of Duty', to: '/cod/sweaty' },
-    { label: 'Free Fire', to: '/free-fire' },
+    { label: 'Counter-Strike 2', to: '/cs2/pro' },
     { label: 'League of Legends', to: '/league-of-legends' },
   ];
 

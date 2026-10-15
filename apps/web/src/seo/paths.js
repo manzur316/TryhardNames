@@ -7,8 +7,9 @@ import { SITE_ORIGIN } from './constants.js';
  */
 export function normalizePath(path) {
   if (!path || path === '/') return '/';
-  const p = path.startsWith('/') ? path : `/${path}`;
-  return p.replace(/\/{2,}/g, '/');
+  const pathname = String(path).split(/[?#]/, 1)[0];
+  const p = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  return p.replace(/\/{2,}/g, '/').replace(/\/+$/, '') || '/';
 }
 
 /**

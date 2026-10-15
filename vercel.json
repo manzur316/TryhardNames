@@ -4,7 +4,649 @@
   "outputDirectory": "apps/web/dist",
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/index.mjs?apiPath=:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index.mjs?apiPath=:path*"
+    },
+    {
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/account",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/aesthetic-gaming-tags",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/movement",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/predator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/sweaty",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/apex/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/auth/callback",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/brandable-usernames",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cod/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cod/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cod/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cod/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cod/sweaty",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cod/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/competitive-gamer-names",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/3-letter",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/brandable",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/og",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/one-word",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cs2/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/edgy-gamer-tags",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/favorites",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fortnite/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fortnite/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fortnite/og",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fortnite/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fortnite/sweaty",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fortnite/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamer-bio-generator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamer-names",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamer-names/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamer-names/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamer-names/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamer-names/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gaming-passport",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/3-letter",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/anime",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/best",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/general/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/brandable",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/cartel",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/gang",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/luxury",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/mafia",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/realistic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gta-rp/street",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/leaderboards",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/3-letter",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/aesthetic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/anime",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/brandable",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/clean",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/korean",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/one-word",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/sweaty",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/league-of-legends/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/bedwars",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/brandable",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/medieval",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/og",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/pvp",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/smp",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/minecraft/survival",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nickname-symbols",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox-names",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox-names/aesthetic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox-names/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox-names/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox-names/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/aesthetic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/anime",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/avatar",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/cute",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/rp",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/soft",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/tiktok",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/roblox/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sign-in",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sign-up",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/stylish-text-generator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms-of-service",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/aesthetic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/aim",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/chamber",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/clean",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/cool",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/edgy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/funny",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/jett",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/radiant",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/reyna",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/sweaty",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/tactical",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/tryhard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/valorant/vct",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/id/:slug([a-z0-9][a-z0-9-]{0,30}[a-z0-9])",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/cool-names",
+      "destination": "/gamer-names/cool",
+      "permanent": true
+    },
+    {
+      "source": "/funny-names",
+      "destination": "/gamer-names/funny",
+      "permanent": true
+    },
+    {
+      "source": "/valorant-names",
+      "destination": "/gamer-names",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite-names",
+      "destination": "/gamer-names",
+      "permanent": true
+    },
+    {
+      "source": "/fortnite-tryhard-names",
+      "destination": "/gamer-names",
+      "permanent": true
+    },
+    {
+      "source": "/cool-gamer-bio",
+      "destination": "/gamer-bio-generator",
+      "permanent": true
+    },
+    {
+      "source": "/funny-gamer-bio",
+      "destination": "/gamer-bio-generator",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-names-generator",
+      "destination": "/roblox-names",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-cool-names",
+      "destination": "/roblox-names/cool",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-funny-names",
+      "destination": "/roblox-names/funny",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-aesthetic-names",
+      "destination": "/roblox-names/aesthetic",
+      "permanent": true
+    },
+    {
+      "source": "/roblox-tryhard-names",
+      "destination": "/roblox-names/tryhard",
+      "permanent": true
+    },
+    {
+      "source": "/gamer-names-generator",
+      "destination": "/gamer-names",
+      "permanent": true
+    },
+    {
+      "source": "/cool-gamer-names",
+      "destination": "/gamer-names/cool",
+      "permanent": true
+    },
+    {
+      "source": "/funny-gamer-names",
+      "destination": "/gamer-names/funny",
+      "permanent": true
+    },
+    {
+      "source": "/pro-gamer-names",
+      "destination": "/gamer-names/pro",
+      "permanent": true
+    },
+    {
+      "source": "/edgy-gamer-names",
+      "destination": "/gamer-names/edgy",
+      "permanent": true
+    },
+    {
+      "source": "/league-of-legends-names",
+      "destination": "/league-of-legends",
+      "permanent": true
+    },
+    {
+      "source": "/identity-kit",
+      "destination": "/gaming-passport",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/account",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/auth/callback",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/sign-in",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/sign-up",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/favorites",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/leaderboards",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/404",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ]
 }

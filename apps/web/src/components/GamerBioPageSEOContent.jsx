@@ -5,9 +5,9 @@ const GamerBioPageSEOContent = () => {
   return (
     <section className="py-16 space-y-16 max-w-4xl mx-auto text-[#d6d6d6]">
       <div className="space-y-6">
-        <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
           Gamer Bio Generator – Cool & Competitive Social Bios
-        </h1>
+        </h2>
         <p className="text-lg leading-relaxed">
           Your gamer bio is your digital handshake. Whether you're queuing up for a ranked match, streaming to hundreds of viewers on Twitch, or just hanging out in a Discord server, your bio tells people exactly who you are. A blank profile is a missed opportunity. With our <strong>Gamer Bio Generator</strong>, you can instantly create tryhard, aesthetic, funny, or competitive bios tailored for any platform.
         </p>
@@ -179,7 +179,7 @@ const GamerBioPageSEOContent = () => {
           In the digital world, your profile is your first impression. A well-crafted bio shows that you care about your online presence. It helps you find like-minded players, attract viewers to your streams, and even intimidate opponents before a match begins. 
         </p>
         <p className="leading-relaxed">
-          Don't settle for a boring profile. Use our generator to find the perfect words, and then level up your entire identity by checking out our <Link to="/clan-name-generator" className="text-primary hover:underline">Clan Name Generator</Link>, customizing your text with our <Link to="/stylish-text-generator" className="text-primary hover:underline">Stylish Text Generator</Link>, or finding a sweaty new username with our <Link to="/" className="text-primary hover:underline">Tryhard Names Generator</Link>.
+          Don't settle for a boring profile. Use our generator to find the perfect words, and then level up your entire identity by checking out our <Link to="/gamer-names" className="text-primary hover:underline">Gamer Name Generator</Link>, customizing your text with our <Link to="/stylish-text-generator" className="text-primary hover:underline">Stylish Text Generator</Link>, or finding a sweaty new username with our <Link to="/" className="text-primary hover:underline">Tryhard Names Generator</Link>.
         </p>
       </article>
     </section>

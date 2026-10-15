@@ -1,26 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export const LEGACY_ROUTE_MAP = {
-  '/cool-names': '/gamer-names/cool',
-  '/funny-names': '/gamer-names/funny',
-  '/valorant-names': '/gamer-names',
-  '/fortnite-names': '/gamer-names',
-  '/fortnite-tryhard-names': '/gamer-names',
-  '/cool-gamer-bio': '/gamer-bio-generator',
-  '/funny-gamer-bio': '/gamer-bio-generator',
-  '/roblox-names-generator': '/roblox-names',
-  '/roblox-cool-names': '/roblox-names/cool',
-  '/roblox-funny-names': '/roblox-names/funny',
-  '/roblox-aesthetic-names': '/roblox-names/aesthetic',
-  '/roblox-tryhard-names': '/roblox-names/tryhard',
-  '/gamer-names-generator': '/gamer-names',
-  '/cool-gamer-names': '/gamer-names/cool',
-  '/funny-gamer-names': '/gamer-names/funny',
-  '/pro-gamer-names': '/gamer-names/pro',
-  '/edgy-gamer-names': '/gamer-names/edgy',
-  '/league-of-legends-names': '/league-of-legends',
-};
+import { LEGACY_ROUTE_MAP } from '../routing/legacyRoutes.js';
+export { LEGACY_ROUTE_MAP } from '../routing/legacyRoutes.js';
 
 export const useLegacyRouteRedirect = () => {
   const navigate = useNavigate();

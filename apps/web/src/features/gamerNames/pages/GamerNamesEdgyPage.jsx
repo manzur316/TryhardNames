@@ -41,9 +41,9 @@ export const GamerNamesEdgyPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Edgy Gamer Names - Bold Gaming Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Strike fear into the hearts of your opponents before the match even begins. Edgy gamer names are perfect for lone wolves, assassins, and players who prefer the shadows. These dark and intimidating usernames set a serious tone and let everyone know you're a dangerous adversary.
         </p>

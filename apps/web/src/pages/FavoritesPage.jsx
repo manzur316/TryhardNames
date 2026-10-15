@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Helmet } from 'react-helmet';
+import SeoHead from '@/seo/SeoHead.jsx';
 import { Download, Upload, Trash2, Share2, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useFavorites, useClearFavorites, useExportFavorites, useImportFavorites } from '@/hooks/useFavorites.js';
@@ -96,10 +96,9 @@ const FavoritesPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>My Favorite Names | TryhardNames</title>
-        <meta name="description" content="View and manage your collection of favorite tryhard, aesthetic, and gaming names." />
-      </Helmet>
+      <SeoHead title="My Favorite Names | TryhardNames"
+        description="View and manage your private collection of favorite gaming names."
+        path="/favorites" noIndex skipCanonical />
 
       <div className="bg-background text-foreground flex-grow flex flex-col">
         <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl flex-grow">

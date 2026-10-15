@@ -41,9 +41,9 @@ export const GamerNamesCoolPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Cool Gamer Names - Stylish Gaming Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Establish a professional and commanding presence across streaming platforms and competitive leagues. A cool gamer name is essential for players who want to be taken seriously in the broader gaming community. It provides a sleek, sophisticated identity that works just as well in a casual Discord call as it does on a tournament broadcast.
         </p>

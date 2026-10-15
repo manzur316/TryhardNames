@@ -41,9 +41,9 @@ export const GamerNamesFunnyPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Funny Gamer Names - Humorous Gaming Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Build a memorable persona that brings joy to every lobby you enter. A funny gamer name showcases your personality and proves you are here for a good time. Whether you are playing casual co-op games with friends or breaking the tension in a ranked match, humor is a fantastic way to connect with the gaming community.
         </p>

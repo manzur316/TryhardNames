@@ -43,9 +43,9 @@ export const GamerNamesPage = () => {
       faqs={faqs}
     >
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Gamer Name Generator - Create Unique Gaming Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Build a consistent and recognizable identity across the entire gaming landscape. Whether you are chatting on Discord, streaming on Twitch, or climbing the ranks on Steam, a strong gamer name is your universal identifier. Our generator helps you craft a gamertag that translates perfectly across all platforms and communities.
         </p>

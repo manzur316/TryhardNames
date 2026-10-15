@@ -41,9 +41,9 @@ export const RobloxNamesAestheticPage = () => {
           </Link>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-dark-50">
           Aesthetic Roblox Names - Beautiful & Artistic Usernames
-        </h1>
+        </h2>
         <p className="text-slate-700 dark:text-dark-300 mb-12 leading-relaxed">
           Express your artistic side with a username that prioritizes visual harmony and poetic elegance. Aesthetic Roblox names are incredibly popular in fashion showcases, building games, and roleplay communities. They signal to other players that you appreciate design, mood, and a relaxed gaming atmosphere.
         </p>
