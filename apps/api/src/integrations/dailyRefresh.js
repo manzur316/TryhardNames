@@ -68,11 +68,12 @@ export function dailyRefreshHandler({ env = process.env, run = runDailyRefresh }
       return res.status(result.budgetExhausted || result.rateLimited || result.unavailable ? 503 : 200).json(result);
     } catch (error) {
       const stage = error.refreshStage === 'claim' ? 'claim' : 'initialization';
-      const code = /^[0-9A-Z]{5}$/.test(error.code || '') ? error.code
+      const code = /^[0-9A-Z_]{3,64}$/.test(error.code || '') ? error.code
         : ['configuration_missing', 'provider_disabled', 'ETIMEDOUT', 'ECONNREFUSED'].includes(error.code || error.message)
           ? (error.code || error.message) : 'request_failed';
-      console.error('passport_daily_refresh_failed', { provider: req.params.provider, stage, code });
-      return res.status(503).json({ error: 'refresh_unavailable', stage, code });
+      const kind = ['Error', 'TypeError', 'AggregateError'].includes(error.name) ? error.name : 'Error';
+      console.error('passport_daily_refresh_failed', { provider: req.params.provider, stage, code, kind });
+      return res.status(503).json({ error: 'refresh_unavailable', stage, code, kind });
     }
   };
 }
