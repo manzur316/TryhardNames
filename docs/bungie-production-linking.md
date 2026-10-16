@@ -120,5 +120,9 @@ allowlisting, unlink, relink, unpublish and normalizer rejection.
   unchanged Steam/osu cron definitions. Security advisors added no new warning.
 - Log scan: one Node DEP0169 deprecation warning, no application failures.
   ESLint: zero errors and one pre-existing generation-ref cleanup warning.
-- User selection of Bungie in the production publication dialog is pending;
-  fixture consent tests did not publish any real account.
+- User confirmed selecting Bungie through the production consent dialog and
+  seeing it in both Preview and `/id/thetryhardnames`. A subsequent anonymous
+  browser check confirmed the real Bungie card, emblem and anchor at 1440/390/320;
+  the response contains only the seven reviewed fields, no IDs or memberships,
+  and null stats. Steam remains unselected and absent from the public profile.
+  Fixture consent tests did not publish any real account.
