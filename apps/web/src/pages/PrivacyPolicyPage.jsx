@@ -100,6 +100,20 @@ const PrivacyPolicyPage = () => {
               profile snapshot and revokes its ownership proof; identifiers and revocation records are retained
               to prevent reassignment and abuse. Temporary linking attempts expire after at most ten minutes.
             </p>
+            <h3 className="text-xl font-bold text-dark-50 mt-6 mb-3">Bungie account linking</h3>
+            <p className="text-dark-300 leading-relaxed mb-4">
+              With your authorization, we verify your Bungie account ID and read your display name,
+              Bungie Name, avatar and up to six linked Destiny account identities and platforms.
+              You confirm before this snapshot is saved privately. No Destiny gameplay statistics,
+              inventory changes or automatic Bungie refresh are included in this release.
+            </p>
+            <p className="text-dark-300 leading-relaxed">
+              Bungie access and refresh tokens are used only in server memory for this verification
+              and are not saved. Discarding them does not revoke the application's permission on Bungie;
+              you can revoke it in Bungie's application settings. Unlinking clears the saved snapshot
+              and revokes its ownership proof, while identifiers and revocation records remain for
+              abuse prevention. Linking Bungie does not publish it on your public Passport.
+            </p>
           </section>
 
           <section>

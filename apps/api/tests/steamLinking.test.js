@@ -102,7 +102,7 @@ test('attempt cookie binds original owner, session and expiry, authenticated and
   const sealed = sealAttempt(value, config);
   assert.deepEqual(openAttempt(sealed, config), value);
   assert.ok(!sealed.includes(owner.ownerId));
-  assert.throws(() => openAttempt('X' + sealed.slice(1), config));
+  assert.throws(() => openAttempt((sealed[0] === 'X' ? 'Y' : 'X') + sealed.slice(1), config));
   assert.throws(() => openAttempt(sealed, config, () => value.expires));
   assert.throws(() => openAttempt(sealed, { ...config, origin: 'https://other.example' }));
 });

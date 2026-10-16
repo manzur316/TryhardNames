@@ -103,7 +103,7 @@ test('production renders saved osu! independently of development linking and cle
   const source = readFileSync(new URL('../../src/gaming-passport/components/PassportWorkspace.jsx', import.meta.url), 'utf8');
   assert.match(source, /import SavedOsuConnections from/);
   assert.match(source, /!showOsuPersistence && !showOsuProbe && <SavedOsuConnections/);
-  assert.match(source, /\[\.\.\.gameHighlights, \.\.\.linkedRobloxHighlights, \.\.\.linkedSteamHighlights\]/);
+  assert.match(source, /\[\.\.\.gameHighlights, \.\.\.linkedRobloxHighlights, \.\.\.linkedSteamHighlights, \.\.\.linkedBungieHighlights\]/);
   const component = readFileSync(new URL('../../src/gaming-passport/components/SavedOsuConnections.jsx', import.meta.url), 'utf8');
   assert.match(component, /requestVersion !== version/);
   assert.match(component, /controller\?\.abort\(\)/);

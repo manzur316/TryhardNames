@@ -35,7 +35,8 @@ account ID and its saved ruleset. It updates existing display statistics, not
 the OAuth ownership proof or the user's publication selection.
 
 Roblox is not part of this scheduler: its current identity-only flow revokes
-tokens after verification. Bungie and Battle.net remain local prototypes.
+tokens after verification. Bungie has private production linking (see
+`bungie-production-linking.md`), but no daily refresh. Battle.net remains a local prototype.
 
 ## Capacity and operations
 

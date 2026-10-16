@@ -7,6 +7,7 @@ import osu from '../../../integrations/osu/routes.js';
 import osuLinking from '../../../integrations/osu-linking/runtime.js';
 import roblox from '../../../integrations/roblox/runtime.js';
 import steam from '../../../integrations/steam/runtime.js';
+import bungie from '../../../integrations/bungie/runtime.js';
 
 const r = Router();
 
@@ -18,5 +19,6 @@ r.use('/osu', osuLinking);
 r.use('/osu', osu);
 r.use('/roblox', roblox);
 r.use('/steam', steam);
+r.use('/bungie', bungie);
 
 export default r;

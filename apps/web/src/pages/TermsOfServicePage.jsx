@@ -57,11 +57,11 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-2xl font-bold text-dark-50 mb-4">4. Riot and Third-Party Game Services</h2>
             <p className="text-dark-300 leading-relaxed mb-4">
-              Roblox, osu! and Steam linking are optional features when enabled. Only link accounts you own.
+              Roblox, osu!, Steam and Bungie linking are optional features when enabled. Only link accounts you own.
               An ownership badge records a successful verification at the displayed verification time;
               it is not a skill rank, official endorsement, or guarantee of continuing account control.
               You can unlink the account from your Passport. TryhardNames is independent of Roblox
-              Corporation, Valve and osu!. Provider approval does not imply endorsement. Provider names, logos, and
+              Corporation, Valve, Bungie and osu!. Provider approval does not imply endorsement. Provider names, logos, and
               properties remain the property of their respective owners.
             </p>
             <p className="text-dark-300 leading-relaxed mb-4">
