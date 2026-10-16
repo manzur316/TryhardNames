@@ -43,7 +43,10 @@ export async function runDailyRefresh(provider, env = process.env) {
     connectionTimeoutMillis: 10000, statement_timeout: 10000, application_name: 'passport-daily-' + provider });
   pool.on('error', () => {});
   const store = {
-    async claim() { return (await pool.query('select private.claim_passport_refresh($1) as account', [provider])).rows[0].account; },
+    async claim() {
+      try { return (await pool.query('select private.claim_passport_refresh($1) as account', [provider])).rows[0].account; }
+      catch (error) { error.refreshStage = 'claim'; throw error; }
+    },
     async finish(account, data) {
       return (await pool.query('select private.finish_passport_refresh($1,$2::uuid,$3::uuid,$4::jsonb) as updated',
         [provider, account.id, account.claimId, data === null ? null : JSON.stringify(data)])).rows[0].updated;
@@ -63,6 +66,13 @@ export function dailyRefreshHandler({ env = process.env, run = runDailyRefresh }
     try {
       const result = await run(req.params.provider, env);
       return res.status(result.budgetExhausted || result.rateLimited || result.unavailable ? 503 : 200).json(result);
-    } catch { return res.status(503).json({ error: 'refresh_unavailable' }); }
+    } catch (error) {
+      const stage = error.refreshStage === 'claim' ? 'claim' : 'initialization';
+      const code = /^[0-9A-Z]{5}$/.test(error.code || '') ? error.code
+        : ['configuration_missing', 'provider_disabled', 'ETIMEDOUT', 'ECONNREFUSED'].includes(error.code || error.message)
+          ? (error.code || error.message) : 'request_failed';
+      console.error('passport_daily_refresh_failed', { provider: req.params.provider, stage, code });
+      return res.status(503).json({ error: 'refresh_unavailable', stage, code });
+    }
   };
 }
