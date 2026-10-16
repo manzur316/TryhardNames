@@ -56,8 +56,12 @@ Apply this reviewed migration only, not all historical migrations.
   the link on TryhardNames, reload and verify persistence.
 
 To stop new links, set `BUNGIE_LINKING_ENABLED=false` and redeploy.
-For rollback, promote the previous production deployment. Leave the additive
-migration and existing account records in place; do not drop identity data.
+For rollback, prefer a frontend build that understands the Bungie public provider.
+Before restoring a pre-public-identity build, restore the prior publication/read
+function bodies through a reviewed migration so older clients do not receive an
+unsupported provider. Preserve stored selections and account records; do not drop
+identity data. Reverting only the frontend after Bungie has been selected can make
+older clients reject the entire public projection.
 
 ## Rollout 2026-10-16
 
@@ -99,3 +103,22 @@ Regression command: `node apps/api/scripts/testOsuLinkingDatabase.js --publicati
 This uses isolated PostgreSQL and checks existing osu/Roblox publication plus
 Bungie-only eligibility, default-hidden selection, explicit consent, field
 allowlisting, unlink, relink, unpublish and normalizer rejection.
+
+### Public identity rollout 2026-10-16
+
+- Application commit `fb7986a`; deployment `dpl_AUSwr9k9qR5opuT5TCAao4XJJSMg`.
+- Tested in staged Production and promoted to `https://www.tryhardnames.com`.
+- Migration applied with history in a repeatable-read transaction. Assertions
+  confirmed existing publication selections and public projections were unchanged.
+- Passed: 65 isolated database assertions, 119 Passport tests, 199 web tests,
+  106 API tests, 109 prerendered pages and three build checks.
+- Browser fixtures verified public/preview parity at 1440/390/320, full-length
+  Bungie names, working emblem anchors, background loading, default-unchecked
+  selection and explicit consent. Fixed an existing desktop preview overflow.
+- Canonical smoke confirmed the existing public profile stayed unchanged, no
+  automatic Bungie publication, four providers enabled, protected mutations and
+  unchanged Steam/osu cron definitions. Security advisors added no new warning.
+- Log scan: one Node DEP0169 deprecation warning, no application failures.
+  ESLint: zero errors and one pre-existing generation-ref cleanup warning.
+- User selection of Bungie in the production publication dialog is pending;
+  fixture consent tests did not publish any real account.
