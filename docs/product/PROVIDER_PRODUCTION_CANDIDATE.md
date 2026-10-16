@@ -54,7 +54,9 @@ restricted writer connection, canonical origin and `STEAM_LINKING_ACCESS=public`
 are configured. `STEAM_LINKING_ENABLED=true` applies to the next deployment.
 The restricted TLS connection and runtime configuration passed preflight.
 Other provider credentials and Preview/Development configuration were not changed.
-Real hosted Steam sign-in and explicit save still require an interactive owner test.
+After rollout, the owner confirmed hosted Steam sign-in, explicit save and that
+the account remains linked after reloading. This verifies that owner's account;
+additional account/privacy variants remain useful regression checks.
 
 ## Database Gates
 
@@ -78,6 +80,15 @@ Verified anonymous access is denied to the underlying tables and publication RPC
 only the sanitized projection RPC is readable, and a missing profile returns null.
 
 ## Verification And Rollout
+
+Released application commit `21acdaec8bf585e9737deda6fa026d4e62b1f64f` as deployment
+`dpl_GnQNsLzWkHEaRNVf6Qtq6YGTQwRF`, staged with Production configuration and then
+promoted to `https://www.tryhardnames.com`. The staged Steam API returned enabled,
+401 for anonymous status/connect, and 403 for a foreign origin. Canonical-domain
+checks confirmed all three providers enabled with anonymous access denied.
+The live public profile, artwork, canonical URL, missing-profile privacy behavior
+and Riot verification file passed checks at desktop/mobile widths without JS errors.
+Rollback target: `dpl_5nKxe5DMkxToYc3ScFGSmTMkrB7W` (Steam disabled).
 
 1. Run `npm run test:api`, `npm run test:providers:release`, `npm run test:passport`,
    `npm run test:auth`, `npm run build` and the isolated provider database runners.
