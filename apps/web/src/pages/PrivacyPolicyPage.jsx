@@ -112,7 +112,10 @@ const PrivacyPolicyPage = () => {
               and are not saved. Discarding them does not revoke the application's permission on Bungie;
               you can revoke it in Bungie's application settings. Unlinking clears the saved snapshot
               and revokes its ownership proof, while identifiers and revocation records remain for
-              abuse prevention. Linking Bungie does not publish it on your public Passport.
+              abuse prevention. Linking Bungie does not publish it on your public Passport. You can
+              separately select its display name, Bungie Name and verification dates for publication.
+              Bungie account IDs, avatars and Destiny account details are not included in that public view.
+              Unlinking immediately removes the public identity; linking it again requires a new publication selection.
             </p>
           </section>
 

@@ -26,13 +26,17 @@ try {
   `;
   const migrations = ['20260623190000_gaming_passport_core.sql', '20261014204209_osu_private_persistence.sql',
     '20261014213058_passport_internal_helper_paths.sql', '20261015024632_roblox_private_linking_runtime.sql', '20261015061942_osu_production_linking.sql',
-    ...(publication ? ['20261015173323_passport_publication_launch.sql'] : [])]
+    ...(publication ? ['20261015173323_passport_publication_launch.sql', '20261015192140_steam_private_linking.sql',
+      '20261015195918_steam_link_attempts_owner_index.sql', '20261015203753_steam_linking_passport_states.sql',
+      '20261016022904_passport_daily_refresh.sql', '20261016041410_bungie_private_linking.sql',
+      '20261016063932_bungie_public_identity.sql'] : [])]
     .map((name) => readFileSync(new URL('migrations/' + name, root), 'utf8')).join('\n');
-  const tests = readFileSync(new URL('tests/database/' + (publication ? 'passport_publication_test.sql' : 'osu_production_linking_test.sql'), root), 'utf8');
+  const tests = readFileSync(new URL('tests/database/' + (publication ? 'passport_publication_test.sql' : 'osu_production_linking_test.sql'), root), 'utf8')
+    + (publication ? '\n' + readFileSync(new URL('tests/database/bungie_public_identity_test.sql', root), 'utf8') : '');
   const result = execFileSync('docker', ['exec', '-i', container, 'psql', '-U', 'postgres', '-v', 'ON_ERROR_STOP=1', '-At'],
     { input: bootstrap + migrations + tests, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
   const count = (result.match(/^ok:/gm) || []).length;
-  if (count < 20) throw new Error('missing_assertions');
+  if (count < (publication ? 60 : 20)) throw new Error('missing_assertions');
   console.log((publication ? 'Publication' : 'Osu') + ' database: ' + count + ' assertions passed in isolated PostgreSQL; no remote database accessed.');
 } catch (error) {
   console.error(error.stderr?.toString() || error.message);

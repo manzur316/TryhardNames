@@ -39,6 +39,22 @@ test('published preview and public route share presentation and sanitized public
   assert.match(read('gaming-passport/components/PassportWorkspace.jsx'), /id=\{publicPreview \? undefined : 'gp-linked-games'\}/);
 });
 
+test('public Bungie identity preserves the full name but rejects memberships, IDs and stats', () => {
+  const username = 'B'.repeat(128) + '#1234';
+  const game = { provider: 'bungie', username, displayName: 'B'.repeat(128),
+    verifiedAt: '2026-10-16T00:00:00Z', updatedAt: '2026-10-16T00:00:00Z', stale: false, stats: null };
+  const value = { schemaVersion: 2, slug: 'bungie-player', alias: 'Player', bio: '', avatarUrl: '', scene: {}, games: [game] };
+  const mapped = mapPublicPassportV2(value);
+  assert.equal(mapped.games[0].username, username);
+  assert.equal(mapped.games[0].displayName.length, 128);
+  assert.equal(publicGameHighlights(mapped.games)[0].game, 'Bungie');
+  assert.equal(publicGameHighlights(mapped.games)[0].pp, null);
+  for (const patch of [{ destinyMemberships: [] }, { accountId: '123' }, { avatarUrl: 'https://example.com' },
+    { stats: { medals: 4 } }, { provider: '__proto__' }]) {
+    assert.equal(mapPublicPassportV2({ ...value, games: [{ ...game, ...patch }] }), null);
+  }
+});
+
 function storage(initial = {}) {
   const values = new Map(Object.entries(initial));
   return { getItem: (key) => values.get(key) || null, setItem: (key, value) => values.set(key, value) };
@@ -536,7 +552,7 @@ test('header display model excludes parent identity and arbitrary provider metad
 test('header reads the existing connection state and never adds a provider request', () => {
   const component = readFileSync(new URL('../../src/gaming-passport/components/PrivateGameHighlights.jsx', import.meta.url), 'utf8');
   assert.doesNotMatch(component, /fetch\(|localStorage|\.rpc\(|getSupabase|connect\(|publish|avg|Average/);
-  assert.match(component, /href=\{game.temporary \? '#gp-roblox-test'/);
+  assert.match(component, /href=\{publicPresentation \? `#gp-public-game-\$\{index\}` : game.temporary \? '#gp-roblox-test'/);
   assert.match(component, /game.game === 'Steam' \? '#gp-steam-linked'/);
   assert.match(component, /game.game === 'Roblox' \? '#gp-roblox-linked' : '#gp-linked-games'/);
   assert.match(component, /new Set\(highlights\.map/);

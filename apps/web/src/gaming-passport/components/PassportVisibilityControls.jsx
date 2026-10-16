@@ -5,6 +5,7 @@ import { getSupabaseRuntime } from '@/lib/supabase/client.js';
 import { copyTextToClipboard } from '@/utils/clipboard.js';
 import { isCanonicalPublicSlug, normalizePublicSlug } from '../domain/contracts.js';
 import { managePassportPublication, publicationError } from '../data/passportPublication.js';
+import { PUBLIC_PROVIDER_NAMES } from '../data/publicPassportV2.js';
 import GameLogo from './GameLogo.jsx';
 import './publication.css';
 
@@ -86,9 +87,10 @@ export default function PassportVisibilityControls({ passport, session, dirty, d
         <fieldset disabled={busy} className="gp-publication-accounts"><legend>Visible game accounts</legend>
           {accounts.length === 0 && <p>Link and verify a game account before publishing.</p>}
           {accounts.map((account) => <div className="gp-publication-account" key={account.id}>
-            <GameLogo game={account.provider === 'osu' ? 'osu!' : 'Roblox'} />
+            <GameLogo game={PUBLIC_PROVIDER_NAMES[account.provider]} />
             <div><label><input type="checkbox" checked={account.selected} onChange={(event) => updateAccount(account.id, { selected: event.target.checked })} />
-              <span>{account.provider === 'osu' ? 'osu!' : 'Roblox'} <strong>{account.username}</strong></span></label>
+              <span>{PUBLIC_PROVIDER_NAMES[account.provider]} <strong>{account.username}</strong></span></label>
+              {account.provider === 'bungie' && <p className="gp-publication-stats">Bungie name and verification only. Destiny accounts stay private.</p>}
               {account.provider === 'osu' && <label className="gp-publication-stats"><input type="checkbox" disabled={!account.selected} checked={account.selected && account.showStats}
                 onChange={(event) => updateAccount(account.id, { showStats: event.target.checked })} />Show PP, ranks, accuracy and medals</label>}
             </div>

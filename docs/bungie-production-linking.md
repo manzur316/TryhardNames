@@ -17,8 +17,12 @@ callback. The local probe files themselves are unchanged.
   and up to six Destiny membership identities/platforms. No gameplay stats.
 - Access and refresh tokens are discarded, not persisted. Discarding is not
   remote revocation; users can manage application permission on Bungie.
-- New links stay private, even for a published Passport. This release does not
-  add Bungie to public projections or to the Steam/osu daily scheduler.
+- New links stay private, even for a published Passport. Owners can separately
+  select Bungie for public display with explicit publication consent. Only its
+  display name, Bungie Name and verification dates are projected; no IDs, avatar,
+  Destiny memberships or gameplay stats. Unlink/relink invalidates the selection.
+- Bungie is not part of the Steam/osu daily scheduler. Identity verification is
+  dated rather than presented as live gameplay data or automatically stale at 24h.
 - Header uses the supplied decorative emblem. Individual cards use Bungie's
   official favicon with a named fallback if its remote image is unavailable.
 
@@ -75,5 +79,23 @@ migration and existing account records in place; do not drop identity data.
 - Post-release log scan returned two Node DEP0169 `url.parse()` deprecation
   warnings, no application failures. Existing dependency audit warnings and
   disabled leaked-password protection remain unrelated follow-up work.
-- Real production OAuth, explicit confirmation and reload persistence are
-  pending user acceptance. Local prototype success is not production acceptance.
+- The user confirmed real production OAuth, explicit confirmation and reload
+  persistence after rollout. Public identity selection is a separate acceptance.
+
+## Public identity extension
+
+Migration `20261016063932_bungie_public_identity.sql` extends the existing
+publication functions, preserving their owners, ACLs, owner/session checks,
+explicit consent, optimistic concurrency and link-epoch matching. It does not
+insert selections or publish any user's account. The existing projection schema
+stays at version 2 with Bungie added to its provider allowlist.
+
+The publication dialog, saved public preview and `/id/` use the same provider
+name and presentation. Header emblems link to the corresponding public card.
+Individual cards retain the official logo with a named fallback and use an
+existing supplied space background. Only osu can expose consented statistics.
+
+Regression command: `node apps/api/scripts/testOsuLinkingDatabase.js --publication`.
+This uses isolated PostgreSQL and checks existing osu/Roblox publication plus
+Bungie-only eligibility, default-hidden selection, explicit consent, field
+allowlisting, unlink, relink, unpublish and normalizer rejection.

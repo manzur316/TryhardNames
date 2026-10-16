@@ -78,7 +78,7 @@ export default function PassportIdentityScene({
             </div>
             {identity}
           </div>
-          {hasHighlights && <PrivateGameHighlights highlights={gameHighlights} probeHighlights={probeHighlights} />}
+          {hasHighlights && <PrivateGameHighlights highlights={gameHighlights} probeHighlights={probeHighlights} publicPresentation={publicPresentation} />}
         </> : <>{portrait}{identity}</>}
       </div>
     </section>
