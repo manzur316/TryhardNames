@@ -11,6 +11,11 @@ Production-only configuration:
 - `PASSPORT_DAILY_REFRESH_ENABLED=true`.
 - Existing provider configuration and restricted writer credentials are reused.
 
+Production Steam uses this project's Supabase shared transaction pooler on port
+6543, with the existing restricted writer and TLS certificate verification. The
+direct database hostname failed DNS resolution from Vercel. Local credentials
+and Preview configuration were not changed.
+
 The migration adds execute-only permissions to the existing Steam/osu writers.
 The non-login executor cannot change account identity, ownership verification,
 visibility, publication selections or consent. Completion locks the parent and
@@ -58,3 +63,24 @@ Browser fixtures cover 1440/390/320 widths, real Steam cover/schema artwork,
 simulated unlocked progress, unavailable/empty libraries and existing linking
 confirmation/unlink controls. Actual account progress requires Steam privacy
 settings to permit access; never claim fixture progress is live account data.
+
+## Production rollout, 2026-10-16 UTC
+
+- Application commit: `39866f6`.
+- Promoted deployment: `dpl_GQ2x7QAhZ9kVW2kmipWMUAbdHHyQ`.
+- Applied migration: `20261016022904_passport_daily_refresh`.
+- Vercel confirmed both cron definitions on the promoted deployment.
+- Steam and osu! each completed one real refresh. Repeated calls on the candidate
+  and canonical domain claimed zero accounts and made no new provider requests.
+- Database checks confirmed unchanged verification timestamps and visibility.
+- Anonymous cron requests returned 401 with `no-store`; both emblem assets
+  returned 200. Production profile checks passed at 1440, 390 and 320 pixels.
+- The tested Steam account's achievement endpoint returned `Profile is not
+  public`; its schema returned 49 achievements. Real progress remains unavailable
+  until the owner permits access in Steam. The UI does not substitute fixture data.
+- Existing maintenance findings remain: dependency audit reports 27 findings
+  (22 high), Supabase reports disabled leaked-password protection, and runtime
+  logs include a Node `url.parse()` deprecation warning. These are not resolved
+  by this feature release; no refresh failure was observed in the final candidate.
+
+Previous production deployment for rollback: `dpl_GnQNsLzWkHEaRNVf6Qtq6YGTQwRF`.
