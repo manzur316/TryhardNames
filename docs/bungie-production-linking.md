@@ -54,3 +54,26 @@ Apply this reviewed migration only, not all historical migrations.
 To stop new links, set `BUNGIE_LINKING_ENABLED=false` and redeploy.
 For rollback, promote the previous production deployment. Leave the additive
 migration and existing account records in place; do not drop identity data.
+
+## Rollout 2026-10-16
+
+- Application commit: `80d1baa383982dcf7cd2b1fa2f64da59c6dc6526` on `main`.
+- Production: `dpl_3HPxobfTSMMtsonJFhaaoqgxY9Jd`, promoted after staged checks.
+- Previous production: `dpl_GQ2x7QAhZ9kVW2kmipWMUAbdHHyQ`.
+- Migration applied transactionally with history; restricted pooler connection
+  verified. Provider credentials and writer connection are Production-only.
+- Passed: Bungie 12 tests, isolated database 35 assertions, API 106 tests,
+  web 199 tests, Passport 118 tests, parent auth 89 tests, provider release 68
+  tests; build 109 public prerenders and three build checks.
+- Candidate and canonical smoke: four providers enabled; anonymous status and
+  connect denied; foreign-origin completion denied; unsolicited callback goes
+  only to the fixed failure return URL. No OAuth code exchanged in smoke tests.
+- Canonical public profile checked at 1440/390/320: artwork loaded, no overflow
+  or JavaScript errors, canonical correct, private Bungie absent, missing
+  profile unavailable, Riot verification file preserved.
+- Steam and osu cron schedules remain 08:00 and 08:30 UTC respectively.
+- Post-release log scan returned two Node DEP0169 `url.parse()` deprecation
+  warnings, no application failures. Existing dependency audit warnings and
+  disabled leaked-password protection remain unrelated follow-up work.
+- Real production OAuth, explicit confirmation and reload persistence are
+  pending user acceptance. Local prototype success is not production acceptance.
