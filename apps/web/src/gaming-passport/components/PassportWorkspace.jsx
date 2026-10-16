@@ -14,6 +14,7 @@ import PersistentSteamConnections from './PersistentSteamConnections.jsx';
 import { isSteamLinkingEnabled } from '../data/steamLinking.js';
 import SavedOsuConnections from './SavedOsuConnections.jsx';
 import PassportVisibilityControls from './PassportVisibilityControls.jsx';
+import PublishedPassportPreview from './PublishedPassportPreview.jsx';
 import { isPrivateOsuProbeEnabled } from '../data/privateOsuProbe.js';
 import { isPrivateOsuPersistenceEnabled } from '../data/privateOsuPersistence.js';
 import { isPrivateRobloxProbeEnabled } from '../data/privateRobloxProbe.js';
@@ -61,6 +62,7 @@ function OwnerWorkspace({ auth }) {
   const showOsuPersistence = isPrivateOsuPersistenceEnabled(import.meta.env.DEV, window.location);
   const showRobloxProbe = isPrivateRobloxProbeEnabled(import.meta.env.DEV, window.location);
   const showSteamLinking = isSteamLinkingEnabled(import.meta.env.DEV, window.location);
+  const publicPreview = mode === 'preview' && passport?.status === 'published' && Boolean(passport.slug);
 
   useEffect(() => {
     mounted.current = true;
@@ -165,7 +167,7 @@ function OwnerWorkspace({ auth }) {
             <button aria-pressed={mode === 'edit'} onClick={() => setMode('edit')}><Pencil size={15} />Edit</button>
             <button aria-pressed={mode === 'preview'} onClick={() => setMode('preview')}><Eye size={15} />Preview</button>
           </div>
-          <button className="gp-icon-button" title="Download private preview" aria-label="Download private preview" onClick={exportPreview} disabled={exporting || busy}><Download size={17} /></button>
+          <button className="gp-icon-button" title="Download private preview" aria-label="Download private preview" onClick={exportPreview} disabled={exporting || busy || publicPreview}><Download size={17} /></button>
           <button className="gp-button gp-primary" disabled={busy || !validation.ok || (Boolean(ownerId) && !passport)} onClick={save}><Save size={16} />{saving ? 'Saving...' : ownerId ? 'Save Passport' : 'Save draft'}</button>
         </div>
       </header>
@@ -174,6 +176,8 @@ function OwnerWorkspace({ auth }) {
       {message && <p role="status" className="gp-feedback"><Check size={16} />{message}</p>}
       {error && <div role="alert" className="gp-feedback gp-error">{error}{ownerId && !passport && <button className="gp-button" onClick={() => setRetry((value) => value + 1)}>Retry</button>}</div>}
 
+      {publicPreview && <PublishedPassportPreview key={passport.slug} slug={passport.slug} updatedAt={passport.updatedAt} dirty={dirty} />}
+      <div hidden={publicPreview}>
       <div className="gp-identity-banner" ref={sceneRef}><PassportIdentityScene alias={form.alias} avatarUrl={form.avatarUrl} bio={form.bioShort} scene={form.sceneConfig} privatePreview localOnly={!ownerId} isPublished={passport?.status === 'published'} gameHighlights={ownerId && passport ? [...gameHighlights, ...linkedRobloxHighlights, ...linkedSteamHighlights] : []} probeHighlights={showRobloxProbe && robloxHighlight ? [robloxHighlight] : []} /></div>
 
       <div className={`gp-editor-layout ${mode === 'preview' ? 'gp-preview-mode' : ''}`}>
@@ -215,7 +219,7 @@ function OwnerWorkspace({ auth }) {
           </div>
         </aside>}
 
-        <div className="gp-canvas" id="gp-linked-games" tabIndex={-1}>
+        <div className="gp-canvas" id={publicPreview ? undefined : 'gp-linked-games'} tabIndex={-1}>
           {ownerId && passport && !showOsuPersistence && !showOsuProbe && <SavedOsuConnections key={passport.id} ownerId={ownerId} passportId={passport.id} onHighlightsChange={setGameHighlights} />}
           {ownerId && passport && !showRobloxProbe && <PersistentRobloxConnections ownerId={ownerId} onHighlightsChange={setLinkedRobloxHighlights} onAvailabilityChange={setRobloxAvailable} />}
           {ownerId && passport && showSteamLinking && <PersistentSteamConnections ownerId={ownerId} onHighlightsChange={setLinkedSteamHighlights} onAvailabilityChange={setSteamAvailable} onBeforeConnect={() => !dirty || window.confirm('Leave with unsaved Passport changes?')} />}
@@ -229,6 +233,7 @@ function OwnerWorkspace({ auth }) {
           </section>}
           <footer className="gp-canvas-footer"><LockKeyhole size={14} /><span>{ownerId ? 'Saving does not change publication consent or verification.' : 'Saved only on this device. No public link.'}</span></footer>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -48,11 +48,13 @@ Registered callbacks:
   `https://www.tryhardnames.com/api/v1/integrations/steam/callback`.
   Steam realm: `https://www.tryhardnames.com/`.
 
-Steam secret transfer to Production has NOT been performed in this task.
-Obtain explicit permission for that transfer; never display the key or database URL.
-The owner explicitly chose to publish without activating Steam. Production now
-has `STEAM_LINKING_ENABLED=false` and `ROBLOX_LINKING_ACCESS=public`; other
-provider credentials and Preview/Development configuration were not changed.
+The owner subsequently authorized Steam activation and secret transfer exclusively
+to this Production project. Steam credentials, a new independent cookie key, the
+restricted writer connection, canonical origin and `STEAM_LINKING_ACCESS=public`
+are configured. `STEAM_LINKING_ENABLED=true` applies to the next deployment.
+The restricted TLS connection and runtime configuration passed preflight.
+Other provider credentials and Preview/Development configuration were not changed.
+Real hosted Steam sign-in and explicit save still require an interactive owner test.
 
 ## Database Gates
 
@@ -63,9 +65,12 @@ files were previously applied under different remote timestamps:
 - `20261015192140_steam_private_linking.sql`: remote `20261015194953`.
 - `20261015195918_steam_link_attempts_owner_index.sql`: remote `20261015200037`.
 
-Pending candidate migration `20261015203753_steam_linking_passport_states.sql`
+Migration `20261015203753_steam_linking_passport_states.sql`
 allows active private, published and unpublished Passports while rejecting
-suspension. It does not publish Steam data. Not applied remotely by this task.
+suspension. It does not publish Steam data. Applied transactionally to the shared
+production project and recorded with the same version, after checking the old
+guard and passing 50 isolated PostgreSQL assertions. The restricted writer was
+then used to verify the deployed guard and connection without modifying accounts.
 `20261015173323_passport_publication_launch.sql` was applied transactionally to
 `bjfryclqznpkptfhsaak` and recorded in migration history. The two Passports remain
 private, all three linked accounts remain, and no public selections were added.
@@ -97,6 +102,17 @@ the last known-good deployment. Keep additive SQL and user records. Do not reset
 the shared database, erase accounts, or silently change publication selections.
 
 ## Candidate Evidence
+
+- Public profile refresh: the published preview and `/id/:slug` now share the
+  sanitized public projection and presentation, including game artwork and badges.
+  Preview displays saved public selections, not private linked accounts or unsaved
+  changes. Steam is still absent from public projection by design.
+- Current checks: 56 provider tests, 118 Passport tests, 89 Auth tests, 199 web
+  tests, build/prerender checks and changed frontend ESLint all pass. Browser
+  fixtures verify identical public/preview content, artwork loading, hidden stats
+  and no overflow at 1440, 390 and 320 pixels.
+- Vercel API duration is explicitly 90 seconds; worker and CA files are explicitly
+  included for Steam verification. Stage production and verify before promotion.
 
 - API: 103 tests passing, including provider client normalization, owner/session
   binding, callback replay, CSRF, public access and isolated OpenID verification.

@@ -9,6 +9,35 @@ import { GAME_BADGES, getGameBadge } from '../../src/gaming-passport/data/gameBa
 import { PROFILE_BACKGROUND_OPTIONS, resolveProfileBackground, sanitizeProfileBackgroundId } from '../../src/gaming-passport/data/profileBackgrounds.js';
 import { AVATAR_FRAME_OPTIONS, resolveAvatarFrame, sanitizeAvatarFrameId } from '../../src/gaming-passport/data/avatarFrames.js';
 import { buildPresentationPayload, mapPassportRow, sanitizeSceneConfig } from '../../src/gaming-passport/data/passportRepository.js';
+import { mapPublicPassportV2, publicGameHighlights } from '../../src/gaming-passport/data/publicPassportV2.js';
+
+test('public presentation preserves consent-filtered stats and rejects private provider payloads', () => {
+  const game = { provider: 'osu', username: 'Player', displayName: 'Player', verifiedAt: '2026-10-15T00:00:00Z', updatedAt: '2026-10-15T00:00:00Z', stale: false, stats: null };
+  const value = { schemaVersion: 2, slug: 'player', alias: 'Player', bio: '', avatarUrl: '', scene: {}, games: [game] };
+  const mapped = mapPublicPassportV2(value);
+  assert.equal(mapped.games[0].stats, null);
+  assert.equal(publicGameHighlights(mapped.games)[0].pp, null);
+  assert.equal(publicGameHighlights(mapped.games)[0].globalRank, null);
+  assert.equal(mapPublicPassportV2({ ...value, games: [{ ...game, metadata_safe: {} }] }), null);
+  assert.equal(mapPublicPassportV2({ ...value, games: [{ ...game, provider: 'steam' }] }), null);
+  const withStats = mapPublicPassportV2({ ...value, games: [{ ...game, stats: { mode: 'osu', pp: 0, medals: 0, accuracyPercent: 98.4, globalRank: 3050088, countryRank: 42 } }] });
+  assert.equal(withStats.games[0].stats.pp, 0);
+  assert.equal(publicGameHighlights(withStats.games)[0].globalRank, '#3,050,088');
+});
+
+test('published preview and public route share presentation and sanitized public repository', () => {
+  const read = file => readFileSync(new URL('../../src/' + file, import.meta.url), 'utf8');
+  const preview = read('gaming-passport/components/PublishedPassportPreview.jsx');
+  const page = read('pages/PublicGamingPassportPage.jsx');
+  const card = read('gaming-passport/components/PublicPassportProfile.jsx');
+  assert.match(preview, /getPublicPassportBySlug\(client, slug\)/);
+  assert.match(preview, /<PublicPassportProfile passport=\{state.passport\}/);
+  assert.match(page, /<PublicPassportProfile passport=\{passport\}/);
+  assert.doesNotMatch(preview, /linked_provider_accounts|metadata_safe|access_token/);
+  assert.match(card, /gp-profile-game-art/);
+  assert.match(card, /Number.isFinite\(game.stats\?\.\[key\]\)/);
+  assert.match(read('gaming-passport/components/PassportWorkspace.jsx'), /id=\{publicPreview \? undefined : 'gp-linked-games'\}/);
+});
 
 function storage(initial = {}) {
   const values = new Map(Object.entries(initial));

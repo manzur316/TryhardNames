@@ -1,4 +1,4 @@
-/* Owner-only profile composition; public projection and sharing stay unchanged. */
+/* Shared identity composition for the editor and public profile. */
 .gp-scene.gp-scene-owner {
   --portrait-size: 224px;
   min-height: 320px;
@@ -32,7 +32,7 @@
 .gp-scene-owner .gp-identity { width: 100%; max-width: 100%; min-width: 0; text-shadow: none; }
 .gp-scene-owner .gp-overline { display: flex; align-items: center; gap: 10px; font-size: 10px; margin-bottom: 13px; }
 .gp-scene-owner .gp-overline::before { content: ''; width: 20px; height: 2px; background: var(--scene-accent); flex: none; }
-.gp-scene-owner .gp-identity h2 { font-size: 36px; line-height: 1.15; font-weight: 750; text-wrap: initial; }
+.gp-scene-owner .gp-identity :is(h1,h2) { font-size: 36px; line-height: 1.15; font-weight: 750; text-wrap: initial; overflow-wrap: anywhere; }
 .gp-scene-owner .gp-identity .gp-long-alias { font-size: 28px; }
 .gp-scene-owner .gp-bio { font-size: 14px; line-height: 1.6; max-width: 460px; margin-top: 14px; color: #c4cad2; }
 .gp-scene-owner .gp-private-state { margin-top: 20px; gap: 9px; color: #c9cdd5; font-size: 11px; }
@@ -76,7 +76,7 @@
   .gp-scene.gp-scene-owner { --portrait-size: 180px; }
   .gp-scene-owner .gp-scene-inner { gap: 24px; padding: 26px; }
   .gp-owner-profile { gap: 18px; }
-  .gp-scene-owner .gp-identity h2 { font-size: 30px; }
+  .gp-scene-owner .gp-identity :is(h1,h2) { font-size: 30px; }
   .gp-scene-owner .gp-identity .gp-long-alias { font-size: 25px; }
   .gp-scene-owner.gp-scene-compact { --portrait-size: 160px; }
 }
@@ -88,7 +88,7 @@
   .gp-scene.gp-scene-owner { --portrait-size: 160px; min-height: 0; }
   .gp-scene-owner .gp-scene-inner { padding: 22px 20px 26px; gap: 22px; }
   .gp-owner-profile { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .gp-scene-owner .gp-identity h2 { font-size: 30px; }
+  .gp-scene-owner .gp-identity :is(h1,h2) { font-size: 30px; }
   .gp-scene-owner .gp-identity .gp-long-alias { font-size: 25px; }
   .gp-scene-owner .gp-bio { font-size: 13px; margin-top: 12px; }
   .gp-scene-owner .gp-overline { font-size: 10px; margin-bottom: 10px; }

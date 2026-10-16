@@ -23,13 +23,14 @@ export default function PublicGamingPassportPage() {
 
   useEffect(() => {
     let cancelled = false;
+    let revision = 0;
 
     async function loadPassport() {
-      setState({ status: 'loading', passport: null, error: '' });
+      const current = ++revision;
       try {
         const { client, config } = await getSupabaseRuntime();
         if (!client || !config.isConfigured) {
-          if (!cancelled) {
+          if (!cancelled && current === revision) {
             setState({
               status: 'unavailable',
               passport: null,
@@ -40,14 +41,14 @@ export default function PublicGamingPassportPage() {
         }
 
         const passport = await getPublicPassportBySlug(client, slug);
-        if (cancelled) return;
+        if (cancelled || current !== revision) return;
         if (!passport) {
           setState({ status: 'not-found', passport: null, error: '' });
           return;
         }
         setState({ status: 'ready', passport, error: '' });
       } catch {
-        if (!cancelled) {
+        if (!cancelled && current === revision) {
           setState({
             status: 'unavailable',
             passport: null,
@@ -57,6 +58,7 @@ export default function PublicGamingPassportPage() {
       }
     }
 
+    setState({ status: 'loading', passport: null, error: '' });
     loadPassport();
     const refresh = () => { if (!document.hidden) loadPassport(); };
     const timer = window.setInterval(refresh, 30000);
@@ -114,7 +116,7 @@ function PublicPassportLoaded({ passport }) {
         ogType="profile"
       />
       <main className="gp-public bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
-        {passport.schemaVersion === 2 ? <PublicPassportProfile passport={passport} /> : <PublicPassportCard passport={passport} />}
+        {passport.schemaVersion === 2 ? <><PublicPassportProfile passport={passport} /><div className="gp-public-content"><PublicProfileReportDialog slug={passport.slug} /></div></> : <PublicPassportCard passport={passport} />}
 
         {passport.schemaVersion !== 2 && <section className="gp-public-content">
           {passport.featuredProofs.length > 0 && <div>
