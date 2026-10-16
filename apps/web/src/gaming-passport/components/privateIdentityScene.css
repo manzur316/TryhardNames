@@ -50,6 +50,9 @@
 .gp-scene-owner[data-highlight-count="1"] .gp-highlight-grid { grid-template-columns: minmax(0, 1fr); }
 .gp-game-highlight { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 9px 10px; align-content: start; min-width: 0; padding: 12px 14px; background: #171b23ed; border: 1px solid #52414c; border-top: 2px solid #ed89b7; border-radius: 6px; transition: border-color .16s, background .16s; }
 .gp-game-highlight:hover { background: #222229; border-color: #ed89b7; }
+.gp-game-highlight[data-game="Steam"] { border-top-color: #62c7ec; }
+.gp-game-highlight[data-game="Steam"]:hover { border-color: #62c7ec; }
+.gp-game-highlight[data-game="Roblox"] { border-top-color: #ed8178; }
 .gp-game-highlight-probe { border-top-color: #fa6675; background: #251c21ed; }
 .gp-game-highlight-probe:hover { border-color: #ff98a3; background: #302127; }
 .gp-workspace .gp-game-highlight:focus-visible { outline: 2px solid #f4b7d3; outline-offset: 4px; }

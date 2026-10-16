@@ -4,11 +4,15 @@
   "outputDirectory": "apps/web/dist",
   "functions": {
     "api/index.mjs": {
-      "maxDuration": 90,
+      "maxDuration": 300,
       "includeFiles": "apps/api/src/integrations/{steam/openidWorker.js,roblox/supabase-root-2021.crt}"
     }
   },
   "trailingSlash": false,
+  "crons": [
+    { "path": "/api/v1/internal/passport-refresh/steam", "schedule": "0 8 * * *" },
+    { "path": "/api/v1/internal/passport-refresh/osu", "schedule": "30 8 * * *" }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",

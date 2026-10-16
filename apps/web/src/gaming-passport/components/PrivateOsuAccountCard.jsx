@@ -1,7 +1,7 @@
 import React, { useId, useState } from 'react';
 import { Activity, ChevronDown, Clock3, Globe2, LockKeyhole, MapPin, Medal, ShieldCheck, Target, Unplug } from 'lucide-react';
 import { buildPrivateOsuCard } from '../data/privateOsuCard.js';
-import GameBadge from './GameBadge.jsx';
+import GameLogo from './GameLogo.jsx';
 import './privateOsuCard.css';
 
 const STAT_ICONS = { global: Globe2, country: MapPin, accuracy: Target, medals: Medal };
@@ -18,7 +18,7 @@ export default function PrivateOsuAccountCard({ profile, busy, onUnlink }) {
     <div className="gp-osu-card-cover">
       <img className="gp-osu-card-art" src="/passport/osu-rhythm.webp" width="1280" height="720" alt="" />
       <header className="gp-osu-card-brand">
-        <GameBadge game="osu!" className="gp-osu-card-badge" />
+        <GameLogo game="osu!" className="gp-osu-card-badge" />
         <div><span className="gp-osu-card-game">osu!</span>{card.mode && <span className="gp-osu-card-mode">Mode <strong>{card.mode}</strong></span>}</div>
         <span className="gp-osu-card-private"><LockKeyhole size={13} aria-hidden="true" />Private</span>
       </header>

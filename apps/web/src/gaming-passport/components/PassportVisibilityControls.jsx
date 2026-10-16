@@ -5,7 +5,7 @@ import { getSupabaseRuntime } from '@/lib/supabase/client.js';
 import { copyTextToClipboard } from '@/utils/clipboard.js';
 import { isCanonicalPublicSlug, normalizePublicSlug } from '../domain/contracts.js';
 import { managePassportPublication, publicationError } from '../data/passportPublication.js';
-import GameBadge from './GameBadge.jsx';
+import GameLogo from './GameLogo.jsx';
 import './publication.css';
 
 export default function PassportVisibilityControls({ passport, session, dirty, disabled, onPassportChange }) {
@@ -86,7 +86,7 @@ export default function PassportVisibilityControls({ passport, session, dirty, d
         <fieldset disabled={busy} className="gp-publication-accounts"><legend>Visible game accounts</legend>
           {accounts.length === 0 && <p>Link and verify a game account before publishing.</p>}
           {accounts.map((account) => <div className="gp-publication-account" key={account.id}>
-            <GameBadge game={account.provider === 'osu' ? 'osu!' : 'Roblox'} />
+            <GameLogo game={account.provider === 'osu' ? 'osu!' : 'Roblox'} />
             <div><label><input type="checkbox" checked={account.selected} onChange={(event) => updateAccount(account.id, { selected: event.target.checked })} />
               <span>{account.provider === 'osu' ? 'osu!' : 'Roblox'} <strong>{account.username}</strong></span></label>
               {account.provider === 'osu' && <label className="gp-publication-stats"><input type="checkbox" disabled={!account.selected} checked={account.selected && account.showStats}

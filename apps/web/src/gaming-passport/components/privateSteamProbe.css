@@ -26,6 +26,29 @@
 .gp-steam-empty { display: flex; gap: 8px; font-size: 13px; padding: 16px 0; margin: 0; color: var(--gp-muted); }
 .gp-steam-empty svg { flex: none; }
 .gp-steam-notice { margin: 0; padding: 12px 0; font-size: 11px; color: var(--gp-muted); border-top: 1px solid var(--gp-line); }
+.gp-steam-library { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 20px 0; }
+.gp-steam-library > li { min-width: 0; border: 1px solid var(--gp-line); border-radius: 6px; overflow: visible; background: var(--gp-panel); color: var(--gp-text); }
+.gp-steam-game-main { display: grid; grid-template-columns: minmax(100px, 42%) minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px; }
+.gp-steam-cover { width: 100%; aspect-ratio: 460 / 215; height: auto; object-fit: cover; display: grid; place-items: center; border-radius: 3px; background: #20252a; }
+.gp-steam-cover.is-fallback { object-fit: contain; padding: 12px; }
+.gp-steam-library h4 { margin: 0 0 6px; font-size: 14px; font-weight: 650; line-height: 1.4; overflow-wrap: anywhere; }
+.gp-steam-library p { margin: 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+.gp-steam-game-main span { font-size: 11px; color: var(--gp-muted); }
+.gp-steam-achievements { display: flex; align-items: center; gap: 10px; padding: 12px; border-top: 1px solid var(--gp-line); background: var(--gp-input); border-radius: 0 0 6px 6px; }
+.gp-steam-achievements > svg { flex: none; color: var(--gp-gold); }
+.gp-steam-progress { flex: 1; min-width: 0; }
+.gp-steam-progress > span { display: block; font-size: 11px; overflow-wrap: anywhere; }
+.gp-steam-progress progress { display: block; width: 100%; height: 7px; margin-top: 7px; border: 0; border-radius: 4px; overflow: hidden; background: #0d1015; accent-color: #46bfdd; }
+.gp-steam-progress progress::-webkit-progress-bar { background: #0d1015; }
+.gp-steam-progress progress::-webkit-progress-value { background: #46bfdd; }
+.gp-steam-progress progress::-moz-progress-bar { background: #46bfdd; }
+.gp-steam-achievement-icons { display: flex; gap: 4px; flex: none; }
+.gp-steam-achievement-icon { width: 32px; height: 32px; position: relative; display: grid; place-items: center; color: #dabd72; background: #30353d; }
+.gp-steam-achievement-icon img { width: 32px; height: 32px; object-fit: contain; }
+.gp-steam-achievement-icon [role=tooltip] { display: none; position: absolute; bottom: 38px; right: 0; width: max-content; max-width: 150px; padding: 6px 8px; background: #090b0e; color: #fff; font-size: 11px; border: 1px solid #59616c; border-radius: 4px; z-index: 2; overflow-wrap: anywhere; }
+.gp-steam-achievement-icon:hover [role=tooltip], .gp-steam-achievement-icon:focus [role=tooltip] { display: block; }
+@container (max-width: 760px) { .gp-steam-library { grid-template-columns: minmax(0, 1fr); } }
+@container (max-width: 360px) { .gp-steam-achievements { flex-wrap: wrap; } .gp-steam-achievement-icons { margin-left: 29px; } .gp-steam-game-main { gap: 10px; } }
 @container (max-width: 900px) {
   .gp-steam-identity { grid-template-columns: 80px minmax(0, 1fr) auto; gap: 16px; }
   .gp-steam-brand { width: 80px; }

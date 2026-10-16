@@ -12,7 +12,7 @@ export default function PrivateGameHighlights({ highlights, probeHighlights = []
       <span>{highlights.length ? <>{gameCount} {gameCount === 1 ? 'game' : 'games'} / {highlights.length} {highlights.length === 1 ? 'account' : 'accounts'}</> : 'Private test'}</span>
     </div>
     <div className="gp-highlight-grid">
-      {tiles.map((game, index) => <a key={`${game.game}-${game.username}-${game.mode}-${index}`} className={`gp-game-highlight ${game.temporary ? 'gp-game-highlight-probe' : ''}`} data-private-probe={game.temporary ? '' : undefined} href={game.temporary ? '#gp-roblox-test' : '#gp-linked-games'} aria-label={`View ${game.username}'s ${game.game} ${game.temporary ? 'private test' : 'account details'}`}>
+      {tiles.map((game, index) => <a key={`${game.game}-${game.username}-${game.mode}-${index}`} className={`gp-game-highlight ${game.temporary ? 'gp-game-highlight-probe' : ''}`} data-game={game.game} data-private-probe={game.temporary ? '' : undefined} href={game.temporary ? '#gp-roblox-test' : game.game === 'Steam' ? '#gp-steam-linked' : game.game === 'Roblox' ? '#gp-roblox-linked' : '#gp-linked-games'} aria-label={`View ${game.username}'s ${game.game} ${game.temporary ? 'private test' : 'account details'}`}>
         <GameBadge game={game.game} className="gp-highlight-badge" />
         <div className="gp-highlight-brand">
           <div>

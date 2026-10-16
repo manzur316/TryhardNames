@@ -1,7 +1,7 @@
 import React, { useId } from 'react';
 import { Clock3, Gamepad2, ShieldCheck, Trophy } from 'lucide-react';
 import PassportIdentityScene from './PassportIdentityScene.jsx';
-import GameBadge from './GameBadge.jsx';
+import GameLogo from './GameLogo.jsx';
 import { publicGameHighlights } from '../data/publicPassportV2.js';
 import './publicPassportProfile.css';
 
@@ -35,7 +35,7 @@ function PublicGameCard({ game }) {
   return <article className="gp-profile-game" data-provider={game.provider} aria-labelledby={heading}>
     <img className="gp-profile-game-art" src={presentation.art} alt="" loading="lazy" width="1280" height="720" />
     <div className="gp-profile-game-body">
-      <GameBadge game={presentation.name} className="gp-profile-game-badge" />
+      <GameLogo game={presentation.name} className="gp-profile-game-badge" />
       <header className="gp-profile-game-identity">
         <p className="gp-profile-game-title">{presentation.name}{game.stats?.mode && <span>{game.stats.mode}</span>}</p>
         <h3 id={heading}>{game.displayName || game.username}</h3>

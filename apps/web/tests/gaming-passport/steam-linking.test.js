@@ -53,7 +53,10 @@ test('saved Steam requires explicit confirmation and remains out of public profi
   assert.match(component, /Confirm Steam link/);
   assert.match(component, /Confirm Steam unlink/);
   assert.match(component, /onBeforeConnect/);
-  assert.match(component, /Saved privately to your Passport/);
+  assert.match(component, /Private snapshot/);
+  assert.match(component, /account.lastSyncedAt/);
+  assert.match(read('SteamLibrary.jsx'), /<progress/);
+  assert.match(read('SteamLibrary.jsx'), /Achievements unavailable/);
   assert.doesNotMatch(component, /localStorage|sessionStorage|STEAM_WEB_API_KEY|publication_consent|updatePassport/);
   assert.match(read('PassportWorkspace.jsx'), /import PersistentSteamConnections/);
   assert.match(read('PassportWorkspace.jsx'), /\.\.\.linkedSteamHighlights/);

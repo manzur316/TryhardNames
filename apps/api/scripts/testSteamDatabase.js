@@ -22,10 +22,13 @@ try {
       'select nullif(current_setting(''request.jwt.claim.sub'', true), '''')::uuid';
   `;
   const migrations = ['20260623190000_gaming_passport_core.sql', '20261014204209_osu_private_persistence.sql',
-    '20261014213058_passport_internal_helper_paths.sql', '20261015024632_roblox_private_linking_runtime.sql', '20261015192140_steam_private_linking.sql',
-    '20261015195918_steam_link_attempts_owner_index.sql', '20261015203753_steam_linking_passport_states.sql']
+    '20261014213058_passport_internal_helper_paths.sql', '20261015024632_roblox_private_linking_runtime.sql',
+    '20261015061942_osu_production_linking.sql', '20261015192140_steam_private_linking.sql',
+    '20261015195918_steam_link_attempts_owner_index.sql', '20261015203753_steam_linking_passport_states.sql',
+    '20261016022904_passport_daily_refresh.sql']
     .map((name) => readFileSync(new URL('migrations/' + name, root), 'utf8')).join('\n');
-  const tests = readFileSync(new URL('tests/database/steam_private_linking_test.sql', root), 'utf8');
+  const tests = readFileSync(new URL('tests/database/steam_private_linking_test.sql', root), 'utf8')
+    + readFileSync(new URL('tests/database/passport_daily_refresh_test.sql', root), 'utf8');
   const result = execFileSync('docker', ['exec', '-i', container, 'psql', '-U', 'postgres', '-v', 'ON_ERROR_STOP=1', '-At'],
     { input: bootstrap + migrations + tests, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
   const count = (result.match(/^ok:/gm) || []).length;

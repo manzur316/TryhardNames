@@ -212,23 +212,20 @@ test('private highlights use bounded single tiles and a two-column desktop mosai
 test('user-supplied game insignias have stable names and bounded local assets', () => {
   assert.ok(Object.isFrozen(GAME_BADGES));
   assert.deepEqual(GAME_BADGES.map((badge) => badge.id), [
-    'fortnite', 'rocket-league', 'apex-legends', 'valorant', 'osu', 'counter-strike-2', 'brawl-stars', 'league-of-legends', 'clash-of-clans', 'roblox', 'steam',
+    'fortnite', 'rocket-league', 'apex-legends', 'valorant', 'osu', 'counter-strike-2', 'brawl-stars', 'league-of-legends', 'clash-of-clans', 'roblox', 'steam', 'bungie',
   ]);
-  assert.equal(new Set(GAME_BADGES.map((badge) => badge.game)).size, 11);
+  assert.equal(new Set(GAME_BADGES.map((badge) => badge.game)).size, 12);
   let totalBytes = 0;
   for (const badge of GAME_BADGES) {
     assert.ok(Object.isFrozen(badge));
     assert.deepEqual(Object.keys(badge).sort(), ['game', 'id', 'src']);
     assert.equal(getGameBadge(badge.game), badge);
-    if (badge.id === 'steam') {
-      assert.equal(badge.src, 'https://store.fastly.steamstatic.com/public/shared/images/header/logo_steam.svg');
-      continue;
-    }
-    assert.equal(badge.src, `/passport/game-badges/${badge.id}.${badge.id === 'roblox' ? 'png' : 'webp'}`);
+    const png = ['roblox', 'steam', 'bungie'].includes(badge.id);
+    assert.equal(badge.src, `/passport/game-badges/${badge.id}.${png ? 'png' : 'webp'}`);
     const bytes = readFileSync(new URL(`../../public${badge.src}`, import.meta.url));
-    if (badge.id === 'roblox') {
+    if (png) {
       assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
-      assert.ok(bytes.length < 2_000_000);
+      assert.ok(bytes.length < 3_000_000);
       continue;
     }
     assert.equal(bytes.subarray(0, 4).toString(), 'RIFF');
@@ -256,7 +253,9 @@ test('badges decorate existing private cards without creating connections or ver
   assert.match(read('PrivateGameHighlights.jsx'), /<GameBadge game=\{game\.game\}/);
   assert.doesNotMatch(read('PrivateGameHighlights.jsx'), /GAME_BADGES\.map/);
   assert.match(read('PrivateOsuAccountCard.jsx'), /if \(!card\) return null/);
-  assert.match(read('PrivateOsuAccountCard.jsx'), /<GameBadge game="osu!"/);
+  assert.match(read('PrivateOsuAccountCard.jsx'), /<GameLogo game="osu!"/);
+  assert.match(read('PublicPassportProfile.jsx'), /<GameLogo game=/);
+  assert.match(read('PersistentSteamConnections.jsx'), /<GameLogo game="Steam"/);
   const roblox = read('PrivateRobloxProbe.jsx');
   assert.match(roblox, /<GameBadge game="Roblox"/);
   assert.match(roblox, /\{profile.accountId\}/);
@@ -537,7 +536,9 @@ test('header display model excludes parent identity and arbitrary provider metad
 test('header reads the existing connection state and never adds a provider request', () => {
   const component = readFileSync(new URL('../../src/gaming-passport/components/PrivateGameHighlights.jsx', import.meta.url), 'utf8');
   assert.doesNotMatch(component, /fetch\(|localStorage|\.rpc\(|getSupabase|connect\(|publish|avg|Average/);
-  assert.match(component, /href=\{game.temporary \? '#gp-roblox-test' : '#gp-linked-games'\}/);
+  assert.match(component, /href=\{game.temporary \? '#gp-roblox-test'/);
+  assert.match(component, /game.game === 'Steam' \? '#gp-steam-linked'/);
+  assert.match(component, /game.game === 'Roblox' \? '#gp-roblox-linked' : '#gp-linked-games'/);
   assert.match(component, /new Set\(highlights\.map/);
   assert.match(component, /game\.stale/);
   const connections = readFileSync(new URL('../../src/gaming-passport/components/PersistentOsuConnections.jsx', import.meta.url), 'utf8');

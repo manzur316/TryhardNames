@@ -40,5 +40,5 @@ export function steamHighlight(account) {
     || typeof account.displayName !== 'string' || !account.displayName.trim()
     || !Number.isFinite(Date.parse(account.verifiedAt))) return null;
   return { game: 'Steam', username: account.displayName, mode: '', pp: null, globalRank: null,
-    stale: Date.now() - Date.parse(account.verifiedAt) > 86400000, target: '#gp-steam-linked' };
+    stale: Date.now() - Date.parse(account.lastSyncedAt || account.verifiedAt) > 86400000, target: '#gp-steam-linked' };
 }

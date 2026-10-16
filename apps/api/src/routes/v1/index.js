@@ -3,8 +3,10 @@ import meta from './meta.js';
 import integrations from './integrations/index.js';
 import exportsRouter from './exports.js';
 import pinterestContent from './pinterestContent.js';
+import { dailyRefreshHandler } from '../../integrations/dailyRefresh.js';
 
 const r = Router();
+r.get('/internal/passport-refresh/:provider', dailyRefreshHandler());
 
 // Specific routes first; meta describes the /api/v1 root.
 r.use('/integrations', integrations);

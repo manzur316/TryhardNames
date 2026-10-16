@@ -1,2 +1,4 @@
 .gp-game-badge { display: block; width: 72px; aspect-ratio: 1; flex: none; pointer-events: none; }
 .gp-game-badge > img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px #0006); }
+.gp-game-logo { display: grid; place-items: center; }
+.gp-game-logo > img { filter: none; }

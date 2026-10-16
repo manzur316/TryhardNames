@@ -10,7 +10,8 @@ export const GAME_BADGES = Object.freeze([
   { id: 'league-of-legends', game: 'League of Legends' },
   { id: 'clash-of-clans', game: 'Clash of Clans' },
   { id: 'roblox', game: 'Roblox', src: '/passport/game-badges/roblox.png' },
-  { id: 'steam', game: 'Steam', src: 'https://store.fastly.steamstatic.com/public/shared/images/header/logo_steam.svg' },
+  { id: 'steam', game: 'Steam', src: '/passport/game-badges/steam.png' },
+  { id: 'bungie', game: 'Bungie', src: '/passport/game-badges/bungie.png' },
 ].map((badge) => Object.freeze({ ...badge, src: badge.src ?? `/passport/game-badges/${badge.id}.webp` })));
 
 export function getGameBadge(game) {

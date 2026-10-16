@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Check, ExternalLink, Gamepad2, Link2, LockKeyhole, RefreshCw, ShieldCheck, Unplug } from 'lucide-react';
-import GameBadge from './GameBadge.jsx';
-import { STEAM_LINK_BASE, requestSteamLink, steamAuthorizationUrl, steamHighlight, steamPlaytime } from '../data/steamLinking.js';
+import GameLogo from './GameLogo.jsx';
+import SteamLibrary from './SteamLibrary.jsx';
+import { STEAM_LINK_BASE, requestSteamLink, steamAuthorizationUrl, steamHighlight } from '../data/steamLinking.js';
 import './privateSteamProbe.css';
 
 const MESSAGES = {
@@ -91,7 +92,7 @@ export default function PersistentSteamConnections({ ownerId, onHighlightsChange
     </div>}
     {accounts.map((account) => <article key={account.id}>
       <div className="gp-steam-identity">
-        <GameBadge game="Steam" className="gp-steam-brand" />
+        <GameLogo game="Steam" className="gp-steam-brand" />
         <div className="gp-steam-player"><SteamImage src={account.avatarUrl} className="gp-steam-avatar" />
           <div><h3>{account.displayName}</h3><p className="gp-steam-verified"><ShieldCheck size={14} />Identity verified with Steam</p><p className="gp-steam-id">{account.steamId}</p></div>
         </div>
@@ -99,16 +100,15 @@ export default function PersistentSteamConnections({ ownerId, onHighlightsChange
           <div><dt>Member since</dt><dd>{account.createdAt ? new Date(account.createdAt).toLocaleDateString('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Unavailable'}</dd></div></dl>
         <div className="gp-steam-actions">
           <a className="gp-icon-button" href={account.profileUrl} target="_blank" rel="noopener noreferrer" title="Open Steam profile" aria-label="Open Steam profile"><ExternalLink size={17} /></a>
-          <button className="gp-icon-button" disabled={busy || pending} onClick={() => act('connect')} title="Verify Steam again and update" aria-label="Verify Steam again and update"><RefreshCw size={17} /></button>
+          <button className="gp-icon-button" disabled={busy || pending} onClick={() => act('connect')} title="Verify Steam identity again" aria-label="Verify Steam identity again"><RefreshCw size={17} /></button>
           <button className="gp-icon-button" disabled={busy} onClick={() => setConfirmId(account.id)} title="Unlink Steam account" aria-label="Unlink Steam account"><Unplug size={17} /></button>
         </div>
       </div>
       {account.dataError && <p className="gp-feedback" role="status">Identity verified. Some Steam details were unavailable during the last update.</p>}
-      {account.library.status === 'available' ? account.library.games.length ? <ul className="gp-steam-games" aria-label="Most played games reported by Steam">
-        {account.library.games.map((game) => <li key={game.appId}><SteamImage src={game.iconUrl} className="gp-steam-game-icon" /><div><h4>{game.name}</h4><p>{steamPlaytime(game.playtimeMinutes)} total</p>{game.recentMinutes !== null && <span>{steamPlaytime(game.recentMinutes)} / last 2 weeks</span>}</div></li>)}
-      </ul> : <p className="gp-steam-empty">Steam returned no games for this account.</p>
+      {account.library.status === 'available' ? account.library.games.length ? <SteamLibrary library={account.library} achievements={account.achievements} />
+        : <p className="gp-steam-empty">Steam returned no games for this account.</p>
         : <p className="gp-steam-empty"><LockKeyhole size={15} />Game details unavailable. Your Steam privacy settings may hide your library or playtime.</p>}
-      <p className="gp-steam-notice">Saved privately to your Passport. Snapshot from {new Date(account.verifiedAt).toLocaleString()}.{steamHighlight(account)?.stale ? ' Snapshot needs updating.' : ''}</p>
+      <p className="gp-steam-notice">Private snapshot · {new Date(account.lastSyncedAt || account.verifiedAt).toLocaleString()}{steamHighlight(account)?.stale ? ' · Awaiting daily update' : ''}</p>
       {confirmId === account.id && <div className="gp-feedback" role="group" aria-label="Confirm Steam unlink">
         <span>Unlink {account.displayName} and remove its saved Steam details?</span>
         <button className="gp-button" disabled={busy} onClick={() => act('unlink', account.id)}>Unlink</button>

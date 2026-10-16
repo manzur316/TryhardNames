@@ -9,6 +9,7 @@ import { readLinkingAccess, canLink } from '../linking-access.js';
 import { readSteamConfig, steamAuthorizeUrl, readSteamSnapshot, validateSteamAssertion } from './client.js';
 import { verifySteamIdentity } from './openid.js';
 import { persistentSteamSnapshot } from './snapshot.js';
+import { safeAchievementDetails } from './achievements.js';
 
 export const BASE = '/api/v1/integrations/steam';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -97,7 +98,7 @@ export function createStore(pool, clientFactory) {
     },
     async status(owner) {
       const { data, error } = await owner.client.from('linked_provider_accounts')
-        .select('id,external_account_id,metadata_safe,verified_at,status,visibility')
+        .select('id,external_account_id,metadata_safe,verified_at,last_synced_at,status,visibility')
         .eq('owner_id', owner.ownerId).eq('passport_id', owner.passportId).eq('provider', 'steam')
         .eq('status', 'verified').eq('visibility', 'private');
       if (error) throw fail('storage_unavailable', 503);
@@ -106,7 +107,9 @@ export function createStore(pool, clientFactory) {
         if (!snapshot || !/^7656119\d{10}$/.test(row.external_account_id)) return null;
         try {
           const safe = persistentSteamSnapshot({ ...snapshot, steamId: row.external_account_id, verifiedAt: row.verified_at });
-          return { ...safe, id: row.id, provider: 'steam', verification: 'openid', visibility: 'private', persisted: true,
+          return { ...safe, lastSyncedAt: row.last_synced_at || row.verified_at,
+            achievements: safeAchievementDetails(row.metadata_safe?.achievements, safe.library.games),
+            id: row.id, provider: 'steam', verification: 'openid', visibility: 'private', persisted: true,
             profileUrl: 'https://steamcommunity.com/profiles/' + row.external_account_id + '/' };
         } catch { return null; }
       }).filter(Boolean);

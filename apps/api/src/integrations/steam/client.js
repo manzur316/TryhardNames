@@ -97,7 +97,7 @@ export function normalizeSteamLibrary(data) {
   return { status: 'available', gameCount: count, games };
 }
 
-async function steamApi(path, params, apiKey, fetchImpl) {
+export async function steamApi(path, params, apiKey, fetchImpl) {
   const url = new URL(`https://api.steampowered.com/${path}`);
   url.search = new URLSearchParams(params);
   // Steam supports the key header; keep the secret out of URLs, redirects and browser responses.

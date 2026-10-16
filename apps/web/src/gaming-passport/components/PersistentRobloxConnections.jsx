@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Check, ExternalLink, Gamepad2, Link2, LockKeyhole, ShieldCheck, Unplug } from 'lucide-react';
-import GameBadge from './GameBadge.jsx';
+import GameLogo from './GameLogo.jsx';
 import { ROBLOX_LINK_BASE, requestRobloxLink, robloxAuthorizationUrl, robloxHighlight } from '../data/robloxLinking.js';
 import './privateRobloxProbe.css';
 
@@ -90,7 +90,7 @@ export default function PersistentRobloxConnections({ ownerId, onHighlightsChang
         : <><span>Roblox authorization could not be completed.</span><button className="gp-button" onClick={clearResult}>Dismiss</button></>}
     </div>}
     {accounts.map((account) => <article className="gp-roblox-account" key={account.id}>
-      <GameBadge game="Roblox" className="gp-roblox-emblem" />
+      <GameLogo game="Roblox" className="gp-roblox-emblem" />
       <div className="gp-roblox-player"><span className="gp-roblox-game">Roblox</span>
         <div className="gp-roblox-player-row"><div className="gp-roblox-avatar">
           {account.avatarUrl && !brokenAvatars.includes(account.avatarUrl)

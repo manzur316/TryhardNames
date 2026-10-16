@@ -11,6 +11,7 @@
     "test:api": "npm run test --prefix apps/api",
     "test:providers:release": "node --test apps/api/tests/robloxClient.test.js apps/api/tests/robloxLinking.test.js apps/api/tests/osuLinkingClient.test.js apps/api/tests/osuLinking.test.js apps/api/tests/steamLinking.test.js apps/api/tests/steamOpenid.test.js apps/api/tests/steamClient.test.js apps/api/tests/passportOwner.test.js apps/api/tests/sourceGuards.test.js apps/web/tests/gaming-passport/steam-linking.test.js",
     "test:steam:db": "node apps/api/scripts/testSteamDatabase.js",
+    "test:passport:daily": "node --test apps/api/tests/dailyRefresh.test.js",
     "test:seo": "npm run test:seo --prefix apps/web",
     "test:passport": "npm run test:passport --prefix apps/web",
     "test:auth": "npm run test:auth --prefix apps/web",
