@@ -26,3 +26,23 @@ smoke. Production rollout must preserve existing selections and public projectio
 Owner acceptance after rollout: open Gaming Passport > Public profile, select Steam,
 optionally enable games/playtime/achievements, accept consent and update. Confirm
 Preview and the anonymous public URL. Never perform this consent step for the owner.
+
+## Production Rollout (2026-10-16)
+
+- Application commit: `a212888`; deployment: `dpl_ACuPzUu1SZBBjU7HyJzbWe6zhbNr`.
+- Published to `https://www.tryhardnames.com` after protected candidate smoke.
+- Migration applied transactionally on the authorized shared project. Hash checks
+  confirmed all existing public projections and account selections were unchanged.
+- 94 isolated database assertions, 123 Passport tests, 199 default web tests,
+  106 API tests and three prerender checks passed. 109 public pages prerendered.
+- Local Preview/public parity and production compiled browser fixtures passed at
+  1440/390/320, including identity-only, activity, unavailable data and real artwork.
+  Fixture responses were substituted only in the browser, never saved remotely.
+- Anonymous checks confirm the real owner's Bungie/osu/Roblox profile is intact,
+  Steam remains unselected, all four provider endpoints require authentication,
+  and Riot verification remains intact. Actual owner Steam publication is pending.
+- Daily schedules unchanged: Steam 08:00 UTC, osu! 08:30 UTC.
+- Existing warnings remain: one React cleanup lint warning, 27 dependency audit
+  findings (22 high), disabled leaked-password protection, Node `url.parse()`
+  deprecation messages. No new database security findings or application errors
+  were observed during this rollout; these existing issues are not resolved here.
