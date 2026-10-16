@@ -11,7 +11,7 @@ export async function managePassportPublication(client, session, passportId, opt
   const { data, error } = await client.rpc('manage_passport_publication', {
     p_passport: passportId, p_action: action, p_slug: slug || null,
     p_accounts: (options.accounts || []).filter((item) => item.selected).map((item) => ({
-      accountId: item.id, showStats: item.provider === 'osu' && item.showStats === true,
+      accountId: item.id, showStats: ['osu', 'steam'].includes(item.provider) && item.showStats === true,
     })),
     p_consent: options.consent === true, p_expected_updated_at: options.updatedAt || null,
   });

@@ -19,7 +19,7 @@ test('public presentation preserves consent-filtered stats and rejects private p
   assert.equal(publicGameHighlights(mapped.games)[0].pp, null);
   assert.equal(publicGameHighlights(mapped.games)[0].globalRank, null);
   assert.equal(mapPublicPassportV2({ ...value, games: [{ ...game, metadata_safe: {} }] }), null);
-  assert.equal(mapPublicPassportV2({ ...value, games: [{ ...game, provider: 'steam' }] }), null);
+  assert.equal(mapPublicPassportV2({ ...value, games: [{ ...game, provider: 'battlenet' }] }), null);
   const withStats = mapPublicPassportV2({ ...value, games: [{ ...game, stats: { mode: 'osu', pp: 0, medals: 0, accuracyPercent: 98.4, globalRank: 3050088, countryRank: 42 } }] });
   assert.equal(withStats.games[0].stats.pp, 0);
   assert.equal(publicGameHighlights(withStats.games)[0].globalRank, '#3,050,088');

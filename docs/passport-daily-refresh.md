@@ -28,7 +28,8 @@ per displayed game. Schemas are reused across accounts within the same run.
 This is one daily refresh cycle, not a single HTTP request per account.
 Unavailable/private achievements are never represented as zero completions.
 Only three unlocked achievement names/icons per game are stored. Tokens and
-OpenID assertions are not stored. Steam remains private to the Passport owner.
+OpenID assertions are not stored. Steam is private by default. Owners can separately
+publish identity and optional bounded game activity; see `steam-publication.md`.
 
 osu! uses an application token with only `public` scope, the linked immutable
 account ID and its saved ruleset. It updates existing display statistics, not

@@ -1,13 +1,14 @@
 import { isCanonicalPublicSlug } from '../domain/contracts.js';
 import { sanitizeAvatarFrameId } from './avatarFrames.js';
 import { sanitizeProfileBackgroundId } from './profileBackgrounds.js';
+import { mapPublicSteamActivity } from './publicSteamActivity.js';
 
 const keys = (value, allowed) => value && typeof value === 'object' && !Array.isArray(value)
   && Object.keys(value).every((key) => allowed.includes(key));
 const text = (value, max = 200) => typeof value === 'string' ? value.slice(0, max) : '';
 const timestamp = (value) => typeof value === 'string' && Number.isFinite(Date.parse(value)) ? value : '';
 const metric = (value) => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
-export const PUBLIC_PROVIDER_NAMES = Object.freeze({ osu: 'osu!', roblox: 'Roblox', bungie: 'Bungie' });
+export const PUBLIC_PROVIDER_NAMES = Object.freeze({ osu: 'osu!', roblox: 'Roblox', bungie: 'Bungie', steam: 'Steam' });
 
 export function mapPublicPassportV2(value) {
   if (!keys(value, ['schemaVersion','slug','alias','avatarUrl','bio','updatedAt','publishedAt','scene','games'])
@@ -19,7 +20,10 @@ export function mapPublicPassportV2(value) {
     if (!keys(game, ['provider','username','displayName','verifiedAt','updatedAt','stale','stats'])
       || !Object.hasOwn(PUBLIC_PROVIDER_NAMES, game.provider) || !timestamp(game.verifiedAt)) return null;
     let stats = null;
-    if (game.stats !== null) {
+    if (game.provider === 'steam' && game.stats !== null) {
+      stats = mapPublicSteamActivity(game.stats);
+      if (!stats) return null;
+    } else if (game.stats !== null) {
       if (game.provider !== 'osu' || !keys(game.stats, ['mode','pp','globalRank','countryRank','accuracyPercent','medals'])) return null;
       stats = Object.fromEntries(['pp','globalRank','countryRank','accuracyPercent','medals'].map((name) => [name, metric(game.stats[name])]));
       stats.mode = ['osu','taiko','fruits','mania'].includes(game.stats.mode) ? game.stats.mode : '';

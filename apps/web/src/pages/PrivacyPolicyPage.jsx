@@ -90,13 +90,17 @@ const PrivacyPolicyPage = () => {
             <p className="text-dark-300 leading-relaxed mb-4">
               Steam sign-in uses OpenID to verify your Steam ID. We read your display name, avatar and account
               creation date when available, plus the game count and up to six most-played games with reported
-              total and recent playtime. Steam privacy settings can make these details unavailable. We do not
+              total and recent playtime, achievement counts and up to three unlocked achievement names and icons per game.
+              Steam privacy settings can make these details unavailable. We do not
               receive your Steam password or infer a competitive rank from library size or playtime.
             </p>
             <p className="text-dark-300 leading-relaxed">
               You confirm each connection before it is saved. These are dated snapshots, not continuous
-              monitoring. Steam snapshots remain private in this release. Publishing a Passport is a separate
-              action and does not automatically publish newly linked accounts. Unlinking clears the saved
+              monitoring. Steam and osu! data refresh automatically once per UTC calendar day when available.
+              Steam stays private by default. You may publish your Steam display name and verification, and
+              separately opt in to share game count, up to six games, playtime and available achievements.
+              Your Steam ID, account creation date and avatar are not included in that public projection.
+              Publishing does not automatically publish newly linked accounts. Unlinking clears the saved
               profile snapshot and revokes its ownership proof; identifiers and revocation records are retained
               to prevent reassignment and abuse. Temporary linking attempts expire after at most ten minutes.
             </p>

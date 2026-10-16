@@ -2,7 +2,9 @@ import React, { useId } from 'react';
 import { Clock3, Gamepad2, ShieldCheck, Trophy } from 'lucide-react';
 import PassportIdentityScene from './PassportIdentityScene.jsx';
 import GameLogo from './GameLogo.jsx';
+import SteamLibrary from './SteamLibrary.jsx';
 import { publicGameHighlights } from '../data/publicPassportV2.js';
+import './privateSteamProbe.css';
 import './publicPassportProfile.css';
 
 const number = new Intl.NumberFormat('en', { maximumFractionDigits: 2 });
@@ -14,6 +16,7 @@ const games = {
   osu: { name: 'osu!', art: '/passport/osu-rhythm.webp' },
   roblox: { name: 'Roblox', art: '/passport/backgrounds/neon-gateway.webp' },
   bungie: { name: 'Bungie', art: '/passport/backgrounds/astral-nexus.webp' },
+  steam: { name: 'Steam', art: '/passport/backgrounds/neon-gateway.webp' },
 };
 
 export default function PublicPassportProfile({ passport }) {
@@ -33,6 +36,9 @@ function PublicGameCard({ game, index }) {
   const presentation = games[game.provider];
   if (!presentation) return null;
   const stats = metrics.filter(([key]) => Number.isFinite(game.stats?.[key]));
+  const activity = game.provider === 'steam' ? game.stats : null;
+  const identityOnly = game.provider === 'bungie' || (game.provider === 'steam' && !activity);
+  const timestamp = identityOnly ? game.verifiedAt : game.updatedAt;
   return <article className="gp-profile-game" id={`gp-public-game-${index}`} tabIndex={-1} data-provider={game.provider} aria-labelledby={heading}>
     <img className="gp-profile-game-art" src={presentation.art} alt="" loading="lazy" width="1280" height="720" />
     <div className="gp-profile-game-body">
@@ -48,10 +54,17 @@ function PublicGameCard({ game, index }) {
         <dd>{key.endsWith('Rank') ? '#' : ''}{number.format(game.stats[key])}{unit && <span>{unit}</span>}</dd>
       </div>)}</dl> : <div className="gp-profile-identity-only"><ShieldCheck size={22} aria-hidden="true" /><span>Verified account</span></div>}
     </div>
+    {activity && <section className="gp-profile-steam-activity" aria-label="Shared Steam activity">
+      <div className="gp-profile-steam-summary"><h4>Games &amp; achievements</h4>
+        {activity.library.gameCount !== null && <span>{number.format(activity.library.gameCount)} games reported</span>}</div>
+      {activity.library.status === 'unavailable' ? <p className="gp-steam-empty">Game activity is unavailable.</p>
+        : activity.library.games.length === 0 ? <p className="gp-steam-empty">No games reported by Steam.</p>
+          : <SteamLibrary library={activity.library} achievements={activity.achievements} />}
+    </section>}
     <footer className="gp-profile-game-footer" data-stale={game.stale}>
       <span><Clock3 size={13} aria-hidden="true" />{game.stale ? 'Snapshot needs updating' : 'Account verified'}</span>
-      {(game.provider === 'bungie' ? game.verifiedAt : game.updatedAt) && <time dateTime={game.provider === 'bungie' ? game.verifiedAt : game.updatedAt}>
-        {game.provider === 'bungie' ? 'Verified' : 'Updated'} {new Date(game.provider === 'bungie' ? game.verifiedAt : game.updatedAt).toLocaleDateString('en', {dateStyle:'medium', timeZone:'UTC'})}</time>}
+      {timestamp && <time dateTime={timestamp}>
+        {identityOnly ? 'Verified' : 'Updated'} {new Date(timestamp).toLocaleDateString('en', {dateStyle:'medium', timeZone:'UTC'})}</time>}
     </footer>
   </article>;
 }

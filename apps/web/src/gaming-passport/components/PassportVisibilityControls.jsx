@@ -91,6 +91,8 @@ export default function PassportVisibilityControls({ passport, session, dirty, d
             <div><label><input type="checkbox" checked={account.selected} onChange={(event) => updateAccount(account.id, { selected: event.target.checked })} />
               <span>{PUBLIC_PROVIDER_NAMES[account.provider]} <strong>{account.username}</strong></span></label>
               {account.provider === 'bungie' && <p className="gp-publication-stats">Bungie name and verification only. Destiny accounts stay private.</p>}
+              {account.provider === 'steam' && <label className="gp-publication-stats"><input type="checkbox" disabled={!account.selected} checked={account.selected && account.showStats}
+                onChange={(event) => updateAccount(account.id, { showStats: event.target.checked })} />Show games, playtime and achievements (up to 6 games)</label>}
               {account.provider === 'osu' && <label className="gp-publication-stats"><input type="checkbox" disabled={!account.selected} checked={account.selected && account.showStats}
                 onChange={(event) => updateAccount(account.id, { showStats: event.target.checked })} />Show PP, ranks, accuracy and medals</label>}
             </div>
